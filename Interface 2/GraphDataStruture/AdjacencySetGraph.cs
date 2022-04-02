@@ -87,7 +87,15 @@ namespace Interface_2
         }
         public int GetEdgeWeight(int v1, int v2) //gets weight between to vertices
         {
-            return VertexSet.ElementAt(v1).GetWeight(v2);
+            int weight = -1;
+            foreach (Node vertex in VertexSet)
+            {
+                if (vertex.GetVertexId() == v1)
+                {
+                    weight = vertex.GetWeight(v2);
+                }
+            }
+            return weight;
         }
         public List<Node> GetAdjacencyList()//gets the adjacency list of the graph
         {
@@ -191,7 +199,7 @@ namespace Interface_2
                 }
             }
         }
-        public string coutHashSet(int vertex)
+        public string coutHashSet(int vertex) //returns the string of the adjacency list
         {
             string stringToReturn = "";
             foreach (Node node in VertexSet)
@@ -203,7 +211,7 @@ namespace Interface_2
             }
             return stringToReturn;
         }
-        public string coutValency(int v)
+        public string coutValency(int v) 
         {
             string stringToReturn = "";
             stringToReturn += "Valency of Vertex " + v.ToString() + ": " + GetValency(v).ToString() + "\n";
@@ -235,7 +243,7 @@ namespace Interface_2
             }
             return maxId;
         }
-        public List<List<int>> GetAdjacencyMatrix()
+        public List<List<int>> GetAdjacencyMatrix() //returns the adjacency matrix as a 2d list
         {
             int size = GetMaxNodeID() + 1;
             List<List<int>> adjMatrix = new List<List<int>>();
@@ -259,7 +267,7 @@ namespace Interface_2
             }
             return adjMatrix;
         }
-        public int selectMinVertex(List<int> value, List<bool> processed, int size)
+        public int selectMinVertex(List<int> value, List<bool> processed, int size) //gets the vertex that has the lowest value
         {
             int minimum = 2147483647;
             int vertex = 0;
@@ -342,6 +350,18 @@ namespace Interface_2
                 cost += GetEdgeWeight(path.ElementAt(i), path.ElementAt(i + 1));
             }
             return Tuple.Create(path, cost);
+        }
+        public List<int> GetOddVertices() //returns a list of odd vertices
+        {
+            List<int> oddVertices = new List<int>();
+            foreach (Node vertex in VertexSet)
+            {
+                if (GetValency(vertex.GetVertexId()) % 2 == 1)
+                {
+                    oddVertices.Add(vertex.GetVertexId()); //once identified, append to list
+                }
+            }
+            return oddVertices;
         }
     }
 }
