@@ -1,0 +1,53 @@
+﻿<Window x:Class="Interface_2.ConnectEdges"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Interface_2"
+        mc:Ignorable="d"
+        Title="ConnectEdges" Height="175" Width="400"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="143*"/>
+            <ColumnDefinition Width="249*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.ColumnSpan="2"
+                   TextWrapping="Wrap"
+                   FontSize="15"
+                   TextAlignment="Center">Enter a <Bold>Non Negative</Bold> weight, to represent the weight for the two vertices. <Bold>Enter 0 for an unweighted edge</Bold></TextBlock>
+        <Label Grid.Row="1"
+               HorizontalAlignment="Center"
+               VerticalAlignment="Center"
+               FontSize="15"
+               FontWeight="Medium">Edge Weight:</Label>
+        <TextBox Grid.Row="1"
+                 Text="0"
+                 Margin="0,8,172,8"
+                 Grid.Column="1"
+                 BorderThickness="3"
+                 MaxLength="15"
+                 VerticalAlignment="Center"
+                 TextAlignment="Left"
+                 FontSize="20"
+                 x:Name="txWeight"
+                 PreviewTextInput="txWeight_PreviewTextInput" TextChanged="txWeight_TextChanged">
+        </TextBox>
+        <Button Grid.Row="2"
+                TabIndex="0"
+                Grid.ColumnSpan="2"
+                Margin="85,10,85,10"
+                FontSize="15"
+                FontWeight="Medium"
+                x:Name="buttonConfirmWeight"
+                Click="buttonConfirmWeight_Click">
+            Make Edge
+        </Button>
+    </Grid>
+</Window>

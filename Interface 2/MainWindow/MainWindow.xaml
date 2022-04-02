@@ -1,0 +1,755 @@
+﻿<Window x:Class="Interface_2.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Interface_2"
+        xmlns:wpfx="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit/extended"
+        mc:Ignorable="d"
+        xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+        Title="Graphing Simulator" Height="720" Width="1200"
+        MinHeight="720" MinWidth="1200"
+        ResizeMode="CanResize"
+        WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <DataTemplate x:Key="DataTemplate_Level2">
+            <Button Content="{Binding}" Height="15" 
+                    Width="15" FontSize="10" Margin="4,4,4,4"
+                    HorizontalContentAlignment="Center"
+                    VerticalContentAlignment="Center"
+                    Background="LightBlue"
+                    FontWeight="Bold"/>
+        </DataTemplate>
+        <DataTemplate x:Key="DataTemplate_Level1">
+            <ItemsControl ItemsSource="{Binding}" ItemTemplate="{DynamicResource DataTemplate_Level2}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </DataTemplate>
+
+    </Window.Resources>
+    <Grid>
+        <Grid Background="#d9d2d2"
+          Margin="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="52*"/>
+                <ColumnDefinition Width="47*"/>
+            </Grid.ColumnDefinitions>
+            <Rectangle Fill="#d9d2d2"
+                        Grid.Column="1"
+                       Panel.ZIndex="2">
+            </Rectangle>
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40*"/>
+                    <RowDefinition Height="609*"/>
+                    <RowDefinition Height="36*"/>
+                </Grid.RowDefinitions>
+
+                <Rectangle Grid.Column="0"
+                   Grid.RowSpan="3"
+                   Fill="{Binding ElementName=colourPickerBackground, Path=SelectedBrush, UpdateSourceTrigger=PropertyChanged}"
+                   Margin="7,7,0,7"
+                   x:Name="rectBorder">
+                </Rectangle>
+                <Canvas Grid.RowSpan="3"
+                AllowDrop="True"
+                DragOver="mainCanvas_DragOver"
+                x:Name="mainCanvas"
+                Grid.Row="0"
+                Background="{Binding ElementName=colourPickerBackground, Path=SelectedBrush, UpdateSourceTrigger=PropertyChanged}"
+                Margin="20"
+                MouseLeftButtonDown="mainCanvas_MouseLeftButtonDown"
+                PreviewMouseWheel="mainCanvas_PreviewMouseWheel">
+                </Canvas>
+                <Label Foreground="White"
+               FontSize="15"
+               FontWeight="Medium"
+               HorizontalAlignment="Left"
+               VerticalAlignment="Center"
+               x:Name="labelGraphName" Height="33" Width="610" Margin="7,7,0,0"/>
+                <Label Foreground="White"
+               FontSize="15"
+               Grid.Row="2"
+               FontWeight="Medium"
+               HorizontalAlignment="Left"
+               VerticalAlignment="Bottom"
+               x:Name="labelExtraInfo" Height="28" Width="610" Margin="7,0,0,7"/>
+            </Grid>
+
+
+
+
+            <GroupBox Grid.Column="1" 
+                      Panel.ZIndex="3"
+                  Background="White" 
+                  Margin="7">
+                <GroupBox.Header>
+                    <Label>Options</Label>
+                </GroupBox.Header>
+                <StackPanel>
+                    <TabControl x:Name="optionTabControl"
+                            TabStripPlacement="Top"
+                            Margin="0,0,0,10"
+                            Height="625">
+                        <TabItem x:Name="tabControlActions">
+                            <TabItem.Header>Actions</TabItem.Header>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+                                <GroupBox>
+                                    <GroupBox.Header>
+                                        <Bold>Add / Delete Component</Bold>
+                                    </GroupBox.Header>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                        </Grid.RowDefinitions>
+                                        <Button Margin="20,14,20,6"
+                                            x:Name="btnAddVertex"
+                                            Click="btnAddVertex_Click">
+                                            Add Vertex
+                                        </Button>
+                                        <TextBlock Foreground="Black"
+                                               Grid.Row="0"
+                                               Height="20" 
+                                               Margin="29,0,30,24"
+                                               FontSize="10"
+                                               HorizontalAlignment="Center">
+                                        Click to add a vertex onto the canvas
+                                        </TextBlock>
+                                        <Button Margin="20,14,20,6"
+                                            x:Name="btnDeleteVertex"
+                                            Click="btnDeleteVertex_Click"
+                                            Grid.Row="1">
+                                            Delete Vertex
+                                        </Button>
+                                        <TextBlock Foreground="Black" 
+                                               Grid.Row="0"
+                                               Margin="13,43,15,30"
+                                               FontSize="10"
+                                               HorizontalAlignment="Center" Width="194" Grid.RowSpan="2">
+                                        Click a Vertex to delete it From the Canvas
+                                        </TextBlock>
+                                        <TextBlock Foreground="Black"
+                                               Grid.Row="1" 
+                                               Margin="30,43,41,30"
+                                               FontSize="10"
+                                               HorizontalAlignment="Center" Grid.RowSpan="2"> <!-- Have a new window appear when they connect vertices-->
+                                        Click two vertices to connect them
+                                        </TextBlock>
+                                        <Button Margin="20,14,20,6"
+                                            x:Name="btnAddConnection"
+                                            Grid.Row="2"
+                                            Click="btnAddConnection_Click">
+                                            Add Connection
+                                        </Button>
+                                        <TextBlock Foreground="Black"
+                                               Grid.Row="3" 
+                                               Margin="27,0,28,30"
+                                               FontSize="10"
+                                               HorizontalAlignment="Center"> <!-- Have a new window appear when they connect vertices-->
+                                        Click on an edge to delete connection
+                                        </TextBlock>
+                                        <Button Margin="20,14,20,6"
+                                            x:Name="btnDeleteConnection"
+                                            Grid.Row="3"
+                                            Click="btnDeleteConnection_Click">
+                                            Delete Connection
+                                        </Button>
+                                    </Grid>
+                                </GroupBox>
+                                <GroupBox Grid.Column="1">
+                                    <GroupBox.Header>
+                                        <Bold>Account</Bold>
+                                    </GroupBox.Header>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                        </Grid.RowDefinitions>
+                                        <Button Margin="20,14,20,6"
+                                            x:Name="btnLogin"
+                                            Click="btnLogin_Click">
+                                            Login
+                                        </Button>
+                                        <TextBlock Foreground="Black"
+                                               Grid.Row="0"
+                                               Height="20" 
+                                               Margin="29,0,30,24"
+                                               FontSize="10"
+                                               HorizontalAlignment="Center">
+                                        Login In in order to save Graphs
+                                        </TextBlock>
+                                        <Button Margin="20,14,20,6"
+                                            x:Name="btnSignUp"
+                                            Grid.Row="1"
+                                            Click="btnSignUp_Click">
+                                            Sign Up
+                                        </Button>
+                                        <TextBlock Foreground="Black"
+                                               Grid.Row="1"
+                                               Height="20" 
+                                               Margin="29,0,30,24"
+                                               FontSize="10"
+                                               HorizontalAlignment="Center">
+                                        Sign Up in order to save Graphs
+                                        </TextBlock>
+                                        <Button Margin="20,14,20,6"
+                                            x:Name="btnSignOut"
+                                            Grid.Row="2"
+                                            Click="btnSignOut_Click">
+                                            Sign Out
+                                        </Button>
+                                        <TextBlock Foreground="Black"
+                                               Grid.Row="2"
+                                               Height="20" 
+                                               Margin="29,0,30,24"
+                                               FontSize="10"
+                                               HorizontalAlignment="Center">
+                                        Sign out of your account
+                                        </TextBlock>
+                                        <Button Margin="20,14,20,6"
+                                            x:Name="btnClose"
+                                            Grid.Row="3"
+                                            Click="btnClose_Click">
+                                            Close
+                                        </Button>
+                                        <TextBlock Foreground="Black"
+                                               Grid.Row="3"
+                                               Height="20" 
+                                               Margin="29,0,30,24"
+                                               FontSize="10"
+                                               HorizontalAlignment="Center">
+                                        Close the graphing Simulator
+                                        </TextBlock>
+
+                                    </Grid>
+                                </GroupBox>
+                                <GroupBox Grid.Row="1"
+                                      Grid.Column="1">
+                                    <GroupBox.Header>
+                                        <Bold>Adjacency Set</Bold>
+                                    </GroupBox.Header>
+                                    <Grid>
+                                        <TextBox AcceptsReturn="True"
+                                         x:Name="txAdjset"
+                                         FontSize="20"
+                                         VerticalScrollBarVisibility="Auto" 
+                                         HorizontalScrollBarVisibility="Auto"
+                                         IsReadOnly="True"/>
+                                    </Grid>
+                                </GroupBox>
+                                <GroupBox Grid.Row="2"
+                                      Grid.Column="1">
+                                    <GroupBox.Header>
+                                        <Bold>Adjacency Matrix</Bold>
+                                    </GroupBox.Header>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="26*"/>
+                                            <RowDefinition Height="31*"/>
+                                            <RowDefinition Height="119*"/>
+                                        </Grid.RowDefinitions>
+                                        <TextBlock FontSize="10"
+                                               TextWrapping="Wrap"
+                                               TextAlignment="Center">
+                                        Updating the matrix after each command causes slow execution, instead heres a button:
+                                        </TextBlock>
+                                        <Button Margin="20,5,20,5"
+                                            Grid.Row="1"
+                                            x:Name="btnGenerateMatrix"
+                                            Click="btnGenerateMatrix_Click">
+                                            Generate
+                                        </Button>
+                                        <ScrollViewer Grid.Row="2" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                                            <ItemsControl x:Name="lst" ItemTemplate="{DynamicResource DataTemplate_Level1}" />
+                                        </ScrollViewer>
+                                    </Grid>
+                                </GroupBox>
+                                <GroupBox Grid.Row="2"
+                                      Grid.Column="0"
+                                      Grid.ColumnSpan="1">
+                                    <GroupBox.Header>
+                                        <Bold>Files</Bold>
+                                    </GroupBox.Header>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                        </Grid.RowDefinitions>
+                                        <Button Margin="20,10,20,10"
+                                            x:Name="btnCreateNewGraph"
+                                            Grid.Row="0"
+                                            Click="btnCreateNewGraph_Click">
+                                            Create Graph
+                                        </Button>
+
+                                        <Button Margin="20,10,20,10"
+                                            x:Name="btnDeleteGraph"
+                                            Grid.Column="0"
+                                            Grid.Row="1"
+                                            Click="btnDeleteGraph_Click"
+                                            IsEnabled="False">
+                                            Delete Graph
+                                        </Button>
+                                        <TextBlock Foreground="Red"
+                                               Grid.Row="2"
+                                               Height="20" 
+                                               Margin="29,0,30,24"
+                                               FontSize="10"
+                                               HorizontalAlignment="Center">You <Bold>MUST</Bold> be logged in to do this</TextBlock>
+                                        <Button Margin="20,15,20,5"
+                                            x:Name="btnExportGraph"
+                                            Grid.Column="0"
+                                            Grid.Row="2"
+                                            Click="btnExportGraph_Click">
+                                            Export Graph
+                                        </Button>
+                                        <TextBlock Foreground="Red"
+                                               Grid.Row="3"
+                                               Height="20" 
+                                               Margin="29,0,30,24"
+                                               FontSize="10"
+                                               HorizontalAlignment="Center">You <Bold>MUST</Bold> be logged in to do this</TextBlock>
+                                        <Button Margin="20,15,20,5"
+                                            x:Name="btnImportGraph"
+                                            Grid.Row="3"
+                                            Click="btnImportGraph_Click">
+                                            Import Graph
+                                        </Button>
+                                    </Grid>
+
+                                </GroupBox>
+                                <GroupBox Grid.Row="1">
+                                    <GroupBox.Header>
+                                        <Bold>Other</Bold>
+                                    </GroupBox.Header>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Foreground="Black"
+                                               Grid.Row="0"
+                                               Height="20" 
+                                               Margin="27,0,28,30"
+                                               FontSize="10"
+                                               HorizontalAlignment="Center"> <!-- Have a new window appear when they connect vertices-->
+                                        Take a screenshot of the canvas
+                                        </TextBlock>
+                                        <Button Margin="20,14,20,6"
+                                            x:Name="btnTakeScreenshot"
+                                            Grid.Row="0"
+                                            Click="btnTakeScreenshot_Click">
+                                            Take Screenshot
+                                        </Button>
+                                        <TextBlock Foreground="Black"
+                                               Grid.Row="1"
+                                               Height="20" 
+                                               Margin="27,0,28,30"
+                                               FontSize="10"
+                                               HorizontalAlignment="Center"> <!-- Have a new window appear when they connect vertices-->
+                                        Click and hold vertices to move them
+                                        </TextBlock>
+                                        <Button Margin="20,14,20,6"
+                                            x:Name="btnDragAndDrop"
+                                            Grid.Row="1"
+                                            Click="btnDragAndDrop_Click">
+                                            Drag And Drop
+                                        </Button>
+                                        <TextBlock Foreground="Black"
+                                               Grid.Row="2"
+                                               Height="20" 
+                                               Margin="27,0,28,30"
+                                               FontSize="10"
+                                               HorizontalAlignment="Center"> <!-- Have a new window appear when they connect vertices-->
+                                        Click around the canvas freely
+                                        </TextBlock>
+                                        <Button Margin="20,14,20,6"
+                                            x:Name="btnDefault"
+                                            Grid.Row="2"
+                                            Click="btnDefault_Click">
+                                            Default
+                                        </Button>
+
+                                    </Grid>
+                                </GroupBox>
+                            </Grid>
+                        </TabItem>
+                        <TabItem x:Name="tabControlAlgorithms" Height="22" VerticalAlignment="Bottom">
+                            <TabItem.Header>Algorithms</TabItem.Header>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <GroupBox Grid.Row="0"
+                                      Grid.Column="0"
+                                      Header="Path Finding Algorithms"
+                                      BorderThickness="2">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                        </Grid.RowDefinitions>
+                                        <GroupBox Header="Minimum Spanning Tree">
+
+                                        </GroupBox>
+                                        <GroupBox Header="Shortest Paths"
+                                              Grid.Column="1">
+                                            <Grid>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition/>
+                                                    <RowDefinition/>
+                                                    <RowDefinition/>
+                                                </Grid.RowDefinitions>
+                                                <Button Margin="20,12,20,3"
+                                            x:Name="btnDijkstras"
+                                            Click="btnDijkstras_Click">
+                                                    Dijkstras Algorithm
+                                                </Button>
+                                                <TextBlock Foreground="Black"
+                                               Grid.Row="0"
+                                               Height="20" 
+                                               Margin="40,-3,41,22"
+                                               FontSize="10"
+                                               HorizontalAlignment="Center">
+                                        find shortest route from A to B
+                                                </TextBlock>
+                                            </Grid>
+                                        </GroupBox>
+                                        <GroupBox Header="Route Inspection"
+                                                  Grid.Column="1"
+                                                  Grid.Row="1">
+                                            <Grid>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition/>
+                                                    <RowDefinition/>
+                                                    <RowDefinition/>
+                                                </Grid.RowDefinitions>
+                                                <Button Margin="20,12,20,3"
+                                            x:Name="btnRouteInspStartAtEnd"
+                                            Click="btnRouteInspStartAtEnd_Click">
+                                                    Start and End at A
+                                                </Button>
+                                                <TextBlock Foreground="Black"
+                                               Grid.Row="0"
+                                               Height="20" 
+                                               Margin="30,-3,26,21"
+                                               FontSize="10"
+                                               HorizontalAlignment="Center" Width="192">
+                                        Shortest route to traverse every edge once
+                                                </TextBlock>
+                                                <Button Margin="20,12,20,3"
+                                                        x:Name="btnRouteInspStartAndEnd"
+                                                        Click="btnRouteInspStartAndEnd_Click"
+                                                        Grid.Row="1">
+                                                    Start at A and End at B 
+                                                </Button>
+                                                <TextBlock Foreground="Black"
+                                               Grid.Row="1"
+                                               Height="20" 
+                                               Margin="30,-3,26,21"
+                                               FontSize="10"
+                                               HorizontalAlignment="Center" Width="192">
+                                        Shortest route to traverse every edge once
+                                                </TextBlock>
+                                            </Grid>
+                                        </GroupBox>
+                                        <GroupBox Header="Traversal Algorithms"
+                                              Grid.Row="1">
+                                            <Grid>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition/>
+                                                    <RowDefinition/>
+                                                </Grid.RowDefinitions>
+                                                <TextBlock Foreground="Black"
+                                               Grid.Row="0"
+                                               Height="20" 
+                                               Margin="27,0,28,30"
+                                               FontSize="10"
+                                               HorizontalAlignment="Center"> <!-- Have a new window appear when they connect vertices-->
+                                        Click around the canvas freely
+                                                </TextBlock>
+                                                <Button Margin="20,20,20,6"
+                                            x:Name="btnHighlightPaths"
+                                            Grid.Row="0"
+                                            Click="btnHighlightPaths_Click">
+                                                    Highlight Path
+                                                </Button>
+                                            </Grid>
+                                        </GroupBox>
+                                    </Grid>
+                                </GroupBox>
+                                <GroupBox Grid.Row="1"
+                                      Grid.Column="0"
+                                      Header="Other Algorithms"
+                                      BorderThickness="2">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                        </Grid.RowDefinitions>
+                                        <GroupBox Header="Calculating Centrality">
+
+                                        </GroupBox>
+                                        <GroupBox Grid.Column="1"
+                                              Header="Graph Stats">
+                                            <Grid>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition/>
+                                                    <RowDefinition/>
+                                                    <RowDefinition/>
+                                                </Grid.RowDefinitions>
+                                                <Button Margin="20,12,20,3"
+                                            x:Name="btnToggleValencies"
+                                            Click="btnToggleValencies_Click">
+                                                    Toggle Valencies
+                                                </Button>
+                                                <TextBlock Foreground="Black"
+                                               Grid.Row="0"
+                                               Height="20" 
+                                               Margin="40,-3,41,22"
+                                               FontSize="10"
+                                               HorizontalAlignment="Center">
+                                        find shortest route from A to B
+                                                </TextBlock>
+                                            </Grid>
+                                        </GroupBox>
+                                    </Grid>
+                                </GroupBox>
+                            </Grid>
+                        </TabItem>
+                        <TabItem x:Name="tabControlDisplay">
+                            <TabItem.Header>Display</TabItem.Header>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="211*"/>
+                                    <RowDefinition Height="187*"/>
+                                    <RowDefinition Height="199*"/>
+                                </Grid.RowDefinitions>
+                                <GroupBox Grid.Column="0"
+                                      Grid.Row="0"
+                                      Header="Colours"
+                                      BorderThickness="2">
+                                    <StackPanel>
+                                        <StackPanel Orientation="Horizontal"
+                                                Height="20"
+                                                Margin="0, 4,0,4">
+                                            <TextBlock VerticalAlignment="Center">Background</TextBlock>
+                                            <syncfusion:ColorPickerPalette Margin="80,0,0,0"
+                                                                       x:Name="colourPickerBackground"
+                                                                       Width="40"
+                                                                       Color="#403d3d">
+
+                                            </syncfusion:ColorPickerPalette>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal"
+                                                Height="20"
+                                                Margin="0,0,0,4">
+                                            <TextBlock VerticalAlignment="Center">Vertex</TextBlock>
+                                            <syncfusion:ColorPickerPalette Margin="110,0,0,0"
+                                                                       x:Name="colourPickerVertex"
+                                                                       Width="40"
+                                                                       Color="DodgerBlue"/>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal"
+                                                Height="20"
+                                                Margin="0,0,0,4">
+                                            <TextBlock VerticalAlignment="Center">Weight</TextBlock>
+                                            <syncfusion:ColorPickerPalette Margin="105,0,0,0"
+                                                                       x:Name="colourPickerWeight"
+                                                                       Width="40"
+                                                                       Color="Black"/>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal"
+                                                Height="20"
+                                                Margin="0,0,0,4">
+                                            <TextBlock VerticalAlignment="Center">Label</TextBlock>
+                                            <syncfusion:ColorPickerPalette Margin="115,0,0,0"
+                                                                       x:Name="colourPickerLabel"
+                                                                       Width="40"
+                                                                       Color="White"/>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal"
+                                                Height="20"
+                                                Margin="0,0,0,4">
+                                            <TextBlock VerticalAlignment="Center">Vertex Stroke</TextBlock>
+                                            <syncfusion:ColorPickerPalette Margin="73,0,0,0"
+                                                                       x:Name="colourPickerVertexStroke"
+                                                                       Width="40"
+                                                                       Color="Black"/>
+                                        </StackPanel>
+                                        <Button Margin="30,17,30,30"
+                                            x:Name="btnResetColour"
+                                            Click="btnResetColour_Click">Reset To Default</Button>
+                                    </StackPanel>
+                                </GroupBox>
+                                <GroupBox Grid.Column="1"
+                                      Grid.Row="0"
+                                      Header="Component Shape"
+                                      BorderThickness="2">
+                                    <StackPanel>
+                                        <GroupBox Header="Edge Stroke Thickness">
+                                            <StackPanel Orientation="Horizontal">
+                                                <Slider Background="Gray"
+                                                    Minimum="1"
+                                                    Maximum="15"
+                                                    Width="180"
+                                                    x:Name="edgeThicknessSlider"
+                                                    Height="30"
+                                                    TickFrequency="1"
+                                                    TickPlacement="Both"
+                                                    IsSnapToTickEnabled="True">
+                                                </Slider>
+                                                <TextBlock FontSize="15"
+                                                       Text="{Binding ElementName=edgeThicknessSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                                       Background="Gray"
+                                                       Width="30"
+                                                       Height="30"></TextBlock>
+                                            </StackPanel>
+                                        </GroupBox>
+                                        <GroupBox Header="Vertex Diameter">
+                                            <StackPanel Orientation="Horizontal">
+                                                <Slider Background="Gray"
+                                                    Minimum="40"
+                                                    Maximum="80"
+                                                    Width="180"
+                                                    x:Name="vertexDiameterSlider"
+                                                    Height="30"
+                                                    TickFrequency="1"
+                                                    TickPlacement="Both"
+                                                    IsSnapToTickEnabled="True">
+                                                </Slider>
+                                                <TextBlock FontSize="15"
+                                                       Text="{Binding ElementName=vertexDiameterSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                                       Background="Gray"
+                                                       Width="30"
+                                                       Height="30"></TextBlock>
+                                            </StackPanel>
+                                        </GroupBox>
+                                        <GroupBox Header="Weight Font Size">
+                                            <StackPanel>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Slider Background="Gray"
+                                                    Minimum="10"
+                                                    Maximum="25"
+                                                    Width="180"
+                                                    x:Name="weightAndLabelFontSizeSlider"
+                                                    Height="30"
+                                                    TickFrequency="1"
+                                                    TickPlacement="Both"
+                                                    IsSnapToTickEnabled="True">
+                                                    </Slider>
+                                                    <TextBlock FontSize="15"
+                                                       Text="{Binding ElementName=weightFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                                       Background="Gray"
+                                                       Width="30"
+                                                       Height="30"></TextBlock>
+                                                </StackPanel>
+                                                <Button Margin="30,12,30,30"
+                                                    x:Name="btnResetComponentShape"
+                                                    Click="btnResetComponentShape_Click">Reset To Default</Button>
+                                            </StackPanel>
+                                        </GroupBox>
+                                    </StackPanel>
+
+                                </GroupBox>
+                            </Grid>
+                        </TabItem>
+                        <TabItem x:Name="tabControlLogs">
+                            <TabItem.Header>Logs</TabItem.Header>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <GroupBox Header="Path Finding Algorithm Logs">
+                                    <StackPanel>
+                                        <TextBox AcceptsReturn="True"
+                                            x:Name="txLogsPathFinding"
+                                            Height="137"
+                                            VerticalScrollBarVisibility="Auto" 
+                                            HorizontalScrollBarVisibility="Auto"
+                                            IsReadOnly="True">
+                                        </TextBox>
+                                        <Button Margin="160,12,160,12"
+                                            x:Name="btnClearPathFindingLogs"
+                                            Click="btnClearPathFindingLogs_Click">Clear Logs</Button>
+                                    </StackPanel>
+                                </GroupBox>
+                                <GroupBox Header="Other Algorithm Logs" 
+                                      Grid.Row="1">
+                                    <StackPanel>
+                                        <TextBox AcceptsReturn="True"
+                                         Height="139"
+                                         x:Name="txLogsOtherAlgorithms"
+                                         VerticalScrollBarVisibility="Auto" 
+                                         HorizontalScrollBarVisibility="Auto"
+                                         IsReadOnly="True">
+                                        </TextBox>
+                                        <Button Margin="160,12,160,12"
+                                            x:Name="btnClearOtherAlgoLogs"
+                                            Click="btnClearOtherAlgoLogs_Click">Clear Logs</Button>
+                                    </StackPanel>
+                                </GroupBox>
+                                <GroupBox Header="Actions Logs" 
+                                      Grid.Row="2">
+                                    <StackPanel>
+                                        <TextBox AcceptsReturn="True"
+                                         Height="139"
+                                         x:Name="txLogsActions"
+                                         VerticalScrollBarVisibility="Auto" 
+                                         HorizontalScrollBarVisibility="Auto"
+                                         IsReadOnly="True">
+                                        </TextBox>
+                                        <Button Margin="160,12,160,12"
+                                            x:Name="btnClearActionLogs"
+                                            Click="btnClearActionLogs_Click">Clear Logs</Button>
+                                    </StackPanel>
+                                </GroupBox>
+                            </Grid>
+                        </TabItem>
+
+                    </TabControl>
+                </StackPanel>
+            </GroupBox>
+        </Grid>
+    </Grid>
+</Window>
