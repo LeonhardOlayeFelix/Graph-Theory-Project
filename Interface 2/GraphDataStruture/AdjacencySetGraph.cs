@@ -373,12 +373,21 @@ namespace Interface_2
                 return false;
             return true;
         }
+        public bool IsConnected()
+        {
+            List<Tuple<int, int, int>> primsRVal = Prims();
+            if (primsRVal.Count == 0)
+            {
+                return false;
+            }
+            return true;
+        }
         public List<Tuple<int, int, int>> Prims() //returns the MST as a tuple(vertex, vertex, cost)
         {
             List<List<int>> adjMatrix = GetAdjacencyMatrix();
             List<Tuple<int, int, int>> mstPath = new List<Tuple<int, int, int>>();//return value
             bool[] isInMST = new bool[adjMatrix.Count()];//represents a value for each vertex which says if its in the MST
-            isInMST[0] = true;//first vertex is in MST
+            isInMST[VertexSet.ElementAt(0).GetVertexId()] = true;//first existing vertex is in MST
             int numVertex = adjMatrix.Count;
             int countedEdges = 0; //to know when to stop the loop
             int mstTotal = 0;
@@ -386,7 +395,7 @@ namespace Interface_2
             while (countedEdges < GetNumberOfVertices() - 1) //we stop when there is one more vertices than edges
             {
                 timeslooped += 1;
-                if (timeslooped == GetNumberOfVertices())//if the number of times looped is >= the num of vertices, we are in an endless loop so halt this process
+                if (timeslooped > GetNumberOfVertices())//if the number of times looped is >= the num of vertices, we are in an endless loop so halt this process
                 {
                     Console.WriteLine("This graph is not connected");
                     return new List<Tuple<int, int, int>>();

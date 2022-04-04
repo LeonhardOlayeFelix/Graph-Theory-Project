@@ -301,6 +301,25 @@ namespace Interface_2
             labelExtraInfo.Content = "Updated Adjacency Matrix.";
             GenerateAdjMat(); //function generates the matrix
         }
+        private void btnPrims_Click(object sender, RoutedEventArgs e)
+        {
+            if (vertexList.Count() != 0)
+            {
+                ActivateButton(sender);
+                if (Graph.IsConnected())
+                {
+                    List<Tuple<int, int, int>> mst = Graph.Prims();
+                    PrimsHighlightPath(mst);
+                }
+                else
+                {
+                    MessageBox.Show("The graph is not connected.");
+                }
+            }
+            
+            
+            
+        }
         public int GetMax(int a, int b)
         {
             return (a > b) ? a : b;

@@ -18,34 +18,39 @@ namespace Interface_2
             labelExtraInfo.Content = "Click a vertex to find the lowest cost route to the next clicked vertex";
             ActivateButton(sender);
         }
-        public void PrimsHighlightPath(List<Tuple<int, int, int>> edges)
+        public bool PrimsHighlightPath(List<Tuple<int, int, int>> edges)
         {
-            int total = 0;
-            List<Line> highlightedLines = new List<Line>(); //gets the list of lines to highlight at the end
-            foreach (Tuple<int, int, int> edge in edges)
+            if (edges.Count() != 0)
             {
-                int smallerId = GetMin(edge.Item1, edge.Item2);
-                int largerId = GetMax(edge.Item1, edge.Item2);
-                string lineName = "line" + smallerId.ToString() + "to" + largerId.ToString(); //uses this to check if theres a path
-                foreach (Tuple<Line, Ellipse, Ellipse, TextBlock> line in edgeList)
+                int total = 0;
+                List<Line> highlightedLines = new List<Line>(); //gets the list of lines to highlight at the end
+                foreach (Tuple<int, int, int> edge in edges)
                 {
-                    if (line.Item1.Name == lineName)//detetcs if theres a path because theres a matching name
+                    int smallerId = GetMin(edge.Item1, edge.Item2);
+                    int largerId = GetMax(edge.Item1, edge.Item2);
+                    string lineName = "line" + smallerId.ToString() + "to" + largerId.ToString(); //uses this to check if theres a path
+                    foreach (Tuple<Line, Ellipse, Ellipse, TextBlock> line in edgeList)
                     {
-                        total += Graph.GetEdgeWeight(smallerId, largerId);
-                        highlightedLines.Add(line.Item1); //adds it to the list of edges
-                        total += Convert.ToInt32(line.Item4.Text);
+                        if (line.Item1.Name == lineName)//detetcs if theres a path because theres a matching name
+                        {
+                            total += Graph.GetEdgeWeight(smallerId, largerId);
+                            highlightedLines.Add(line.Item1); //adds it to the list of edges
+                            total += Convert.ToInt32(line.Item4.Text);
+                        }
                     }
                 }
+                foreach (Line line in highlightedLines)
+                {
+                    line.Stroke = new SolidColorBrush(Colors.Red);
+                }
+                MessageBox.Show("Press ok to clear Minimum Spanning Tree\nCost: " + total / 2); //weight will be twice what it shuold be
+                foreach (Line line in highlightedLines)
+                {
+                    line.Stroke = new SolidColorBrush(Colors.Black);//reset the colour
+                }
+                return true;
             }
-            foreach(Line line in highlightedLines)
-            {
-                line.Stroke = new SolidColorBrush(Colors.Red);
-            }
-            MessageBox.Show("Press ok to clear Minimum Spanning Tree\nCost: " + total / 2); //weight will be twice what it shuold be
-            foreach (Line line in highlightedLines)
-            {
-                line.Stroke = new SolidColorBrush(Colors.Black);//reset the colour
-            }
+            return false;
         }
         public void DijkstraHighlightPath(List<int> path) //a path of vertexIds, in the order they want to be traversed
         {
