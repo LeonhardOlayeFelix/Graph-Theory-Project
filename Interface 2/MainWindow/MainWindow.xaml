@@ -441,7 +441,7 @@
                                                 </TextBlock>
                                             </Grid>
                                         </GroupBox>
-                                        <GroupBox Header="Shortest Paths"
+                                        <GroupBox Header="Path Finding"
                                               Grid.Column="1">
                                             <Grid>
                                                 <Grid.RowDefinitions>
@@ -450,17 +450,31 @@
                                                     <RowDefinition/>
                                                 </Grid.RowDefinitions>
                                                 <Button Margin="20,12,20,3"
-                                            x:Name="btnDijkstras"
-                                            Click="btnDijkstras_Click">
-                                                    Dijkstras Algorithm
+                                            x:Name="btnDijkstrasShort"
+                                            Click="btnDijkstrasShort_Click">
+                                                    Shortest Route
                                                 </Button>
                                                 <TextBlock Foreground="Black"
                                                Grid.Row="0"
                                                Height="20" 
-                                               Margin="40,-3,41,22"
+                                               Margin="23,-3,20,22"
                                                FontSize="10"
-                                               HorizontalAlignment="Center">
-                                        find shortest route from A to B
+                                               HorizontalAlignment="Center" Width="205">
+                                        find shortest route from A to B With Dijkstra's
+                                                </TextBlock>
+                                                <Button Margin="20,12,20,3"
+                                                        x:Name="btnDijkstrasLong"
+                                                        Grid.Row="1"
+                                                        Click="btnDijkstrasLong_Click">
+                                                    Longest Route
+                                                </Button>
+                                                <TextBlock Foreground="Black"
+                                               Grid.Row="1"
+                                               Height="20" 
+                                               Margin="23,-3,20,22"
+                                               FontSize="10"
+                                               HorizontalAlignment="Center" Width="205">
+                                        find longest route from A to B With Dijkstra's
                                                 </TextBlock>
                                             </Grid>
                                         </GroupBox>
@@ -490,7 +504,7 @@
                                                         x:Name="btnRouteInspStartAndEnd"
                                                         Click="btnRouteInspStartAndEnd_Click"
                                                         Grid.Row="1">
-                                                    Start at A and End at B 
+                                                    Start at A and End at B
                                                 </Button>
                                                 <TextBlock Foreground="Black"
                                                Grid.Row="1"

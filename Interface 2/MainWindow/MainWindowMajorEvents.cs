@@ -81,7 +81,7 @@ namespace Interface_2
                         DisableAllActionButtons();
                     }
                 }
-                else if (currentButton == btnDijkstras)
+                else if (currentButton == btnDijkstrasShort)
                 {
                     dijkstraSelectionCount += 1;
                     if (dijkstraSelectionCount % 2 == 0)
@@ -100,7 +100,7 @@ namespace Interface_2
                         {
                             try
                             {
-                                List<int> path = Graph.DijkstrasAlgorithm(startVertex, vId).Item1; //get the path from the method
+                                List<int> path = Graph.DijkstrasAlgorithmShort(startVertex, vId).Item1; //get the path from the method
                                 DijkstraHighlightPath(path);
                                 labelExtraInfo.Content = "";
                             }
@@ -109,6 +109,47 @@ namespace Interface_2
                                 MessageBox.Show("There is no shortest path from these two points");
                             }
                             
+                            EnableTbCtrl();
+                            EnableAllAlgoButtons();
+                        }
+
+                    }
+                    else if (dijkstraSelectionCount % 2 == 1)
+                    {
+                        DisableTbCtrl();
+                        DisableAllAlgoButtons();
+                        Ellipse v = (Ellipse)e.OriginalSource;
+                        startVertex = Convert.ToInt32(v.Name.Substring(3));
+                        labelExtraInfo.Content = "Shortest Path from " + startVertex + " to...";
+                    }
+                }
+                else if (currentButton == btnDijkstrasLong)
+                {
+                    dijkstraSelectionCount += 1;
+                    if (dijkstraSelectionCount % 2 == 0)
+                    {
+                        Ellipse v = (Ellipse)e.OriginalSource;
+                        int vId = Convert.ToInt32(v.Name.Substring(3)); //get id of vertex that was pressed
+                        if (startVertex == vId) //if they are connecting it to itself, do nothing
+                        {
+                            EnableAllActionButtons();
+                            EnableTbCtrl();
+                            btnImportGraph.IsEnabled = false;
+                            btnImportGraph.IsEnabled = false;
+                            labelExtraInfo.Content = "";
+                        }
+                        else
+                        {
+                            try
+                            {
+                                List<int> path = Graph.DijkstrasAlgorithmLong(startVertex, vId).Item1; //get the path from the method
+                                DijkstraHighlightPath(path);
+                                labelExtraInfo.Content = "";
+                            }
+                            catch (NullReferenceException) //this means there was no path
+                            {
+                                MessageBox.Show("There is no longest path from these two points");
+                            }
                             EnableTbCtrl();
                             EnableAllAlgoButtons();
                         }

@@ -12,7 +12,7 @@ namespace Interface_2
 {
     public partial class MainWindow : Window
     {
-        private void btnDijkstras_Click(object sender, RoutedEventArgs e)
+        private void btnDijkstrasShort_Click(object sender, RoutedEventArgs e)
         {
             HideValencies();
             labelExtraInfo.Content = "Click a vertex to find the lowest cost route to the next clicked vertex";

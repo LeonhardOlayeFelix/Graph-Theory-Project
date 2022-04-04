@@ -54,6 +54,11 @@ namespace Interface_2
             DisableTbCtrl();
         }
 
-        
+        private void btnDijkstrasLong_Click(object sender, RoutedEventArgs e)
+        {
+            HideValencies();
+            labelExtraInfo.Content = "Click a vertex to find the highest cost route to the next clicked vertex";
+            ActivateButton(sender);
+        }
     }
 }
