@@ -33,6 +33,7 @@ namespace Interface_2
                     {
                         total += Graph.GetEdgeWeight(smallerId, largerId);
                         highlightedLines.Add(line.Item1); //adds it to the list of edges
+                        total += Convert.ToInt32(line.Item4.Text);
                     }
                 }
             }
@@ -40,7 +41,7 @@ namespace Interface_2
             {
                 line.Stroke = new SolidColorBrush(Colors.Red);
             }
-            MessageBox.Show("Press ok to clear Minimum Spanning Tree");
+            MessageBox.Show("Press ok to clear Minimum Spanning Tree\nCost: " + total / 2); //weight will be twice what it shuold be
             foreach (Line line in highlightedLines)
             {
                 line.Stroke = new SolidColorBrush(Colors.Black);//reset the colour

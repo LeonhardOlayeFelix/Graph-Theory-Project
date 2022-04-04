@@ -19,6 +19,7 @@ namespace Interface_2
             btnToggleValencies.IsEnabled = false;
             btnRouteInspStartAndEnd.IsEnabled = false;
             btnRouteInspStartAtEnd.IsEnabled = false;
+            btnPrims.IsEnabled = false;
         }
         public void EnableAllAlgoButtons()
         {
@@ -27,6 +28,7 @@ namespace Interface_2
             btnToggleValencies.IsEnabled = true;
             btnRouteInspStartAndEnd.IsEnabled = true;
             btnRouteInspStartAtEnd.IsEnabled = true;
+            btnPrims.IsEnabled = true;
         }
         public void DisableTbCtrl()
         {

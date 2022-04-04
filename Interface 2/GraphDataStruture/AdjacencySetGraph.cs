@@ -382,8 +382,15 @@ namespace Interface_2
             int numVertex = adjMatrix.Count;
             int countedEdges = 0; //to know when to stop the loop
             int mstTotal = 0;
+            int timeslooped = 0;
             while (countedEdges < GetNumberOfVertices() - 1) //we stop when there is one more vertices than edges
             {
+                timeslooped += 1;
+                if (timeslooped == GetNumberOfVertices())//if the number of times looped is >= the num of vertices, we are in an endless loop so halt this process
+                {
+                    Console.WriteLine("This graph is not connected");
+                    return new List<Tuple<int, int, int>>();
+                }
                 int minimum = int.MaxValue; //set to the highest value
                 int a = -1; //set to a value which wont be used
                 int b = -1; //set to a value which wont be used
