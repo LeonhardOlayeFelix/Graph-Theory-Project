@@ -122,47 +122,6 @@ namespace Interface_2
                         labelExtraInfo.Content = "Shortest Path from " + startVertex + " to...";
                     }
                 }
-                else if (currentButton == btnDijkstrasLong)
-                {
-                    dijkstraSelectionCount += 1;
-                    if (dijkstraSelectionCount % 2 == 0)
-                    {
-                        Ellipse v = (Ellipse)e.OriginalSource;
-                        int vId = Convert.ToInt32(v.Name.Substring(3)); //get id of vertex that was pressed
-                        if (startVertex == vId) //if they are connecting it to itself, do nothing
-                        {
-                            EnableAllActionButtons();
-                            EnableTbCtrl();
-                            btnImportGraph.IsEnabled = false;
-                            btnImportGraph.IsEnabled = false;
-                            labelExtraInfo.Content = "";
-                        }
-                        else
-                        {
-                            try
-                            {
-                                List<int> path = Graph.DijkstrasAlgorithmLong(startVertex, vId).Item1; //get the path from the method
-                                DijkstraHighlightPath(path);
-                                labelExtraInfo.Content = "";
-                            }
-                            catch (NullReferenceException) //this means there was no path
-                            {
-                                MessageBox.Show("There is no longest path from these two points");
-                            }
-                            EnableTbCtrl();
-                            EnableAllAlgoButtons();
-                        }
-
-                    }
-                    else if (dijkstraSelectionCount % 2 == 1)
-                    {
-                        DisableTbCtrl();
-                        DisableAllAlgoButtons();
-                        Ellipse v = (Ellipse)e.OriginalSource;
-                        startVertex = Convert.ToInt32(v.Name.Substring(3));
-                        labelExtraInfo.Content = "Shortest Path from " + startVertex + " to...";
-                    }
-                }
             }
             else if (e.OriginalSource is Line) //if they click on a line in the canvas
             {
