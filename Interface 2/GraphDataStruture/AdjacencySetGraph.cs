@@ -351,7 +351,7 @@ namespace Interface_2
             }
             return Tuple.Create(path, cost);
         }
-        public List<int> GetOddVertices() //returns a list of odd vertices
+        public List<int> GetOddVertices() //returns a list of odd valency vertices
         {
             List<int> oddVertices = new List<int>();
             foreach (Node vertex in VertexSet)
@@ -362,6 +362,64 @@ namespace Interface_2
                 }
             }
             return oddVertices;
+        }
+        static bool IsValidEdge(int u, int v, bool[] isInMst) //Check if the passed in edge is available for use in the MST
+        {
+            if (u == v) //a vertex to itself is not valid
+                return false;
+            if (isInMst[u] == false && isInMst[v] == false) //exactly one of the vertices need to be in the MST so return false
+                return false;
+            else if (isInMst[u] == true && isInMst[v] == true)//exactly one of the vertices need to be in the MST so return false
+                return false;
+            return true;
+        }
+        public List<Tuple<int, int, int>> Prims() //returns the MST as a tuple(vertex, vertex, cost)
+        {
+            List<List<int>> adjMatrix = GetAdjacencyMatrix();
+            List<Tuple<int, int, int>> mstPath = new List<Tuple<int, int, int>>();//return value
+            bool[] isInMST = new bool[adjMatrix.Count()];//represents a value for each vertex which says if its in the MST
+            isInMST[0] = true;//first vertex is in MST
+            int numVertex = adjMatrix.Count;
+            int countedEdges = 0; //to know when to stop the loop
+            int mstTotal = 0;
+            while (countedEdges < GetNumberOfVertices() - 1) //we stop when there is one more vertices than edges
+            {
+                int minimum = int.MaxValue; //set to the highest value
+                int a = -1; //set to a value which wont be used
+                int b = -1; //set to a value which wont be used
+                for (int i = 0; i < numVertex; i++)
+                {
+                    for (int j = 0; j < numVertex; j++)
+                    {
+                        if (adjMatrix[i][j] < minimum && adjMatrix[i][j] != -1) //if the cost is -1, there is no edge
+                        {
+                            if (IsValidEdge(i, j, isInMST))
+                            {
+                                minimum = adjMatrix[i][j]; //loop through adjMatrix and set the minimum once a valid edge is found
+                                a = i;
+                                b = j;
+                            }
+                        }
+                    }
+                }
+                if (a != -1 && b != -1) //if a and b are -1, then an edge was not found
+                {
+                    mstPath.Add(Tuple.Create(GetMin(a, b), GetMax(a, b), minimum)); //add this edge to the return value
+                    countedEdges++;//increment the edge to stop infinite looping
+                    mstTotal += minimum; //update the total cost
+                    isInMST[a] = true; //update a
+                    isInMST[b] = true;//update b
+                }
+            }
+            return mstPath;
+        }
+        public int GetMax(int a, int b)
+        {
+            return (a > b) ? a : b;
+        }
+        public int GetMin(int a, int b)
+        {
+            return (a < b) ? a : b;
         }
     }
 }

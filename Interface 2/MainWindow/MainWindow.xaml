@@ -420,7 +420,26 @@
                                             <RowDefinition/>
                                         </Grid.RowDefinitions>
                                         <GroupBox Header="Minimum Spanning Tree">
-
+                                            <Grid>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition/>
+                                                    <RowDefinition/>
+                                                    <RowDefinition/>
+                                                </Grid.RowDefinitions>
+                                                <Button Margin="20,12,20,3"
+                                                        x:Name="btnPrims"
+                                                        Click="btnPrims_Click">
+                                                    Prim's Algorithm
+                                                </Button>
+                                                <TextBlock Foreground="Black"
+                                               Grid.Row="0"
+                                               Height="20" 
+                                               Margin="40,-3,41,22"
+                                               FontSize="10"
+                                               HorizontalAlignment="Center">
+                                        find the minimum spanning tree
+                                                </TextBlock>
+                                            </Grid>
                                         </GroupBox>
                                         <GroupBox Header="Shortest Paths"
                                               Grid.Column="1">

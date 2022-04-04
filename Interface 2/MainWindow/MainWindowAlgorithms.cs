@@ -18,6 +18,34 @@ namespace Interface_2
             labelExtraInfo.Content = "Click a vertex to find the lowest cost route to the next clicked vertex";
             ActivateButton(sender);
         }
+        public void PrimsHighlightPath(List<Tuple<int, int, int>> edges)
+        {
+            int total = 0;
+            List<Line> highlightedLines = new List<Line>(); //gets the list of lines to highlight at the end
+            foreach (Tuple<int, int, int> edge in edges)
+            {
+                int smallerId = GetMin(edge.Item1, edge.Item2);
+                int largerId = GetMax(edge.Item1, edge.Item2);
+                string lineName = "line" + smallerId.ToString() + "to" + largerId.ToString(); //uses this to check if theres a path
+                foreach (Tuple<Line, Ellipse, Ellipse, TextBlock> line in edgeList)
+                {
+                    if (line.Item1.Name == lineName)//detetcs if theres a path because theres a matching name
+                    {
+                        total += Graph.GetEdgeWeight(smallerId, largerId);
+                        highlightedLines.Add(line.Item1); //adds it to the list of edges
+                    }
+                }
+            }
+            foreach(Line line in highlightedLines)
+            {
+                line.Stroke = new SolidColorBrush(Colors.Red);
+            }
+            MessageBox.Show("Press ok to clear Minimum Spanning Tree");
+            foreach (Line line in highlightedLines)
+            {
+                line.Stroke = new SolidColorBrush(Colors.Black);//reset the colour
+            }
+        }
         public void DijkstraHighlightPath(List<int> path) //a path of vertexIds, in the order they want to be traversed
         {
             int total = 0;
@@ -40,19 +68,19 @@ namespace Interface_2
                         }
                     }
                 }
-                if (highlightedLines.Count() == path.Count() - 1)//if the path is found, then the size of the lines is always 1 less that the n. of vertices passed in
+                if (highlightedLines.Count() == path.Count() - 1)//if the path is found, then the size of the array is always 1 less that the n. of vertices passed in
                 {
                     string pathString = "";
                     for (int i = 0; i < highlightedLines.Count(); ++i)
                     {
                         highlightedLines[i].Stroke = new SolidColorBrush(Colors.Red);
-                        pathString += path[i].ToString() + "=>";
+                        pathString += path[i].ToString() + "=>"; //change the colour and update the path string
                     }
                     pathString += path[path.Count() - 1];
                     MessageBox.Show("Press ok to clear \nTotal Cost: " + total +"\nPath: " + pathString);
                     foreach (Line line in highlightedLines)
                     {
-                        line.Stroke = new SolidColorBrush(Colors.Black);
+                        line.Stroke = new SolidColorBrush(Colors.Black);//reset the colour
                     }
                 }
                 else //if this isnt true, then a valid path was not passed in.
@@ -137,5 +165,6 @@ namespace Interface_2
                 labelExtraInfo.Content = "";
             }
         }
+        
     }
 }

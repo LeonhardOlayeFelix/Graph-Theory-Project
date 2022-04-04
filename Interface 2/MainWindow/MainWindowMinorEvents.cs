@@ -119,11 +119,13 @@ namespace Interface_2
         }
         private void btnRouteInspStartAtEnd_Click(object sender, RoutedEventArgs e)
         {
+            ActivateButton(sender);
             HideValencies();
         }
 
         private void btnRouteInspStartAndEnd_Click(object sender, RoutedEventArgs e)
         {
+            ActivateButton(sender);
             HideValencies();
         }
 

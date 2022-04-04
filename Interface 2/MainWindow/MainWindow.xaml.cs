@@ -54,6 +54,10 @@ namespace Interface_2
             DisableTbCtrl();
         }
 
-
+        private void btnPrims_Click(object sender, RoutedEventArgs e)
+        {
+            List<Tuple<int, int, int>> mst = Graph.Prims();
+            PrimsHighlightPath(mst);
+        }
     }
 }
