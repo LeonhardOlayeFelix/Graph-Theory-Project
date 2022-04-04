@@ -39,9 +39,10 @@ namespace Interface_2
                         }
                     }
                 }
-                foreach (Line line in highlightedLines)
+                for (int i = 0; i < highlightedLines.Count(); ++i)
                 {
-                    line.Stroke = new SolidColorBrush(Colors.Red);
+                    highlightedLines[i].Stroke = new SolidColorBrush(Colors.Red);
+                    if (i != highlightedLines.Count() - 1) { MessageBox.Show("Press OK to show next edge"); }
                 }
                 MessageBox.Show("Press ok to clear Minimum Spanning Tree\nCost: " + total / 2); //weight will be twice what it shuold be
                 foreach (Line line in highlightedLines)
@@ -81,6 +82,7 @@ namespace Interface_2
                     {
                         highlightedLines[i].Stroke = new SolidColorBrush(Colors.Red);
                         pathString += path[i].ToString() + "=>"; //change the colour and update the path string
+                        if (i != highlightedLines.Count() - 1) { MessageBox.Show("Press OK to show next edge"); }
                     }
                     pathString += path[path.Count() - 1];
                     MessageBox.Show("Press ok to clear \nTotal Cost: " + total +"\nPath: " + pathString);

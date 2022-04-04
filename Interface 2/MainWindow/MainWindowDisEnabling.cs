@@ -15,7 +15,6 @@ namespace Interface_2
         public void DisableAllAlgoButtons()
         {
             btnDijkstrasShort.IsEnabled = false;
-            btnDijkstrasLong.IsEnabled = false;
             btnHighlightPaths.IsEnabled = false;
             btnToggleValencies.IsEnabled = false;
             btnRouteInspStartAndEnd.IsEnabled = false;
@@ -25,7 +24,6 @@ namespace Interface_2
         public void EnableAllAlgoButtons()
         {
             btnDijkstrasShort.IsEnabled = true;
-            btnDijkstrasLong.IsEnabled = true;
             btnHighlightPaths.IsEnabled = true;
             btnToggleValencies.IsEnabled = true;
             btnRouteInspStartAndEnd.IsEnabled = true;

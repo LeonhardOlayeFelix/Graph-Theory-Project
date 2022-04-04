@@ -462,20 +462,6 @@
                                                HorizontalAlignment="Center" Width="205">
                                         find shortest route from A to B With Dijkstra's
                                                 </TextBlock>
-                                                <Button Margin="20,12,20,3"
-                                                        x:Name="btnDijkstrasLong"
-                                                        Grid.Row="1"
-                                                        Click="btnDijkstrasLong_Click">
-                                                    Longest Route
-                                                </Button>
-                                                <TextBlock Foreground="Black"
-                                               Grid.Row="1"
-                                               Height="20" 
-                                               Margin="23,-3,20,22"
-                                               FontSize="10"
-                                               HorizontalAlignment="Center" Width="205">
-                                        find longest route from A to B With Dijkstra's
-                                                </TextBlock>
                                             </Grid>
                                         </GroupBox>
                                         <GroupBox Header="Route Inspection"
@@ -530,7 +516,7 @@
                                                Margin="30,-3,26,21"
                                                FontSize="10"
                                                HorizontalAlignment="Center"> <!-- Have a new window appear when they connect vertices-->
-                                        Click around the canvas freely
+                                        Enter a path to be highlighted
                                                 </TextBlock>
                                                 <Button Margin="20,12,20,3"
                                             x:Name="btnHighlightPaths"
