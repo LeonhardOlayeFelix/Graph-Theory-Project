@@ -61,22 +61,6 @@ namespace Interface_2
         {
             HideValencies();
         }
-        private void btnClearOtherAlgoLogs_Click(object sender, RoutedEventArgs e)
-        {
-            labelExtraInfo.Content = "Logs Cleared.";
-            txLogsOtherAlgorithms.Clear();
-        }
-
-        private void btnClearPathFindingLogs_Click(object sender, RoutedEventArgs e)
-        {
-            labelExtraInfo.Content = "Logs Cleared.";
-            txLogsPathFinding.Clear();
-        }
-        private void btnClearActionLogs_Click(object sender, RoutedEventArgs e)
-        {
-            labelExtraInfo.Content = "Logs Cleared.";
-            txLogsActions.Clear();
-        }
 
         private void btnAddVertex_Click(object sender, RoutedEventArgs e)
         {

@@ -459,6 +459,10 @@ namespace Interface_2
         }
         public bool IsConnected()
         {
+            if (GetNumberOfVertices() == 1)
+            {
+                return true;
+            }
             List<Tuple<int, int, int>> primsRVal = Prims();
             if (primsRVal.Count == 0)
             {
@@ -481,7 +485,6 @@ namespace Interface_2
                 timeslooped += 1;
                 if (timeslooped > GetNumberOfVertices())//if the number of times looped is >= the num of vertices, we are in an endless loop so halt this process
                 {
-                    Console.WriteLine("This graph is not connected");
                     return new List<Tuple<int, int, int>>();
                 }
                 int minimum = int.MaxValue; //set to the highest value

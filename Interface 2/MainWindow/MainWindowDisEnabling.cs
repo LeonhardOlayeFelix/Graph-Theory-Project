@@ -37,7 +37,6 @@ namespace Interface_2
             //disable all the tab controls apart from action and adjset
             tabControlAlgorithms.IsEnabled = false;
             tabControlDisplay.IsEnabled = false;
-            tabControlLogs.IsEnabled = false;
             tabControlActions.IsEnabled = false;
         }
         public void EnableTbCtrl()
@@ -45,7 +44,6 @@ namespace Interface_2
             //enable all the tab controls
             tabControlAlgorithms.IsEnabled = true;
             tabControlDisplay.IsEnabled = true;
-            tabControlLogs.IsEnabled = true;
             tabControlActions.IsEnabled = true;
         }
         public void DisableAllActionButtons()

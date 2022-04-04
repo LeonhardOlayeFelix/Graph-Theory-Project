@@ -23,7 +23,6 @@ namespace Interface_2
                     Ellipse activeVertex = (Ellipse)e.OriginalSource; //give the button a variable to refer to
                     HashSet<Tuple<Line, Ellipse, Ellipse, TextBlock>> listOfEdgesToRemove = GetListOfEdgesFromVertex(activeVertex);//gets list of edges we need to remove with the vertex
                     Graph.RemoveVertex(Convert.ToInt32(activeVertex.Name.Substring(3))); //update the class
-                    txLogsActions.AppendText(Graph.Name + ".RemoveVertex(" + Convert.ToInt32(activeVertex.Name.Substring(3)).ToString() + ");\n");//updates the logs
                     //loop through lines and delete any lines that come out of it
                     foreach (Tuple<Line, Ellipse, Ellipse, TextBlock> edge in listOfEdgesToRemove)
                     {
@@ -278,7 +277,6 @@ namespace Interface_2
 
                     mainCanvas.Children.Add(vertexToAdd);//add the vertex to the canvas
                     mainCanvas.Children.Add(vertexLabel); //add the label to the canvas
-                    txLogsActions.AppendText(Graph.Name + ".AddVertex()\n");//update logs
                 }
             }
             if (graphCreated == true)

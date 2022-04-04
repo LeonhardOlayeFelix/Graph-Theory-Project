@@ -522,16 +522,17 @@
                                                 <Grid.RowDefinitions>
                                                     <RowDefinition/>
                                                     <RowDefinition/>
+                                                    <RowDefinition/>
                                                 </Grid.RowDefinitions>
                                                 <TextBlock Foreground="Black"
                                                Grid.Row="0"
                                                Height="20" 
-                                               Margin="27,0,28,30"
+                                               Margin="30,-3,26,21"
                                                FontSize="10"
                                                HorizontalAlignment="Center"> <!-- Have a new window appear when they connect vertices-->
                                         Click around the canvas freely
                                                 </TextBlock>
-                                                <Button Margin="20,20,20,6"
+                                                <Button Margin="20,12,20,3"
                                             x:Name="btnHighlightPaths"
                                             Grid.Row="0"
                                             Click="btnHighlightPaths_Click">
@@ -558,7 +559,7 @@
 
                                         </GroupBox>
                                         <GroupBox Grid.Column="1"
-                                              Header="Graph Stats">
+                                              Header="Graph Statistics">
                                             <Grid>
                                                 <Grid.RowDefinitions>
                                                     <RowDefinition/>
@@ -725,61 +726,6 @@
                                 </GroupBox>
                             </Grid>
                         </TabItem>
-                        <TabItem x:Name="tabControlLogs">
-                            <TabItem.Header>Logs</TabItem.Header>
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition/>
-                                    <RowDefinition/>
-                                    <RowDefinition/>
-                                </Grid.RowDefinitions>
-                                <GroupBox Header="Path Finding Algorithm Logs">
-                                    <StackPanel>
-                                        <TextBox AcceptsReturn="True"
-                                            x:Name="txLogsPathFinding"
-                                            Height="137"
-                                            VerticalScrollBarVisibility="Auto" 
-                                            HorizontalScrollBarVisibility="Auto"
-                                            IsReadOnly="True">
-                                        </TextBox>
-                                        <Button Margin="160,12,160,12"
-                                            x:Name="btnClearPathFindingLogs"
-                                            Click="btnClearPathFindingLogs_Click">Clear Logs</Button>
-                                    </StackPanel>
-                                </GroupBox>
-                                <GroupBox Header="Other Algorithm Logs" 
-                                      Grid.Row="1">
-                                    <StackPanel>
-                                        <TextBox AcceptsReturn="True"
-                                         Height="139"
-                                         x:Name="txLogsOtherAlgorithms"
-                                         VerticalScrollBarVisibility="Auto" 
-                                         HorizontalScrollBarVisibility="Auto"
-                                         IsReadOnly="True">
-                                        </TextBox>
-                                        <Button Margin="160,12,160,12"
-                                            x:Name="btnClearOtherAlgoLogs"
-                                            Click="btnClearOtherAlgoLogs_Click">Clear Logs</Button>
-                                    </StackPanel>
-                                </GroupBox>
-                                <GroupBox Header="Actions Logs" 
-                                      Grid.Row="2">
-                                    <StackPanel>
-                                        <TextBox AcceptsReturn="True"
-                                         Height="139"
-                                         x:Name="txLogsActions"
-                                         VerticalScrollBarVisibility="Auto" 
-                                         HorizontalScrollBarVisibility="Auto"
-                                         IsReadOnly="True">
-                                        </TextBox>
-                                        <Button Margin="160,12,160,12"
-                                            x:Name="btnClearActionLogs"
-                                            Click="btnClearActionLogs_Click">Clear Logs</Button>
-                                    </StackPanel>
-                                </GroupBox>
-                            </Grid>
-                        </TabItem>
-
                     </TabControl>
                 </StackPanel>
             </GroupBox>

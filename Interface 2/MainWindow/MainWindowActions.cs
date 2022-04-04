@@ -110,7 +110,6 @@ namespace Interface_2
             //add a new edge tuple to the list
             edgeList.Add(Tuple.Create(temp, smallerEllipse, largerEllipse, weightLabel));
             //update logs
-            txLogsActions.AppendText("AddEdge(" + smallerEllipse.Name.Substring(3) + "," + largerEllipse.Name.Substring(3) + ")\n");
 
             //if the weight is 0, show it as an unweighted graph
             mainCanvas.Children.Add(temp);
@@ -133,7 +132,6 @@ namespace Interface_2
         {
             mainCanvas.Children.Remove(edge.Item1); //remove the line which is the first item
             mainCanvas.Children.Remove(edge.Item4);//remove the label which is the fourth element
-            txLogsActions.AppendText("RemoveEdge(" + edge.Item2.Name.Substring(3) + "," + edge.Item3.Name.Substring(3) + ")\n"); //update logs
             edgeList.Remove(edge);//remove it from the graph
             GenerateAdjList();
         }
@@ -173,7 +171,6 @@ namespace Interface_2
             if (nameGraphWindow.DialogResult == true)
             {
                 name = nameGraphWindow.txBoxGraphName.Text;
-                txLogsActions.AppendText("CreateNewGraph(" + name + ")\n");
                 DeleteGraph();
                 CreateNewGraph(name);
                 btnDeleteGraph.IsEnabled = true;
