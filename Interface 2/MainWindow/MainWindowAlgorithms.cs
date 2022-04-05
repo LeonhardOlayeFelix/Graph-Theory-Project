@@ -75,7 +75,7 @@ namespace Interface_2
                         }
                     }
                 }
-                if (highlightedLines.Count() == path.Count() - 1)//if the path is found, then the size of the array is always 1 less that the n. of vertices passed in
+                if (highlightedLines.Count() == path.Count() - 1)//if the path is found, then the size of the array is always 1 less than the n. of vertices passed in
                 {
                     string pathString = "";
                     for (int i = 0; i < highlightedLines.Count(); ++i)

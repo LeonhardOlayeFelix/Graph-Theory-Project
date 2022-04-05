@@ -433,6 +433,25 @@ namespace Interface_2
             }
             return mstPath;
         }
+
+        public int GetPathCost(List<int> path)
+        {
+            int pathCost = 0;
+            for (int i = 0; i < path.Count() - 1; ++i)
+            {
+                int edgeWeight = GetEdgeWeight(path[i], path[i + 1]); //get the weight between the vertices
+                if (edgeWeight == -1) //it returns -1 if theres no edge
+                {
+                    pathCost = -1; //set cost to -1
+                    break;
+                }
+                else
+                {
+                    pathCost += edgeWeight;
+                }
+            }
+            return pathCost;
+        }
         private int GetMax(int a, int b)
         {
             return (a > b) ? a : b;
