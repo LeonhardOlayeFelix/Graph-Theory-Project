@@ -18,7 +18,7 @@ namespace Interface_2
             labelExtraInfo.Content = "Click a vertex to find the lowest cost route to the next clicked vertex";
             ActivateButton(sender);
         }
-        public void RouteInspHighlightPath(List<Tuple<int, int>> edges)
+        public void RouteInspHighlightPath(List<Tuple<int, int>> edges, int cost)
         {
             List<Line> highlightedLines = new List<Line>(); //gets the list of lines to highlight at the end
             foreach (Tuple<int, int> edge in edges)
@@ -38,7 +38,7 @@ namespace Interface_2
             {
                 highlightedLines[i].Stroke = new SolidColorBrush(Colors.Red);
             }
-            MessageBox.Show("The highlighted edges are edges which must be repeated");
+            MessageBox.Show("The highlighted edges are edges which must be repeated\nTotal Cost: " + (cost + Graph.GetSumOfWeights()));
             foreach (Line line in highlightedLines)
             {
                 line.Stroke = new SolidColorBrush(Colors.Black);//reset the colour

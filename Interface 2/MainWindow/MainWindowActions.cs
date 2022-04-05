@@ -186,7 +186,7 @@ namespace Interface_2
                 {
                     List<Tuple<int, int>> edgesToRepeat = result.Item1;
                     int cost = result.Item2;
-                    RouteInspHighlightPath(edgesToRepeat);
+                    RouteInspHighlightPath(edgesToRepeat, cost);
                 }
             }
             HideValencies();
@@ -227,6 +227,7 @@ namespace Interface_2
             txAdjset.Clear();
             DeleteGraph();
             DisableAllActionButtons();
+            DisableTbCtrl();
         }
         public void DeleteGraph()
         {
