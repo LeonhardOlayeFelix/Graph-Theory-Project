@@ -101,11 +101,7 @@ namespace Interface_2
             labelExtraInfo.Content = "Click freely around the Canvas";
             ActivateButton(sender);
         }
-        private void btnRouteInspStartAtEnd_Click(object sender, RoutedEventArgs e)
-        {
-            ActivateButton(sender);
-            HideValencies();
-        }
+        
 
         private void btnRouteInspStartAndEnd_Click(object sender, RoutedEventArgs e)
         {

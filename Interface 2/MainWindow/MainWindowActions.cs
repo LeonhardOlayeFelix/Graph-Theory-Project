@@ -163,6 +163,34 @@ namespace Interface_2
             }
             return listOfEdges; //return the list of edges
         }
+        private void btnRouteInspStartAtEnd_Click(object sender, RoutedEventArgs e)
+        {
+            if (vertexList.Count() != 0)
+            {
+                ActivateButton(sender);
+                Tuple<List<Tuple<int, int>>, int> result = Graph.RInspStartAtEnd();
+                if (!Graph.IsConnected())
+                {
+                    MessageBox.Show("The graph is not connected");
+                }
+                else if (Graph.IsEulerian())
+                {
+                    MessageBox.Show("This graph is traversable");
+                }
+                else if (result == null)
+                {
+                    MessageBox.Show("Appropriate graph was not entered");
+
+                }
+                else
+                {
+                    List<Tuple<int, int>> edgesToRepeat = result.Item1;
+                    int cost = result.Item2;
+                    RouteInspHighlightPath(edgesToRepeat);
+                }
+            }
+            HideValencies();
+        }
         private void btnCreateNewGraph_Click(object sender, RoutedEventArgs e)
         {
             string name = "";

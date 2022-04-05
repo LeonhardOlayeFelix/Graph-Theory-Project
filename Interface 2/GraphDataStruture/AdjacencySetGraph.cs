@@ -12,7 +12,7 @@ namespace Interface_2
         private int NumberOfVertices; //keeps track of the number of vertices
         private int idOfNodetoAdd = 0; //makes sure that the ID of all nodes are unique, as it will be incremented
         private List<Node> VertexSet; //represents the adjacency list: A hashset containing data of class Node, where each Node contains another HashSet of type Tuple<int, int> 
-                           //which represents all of its adjacent vertices and the weight.
+                                      //which represents all of its adjacent vertices and the weight.
         public string Name { get; set; }
 
         public AdjacencySetGraph() //constructor
@@ -211,7 +211,7 @@ namespace Interface_2
             }
             return stringToReturn;
         }
-        public string coutValency(int v) 
+        public string coutValency(int v)
         {
             string stringToReturn = "";
             stringToReturn += "Valency of Vertex " + v.ToString() + ": " + GetValency(v).ToString() + "\n";
@@ -256,10 +256,10 @@ namespace Interface_2
                     adjMatrix[row].Add(-1);
                 }
             }
-            foreach(Node node in VertexSet)
+            foreach (Node node in VertexSet)
             {
                 //intialise all entries which will have a connection
-                foreach (Tuple<int,int> adjacentVertex in node.GetAdjVertices())
+                foreach (Tuple<int, int> adjacentVertex in node.GetAdjVertices())
                 {
                     adjMatrix[node.GetVertexId()][adjacentVertex.Item1] = adjacentVertex.Item2;
                     adjMatrix[adjacentVertex.Item1][node.GetVertexId()] = adjacentVertex.Item2;
@@ -351,7 +351,7 @@ namespace Interface_2
             }
             return Tuple.Create(path, cost);
         }
-        
+
         public List<int> GetOddVertices() //returns a list of odd valency vertices
         {
             List<int> oddVertices = new List<int>();
@@ -451,6 +451,163 @@ namespace Interface_2
                 }
             }
             return pathCost;
+        }
+        public static List<int> AddListAtoListB(List<int> listA, List<int> listB)
+        {
+            List<int> listResult = new List<int>() { };
+            for (int i = 0; i < listA.Count; ++i)
+            {
+                listResult.Add(listA[i]); //add onto the end of listresult
+            }
+            for (int i = 0; i < listB.Count; ++i)
+            {
+                listResult.Add(listB[i]); //add onto the end of listresult
+            }
+            return listResult;
+        }//adding lists together
+        private static List<List<int>> AddListAtoListB(List<List<int>> listA, List<List<int>> listB)
+        {
+            List<List<int>> ResultTwoDimList = new List<List<int>>() { };
+            for (int i = 0; i < listA.Count; ++i)
+            {
+                ResultTwoDimList.Add(listA[i]); //add onto the end of resulttwodimlist
+            }
+            for (int i = 0; i < listB.Count; ++i)
+            {
+                ResultTwoDimList.Add(listB[i]);//add onto the end of resulttwodimlist
+            }
+            return ResultTwoDimList;
+        }
+        private static List<int> SliceList(List<int> list, int start, int end) //cuts a list at specified interval and returns cut list
+        {
+
+            end = (end == -1) ? list.Count : end;  //passing in -1 means the end of the list
+            start = (start == -1) ? 0 : start; //passing in -1 means the start of the list
+            List<int> sublist = new List<int>() { };
+            for (int i = start; i < end; ++i)
+            {
+                sublist.Add(list[i]); //takes the list at the specified positions
+            }
+            return sublist;
+        } //c# version of slicing
+        private static void OutputList(List<List<List<int>>> threedimlist)//output 3D list, for testing purposes
+        {
+            Console.Write("[");
+            for (int i = 0; i < threedimlist.Count; ++i)
+            {
+                Console.Write("[");
+                for (int j = 0; j < threedimlist[i].Count; ++j)
+                {
+                    Console.Write("(");
+                    for (int k = 0; k < threedimlist[i][j].Count; ++k)
+                    {
+                        if (k == threedimlist[i][j].Count - 1)
+                            Console.Write("{0}", threedimlist[i][j][k]);
+                        else
+                            Console.Write("{0},", threedimlist[i][j][k]);
+                    }
+                    if (j == threedimlist[i].Count - 1)
+                        Console.Write(")");
+                    else
+                        Console.Write("),");
+                }
+                if (i == threedimlist.Count - 1)
+                    Console.Write("]");
+                else
+                    Console.WriteLine("],");
+            }
+            Console.WriteLine("]");
+        }
+        private static List<List<List<int>>> Partition(List<int> a) //returns all the possible combinations in a 3 dimensional list
+        {
+            if (a.Count == 2) //if its two items, theres only one combination
+            {
+                List<List<List<int>>> temp = new List<List<List<int>>>() { new List<List<int>>() { new List<int>() { a[0], a[1] } } };
+                return temp;
+            }
+            List<List<List<int>>> ret = new List<List<List<int>>>() { }; //return value
+            for (int i = 1; i < a.Count; ++i)
+            {
+                List<List<int>> p1 = new List<List<int>>() { new List<int>() { a[0], a[i] } };
+                List<int> rem = AddListAtoListB(SliceList(a, 1, i), SliceList(a, i + 1, -1));
+                List<List<List<int>>> res = Partition(rem);
+                foreach (var ri in res)
+                {
+                    ret.Add(AddListAtoListB(p1, ri));
+                }
+            }
+            return ret;
+        }
+        public bool IsEulerian()
+        {
+            foreach (Node vertex in VertexSet)
+            {
+                if (GetValency(vertex.GetVertexId()) % 2 == 1)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+        public Tuple<List<Tuple<int, int>>, int> RInspStartAtEnd() //item1 is the edges to repeat, item2 is the cost of repition
+        {
+            List<int> oddVertices = GetOddVertices();
+            List<List<List<int>>> combinations = Partition(oddVertices); //partition the odd vertices into pairs
+            List<List<Tuple<List<int>, int>>> CombinationsCost = new List<List<Tuple<List<int>, int>>>(); //[[((1,2,3,4),5), ((2,3,4,5),6)]]
+            for (int i = 0; i < combinations.Count(); ++i) //
+            {
+                CombinationsCost.Add(new List<Tuple<List<int>, int>>()); //create a new element so we can add that element below
+                for (int j = 0; j < combinations[i].Count(); ++j)
+                {
+                    CombinationsCost[i].Add(DijkstrasAlgorithmShort(combinations[i][j][0], combinations[i][j][1])); //populate the element just made
+                }
+            }
+            int index = selectMinPairing(CombinationsCost); //index of the lowest cost pairing.
+            //Console.WriteLine(k); ////checking
+
+            List<Tuple<int, int>> edgesToRepeat = new List<Tuple<int, int>>(); //the edges that will need to be repeated
+            List<Tuple<List<int>, int>> optimalCombo = new List<Tuple<List<int>, int>>();
+            try
+            {
+                optimalCombo = CombinationsCost[index];//get the combination that had the lowest cost
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                return null;
+            };
+            int total = 0;//the cost
+            foreach (Tuple<List<int>, int> pathAndCost in optimalCombo)
+            {
+                total += pathAndCost.Item2;//update the cost
+                List<int> path = pathAndCost.Item1;
+                for (int i = 0; i < path.Count() - 1; ++i)
+                {
+                    edgesToRepeat.Add(Tuple.Create(GetMin(path[i], path[i + 1]), GetMax(path[i], path[i + 1])));//add the edge as the vertices it connects to
+                }
+            }
+            return Tuple.Create(edgesToRepeat, total);//
+        }
+        private int selectMinPairing(List<List<Tuple<List<int>, int>>> combinations) //returns the index of the lowest cost combination
+        {
+            int min = int.MaxValue; //initialise the lowest cost to the minimum value
+            int index = 0;//set the index to 0
+            for (int i = 0; i < combinations.Count(); ++i)
+            {
+                int temp = 0; //set temp so it restarts every time
+
+                for (int j = 0; j < combinations[i].Count(); ++j)
+                {
+                    temp += combinations[i][j].Item2; //add the cost of the combination temp
+                }
+                //Console.WriteLine(temp); ////checking
+                if (temp < min)//if the temp was a lower cost...
+                {
+                    index = i;//set the new index
+                    min = temp;//replace min
+                }
+
+            }
+            return index;//return the index that the lowest combination is at
         }
         private int GetMax(int a, int b)
         {
