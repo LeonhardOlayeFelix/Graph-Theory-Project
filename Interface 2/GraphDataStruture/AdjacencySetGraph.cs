@@ -51,25 +51,22 @@ namespace Interface_2
             }
             return false;//otherwise return false
         }
-        public void RemoveEdge(int v1, int v2)//function that deletes the tuple that says theres a connection
+        public void RemoveEdge(int v1, int v2)//function that deletes a connection
         {
             if (!IsInVertexList(v1) || !IsInVertexList(v2))//if the input vertex is not in the list
             {
                 throw new ArgumentException("Vertex Does not exist");
             }
             else if (VertexSet.ElementAt(GetListOfVertices().IndexOf(v1)).EdgeExists(v2))//must use the index of v1 in the vertices list, incase any vertices have been deleted, as it will represent the ID too.
-            {//also checks if a connection exists so we can remove it.
+            {//need to make sure the edge exists first too
                 List<int> vertexList = GetListOfVertices();//get list of vertices
                 if (v1 == v2)
                 {
                     throw new ArgumentException("An edge does not exist from itself to itself");
                 }
-                //else if (v1 >= this.NumberOfVertices + NumberOfDeletedVertices || v2 >= this.NumberOfVertices + NumberOfDeletedVertices || v1 < 0 || v2 < 0)//make sure that input vertex is in range
-                //    throw new ArgumentOutOfRangeException("Vertex out of bounds"); ////not sure i even need this code
                 int v1Index = vertexList.IndexOf(v1);
                 int v2Index = vertexList.IndexOf(v2);
                 this.VertexSet.ElementAt(v1Index).RemoveEdge(v2);//pass in the index since some of the vertices may have been deleted
-                //this is where we should make the line disappear on the screen from button v1 to button v2
                 this.VertexSet.ElementAt(v2Index).RemoveEdge(v1); //undirected graph
             }
             else
@@ -94,7 +91,7 @@ namespace Interface_2
                     weight = vertex.GetWeight(v2);
                 }
             }
-            return weight;
+            return weight; //returns -1 if no edge was found
         }
         public List<Node> GetAdjacencyList()//gets the adjacency list of the graph
         {
@@ -135,11 +132,11 @@ namespace Interface_2
             }
             return ListOfVertices;
         }
-        public int GetValency(int v1)//get the valency of each node (number of edges that are coming out of it.)
+        public int GetValency(int v1)//get the valency of a node
         {
-            if (IsInVertexList(v1))//first, make sure the input vertex exists
+            if (IsInVertexList(v1))//first, make sure the vertex exists
             {
-                foreach (Node node in VertexSet)
+                foreach (Node node in VertexSet)//loop through each node
                 {
                     if (node.GetVertexId() == v1) //when you find the match
                     {
@@ -176,13 +173,12 @@ namespace Interface_2
                         //first remove all of the edges coming INTO the vertex
                         foreach (Node node in VertexSet)//loops through node
                         {
-                            foreach (Tuple<int, int> tuple in node.GetAdjVertices())//loop through the hashset of tuples in within each node
+                            foreach (Tuple<int, int> tuple in node.GetAdjVertices())//loop through the hashset of tuples within each node
                             {
-                                if (tuple.Item1 == vertexToRemove)//if this is true, then an edge coming into the vertex has been found
+                                if (tuple.Item1 == vertexToRemove)//if the tuples item1 is the same as the vertex to remove, then its an edge that needs to be deleted
                                 {
-                                    RemoveEdge(node.GetVertexId(), vertexToRemove); //removes said edge
-
-                                    break;//MUST since you cannot edit a tuple after its been editted inside of a loop
+                                    RemoveEdge(node.GetVertexId(), vertexToRemove); //remove said edge
+                                    break;//MUST do this since you cannot edit a tuple after its been editted inside of a loop
                                 }
                             }
                         }
@@ -198,25 +194,13 @@ namespace Interface_2
                 }
             }
         }
-        public string coutHashSet(int vertex) //returns the string of the adjacency list
-        {
-            string stringToReturn = "";
-            foreach (Node node in VertexSet)
-            {
-                if (node.GetVertexId() == vertex)
-                {
-                    stringToReturn = node.coutHashSet();
-                }
-            }
-            return stringToReturn;
-        }
-        public string coutValency(int v)
+        public string coutValency(int v) //returns the string which represents the valency of vertex v
         {
             string stringToReturn = "";
             stringToReturn += "Valency of Vertex " + v.ToString() + ": " + GetValency(v).ToString() + "\n";
             return stringToReturn;
         }
-        public string coutAdjList()
+        public string coutAdjList() //returns the string which represents the adjacency list
         {
             string stringToReturn = "";
             List<Node> adjList = GetAdjacencyList();
@@ -230,7 +214,7 @@ namespace Interface_2
             }
             return stringToReturn;
         }
-        public int GetMaxNodeID()
+        public int GetMaxNodeID() //returns the highest Node ID
         {
             int maxId = -10;
             foreach (Node node in VertexSet)
@@ -244,12 +228,12 @@ namespace Interface_2
         }
         public List<List<int>> GetAdjacencyMatrix() //returns the adjacency matrix as a 2d list
         {
-            int size = GetMaxNodeID() + 1;
-            List<List<int>> adjMatrix = new List<List<int>>();
+            int size = GetMaxNodeID() + 1; //need a size one greater since the nodes start from 0
+            List<List<int>> adjMatrix = new List<List<int>>(); //where we will store the matrix
             for (int row = 0; row < size; ++row)
             {
                 adjMatrix.Add(new List<int>());
-                //set all entries to -1
+                //set all entries to -1 first
                 for (int column = 0; column < size; ++column)
                 {
                     adjMatrix[row].Add(-1);
@@ -260,13 +244,13 @@ namespace Interface_2
                 //intialise all entries which will have a connection
                 foreach (Tuple<int, int> adjacentVertex in node.GetAdjVertices())
                 {
-                    adjMatrix[node.GetVertexId()][adjacentVertex.Item1] = adjacentVertex.Item2;
-                    adjMatrix[adjacentVertex.Item1][node.GetVertexId()] = adjacentVertex.Item2;
+                    adjMatrix[node.GetVertexId()][adjacentVertex.Item1] = adjacentVertex.Item2; //update the position in the matrix 
+                    adjMatrix[adjacentVertex.Item1][node.GetVertexId()] = adjacentVertex.Item2;//both ways
                 }
             }
             return adjMatrix;
         }
-        public int selectMinVertex(List<int> value, List<bool> processed, int size) //gets the vertex that has the lowest value
+        private int selectMinVertex(List<int> value, List<bool> processed, int size) //gets the vertex that has the lowest value, that is not already processed
         {
             int minimum = 2147483647;
             int vertex = 0;
@@ -346,12 +330,12 @@ namespace Interface_2
             int cost = 0;
             for (int i = 0; i < path.Count() - 1; ++i)
             {
-                cost += GetEdgeWeight(path.ElementAt(i), path.ElementAt(i + 1));
+                cost += GetEdgeWeight(path.ElementAt(i), path.ElementAt(i + 1)); //get the cost of the shortest path
             }
             return Tuple.Create(path, cost);
         }
 
-        public List<int> GetOddVertices() //returns a list of odd valency vertices
+        public List<int> GetOddVertices() //returns a list of all the odd valency vertices (for route inspection)
         {
             List<int> oddVertices = new List<int>();
             foreach (Node vertex in VertexSet)
@@ -363,7 +347,7 @@ namespace Interface_2
             }
             return oddVertices;
         }
-        static bool IsValidEdge(int u, int v, bool[] isInMst) //Check if the passed in edge is available for use in the MST
+        private bool IsValidEdge(int u, int v, bool[] isInMst) //Check if the passed in edge is available for use in the MST
         {
             if (u == v) //a vertex to itself is not valid
                 return false;
@@ -373,18 +357,18 @@ namespace Interface_2
                 return false;
             return true;
         }
-        public bool IsConnected()
+        public bool IsConnected() //returns true if the graph is connected, false if not
         {
             if (GetNumberOfVertices() == 1)
             {
-                return true;
+                return true; //a graph with 1 node is connected
             }
-            List<Tuple<int, int, int>> primsRVal = Prims();
+            List<Tuple<int, int, int>> primsRVal = Prims(); //if Prim's algorithm returns an empty list, then it means its not connected
             if (primsRVal.Count == 0)
             {
                 return false;
             }
-            return true;
+            return true; //if it gets here, the graph is connected
         }
         public List<Tuple<int, int, int>> Prims() //returns the MST as a tuple(vertex, vertex, cost)
         {
@@ -433,7 +417,7 @@ namespace Interface_2
             return mstPath;
         }
 
-        public int GetPathCost(List<int> path)
+        public int GetPathCost(List<int> path) //returns the cost of a path
         {
             int pathCost = 0;
             for (int i = 0; i < path.Count() - 1; ++i)
@@ -451,7 +435,7 @@ namespace Interface_2
             }
             return pathCost;
         }
-        public static List<int> AddListAtoListB(List<int> listA, List<int> listB)
+        private static List<int> AddListAtoListB(List<int> listA, List<int> listB) //adding lists together - for route inspection partitioning
         {
             List<int> listResult = new List<int>() { };
             for (int i = 0; i < listA.Count; ++i)
@@ -463,8 +447,8 @@ namespace Interface_2
                 listResult.Add(listB[i]); //add onto the end of listresult
             }
             return listResult;
-        }//adding lists together
-        private static List<List<int>> AddListAtoListB(List<List<int>> listA, List<List<int>> listB)
+        }
+        private static List<List<int>> AddListAtoListB(List<List<int>> listA, List<List<int>> listB) //adds two dimensional lists together for route inspection pair partitioning
         {
             List<List<int>> ResultTwoDimList = new List<List<int>>() { };
             for (int i = 0; i < listA.Count; ++i)
@@ -537,16 +521,16 @@ namespace Interface_2
             }
             return ret;
         }
-        public bool IsEulerian()
+        public bool IsEulerian() //returns true if the graph is eulerian
         {
             foreach (Node vertex in VertexSet)
             {
                 if (GetValency(vertex.GetVertexId()) % 2 == 1)
                 {
-                    return false;
+                    return false; //returns false if an odd vertex is found
                 }
             }
-            return true;
+            return true; //returns true since no odd vertices were found
         }
         public Tuple<List<Tuple<int, int>>, int> RInspStartAtEnd() //item1 is the edges to repeat, item2 is the cost of repition
         {
@@ -587,7 +571,7 @@ namespace Interface_2
             }
             return Tuple.Create(edgesToRepeat, total);
         }
-        private int selectMinPairing(List<List<Tuple<List<int>, int>>> combinations) //returns the index of the lowest cost combination
+        private int selectMinPairing(List<List<Tuple<List<int>, int>>> combinations) //returns the index of the lowest cost combination for route inspection
         {
             int min = int.MaxValue; //initialise the lowest cost to the minimum value
             int index = 0;//set the index to 0
@@ -609,13 +593,13 @@ namespace Interface_2
             }
             return index;//return the index that the lowest combination is at
         }
-        private int GetMax(int a, int b)
+        private int GetMax(int a, int b) //gets the larger value
         {
             return (a > b) ? a : b;
         }
         private int GetMin(int a, int b)
         {
-            return (a < b) ? a : b;
+            return (a < b) ? a : b; //gets the smaller value
         }
     }
 }
