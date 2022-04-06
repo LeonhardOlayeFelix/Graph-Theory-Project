@@ -375,7 +375,7 @@ namespace Interface_2
             List<List<int>> adjMatrix = GetAdjacencyMatrix();
             List<Tuple<int, int, int>> mstPath = new List<Tuple<int, int, int>>();//return value
             bool[] isInMST = new bool[adjMatrix.Count()];//represents a value for each vertex which says if its in the MST
-            if (startVertex == -1) //if a start vertex wasnt specified
+            if (startVertex == -1 || !IsInVertexList(startVertex)) //if a start vertex wasnt specified or if it was an invalid vertex   
             {
                 isInMST[VertexSet.ElementAt(0).GetVertexId()] = true;//first existing vertex is in MST
             }
