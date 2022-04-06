@@ -21,26 +21,25 @@ namespace Interface_2
             this.NumberOfDeletedVertices = 0;
             this.VertexSet = new List<Node>();
         }
-        public void AddEdge(int v1, int v2, int weight = 0) //Makes a the input nodes adjacent to each other with a weight of the input
+        public void AddEdge(int v1, int v2, int weight = 0) //Makes the input nodes adjacent to each other with a weight of the input
         {
 
             if (v1 == v2)
             {
                 throw new ArgumentException("Cannot make a vertex adjacent to itself.");
             }
-            if (!IsInVertexList(v1) || !IsInVertexList(v2)) //make sure that the vertex is actually a vertex.
+            if (!IsInVertexList(v1) || !IsInVertexList(v2)) //make sure that the vertex exists.
             {
                 throw new ArgumentException("Vertex does not exist.");
             }
             List<int> vertexList = GetListOfVertices(); //get a list of the current vertices
             int v1Index = vertexList.IndexOf(v1);//gets the index of the vertex in the vertices list incase some vertices have been deleted.
             int v2Index = vertexList.IndexOf(v2);//gets the index of the vertex in the vertices list incase some vertices have been deleted.
-            this.VertexSet.ElementAt(v1Index).AddEdge(v2, weight); //add a tuple to each of the vertices, to represent that the vertices are adjacent to each other
-            //this is where we should make the line appear on the screen from button v1 to button v2
-            this.VertexSet.ElementAt(v2Index).AddEdge(v1, weight); //do it the other way aswell since the graph is undirected            
+            this.VertexSet.ElementAt(v1Index).AddEdge(v2, weight); //adds the edge using the AddEdge Method that the Nodes have
+            this.VertexSet.ElementAt(v2Index).AddEdge(v1, weight); //Does it both ways since this is an undirected graph           
         }
 
-        public bool IsInVertexList(int v)//function to check if a vertex actually exists.
+        public bool IsInVertexList(int v)//function to check if a vertex exists
         {
             List<int> vertexList = GetListOfVertices();//get the list of vertices
             foreach (int vertex in vertexList)//loop through it
