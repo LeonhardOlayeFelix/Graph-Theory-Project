@@ -168,25 +168,25 @@ namespace Interface_2
             if (vertexList.Count() != 0)
             {
                 ActivateButton(sender);
-                Tuple<List<Tuple<int, int>>, int> result = Graph.RInspStartAtEnd();
-                if (!Graph.IsConnected())
+                Tuple<List<Tuple<int, int>>, int> result = Graph.RInspStartAtEnd();//returns the edges to repeated (1) and the cost of repitition (2)
+                if (!Graph.IsConnected()) //have to make sure that the graph is connected first
                 {
                     MessageBox.Show("The graph is not connected");
                 }
-                else if (Graph.IsEulerian())
+                else if (Graph.IsEulerian()) //if the graph is already eulerian then it will be traversable
                 {
                     MessageBox.Show("This graph is traversable");
                 }
                 else if (result == null)
                 {
-                    MessageBox.Show("Appropriate graph was not entered");
+                    MessageBox.Show("Appropriate graph was not entered"); //in this case, there was an unexpected error
 
                 }
                 else
                 {
-                    List<Tuple<int, int>> edgesToRepeat = result.Item1;
-                    int cost = result.Item2;
-                    RouteInspHighlightPath(edgesToRepeat, cost);
+                    List<Tuple<int, int>> edgesToRepeat = result.Item1; //first item of the tuple
+                    int cost = result.Item2;//second item of the tuple
+                    RouteInspHighlightPath(edgesToRepeat, cost); //highlights the edges to be repeated and presents the cost
                 }
             }
             HideValencies();
@@ -195,10 +195,10 @@ namespace Interface_2
         {
             string name = "";
             NameCreatedGraph nameGraphWindow = new NameCreatedGraph();
-            nameGraphWindow.ShowDialog();
-            if (nameGraphWindow.DialogResult == true)
+            nameGraphWindow.ShowDialog(); //opens a new window
+            if (nameGraphWindow.DialogResult == true) //if they pressed ok rather than the exit button
             {
-                name = nameGraphWindow.txBoxGraphName.Text;
+                name = nameGraphWindow.txBoxGraphName.Text; //re-initialise everything:
                 DeleteGraph();
                 CreateNewGraph(name);
                 btnDeleteGraph.IsEnabled = true;

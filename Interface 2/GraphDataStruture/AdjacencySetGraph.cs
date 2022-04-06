@@ -528,12 +528,12 @@ namespace Interface_2
             List<List<List<int>>> ret = new List<List<List<int>>>() { }; //return value
             for (int i = 1; i < a.Count; ++i)
             {
-                List<List<int>> p1 = new List<List<int>>() { new List<int>() { a[0], a[i] } };
-                List<int> rem = AddListAtoListB(SliceList(a, 1, i), SliceList(a, i + 1, -1));
+                List<List<int>> p1 = new List<List<int>>() { new List<int>() { a[0], a[i] } }; //split apart: [0,1] [2,3,4,5]
+                List<int> rem = AddListAtoListB(SliceList(a, 1, i), SliceList(a, i + 1, -1)); //generate combinations of [2,3,4,5] recursively
                 List<List<List<int>>> res = Partition(rem);
                 foreach (var ri in res)
                 {
-                    ret.Add(AddListAtoListB(p1, ri));
+                    ret.Add(AddListAtoListB(p1, ri)); //add that combination to [0,1]
                 }
             }
             return ret;
@@ -551,18 +551,18 @@ namespace Interface_2
         }
         public Tuple<List<Tuple<int, int>>, int> RInspStartAtEnd() //item1 is the edges to repeat, item2 is the cost of repition
         {
-            List<int> oddVertices = GetOddVertices();
+            List<int> oddVertices = GetOddVertices();//get a list of all the odd vertices
             List<List<List<int>>> combinations = Partition(oddVertices); //partition the odd vertices into pairs
-            List<List<Tuple<List<int>, int>>> CombinationsCost = new List<List<Tuple<List<int>, int>>>(); //[[((1,2,3,4),5), ((2,3,4,5),6)]]
-            for (int i = 0; i < combinations.Count(); ++i) //
+            List<List<Tuple<List<int>, int>>> CombinationsCost = new List<List<Tuple<List<int>, int>>>(); //example: [[#path, cost],[#path, cost]]
+            for (int i = 0; i < combinations.Count(); ++i) //loop through each combination
             {
-                CombinationsCost.Add(new List<Tuple<List<int>, int>>()); //create a new element so we can add that element below
+                CombinationsCost.Add(new List<Tuple<List<int>, int>>()); //create a new element so we can add the cost and path below
                 for (int j = 0; j < combinations[i].Count(); ++j)
                 {
                     CombinationsCost[i].Add(DijkstrasAlgorithmShort(combinations[i][j][0], combinations[i][j][1])); //populate the element just made
                 }
             }
-            int index = selectMinPairing(CombinationsCost); //index of the lowest cost pairing.
+            int index = selectMinPairing(CombinationsCost); //returns the index of the lowest cost pairing
             //Console.WriteLine(k); ////checking
 
             List<Tuple<int, int>> edgesToRepeat = new List<Tuple<int, int>>(); //the edges that will need to be repeated
@@ -571,21 +571,22 @@ namespace Interface_2
             {
                 optimalCombo = CombinationsCost[index];//get the combination that had the lowest cost
             }
-            catch (ArgumentOutOfRangeException)
+            catch
             {
-                return null;
+                return null; //incase anything goes wrong
             };
             int total = 0;//the cost
             foreach (Tuple<List<int>, int> pathAndCost in optimalCombo)
             {
                 total += pathAndCost.Item2;//update the cost
-                List<int> path = pathAndCost.Item1;
+                List<int> path = pathAndCost.Item1; //get the path e.g (1,2,3,4,5)
                 for (int i = 0; i < path.Count() - 1; ++i)
                 {
-                    edgesToRepeat.Add(Tuple.Create(GetMin(path[i], path[i + 1]), GetMax(path[i], path[i + 1])));//add the edge as the vertices it connects to
+                    edgesToRepeat.Add(Tuple.Create(GetMin(path[i], path[i + 1]), GetMax(path[i], path[i + 1])));//get the path as different edges, e.g.
+                                                                                                                //(1,2),(2,3),(3,4),(4,5);
                 }
             }
-            return Tuple.Create(edgesToRepeat, total);//
+            return Tuple.Create(edgesToRepeat, total);
         }
         private int selectMinPairing(List<List<Tuple<List<int>, int>>> combinations) //returns the index of the lowest cost combination
         {
