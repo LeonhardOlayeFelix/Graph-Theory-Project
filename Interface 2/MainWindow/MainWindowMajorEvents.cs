@@ -88,6 +88,7 @@ namespace Interface_2
                                     List<Tuple<int, int>> edgesToRepeat = result.Item1; //first item of the tuple reps edges to repeat
                                     int cost = result.Item2;//second item of the tuple reps the total cost
                                     RouteInspHighlightPath(edgesToRepeat, cost); //highlights the edges to be repeated and presents the cost
+                                    HideValencies();
                                 }
                                 EnableTbCtrl();
                                 EnableAllAlgoButtons();

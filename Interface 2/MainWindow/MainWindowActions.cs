@@ -165,7 +165,7 @@ namespace Interface_2
         }
         private void btnRouteInspStartAndEnd_Click(object sender, RoutedEventArgs e)
         {
-            HideValencies();
+            ShowValencies();
             labelExtraInfo.Content = "Choose a START vertex with an ODD valency";
             ActivateButton(sender);
         }
