@@ -21,6 +21,8 @@ namespace Interface_2
         Ellipse vertexToConnectTo;
         int buttonSelectionCount = 0;
         int dijkstraSelectionCount = 0;
+        int rInspSelectionCount = 0;
+        int rInspStart = 0;
         int startVertex = 0;
         //for loading, creating, and deleting files
         private bool graphCreated = false;

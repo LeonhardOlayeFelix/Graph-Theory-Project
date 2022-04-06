@@ -103,11 +103,7 @@ namespace Interface_2
         }
         
 
-        private void btnRouteInspStartAndEnd_Click(object sender, RoutedEventArgs e)
-        {
-            ActivateButton(sender);
-            HideValencies();
-        }
+        
 
         private void btnClose_Click(object sender, RoutedEventArgs e)
         {

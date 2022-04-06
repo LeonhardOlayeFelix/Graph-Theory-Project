@@ -535,6 +535,20 @@ namespace Interface_2
             }
             return ret;
         }
+        public bool IsSemiEulerian()
+        {
+            int numOddVertices = 0;
+            foreach (Node vertex in VertexSet)
+            {
+                if (GetValency(vertex.GetVertexId()) % 2 == 1)
+                {
+                    numOddVertices += 1;
+                }
+            }
+            if (numOddVertices == 2)
+                return true;
+            return false;
+        }
         public bool IsEulerian() //returns true if the graph is eulerian
         {
             foreach (Node vertex in VertexSet)
@@ -599,7 +613,7 @@ namespace Interface_2
                 throw new Exception("Both the start vertex and end vertex need to have an odd valency");
             }
             List<int> oddVertices = GetOddVertices();//get a list of all the odd vertices
-            oddVertices.Remove(startVertex);
+            oddVertices.Remove(startVertex); //the start and end vertex dont need to be made even
             oddVertices.Remove(endVertex);
             return GetOptimalCombination(oddVertices);
         }

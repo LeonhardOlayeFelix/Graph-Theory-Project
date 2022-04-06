@@ -163,6 +163,12 @@ namespace Interface_2
             }
             return listOfEdges; //return the list of edges
         }
+        private void btnRouteInspStartAndEnd_Click(object sender, RoutedEventArgs e)
+        {
+            HideValencies();
+            labelExtraInfo.Content = "Choose a START vertex with an ODD valency";
+            ActivateButton(sender);
+        }
         private void btnRouteInspStartAtEnd_Click(object sender, RoutedEventArgs e)
         {
             if (vertexList.Count() != 0)

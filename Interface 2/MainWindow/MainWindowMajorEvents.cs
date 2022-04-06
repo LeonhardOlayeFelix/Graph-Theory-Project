@@ -41,6 +41,79 @@ namespace Interface_2
                     }
 
                 }
+                else if (currentButton == btnRouteInspStartAndEnd)
+                {
+                    if (!Graph.IsConnected())
+                    {
+                        MessageBox.Show("The graph is not connected");
+                    }
+                    else
+                    {
+                        rInspSelectionCount += 1;
+                        if (rInspSelectionCount % 2 == 0) //if even, its the END vertex
+                        {
+                            Ellipse endVertex = (Ellipse)e.OriginalSource;
+                            int endVertexId = Convert.ToInt32(endVertex.Name.Substring(3));
+                            if (Graph.GetValency(endVertexId) % 2 == 0) //if the valency of the end vertex is odd, the algorithm isnt useful here
+                            {
+                                MessageBox.Show("The start and end Vertex must have an ODD valency.");
+                                rInspSelectionCount -= 1; //decrement it as if nothing happened
+                            }
+                            else if (rInspStart == endVertexId) //if they are path finding to itself, do nothing
+                            {
+                                EnableAllActionButtons();
+                                EnableTbCtrl();
+                                EnableAllAlgoButtons();
+                                btnImportGraph.IsEnabled = false;
+                                btnImportGraph.IsEnabled = false;
+                                labelExtraInfo.Content = "";
+                            }
+                            else
+                            {
+                                Tuple<List<Tuple<int, int>>, int> result = Graph.RInspStartAndEnd(rInspStart, endVertexId);//returns the edges to repeated (1) and the cost of repitition (2)
+                                if (!Graph.IsConnected()) //have to make sure that the graph is connected first
+                                {
+                                    MessageBox.Show("The graph is not connected");
+                                }
+                                else if (Graph.IsSemiEulerian()) //if the graph is already semi eulerian then it will be traversable
+                                {
+                                    MessageBox.Show("No edges need to be added");
+                                }
+                                else if (result == null)
+                                {
+                                    MessageBox.Show("Appropriate graph was not entered"); //in this case, there was an unexpected eror
+                                }
+                                else
+                                {
+                                    List<Tuple<int, int>> edgesToRepeat = result.Item1; //first item of the tuple reps edges to repeat
+                                    int cost = result.Item2;//second item of the tuple reps the total cost
+                                    RouteInspHighlightPath(edgesToRepeat, cost); //highlights the edges to be repeated and presents the cost
+                                }
+                                EnableTbCtrl();
+                                EnableAllAlgoButtons();
+                            }
+
+                        }
+                        else if (rInspSelectionCount % 2 == 1) //if selectioncount is odd, then its the START vertex
+                        {
+                            DisableTbCtrl();
+                            DisableAllAlgoButtons();
+                            Ellipse v = (Ellipse)e.OriginalSource;
+                            rInspStart = Convert.ToInt32(v.Name.Substring(3));
+                            if (Graph.GetValency(rInspStart) % 2 == 0) //make sure the vertex has an odd valency
+                            {
+                                MessageBox.Show("The start and end vertex must have an odd valency");
+                                labelExtraInfo.Content = "Choose a START vertex with ODD valency";
+                                rInspSelectionCount -= 1; //if it doesnt, decrement to act as if that selection didnt count
+                            }
+                            else
+                            {
+                                labelExtraInfo.Content = "Choose an END vertex with ODD valency.";
+                            }
+                            
+                        }
+                    }
+                }
                 else if (currentButton == btnAddConnection) //if they want to add a vertex
                 {
                     buttonSelectionCount += 1;
