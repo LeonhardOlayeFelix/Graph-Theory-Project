@@ -375,7 +375,7 @@ namespace Interface_2
             List<List<int>> adjMatrix = GetAdjacencyMatrix();
             List<Tuple<int, int, int>> mstPath = new List<Tuple<int, int, int>>();//return value
             bool[] isInMST = new bool[adjMatrix.Count()];//represents a value for each vertex which says if its in the MST
-            if (startVertex == -1 || !IsInVertexList(startVertex)) //if a start vertex wasnt specified or if it was an invalid vertex   
+            if (startVertex == -1 || !IsInVertexList(startVertex)) //if a start vertex wasnt specified or if it was an invalid vertex
             {
                 isInMST[VertexSet.ElementAt(0).GetVertexId()] = true;//first existing vertex is in MST
             }
@@ -389,7 +389,7 @@ namespace Interface_2
                     }
                 }
             }
-            
+
             int numVertex = adjMatrix.Count;
             int countedEdges = 0; //to know when to stop the loop
             int mstTotal = 0;
@@ -546,9 +546,8 @@ namespace Interface_2
             }
             return true; //returns true since no odd vertices were found
         }
-        public Tuple<List<Tuple<int, int>>, int> RInspStartAtEnd() //item1 is the edges to repeat, item2 is the cost of repition
+        public Tuple<List<Tuple<int, int>>, int> GetOptimalCombination(List<int> oddVertices)
         {
-            List<int> oddVertices = GetOddVertices();//get a list of all the odd vertices
             List<List<List<int>>> combinations = Partition(oddVertices); //partition the odd vertices into pairs
             List<List<Tuple<List<int>, int>>> CombinationsCost = new List<List<Tuple<List<int>, int>>>(); //example: [[#path, cost],[#path, cost]]
             for (int i = 0; i < combinations.Count(); ++i) //loop through each combination
@@ -561,7 +560,6 @@ namespace Interface_2
             }
             int index = selectMinPairing(CombinationsCost); //returns the index of the lowest cost pairing
             //Console.WriteLine(k); ////checking
-
             List<Tuple<int, int>> edgesToRepeat = new List<Tuple<int, int>>(); //the edges that will need to be repeated
             List<Tuple<List<int>, int>> optimalCombo = new List<Tuple<List<int>, int>>();
             try
@@ -584,6 +582,26 @@ namespace Interface_2
                 }
             }
             return Tuple.Create(edgesToRepeat, total);
+        }
+        public Tuple<List<Tuple<int, int>>, int> RInspStartAtEnd() //item1 is the edges to repeat, item2 is the cost of repition
+        {
+            List<int> oddVertices = GetOddVertices();//get a list of all the odd vertices
+            return GetOptimalCombination(oddVertices);
+        }
+        public Tuple<List<Tuple<int, int>>, int> RInspStartAndEnd(int startVertex, int endVertex) //item1 is the edges to repeat, item2 is the cost of repition
+        {
+            if (!IsInVertexList(startVertex) || !IsInVertexList(endVertex))
+            {
+                throw new Exception("Input vertex does not exist.");
+            }
+            else if (GetValency(startVertex) % 2 == 0 || GetValency(endVertex) % 2 == 0)
+            {
+                throw new Exception("Both the start vertex and end vertex need to have an odd valency");
+            }
+            List<int> oddVertices = GetOddVertices();//get a list of all the odd vertices
+            oddVertices.Remove(startVertex);
+            oddVertices.Remove(endVertex);
+            return GetOptimalCombination(oddVertices);
         }
         private int selectMinPairing(List<List<Tuple<List<int>, int>>> combinations) //returns the index of the lowest cost combination for route inspection
         {

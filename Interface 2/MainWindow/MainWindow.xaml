@@ -490,7 +490,7 @@
                                                         x:Name="btnRouteInspStartAndEnd"
                                                         Click="btnRouteInspStartAndEnd_Click"
                                                         Grid.Row="1">
-                                                    Start at A and End at B
+                                                    Start at A and End at B (odd)
                                                 </Button>
                                                 <TextBlock Foreground="Black"
                                                Grid.Row="1"
