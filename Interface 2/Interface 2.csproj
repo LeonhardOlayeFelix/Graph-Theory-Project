@@ -112,7 +112,7 @@
     <Compile Include="MainWindow\MainWindowActions.cs" />
     <Compile Include="MainWindow\MainWindowAlgorithms.cs" />
     <Compile Include="MainWindow\MainWindowDisEnabling.cs" />
-    <Compile Include="MainWindow\MainWindowMajorEvents.cs" />
+    <Compile Include="MainWindow\MainWindowCanvasEvents.cs" />
     <Compile Include="MainWindow\MainWindowMinorEvents.cs" />
     <Compile Include="SecondaryWindows\NameCreatedGraph.xaml.cs">
       <DependentUpon>NameCreatedGraph.xaml</DependentUpon>
