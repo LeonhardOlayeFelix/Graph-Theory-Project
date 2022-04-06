@@ -329,22 +329,8 @@ namespace Interface_2
         }
         private void btnPrims_Click(object sender, RoutedEventArgs e)
         {
-            if (vertexList.Count() != 0)
-            {
-                ActivateButton(sender);
-                if (Graph.IsConnected())
-                {
-                    List<Tuple<int, int, int>> mst = Graph.Prims();
-                    PrimsHighlightPath(mst);
-                }
-                else
-                {
-                    MessageBox.Show("The graph is not connected.");
-                }
-            }
-            
-            
-            
+            labelExtraInfo.Content = "Choose a start Vertex";
+            ActivateButton(sender);
         }
         public int GetMax(int a, int b)
         {

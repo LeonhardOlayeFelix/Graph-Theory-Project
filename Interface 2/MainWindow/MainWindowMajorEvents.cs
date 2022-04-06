@@ -80,6 +80,23 @@ namespace Interface_2
                         DisableAllActionButtons();
                     }
                 }
+                else if (currentButton == btnPrims)
+                {
+                    if (vertexList.Count() != 0)
+                    {
+                        Ellipse startVertex = (Ellipse)e.OriginalSource;
+                        int startVertexID = Convert.ToInt32(startVertex.Name.Substring(3));
+                        if (Graph.IsConnected())
+                        {
+                            List<Tuple<int, int, int>> mst = Graph.Prims(startVertexID);
+                            PrimsHighlightPath(mst);
+                        }
+                        else
+                        {
+                            MessageBox.Show("The graph is not connected.");
+                        }
+                    }
+                }
                 else if (currentButton == btnDijkstrasShort)
                 {
                     dijkstraSelectionCount += 1;

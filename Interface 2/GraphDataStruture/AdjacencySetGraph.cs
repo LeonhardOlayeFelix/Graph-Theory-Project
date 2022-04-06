@@ -370,12 +370,26 @@ namespace Interface_2
             }
             return true; //if it gets here, the graph is connected
         }
-        public List<Tuple<int, int, int>> Prims() //returns the MST as a tuple(vertex, vertex, cost)
+        public List<Tuple<int, int, int>> Prims(int startVertex = -1) //returns the MST as a tuple(vertex, vertex, cost)
         {
             List<List<int>> adjMatrix = GetAdjacencyMatrix();
             List<Tuple<int, int, int>> mstPath = new List<Tuple<int, int, int>>();//return value
             bool[] isInMST = new bool[adjMatrix.Count()];//represents a value for each vertex which says if its in the MST
-            isInMST[VertexSet.ElementAt(0).GetVertexId()] = true;//first existing vertex is in MST
+            if (startVertex == -1) //if a start vertex wasnt specified
+            {
+                isInMST[VertexSet.ElementAt(0).GetVertexId()] = true;//first existing vertex is in MST
+            }
+            else //if a start vertex was specified
+            {
+                for (int i = 0; i < VertexSet.Count(); ++i)
+                {
+                    if (VertexSet.ElementAt(i).GetVertexId() == startVertex)
+                    {
+                        isInMST[VertexSet.ElementAt(i).GetVertexId()] = true;
+                    }
+                }
+            }
+            
             int numVertex = adjMatrix.Count;
             int countedEdges = 0; //to know when to stop the loop
             int mstTotal = 0;
