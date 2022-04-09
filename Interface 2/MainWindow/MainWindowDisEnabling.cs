@@ -31,7 +31,7 @@ namespace Interface_2
             btnRouteInspStartAndEnd.IsEnabled = true;
             btnRouteInspStartAtEnd.IsEnabled = true;
             btnBreadthFirst.IsEnabled = true;
-            btnDepthFirst.IsEnabled = false;
+            btnDepthFirst.IsEnabled = true;
             btnPrims.IsEnabled = true;
         }
         public void DisableTbCtrl()

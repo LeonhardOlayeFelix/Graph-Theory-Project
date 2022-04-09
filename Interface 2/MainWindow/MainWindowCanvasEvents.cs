@@ -102,6 +102,7 @@ namespace Interface_2
                                     HideValencies();
                                 }
                                 EnableTbCtrl();
+                                EnableAllActionButtons();
                                 EnableAllAlgoButtons();
                             }
 
