@@ -549,7 +549,7 @@
                                                 <Button Margin="20,12,20,3"
                                             x:Name="btnDepthFirst"
                                             Grid.Row="2"
-                                            Click="btnBreadthFirst_Click">
+                                            Click="btnDepthFirst_Click">
                                                     Depth-First Traversal
                                                 </Button>
                                             </Grid>

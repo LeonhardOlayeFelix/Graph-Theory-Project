@@ -447,12 +447,10 @@ namespace Interface_2
             {
                 return true; //a graph with 1 node is connected
             }
-            List<Tuple<int, int, int>> primsRVal = Prims(); //if Prim's algorithm returns an empty list, then it means its not connected
-            if (primsRVal.Count == 0)
-            {
-                return false;
-            }
-            return true; //if it gets here, the graph is connected
+            List<Tuple<int, int>> DFSresult = DepthFirst(GetMaxNodeID());
+            if (DFSresult.Count() != GetNumberOfVertices() - 1)
+                return true; //if the result of DFS includes all of the vertices it is connected
+            return false;
         }
         public List<Tuple<int, int, int>> Kruskals()
         {
@@ -729,7 +727,7 @@ namespace Interface_2
             }
             return index;//return the index that the lowest combination is at
         }
-        public List<Tuple<int, int>> DepthFirst(int startNode = 0) //returns a list of tuples where Item1 = Vertex, Item2 = Parent Vertex, we connect edges between these two items
+        public List<Tuple<int, int>> DepthFirst(int startNode) //returns a list of tuples where Item1 = Vertex, Item2 = Parent Vertex, we connect edges between these two items
         {
             List<Tuple<int, int>> visited = new List<Tuple<int, int>>(); //initialise return value
             visited.Add(Tuple.Create(startNode, -1)); //start node doesnt have a parent so we can set it to -1 and mark it as visited

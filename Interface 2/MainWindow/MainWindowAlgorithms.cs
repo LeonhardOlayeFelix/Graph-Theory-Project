@@ -139,7 +139,32 @@ namespace Interface_2
                 DijkstraHighlightPath(pathToHighlight);//runs the function on this list of IDs
             }
         }
-
+        private void TraversalHighlightPath(List<Tuple<int, int>> edges)
+        {
+            List<Line> highlightedLines = new List<Line>(); //gets the list of lines to highlight at the end
+            foreach (Tuple<int, int> edge in edges)
+            {
+                int smallerId = GetMin(edge.Item1, edge.Item2);
+                int largerId = GetMax(edge.Item1, edge.Item2);
+                string lineName = "line" + smallerId.ToString() + "to" + largerId.ToString(); //uses this to check if theres a path
+                foreach (Tuple<Line, Ellipse, Ellipse, TextBlock> line in edgeList)
+                {
+                    if (line.Item1.Name == lineName)//detetcs if theres a path because theres a matching name
+                    {
+                        highlightedLines.Add(line.Item1); //adds it to the list of edges
+                    }
+                }
+            }
+            for (int i = 0; i < highlightedLines.Count(); ++i)
+            {
+                highlightedLines[i].Stroke = new SolidColorBrush(Colors.Red);
+                MessageBox.Show("Press ok to show next edge");
+            }
+            foreach (Line line in highlightedLines)
+            {
+                line.Stroke = new SolidColorBrush(Colors.Black);//reset the colour
+            }
+        }
         private void btnToggleValencies_Click(object sender, RoutedEventArgs e)
         {
             ActivateButton(sender);

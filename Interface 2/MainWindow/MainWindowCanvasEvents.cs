@@ -41,6 +41,13 @@ namespace Interface_2
                     }
 
                 }
+                else if (currentButton == btnDepthFirst)
+                {
+                    Ellipse startVertex = (Ellipse)e.OriginalSource;
+                    int startVertexId = Convert.ToInt32(startVertex.Name.Substring(3));
+                    List<Tuple<int, int>> edges = Graph.DepthFirst(startVertexId);
+                    TraversalHighlightPath(edges);
+                }
                 else if (currentButton == btnRouteInspStartAndEnd)
                 {
                     if (!Graph.IsConnected())

@@ -30,7 +30,12 @@ namespace Interface_2
             if (currentButton != null)
                 currentButton.Background = new SolidColorBrush(Color.FromRgb(221, 221, 221));
         }
-
+        private void btnDepthFirst_Click(object sender, RoutedEventArgs e)
+        {
+            ActivateButton(sender);
+            HideValencies();
+            labelExtraInfo.Content = "Choose a root vertex";
+        }
 
         private void btnResetColour_Click(object sender, RoutedEventArgs e)
         {
