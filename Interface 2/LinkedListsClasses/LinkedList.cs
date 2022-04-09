@@ -25,7 +25,7 @@ namespace Interface_2.LinkedListsClasses
         public void PopFront()
         {
             LinkedListNode node = head;
-            head = head.next;
+            head = head.next;   
             node = null;
             Count--;
         }
