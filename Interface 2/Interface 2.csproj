@@ -93,6 +93,8 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="LinkedListsClasses\LinkedList.cs" />
+    <Compile Include="LinkedListsClasses\LinkedListNode.cs" />
     <Compile Include="SecondaryWindows\ConnectEdges.xaml.cs">
       <DependentUpon>ConnectEdges.xaml</DependentUpon>
     </Compile>
