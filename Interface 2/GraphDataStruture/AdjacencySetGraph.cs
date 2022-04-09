@@ -448,7 +448,7 @@ namespace Interface_2
                 return true; //a graph with 1 node is connected
             }
             List<Tuple<int, int>> DFSresult = DepthFirst(GetMaxNodeID());
-            if (DFSresult.Count() != GetNumberOfVertices() - 1)
+            if (DFSresult.Count() == GetNumberOfVertices() - 1)
                 return true; //if the result of DFS includes all of the vertices it is connected
             return false;
         }
