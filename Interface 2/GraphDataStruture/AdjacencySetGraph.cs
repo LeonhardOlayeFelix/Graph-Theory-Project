@@ -441,13 +441,29 @@ namespace Interface_2
                 return false;
             return true;
         }
+        public int GetNumberOfEdges()
+        {
+            return GetSumValency() / 2;
+        }
+        public bool ContainsCycle()
+        {
+            bool result = false;
+            foreach (Node vertex in VertexSet)
+            {
+                if (DepthFirst(vertex.GetVertexId()).Item2) //Start from every node incase the graph is disconnected
+                {
+                    result = true;
+                }
+            }
+            return result;
+        }
         public bool IsConnected() //returns true if the graph is connected, false if not
         {
             if (GetNumberOfVertices() == 1)
             {
                 return true; //a graph with 1 node is connected
             }
-            List<Tuple<int, int>> DFSresult = DepthFirst(GetMaxNodeID());
+            List<Tuple<int, int>> DFSresult = DepthFirst(GetMaxNodeID()).Item1;
             if (DFSresult.Count() == GetNumberOfVertices() - 1)
                 return true; //if the result of DFS includes all of the vertices it is connected
             return false;
@@ -456,7 +472,25 @@ namespace Interface_2
         {
             List<List<int>> adjMatrix = GetAdjacencyMatrix();
             List<Tuple<int, int, int>> listOfSortedEdges = GetListOfSortedEdges();
-            return null;
+            int successful = 0;
+            AdjacencySetGraph mst = new AdjacencySetGraph();
+            mst.AddVertex(GetMaxNodeID() + 1);
+            while (successful < GetListOfVertices().Count() - 1)
+            {
+                Tuple<int, int, int> cheapestEdge = listOfSortedEdges.First();
+                listOfSortedEdges.RemoveAt(0);
+                mst.AddEdge(cheapestEdge.Item1, cheapestEdge.Item2, cheapestEdge.Item3);
+                if (mst.ContainsCycle())
+                {
+                    mst.RemoveEdge(cheapestEdge.Item1, cheapestEdge.Item2);
+                }
+                else
+                {
+                    successful += 1;
+                }
+            }
+            List<Tuple<int, int, int>> mstEdges = mst.GetListOfSortedEdges();
+            return mstEdges;
         }
         public List<Tuple<int, int, int>> Prims(int startVertex = -1) //returns the MST as a tuple(vertex, vertex, cost)
         {
@@ -727,7 +761,7 @@ namespace Interface_2
             }
             return index;//return the index that the lowest combination is at
         }
-        public List<Tuple<int, int>> DepthFirst(int startNode) //returns a list of tuples where Item1 = Vertex, Item2 = Parent Vertex, we connect edges between these two items
+        public Tuple<List<Tuple<int, int>>, bool> DepthFirst(int startNode) //returns a list of tuples where Item1 = Vertex, Item2 = Parent Vertex, we connect edges between these two items
         {
             List<Tuple<int, int>> visited = new List<Tuple<int, int>>(); //initialise return value
             visited.Add(Tuple.Create(startNode, -1)); //start node doesnt have a parent so we can set it to -1 and mark it as visited
@@ -737,7 +771,7 @@ namespace Interface_2
             {
                 stack.PushFront(Tuple.Create(adjNodes[i], startNode)); //add all the adjacent nodes to the stack
             }
-
+            bool cycle = false;
             while (stack.Count != 0) //do this until the stack is empty
             {
                 Tuple<int, int> topOfStack = stack.PopFront(); //take and save the vertex at the top of the starck
@@ -746,12 +780,16 @@ namespace Interface_2
                 adjNodes = GetAdjVertices(parentNode);//get the adj vertices
                 for (int i = 0; i < adjNodes.Count(); ++i)//loop through all these nodes
                 {
+                    if (stack.Contains(adjNodes[i]))
+                    {
+                        cycle = true;
+                    }
                     if (!NodeVisited(visited, adjNodes[i]) && !stack.Contains(adjNodes[i])) //if not visited and not already in stack
                         stack.PushFront(Tuple.Create(adjNodes[i], parentNode)); //push them to the front of the stack
                 }
             }
             visited.RemoveAt(0); //remove (startvertex, -1) from the list since its not an edge
-            return visited; //return the ordered edges
+            return Tuple.Create(visited, cycle); //return the ordered edges
         }
         private bool NodeVisited(List<Tuple<int, int>> visited, int node) //retunrs whether a node has been visited
         {

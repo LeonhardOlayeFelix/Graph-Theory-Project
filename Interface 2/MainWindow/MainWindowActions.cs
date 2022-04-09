@@ -338,6 +338,18 @@ namespace Interface_2
             labelExtraInfo.Content = "Choose a start Vertex";
             ActivateButton(sender);
         }
+        private void btnKruskals_Click(object sender, RoutedEventArgs e)
+        {
+            if (!Graph.IsConnected())
+            {
+                MessageBox.Show("The graph is not connected");
+            }
+            else
+            {
+                List<Tuple<int, int, int>> mstEdges = Graph.Kruskals();
+                TraversalHighlightPath(mstEdges);
+            }
+        }
         public int GetMax(int a, int b)
         {
             return (a > b) ? a : b;

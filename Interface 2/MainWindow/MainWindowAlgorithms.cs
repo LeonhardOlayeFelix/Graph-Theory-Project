@@ -44,7 +44,7 @@ namespace Interface_2
                 line.Stroke = new SolidColorBrush(Colors.Black);//reset the colour
             }
         }
-        public bool PrimsHighlightPath(List<Tuple<int, int, int>> edges)
+        public bool TraversalHighlightPath(List<Tuple<int, int, int>> edges)
         {
             if (edges.Count() != 0)
             {

@@ -45,7 +45,7 @@ namespace Interface_2
                 {
                     Ellipse startVertex = (Ellipse)e.OriginalSource;
                     int startVertexId = Convert.ToInt32(startVertex.Name.Substring(3));
-                    List<Tuple<int, int>> edges = Graph.DepthFirst(startVertexId);
+                    List<Tuple<int, int>> edges = Graph.DepthFirst(startVertexId).Item1;
                     TraversalHighlightPath(edges);
                 }
                 else if (currentButton == btnRouteInspStartAndEnd)
@@ -179,7 +179,7 @@ namespace Interface_2
                         if (Graph.IsConnected())
                         {
                             List<Tuple<int, int, int>> mst = Graph.Prims(startVertexID);
-                            PrimsHighlightPath(mst);
+                            TraversalHighlightPath(mst);
                         }
                         else
                         {

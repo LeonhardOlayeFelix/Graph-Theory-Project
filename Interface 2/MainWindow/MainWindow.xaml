@@ -439,6 +439,20 @@
                                                HorizontalAlignment="Center">
                                         find the minimum spanning tree
                                                 </TextBlock>
+                                                <Button Margin="20,12,20,3"
+                                                        x:Name="btnKruskals"
+                                                        Click="btnKruskals_Click"
+                                                        Grid.Row="1">
+                                                    Kruskal's Algorithm
+                                                </Button>
+                                                <TextBlock Foreground="Black"
+                                               Grid.Row="1"
+                                               Height="20" 
+                                               Margin="40,-3,41,22"
+                                               FontSize="10"
+                                               HorizontalAlignment="Center">
+                                        find the minimum spanning tree
+                                                </TextBlock>
                                             </Grid>
                                         </GroupBox>
                                         <GroupBox Header="Path Finding"
