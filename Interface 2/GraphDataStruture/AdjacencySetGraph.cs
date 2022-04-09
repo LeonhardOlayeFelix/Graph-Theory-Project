@@ -80,12 +80,23 @@ namespace Interface_2
                 throw new ArgumentException($"No edge exists from {v1} to {v2}");
             }
         }
-        public List<Tuple<int, int>> GetAdjVertices(int vertex) //gets the adjacent vertices of a vertex
+        public List<int> GetAdjVertices(int vertex) //gets the adjacent vertices of a vertex
         {
 
             if (!IsInVertexList(vertex)) //make sure that the input vertex exists first.
                 throw new ArgumentOutOfRangeException("Vertex does note exist");
-            return this.VertexSet.ElementAt(GetListOfVertices().IndexOf(vertex)).GetAdjVertices();
+            List<int> adjacentVertices = new List<int>();
+            for (int i = 0; i < VertexSet.Count(); ++i)
+            {
+                if (VertexSet[i].GetVertexId() == vertex)
+                {
+                    foreach (Tuple<int, int> adjVertex in VertexSet[i].GetAdjVertices())
+                    {
+                        adjacentVertices.Add(adjVertex.Item1);
+                    }
+                }
+            }
+            return adjacentVertices;
         }
         public int GetEdgeWeight(int v1, int v2) //gets weight between to vertices
         {
@@ -446,7 +457,7 @@ namespace Interface_2
         public List<Tuple<int, int, int>> Kruskals()
         {
             List<List<int>> adjMatrix = GetAdjacencyMatrix();
-            List<Tuple<int, int, int>> listOfEdges = new List<Tuple<int, int, int>>();
+            List<Tuple<int, int, int>> listOfSortedEdges = GetListOfSortedEdges();
             return null;
         }
         public List<Tuple<int, int, int>> Prims(int startVertex = -1) //returns the MST as a tuple(vertex, vertex, cost)
@@ -717,6 +728,43 @@ namespace Interface_2
 
             }
             return index;//return the index that the lowest combination is at
+        }
+        public List<Tuple<int, int>> DepthFirst(int startNode = 0) //returns a list of tuples where Item1 = Vertex, Item2 = Parent Vertex, we connect edges between these two items
+        {
+            List<Tuple<int, int>> visited = new List<Tuple<int, int>>(); //initialise return value
+            visited.Add(Tuple.Create(startNode, -1)); //start node doesnt have a parent so we can set it to -1 and mark it as visited
+            List<int> adjNodes = GetAdjVertices(startNode); //get the nodes that are adjacent to that start node
+            UDLinkedList stack = new UDLinkedList(); //create an instance of the linked list for the stack
+            for (int i = 0; i < adjNodes.Count(); ++i)
+            {
+                stack.PushFront(Tuple.Create(adjNodes[i], startNode)); //add all the adjacent nodes to the stack
+            }
+
+            while (stack.Count != 0) //do this until the stack is empty
+            {
+                Tuple<int, int> topOfStack = stack.PopFront(); //take and save the vertex at the top of the starck
+                visited.Add(topOfStack); //mark this vertex as visited
+                int parentNode = topOfStack.Item1; //the parent of the next-generated adj vertices will be item1 of this vertex
+                adjNodes = GetAdjVertices(parentNode);//get the adj vertices
+                for (int i = 0; i < adjNodes.Count(); ++i)//loop through all these nodes
+                {
+                    if (!NodeVisited(visited, adjNodes[i]) && !stack.Contains(adjNodes[i])) //if not visited and not already in stack
+                        stack.PushFront(Tuple.Create(adjNodes[i], parentNode)); //push them to the front of the stack
+                }
+            }
+            visited.RemoveAt(0); //remove (startvertex, -1) from the list since its not an edge
+            return visited; //return the ordered edges
+        }
+        private bool NodeVisited(List<Tuple<int, int>> visited, int node) //retunrs whether a node has been visited
+        {
+            for (int i = 0; i < visited.Count(); ++i)
+            {
+                if (visited[i].Item1 == node)
+                {
+                    return true; //if there is a match found in the list, return true;
+                }
+            }
+            return false;//other wise return false;
         }
         private int GetMax(int a, int b) //gets the larger value
         {
