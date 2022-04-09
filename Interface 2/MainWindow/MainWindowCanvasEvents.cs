@@ -57,15 +57,15 @@ namespace Interface_2
                             if (Graph.GetValency(endVertexId) % 2 == 0) //if the valency of the end vertex is odd, the algorithm isnt useful here
                             {
                                 MessageBox.Show("The start and end Vertex must have an ODD valency.");
-                                rInspSelectionCount -= 1; //decrement it as if nothing happened
+                                rInspSelectionCount -= 1; //decrement it as if that selection didnt count
                             }
                             else if (rInspStart == endVertexId) //if they are path finding to itself, do nothing
                             {
                                 EnableAllActionButtons();
                                 EnableTbCtrl();
                                 EnableAllAlgoButtons();
-                                btnImportGraph.IsEnabled = false;
-                                btnImportGraph.IsEnabled = false;
+                                btnLoadGraph.IsEnabled = false;
+                                btnSaveGraph.IsEnabled = false;
                                 labelExtraInfo.Content = "";
                             }
                             else
@@ -78,6 +78,10 @@ namespace Interface_2
                                 else if (Graph.IsSemiEulerian()) //if the graph is already semi eulerian then it will be traversable
                                 {
                                     MessageBox.Show("No edges need to be added");
+                                    EnableAllActionButtons();
+                                    EnableTbCtrl();
+                                    EnableAllAlgoButtons();
+                                    labelExtraInfo.Content = "";
                                 }
                                 else if (result == null)
                                 {
@@ -99,10 +103,14 @@ namespace Interface_2
                         {
                             DisableTbCtrl();
                             DisableAllAlgoButtons();
+                            DisableAllActionButtons();
                             Ellipse v = (Ellipse)e.OriginalSource;
                             rInspStart = Convert.ToInt32(v.Name.Substring(3));
                             if (Graph.GetValency(rInspStart) % 2 == 0) //make sure the vertex has an odd valency
                             {
+                                EnableAllActionButtons();
+                                EnableTbCtrl();
+                                EnableAllAlgoButtons();
                                 MessageBox.Show("The start and end vertex must have an odd valency");
                                 labelExtraInfo.Content = "Choose a START vertex with ODD valency";
                                 rInspSelectionCount -= 1; //if it doesnt, decrement to act as if that selection didnt count
@@ -127,8 +135,8 @@ namespace Interface_2
                         {
                             EnableAllActionButtons();
                             EnableTbCtrl();
-                            btnImportGraph.IsEnabled = false;
-                            btnImportGraph.IsEnabled = false;
+                            btnSaveGraph.IsEnabled = false;
+                            btnLoadGraph.IsEnabled = false;
                             labelExtraInfo.Content = "";
                         }
                         else if (connectEdges.ShowDialog() == true) // otherwise, open a new form and get the weight
@@ -138,8 +146,8 @@ namespace Interface_2
                             labelExtraInfo.Content = "";
                             EnableTbCtrl();
                             EnableAllActionButtons();
-                            btnImportGraph.IsEnabled = false;
-                            btnImportGraph.IsEnabled = false;
+                            btnSaveGraph.IsEnabled = false;
+                            btnLoadGraph.IsEnabled = false;
                         }
                         else
                         {
@@ -182,8 +190,8 @@ namespace Interface_2
                         {
                             EnableAllActionButtons();
                             EnableTbCtrl();
-                            btnImportGraph.IsEnabled = false;
-                            btnImportGraph.IsEnabled = false;
+                            btnSaveGraph.IsEnabled = false;
+                            btnLoadGraph.IsEnabled = false;
                             labelExtraInfo.Content = "";
                         }
                         else

@@ -51,17 +51,14 @@ namespace Interface_2
                 DragDrop.DoDragDrop(sender as Ellipse, sender as Ellipse, DragDropEffects.Move); //start the drag function on this vertex
             }
         }
-
-        private void btnImportGraph_Click(object sender, RoutedEventArgs e)
+        private void btnLoadGraph_Click(object sender, RoutedEventArgs e)
         {
-            HideValencies();
-        }
 
-        private void btnExportGraph_Click(object sender, RoutedEventArgs e)
+        }
+        private void btnSaveGraph_Click(object sender, RoutedEventArgs e)
         {
-            HideValencies();
-        }
 
+        }
         private void btnAddVertex_Click(object sender, RoutedEventArgs e)
         {
             HideValencies();

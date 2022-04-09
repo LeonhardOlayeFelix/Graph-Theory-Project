@@ -13,6 +13,7 @@ namespace Interface_2
         private int idOfNodetoAdd = 0; //makes sure that the ID of all nodes are unique, as it will be incremented
         private List<Node> VertexSet; //represents the adjacency list: A list containing data of class Node, where each Node contains another HashSet of type Tuple<int, int> 
                                       //which represents all of its adjacent vertices and the weight.
+        private List<Tuple<int, int, int>> listOfEdges = null; //keeps track of all of the edges in the graph
         public string Name { get; set; }
 
         public AdjacencySetGraph() //constructor
@@ -20,6 +21,7 @@ namespace Interface_2
             this.NumberOfVertices = 0;
             this.NumberOfDeletedVertices = 0;
             this.VertexSet = new List<Node>();
+            listOfEdges = new List<Tuple<int, int, int>>();
         }
         public void AddEdge(int v1, int v2, int weight = 0) //Makes the input nodes adjacent to each other with a weight of the input
         {
@@ -36,7 +38,8 @@ namespace Interface_2
             int v1Index = vertexList.IndexOf(v1);//gets the index of the vertex in the vertices list incase some vertices have been deleted.
             int v2Index = vertexList.IndexOf(v2);//gets the index of the vertex in the vertices list incase some vertices have been deleted.
             this.VertexSet.ElementAt(v1Index).AddEdge(v2, weight); //adds the edge using the AddEdge Method that the Nodes have
-            this.VertexSet.ElementAt(v2Index).AddEdge(v1, weight); //Does it both ways since this is an undirected graph           
+            this.VertexSet.ElementAt(v2Index).AddEdge(v1, weight); //Does it both ways since this is an undirected graph
+            listOfEdges.Add(Tuple.Create(v1, v2, weight)); //update list of edges
         }
 
         public bool IsInVertexList(int v)//function to check if a vertex exists
@@ -66,8 +69,11 @@ namespace Interface_2
                 }
                 int v1Index = vertexList.IndexOf(v1);
                 int v2Index = vertexList.IndexOf(v2);
+                int weight = GetEdgeWeight(v1, v2);
                 this.VertexSet.ElementAt(v1Index).RemoveEdge(v2);//pass in the index since some of the vertices may have been deleted
                 this.VertexSet.ElementAt(v2Index).RemoveEdge(v1); //undirected graph
+                listOfEdges.Remove(Tuple.Create(v1, v2, weight)); //update list of edges
+                listOfEdges.Remove(Tuple.Create(v2, v1, weight)); //update this way incase it was saved like this
             }
             else
             {
@@ -92,6 +98,10 @@ namespace Interface_2
                 }
             }
             return weight; //returns -1 if no edge was found
+        }
+        public List<Tuple<int, int, int>> GetListOfEdges() //item1: vertex1, Item2: Vertex2, Item3: Cost
+        {
+            return listOfEdges;
         }
         public List<Node> GetAdjacencyList()//gets the adjacency list of the graph
         {
@@ -369,6 +379,12 @@ namespace Interface_2
                 return false;
             }
             return true; //if it gets here, the graph is connected
+        }
+        public List<Tuple<int, int, int>> Kruskals()
+        {
+            List<List<int>> adjMatrix = GetAdjacencyMatrix();
+            List<Tuple<int, int, int>> listOfEdges = new List<Tuple<int, int, int>>();
+            return null;
         }
         public List<Tuple<int, int, int>> Prims(int startVertex = -1) //returns the MST as a tuple(vertex, vertex, cost)
         {

@@ -320,11 +320,11 @@
                                                FontSize="10"
                                                HorizontalAlignment="Center">You <Bold>MUST</Bold> be logged in to do this</TextBlock>
                                         <Button Margin="20,15,20,5"
-                                            x:Name="btnExportGraph"
+                                            x:Name="btnLoadGraph"
                                             Grid.Column="0"
                                             Grid.Row="2"
-                                            Click="btnExportGraph_Click">
-                                            Export Graph
+                                            Click="btnLoadGraph_Click">
+                                            Load Graph
                                         </Button>
                                         <TextBlock Foreground="Red"
                                                Grid.Row="3"
@@ -333,10 +333,10 @@
                                                FontSize="10"
                                                HorizontalAlignment="Center">You <Bold>MUST</Bold> be logged in to do this</TextBlock>
                                         <Button Margin="20,15,20,5"
-                                            x:Name="btnImportGraph"
+                                            x:Name="btnSaveGraph"
                                             Grid.Row="3"
-                                            Click="btnImportGraph_Click">
-                                            Import Graph
+                                            Click="btnSaveGraph_Click">
+                                            Save Graph
                                         </Button>
                                     </Grid>
 
@@ -523,6 +523,34 @@
                                             Grid.Row="0"
                                             Click="btnHighlightPaths_Click">
                                                     Highlight Path
+                                                </Button>
+                                                <TextBlock Foreground="Black"
+                                               Grid.Row="1"
+                                               Height="20" 
+                                               Margin="30,-3,26,21"
+                                               FontSize="10"
+                                               HorizontalAlignment="Center"> <!-- Have a new window appear when they connect vertices-->
+                                        Perform a Breadth-First traversal
+                                                </TextBlock>
+                                                <Button Margin="20,12,20,3"
+                                            x:Name="btnBreadthFirst"
+                                            Grid.Row="1"
+                                            Click="btnBreadthFirst_Click">
+                                                    Breadth-First Traversal
+                                                </Button>
+                                                <TextBlock Foreground="Black"
+                                               Grid.Row="2"
+                                               Height="20" 
+                                               Margin="30,-3,26,21"
+                                               FontSize="10"
+                                               HorizontalAlignment="Center"> <!-- Have a new window appear when they connect vertices-->
+                                        Perform a Depth-First traversal
+                                                </TextBlock>
+                                                <Button Margin="20,12,20,3"
+                                            x:Name="btnDepthFirst"
+                                            Grid.Row="2"
+                                            Click="btnBreadthFirst_Click">
+                                                    Depth-First Traversal
                                                 </Button>
                                             </Grid>
                                         </GroupBox>

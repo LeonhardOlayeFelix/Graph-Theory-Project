@@ -55,5 +55,10 @@ namespace Interface_2
             DisableAllActionButtons();
             DisableTbCtrl();
         }
+
+        private void btnBreadthFirst_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
