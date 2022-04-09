@@ -103,6 +103,69 @@ namespace Interface_2
         {
             return listOfEdges;
         }
+        private List<Tuple<int, int, int>> MergeSort(List<Tuple<int, int, int>> edges) //recurcsively splits the list into right and left until the size is 1
+        {
+            if (edges.Count() <= 1) { return edges; } //base case (where the size is 1)
+
+            List<Tuple<int, int, int>> left = new List<Tuple<int, int, int>>(); //empty list for the left side
+            List<Tuple<int, int, int>> right = new List<Tuple<int, int, int>>(); //empty list for the right side
+
+            for (int i = 0; i < edges.Count(); i++) //splitting the list into two parts
+            {
+                if (i % 2 == 0)
+                {
+                    left.Add(edges[i]); //if i is even, add it to the left side
+                }
+                else
+                {
+                    right.Add(edges[i]); //if i is odd, add it to the right side
+                }
+            }
+            left = MergeSort(left); //recursively repeat this process so you have lists with one element that will be merged and sorted
+            right = MergeSort(right);
+            return Merge(left, right); //merge these two lists while sorting them using the merge method
+        }
+        private List<Tuple<int, int, int>> Merge(List<Tuple<int, int, int>> left, List<Tuple<int, int, int>> right)
+        {
+            List<Tuple<int, int, int>> result = new List<Tuple<int, int, int>>(); //empty list which will store the sorted list
+            while (NotEmpty(left) && NotEmpty(right)) //whilst both of the lists are non-empty
+            {
+                if (left.First().Item3 <= right.First().Item3) //we are comparing by the edge weight, so if left weight is less than right weight...
+                {
+                    UpdateResult(left, result); //see function definition
+                }
+                else
+                {
+                    UpdateResult(right, result); //see function definition
+                }
+            }
+
+            //either the left or the right may still have elements in them so add them to the list
+            while (NotEmpty(left)) //do this until the list is empty
+            {
+                UpdateResult(left, result); //see function definition
+            }
+            while (NotEmpty(right)) //do this until the list is empty
+            {
+                UpdateResult(right, result); //see function definition
+            }
+            return result; //return the sorted list
+        }
+        private void UpdateResult(List<Tuple<int, int, int>> LeftOrRight, List<Tuple<int, int, int>> result)
+        {
+            result.Add(LeftOrRight.First()); //add the first element we just compared (from left or right list)to be smaller to the result list
+            LeftOrRight.RemoveAt(0); //then remove that first element from the list it was in (left or right list)
+        }
+        private bool NotEmpty(List<Tuple<int, int, int>> list)
+        {
+            return list.Count != 0; //returns true if the list is not empty
+        }
+        public List<Tuple<int, int, int>> GetListOfSortedEdges() //uses merge sort to get a list of sorted edges
+        {
+            List<Tuple<int, int, int>> unsortedEdges = GetListOfEdges();//get the unsorted list
+            List<Tuple<int, int, int>> sortedEdges = MergeSort(unsortedEdges); //run the merge sort on the unsorted list
+            return sortedEdges;
+        }
         public List<Node> GetAdjacencyList()//gets the adjacency list of the graph
         {
             return VertexSet;
