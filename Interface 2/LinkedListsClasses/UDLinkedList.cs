@@ -37,6 +37,7 @@ namespace Interface_2
             if (head == null)
             {
                 head = new UDLinkedListNode(data);
+                Count++;
                 return;
             }
 
@@ -47,11 +48,11 @@ namespace Interface_2
             {
                 last = last.next;
             }
-
             last.next = newNode;
+            Count++;
             return;
         }
-        public UDLinkedListNode Pop()
+        public Tuple<int, int> Pop()
         {
             if (head == null)
                 return null;
@@ -61,9 +62,10 @@ namespace Interface_2
             UDLinkedListNode secondLast = head;
             while (secondLast.next.next != null)
                 secondLast = secondLast.next;
-
+            Count--;
+            Tuple<int, int> value = secondLast.next.data;
             secondLast.next = null;
-            return head;
+            return value;
         }
         public void PrintList() //for testing
         {

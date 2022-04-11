@@ -44,9 +44,29 @@ namespace Interface_2
                 else if (currentButton == btnDepthFirst)
                 {
                     Ellipse startVertex = (Ellipse)e.OriginalSource;
-                    int startVertexId = Convert.ToInt32(startVertex.Name.Substring(3));
-                    List<Tuple<int, int>> edges = Graph.DepthFirst(startVertexId).Item1;
-                    TraversalHighlightPath(edges);
+                    int startVertexId = Convert.ToInt32(startVertex.Name.Substring(3));//id of the start vertex
+                    if (Graph.GetAdjVertices(startVertexId).Count() != 0) //make sure the node has atleast one edge
+                    {
+                        Tuple<List<Tuple<int, int>>, bool ,string> result = Graph.DepthFirst(startVertexId);
+                        List<Tuple<int, int>> edges = result.Item1;
+                        labelExtraInfo.Content = "Traversal Order: " + result.Item3;
+                        TraversalHighlightPath(edges);
+                    }
+                    
+                    
+                }
+                else if (currentButton == btnBreadthFirst)
+                {
+                    Ellipse startVertex = (Ellipse)e.OriginalSource;
+                    int startVertexId = Convert.ToInt32(startVertex.Name.Substring(3)); //id of the start vertex
+                    if (Graph.GetAdjVertices(startVertexId).Count() != 0) //make sure the node has atleast one edge
+                    {
+                        Tuple<List<Tuple<int, int>>, string> result = Graph.BreadthFirst(startVertexId);
+                        List<Tuple<int, int>> edges = result.Item1;
+                        labelExtraInfo.Content = "Traversal Order: " + result.Item2;
+                        TraversalHighlightPath(edges);
+                    }
+                    
                 }
                 else if (currentButton == btnRouteInspStartAndEnd)
                 {

@@ -56,10 +56,7 @@ namespace Interface_2
             DisableTbCtrl();
         }
 
-        private void btnBreadthFirst_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
+        
 
         
     }

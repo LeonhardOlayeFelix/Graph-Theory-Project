@@ -36,7 +36,12 @@ namespace Interface_2
             HideValencies();
             labelExtraInfo.Content = "Choose a root vertex";
         }
-
+        private void btnBreadthFirst_Click(object sender, RoutedEventArgs e)
+        {
+            ActivateButton(sender);
+            HideValencies();
+            labelExtraInfo.Content = "Choose a root vertex";
+        }
         private void btnResetColour_Click(object sender, RoutedEventArgs e)
         {
             //resets the colours of all the colour pickers
