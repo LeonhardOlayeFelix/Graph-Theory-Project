@@ -42,6 +42,9 @@ namespace Interface_2
         //Id to assigns buttons with
         int buttonId = 0;
 
+        //for the highlight path button
+        List<int> livePath = new List<int>();
+
         //intialise all of the structures
         List<Ellipse> vertexList = null;
         List<TextBlock> vertexTxBoxList = null;

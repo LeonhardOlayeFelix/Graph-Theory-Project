@@ -15,6 +15,8 @@ namespace Interface_2
     {
         private void ActivateButton(object btnSender) //highlight a button when its pressed
         {
+            RevertLineColour();
+            livePath.Clear(); //incase they were in the midst of the highlight path action
             if (btnSender != null) //make sure that the button isnt null
             {
                 if (currentButton != (Button)btnSender) //if the same button is not pressed

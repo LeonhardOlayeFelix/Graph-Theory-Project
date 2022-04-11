@@ -39,10 +39,7 @@ namespace Interface_2
                 highlightedLines[i].Stroke = new SolidColorBrush(Colors.Red);
             }
             MessageBox.Show("The highlighted edges are edges which must be repeated\nTotal Cost: " + (cost + Graph.GetSumOfWeights()));
-            foreach (Line line in highlightedLines)
-            {
-                line.Stroke = new SolidColorBrush(Colors.Black);//reset the colour
-            }
+            RevertLineColour();
         }
         public bool mstHighlightPath(List<Tuple<int, int, int>> edges)
         {
@@ -72,15 +69,12 @@ namespace Interface_2
                 }
                 txExtraInfo2.Text = "Cost: " + total;
                 MessageBox.Show("Press ok to clear Minimum Spanning Tree\nCost: " + total / 2); //weight will be twice what it shuold be
-                foreach (Line line in highlightedLines)
-                {
-                    line.Stroke = new SolidColorBrush(Colors.Black);//reset the colour
-                }
+                RevertLineColour();
                 return true;
             }
             return false;
         }
-        public void DijkstraHighlightPath(List<int> path) //a path of vertexIds, in the order they want to be traversed
+        public void DijkstraHighlightPath(List<int> path, bool livePathhighlighting = false) //a path of vertexIds, in the order they want to be traversed
         {
             int total = 0;
             if (path.Count() > 1)
@@ -105,6 +99,18 @@ namespace Interface_2
                 if (highlightedLines.Count() == path.Count() - 1)//if the path is found, then the size of the array is always 1 less than the n. of vertices passed in
                 {
                     string pathString = "";
+                        
+                    if (livePathhighlighting)
+                    {
+                        for (int i = 0; i < highlightedLines.Count(); ++i)
+                        {
+                            highlightedLines[i].Stroke = new SolidColorBrush(Colors.Red);
+                            pathString += path[i].ToString() + "=>";
+                        }
+                        pathString += path[path.Count() - 1];
+                        txExtraInfo2.Text = "Traversal Order:\n" + pathString + "\nCost: " + total;
+                        return;
+                    }
                     for (int i = 0; i < highlightedLines.Count(); ++i)
                     {
                         highlightedLines[i].Stroke = new SolidColorBrush(Colors.Red);
@@ -112,34 +118,38 @@ namespace Interface_2
                         if (i != highlightedLines.Count() - 1) { MessageBox.Show("Press OK to show next edge"); }
                     }
                     pathString += path[path.Count() - 1];
+                    MessageBox.Show("Press ok to clear \nTotal Cost: " + total + "\nPath: " + pathString);
                     txExtraInfo2.Text = "Traversal Order:\n" + pathString + "\nCost: " + total;
-                    MessageBox.Show("Press ok to clear \nTotal Cost: " + total +"\nPath: " + pathString);
-                    foreach (Line line in highlightedLines)
-                    {
-                        line.Stroke = new SolidColorBrush(Colors.Black);//reset the colour
-                    }
+                    RevertLineColour();
                 }
                 else //if this isnt true, then a valid path was not passed in.
                 {
-                    MessageBox.Show("No Route/Path Exists");
+                    MessageBox.Show("No Edge between these vertices was found");
                 }
             }
             else
             { //if this is true, then they didnt enter a path at all
-                MessageBox.Show("No Route/Path Was Entered");
+                MessageBox.Show("No Edge between these vertices was found");
             }
+        }
 
+        public void RevertLineColour() //rebinds the colour of the lines to the colour picker
+        {
+            foreach (var edge in edgeList)
+            {
+                Binding bindingStroke = new Binding("SelectedBrush")
+                {
+                    Source = colourPickerLine,
+                    Mode = BindingMode.OneWay,
+                    UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
+                };
+                edge.Item1.SetBinding(Line.StrokeProperty, bindingStroke);
+            }
         }
         private void btnHighlightPaths_Click(object sender, RoutedEventArgs e)
         {
-            labelExtraInfo.Content = "Enter a Route that you want to highlight";
-            List<int> pathToHighlight = new List<int>(); //keeps the path in a list
-            HighlightPath highlightPath = new HighlightPath(); //opens the highlight path window
-            if (highlightPath.ShowDialog() == true) //if the window was closed how we wanted it to...
-            {
-                pathToHighlight = highlightPath.getPath(); //get path is a function in the other form that returns the entered path
-                DijkstraHighlightPath(pathToHighlight);//runs the function on this list of IDs
-            }
+            ActivateButton(sender);
+            labelExtraInfo.Content = "Click on the vertices that you want the path to connect.";
         }
         private void TraversalHighlightPath(List<Tuple<int, int>> edges)
         {
@@ -162,10 +172,7 @@ namespace Interface_2
                 highlightedLines[i].Stroke = new SolidColorBrush(Colors.Red);
                 MessageBox.Show("Press ok to show next edge");
             }
-            foreach (Line line in highlightedLines)
-            {
-                line.Stroke = new SolidColorBrush(Colors.Black);//reset the colour
-            }
+            RevertLineColour();
 
         }
         private void btnToggleValencies_Click(object sender, RoutedEventArgs e)

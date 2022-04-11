@@ -79,10 +79,6 @@
                VerticalAlignment="Bottom"
                x:Name="labelExtraInfo" Height="28" Width="610" Margin="7,0,0,7"/>
             </Grid>
-
-
-
-
             <GroupBox Grid.Column="1" 
                       Panel.ZIndex="3"
                   Background="White" 
@@ -661,6 +657,15 @@
                                             <TextBlock VerticalAlignment="Center">Vertex Stroke</TextBlock>
                                             <syncfusion:ColorPickerPalette Margin="73,0,0,0"
                                                                        x:Name="colourPickerVertexStroke"
+                                                                       Width="40"
+                                                                       Color="Black"/>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal"
+                                                Height="20"
+                                                Margin="0,0,0,4">
+                                            <TextBlock VerticalAlignment="Center">Line Fill</TextBlock>
+                                            <syncfusion:ColorPickerPalette Margin="104,0,0,0"
+                                                                       x:Name="colourPickerLine"
                                                                        Width="40"
                                                                        Color="Black"/>
                                         </StackPanel>

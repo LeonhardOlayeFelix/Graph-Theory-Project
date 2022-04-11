@@ -39,7 +39,13 @@ namespace Interface_2
                 Stroke = new SolidColorBrush(Colors.Black)
             };
             Canvas.SetZIndex(temp, 0); //make sure its underneath everything
-
+            Binding bindingStroke = new Binding("SelectedBrush")
+            {
+                Source = colourPickerLine,
+                Mode = BindingMode.OneWay,
+                UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
+            };
+            temp.SetBinding(Line.StrokeProperty, bindingStroke);
             //bind the lines x1 to the smaller vertex's x1
             Binding bindingV1X = new Binding
             {

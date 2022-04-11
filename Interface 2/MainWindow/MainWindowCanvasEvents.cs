@@ -69,6 +69,25 @@ namespace Interface_2
                     }
 
                 }
+                else if (currentButton == btnHighlightPaths)
+                {
+                    Ellipse activeVertex = (Ellipse)e.OriginalSource;
+                    int activeVertexId = Convert.ToInt32(activeVertex.Name.Substring(3));
+                    livePath.Add(activeVertexId);
+                    if (livePath.Count() > 1)
+                    {
+                        if ((livePath.Last() == livePath[livePath.Count - 2]) || Graph.GetEdgeWeight(livePath.Last(), livePath[livePath.Count() - 2]) == -1) //if they are attempting to press the 
+                                                                                                                                                            //same vertex twice or go to an unconnected
+                                                                                                                                                            //vertex
+                        {
+                            livePath.RemoveAt(livePath.Count() - 1);
+                        }
+                        else
+                        {
+                            DijkstraHighlightPath(livePath, true);
+                        }
+                    }
+                }
                 else if (currentButton == btnRouteInspStartAndEnd)
                 {
                     if (!Graph.IsConnected())
@@ -228,7 +247,7 @@ namespace Interface_2
                             try
                             {
                                 List<int> path = Graph.DijkstrasAlgorithmShort(startVertex, vId).Item1; //get the path from the method
-                                DijkstraHighlightPath(path);
+                                DijkstraHighlightPath(path, false);
                                 labelExtraInfo.Content = "";
                             }
                             catch (NullReferenceException) //this means there was no path
