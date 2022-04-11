@@ -34,14 +34,14 @@ namespace Interface_2
         public void Append(Tuple<int, int> data)
         {
             UDLinkedListNode newNode = new UDLinkedListNode(data);
-            if (head == null)
+            if (head == null)  //if the list was empty
             {
-                head = new UDLinkedListNode(data);
-                Count++;
-                return;
+                head = new UDLinkedListNode(data); //make the head the item
+                Count++;//incremement count
+                return;//stop execution
             }
 
-            newNode.next = null;
+            newNode.next = null; //if the list wasnt empty, get the 
 
             UDLinkedListNode last = head;
             while (last.next != null)
@@ -55,17 +55,17 @@ namespace Interface_2
         public Tuple<int, int> Pop()
         {
             if (head == null)
-                return null;
-            if (head.next == null)
+                return null; //if theres nothing in the list return null
+            if (head.next == null)//if there was one item in the list, also return null
                 return null;
 
-            UDLinkedListNode secondLast = head;
-            while (secondLast.next.next != null)
-                secondLast = secondLast.next;
-            Count--;
-            Tuple<int, int> value = secondLast.next.data;
-            secondLast.next = null;
-            return value;
+            UDLinkedListNode secondLast = head; 
+            while (secondLast.next.next != null) //finds the second to last item since .next.next is 2 items away
+                secondLast = secondLast.next; //update secondLast
+            Count--;//decrement the count
+            Tuple<int, int> value = secondLast.next.data; //to return what was popped
+            secondLast.next = null;//set the last item to null
+            return value; //return what was popped
         }
         public void PrintList() //for testing
         {

@@ -7,7 +7,8 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
-
+using System.Data;
+using System.Data.OleDb;
 
 namespace Interface_2
 {
@@ -18,7 +19,6 @@ namespace Interface_2
             //gets the smaller and larger vertex
             Ellipse smallerEllipse = GetMinEllipse(v1, v2);
             Ellipse largerEllipse = GetMaxEllipse(v1, v2);
-
             //creates the lines soon to be name
             string lineName = "line" + smallerEllipse.Name.Substring(3).ToString() + "to" + largerEllipse.Name.Substring(3).ToString(); //have the name of the line in the form atob where a < b
             foreach (Tuple<Line, Ellipse, Ellipse, TextBlock> edge in edgeList)//but first check if a line with name exists
@@ -350,6 +350,7 @@ namespace Interface_2
             {
                 List<Tuple<int, int, int>> mst = Graph.Kruskals();
                 mstHighlightPath(mst);
+                
             }
         }
         public int GetMax(int a, int b)
