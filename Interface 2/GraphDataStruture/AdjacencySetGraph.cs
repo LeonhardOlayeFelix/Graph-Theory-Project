@@ -175,7 +175,7 @@ namespace Interface_2
         {
             List<Tuple<int, int, int>> unsortedEdges = GetListOfEdges();//get the unsorted list
             List<Tuple<int, int, int>> sortedEdges = MergeSort(unsortedEdges); //run the merge sort on the unsorted list
-            return sortedEdges;
+            return sortedEdges;//return the sorted list
         }
         public List<Node> GetAdjacencyList()//gets the adjacency list of the graph
         {
@@ -447,15 +447,14 @@ namespace Interface_2
         }
         public bool ContainsCycle()
         {
-            bool result = false;
             foreach (Node vertex in VertexSet)
             {
-                if (DepthFirst(vertex.GetVertexId()).Item2) //Start from every node incase the graph is disconnected
+                if (DepthFirst(vertex.GetVertexId()).Item2) //Start from every node incase the graph is disconnected and only looks at one part
                 {
-                    result = true;
+                    return true; //if a cycle is found at anypoint, return true;
                 }
             }
-            return result;
+            return false; //if a cycle wasnt found, then return false;
         }
         public bool IsConnected() //returns true if the graph is connected, false if not
         {
@@ -470,27 +469,26 @@ namespace Interface_2
         }
         public List<Tuple<int, int, int>> Kruskals()
         {
-            List<List<int>> adjMatrix = GetAdjacencyMatrix();
-            List<Tuple<int, int, int>> listOfSortedEdges = GetListOfSortedEdges();
-            int successful = 0;
-            AdjacencySetGraph mst = new AdjacencySetGraph();
-            mst.AddVertex(GetMaxNodeID() + 1);
-            while (successful < GetListOfVertices().Count() - 1)
+            List<Tuple<int, int, int>> listOfSortedEdges = GetListOfSortedEdges(); //use merge sort to get a list of the sorted edges.
+            int successful = 0; //the amount of edges that were added without creating a cycle
+            AdjacencySetGraph mst = new AdjacencySetGraph(); //create a temporary graph data structure
+            mst.AddVertex(GetMaxNodeID() + 1); //add the same amount of vertices as the current graph
+            while (successful < GetListOfVertices().Count() - 1) //the mst is made when n - 1 successful edges have been added (n = num vertices)
             {
-                Tuple<int, int, int> cheapestEdge = listOfSortedEdges.First();
-                listOfSortedEdges.RemoveAt(0);
-                mst.AddEdge(cheapestEdge.Item1, cheapestEdge.Item2, cheapestEdge.Item3);
+                Tuple<int, int, int> cheapestEdge = listOfSortedEdges.First();//choose the lowest cost edge (first element)
+                listOfSortedEdges.RemoveAt(0); //update the list of sorted edges
+                mst.AddEdge(cheapestEdge.Item1, cheapestEdge.Item2, cheapestEdge.Item3); //add that edge to the new graph
                 if (mst.ContainsCycle())
                 {
-                    mst.RemoveEdge(cheapestEdge.Item1, cheapestEdge.Item2);
+                    mst.RemoveEdge(cheapestEdge.Item1, cheapestEdge.Item2); //if that caused the new graph to have a cycle, then remove it
                 }
                 else
                 {
-                    successful += 1;
+                    successful += 1; //if it didnt cause a cycle, then increment successful
                 }
             }
-            List<Tuple<int, int, int>> mstEdges = mst.GetListOfSortedEdges();
-            return mstEdges;
+            List<Tuple<int, int, int>> mstEdges = mst.GetListOfSortedEdges(); //by here, the mst is made
+            return mstEdges; //so return their sorted edges
         }
         public List<Tuple<int, int, int>> Prims(int startVertex = -1) //returns the MST as a tuple(vertex, vertex, cost)
         {
@@ -761,7 +759,9 @@ namespace Interface_2
             }
             return index;//return the index that the lowest combination is at
         }
-        public Tuple<List<Tuple<int, int>>, bool> DepthFirst(int startNode) //returns a list of tuples where Item1 = Vertex, Item2 = Parent Vertex, we connect edges between these two items
+        public Tuple<List<Tuple<int, int>>, bool> DepthFirst(int startNode) //returns a Tuple :
+                                                                            //Item1: List of tuples (item1 vertex, and item 2 its parent)
+                                                                            //Item2: bool which represents whether a cycle was found
         {
             List<Tuple<int, int>> visited = new List<Tuple<int, int>>(); //initialise return value
             visited.Add(Tuple.Create(startNode, -1)); //start node doesnt have a parent so we can set it to -1 and mark it as visited
@@ -771,7 +771,7 @@ namespace Interface_2
             {
                 stack.PushFront(Tuple.Create(adjNodes[i], startNode)); //add all the adjacent nodes to the stack
             }
-            bool cycle = false;
+            bool cycleExists = false;
             while (stack.Count != 0) //do this until the stack is empty
             {
                 Tuple<int, int> topOfStack = stack.PopFront(); //take and save the vertex at the top of the starck
@@ -782,14 +782,14 @@ namespace Interface_2
                 {
                     if (stack.Contains(adjNodes[i]))
                     {
-                        cycle = true;
+                        cycleExists = true; //if an unvisited node appears more than one time in the stack, then there is a cycle
                     }
                     if (!NodeVisited(visited, adjNodes[i]) && !stack.Contains(adjNodes[i])) //if not visited and not already in stack
                         stack.PushFront(Tuple.Create(adjNodes[i], parentNode)); //push them to the front of the stack
                 }
             }
             visited.RemoveAt(0); //remove (startvertex, -1) from the list since its not an edge
-            return Tuple.Create(visited, cycle); //return the ordered edges
+            return Tuple.Create(visited, cycleExists); //return the ordered edges, and cycle
         }
         private bool NodeVisited(List<Tuple<int, int>> visited, int node) //retunrs whether a node has been visited
         {
