@@ -49,7 +49,6 @@ namespace Interface_2
                                                                            //the smallest vertex, the largest vertex, the weight
         //for the drag feature                                                              //will be assigned to the ellipse that will be dragged then dropped
         Ellipse ellipseToDrop = null;
-
         //the actual graph class
         private AdjacencySetGraph Graph = null;
         public MainWindow()

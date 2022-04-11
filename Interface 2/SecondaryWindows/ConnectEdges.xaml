@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Interface_2"
         mc:Ignorable="d"
-        Title="ConnectEdges" Height="175" Width="400"
+        Title="ConnectEdges" Height="190" Width="400"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize">
     <Grid>
@@ -21,7 +21,7 @@
         <TextBlock Grid.ColumnSpan="2"
                    TextWrapping="Wrap"
                    FontSize="15"
-                   TextAlignment="Center">Enter a <Bold>Non Negative</Bold> weight, to represent the weight for the two vertices. <Bold>Enter 0 for an unweighted edge</Bold></TextBlock>
+                   TextAlignment="Center">Enter a value, to represent the weight of the edge. <Bold>Enter 0 for an unweighted edge</Bold></TextBlock>
         <Label Grid.Row="1"
                HorizontalAlignment="Center"
                VerticalAlignment="Center"
@@ -39,15 +39,68 @@
                  x:Name="txWeight"
                  PreviewTextInput="txWeight_PreviewTextInput" TextChanged="txWeight_TextChanged">
         </TextBox>
+        <Label Grid.Row="1"
+               Grid.Column="1"
+               Content="to"
+               Margin="155,0,0,0"
+               FontWeight="Bold"
+               VerticalAlignment="Center">
+        </Label>
+        <Label
+               Grid.Column="1"
+               Content="Min"
+               Margin="115,34,40,18"
+               FontWeight="Bold" 
+               Grid.RowSpan="2"/>
+        <TextBox Grid.Row="1"
+                 Text="1"
+                 Margin="115,8,100,8"
+                 Grid.Column="1"
+                 BorderThickness="3"
+                 MaxLength="15"
+                 VerticalAlignment="Center"
+                 TextAlignment="Left"
+                 FontSize="20"
+                 x:Name="txMinimum"
+                 PreviewTextInput="txWeight_PreviewTextInput" TextChanged="txWeight_TextChanged">
+        </TextBox>
+        <TextBox Grid.Row="1"
+                 Text="25"
+                 Margin="185,8,30,8"
+                 Grid.Column="1"
+                 BorderThickness="3"
+                 MaxLength="15"
+                 VerticalAlignment="Center"
+                 TextAlignment="Left"
+                 FontSize="20"
+                 x:Name="txMaximum"
+                 PreviewTextInput="txWeight_PreviewTextInput" TextChanged="txWeight_TextChanged">
+        </TextBox>
         <Button Grid.Row="2"
                 TabIndex="0"
-                Grid.ColumnSpan="2"
-                Margin="85,10,85,10"
+                Grid.ColumnSpan="1"
+                Margin="10"
                 FontSize="15"
                 FontWeight="Medium"
                 x:Name="buttonConfirmWeight"
                 Click="buttonConfirmWeight_Click">
             Make Edge
         </Button>
+        <Button Grid.Row="2"
+                TabIndex="0"
+                Grid.Column="1"
+                Margin="10"
+                FontSize="15"
+                FontWeight="Medium"
+                x:Name="buttonRandomiseWeight"
+                Click="buttonRandomiseWeight_Click">
+            Randomise Weight Min to Max
+        </Button>
+        <Label
+            Grid.Column="1"
+            Content="Max"
+            Margin="184,34,-29,18"
+            FontWeight="Bold" 
+            Grid.RowSpan="2"/>
     </Grid>
 </Window>

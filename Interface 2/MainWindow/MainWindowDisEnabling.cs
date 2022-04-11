@@ -22,6 +22,7 @@ namespace Interface_2
             btnBreadthFirst.IsEnabled = false;
             btnDepthFirst.IsEnabled = false;
             btnPrims.IsEnabled = false;
+            btnKruskals.IsEnabled = false;
         }
         public void EnableAllAlgoButtons()
         {
@@ -33,6 +34,7 @@ namespace Interface_2
             btnBreadthFirst.IsEnabled = true;
             btnDepthFirst.IsEnabled = true;
             btnPrims.IsEnabled = true;
+            btnKruskals.IsEnabled = true;
         }
         public void DisableTbCtrl()
         {
