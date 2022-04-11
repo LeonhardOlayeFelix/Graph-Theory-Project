@@ -793,7 +793,7 @@ namespace Interface_2
                 }
             }
             visited.RemoveAt(0); //remove (startvertex, -1) from the list since its not an edge
-            return Tuple.Create(visited, String.Join(", ", outputList)); //return the ordered edges and 
+            return Tuple.Create(visited, String.Join("=>", outputList)); //return the ordered edges and 
         }
         public Tuple<List<Tuple<int, int>>, bool, string> DepthFirst(int startNode) //returns a Tuple :
                                                                             //Item1: List of tuples (item1 vertex, and item 2 its parent)
@@ -836,7 +836,7 @@ namespace Interface_2
                 }
             }
             visited.RemoveAt(0); //remove (startvertex, -1) from the list since its not an edge
-            return Tuple.Create(visited, cycleExists, String.Join(",", outputList)); //return the ordered edges, the cycle and the traversal order
+            return Tuple.Create(visited, cycleExists, String.Join("=>", outputList)); //return the ordered edges, the cycle and the traversal order
         }
         private bool NodeVisited(List<Tuple<int, int>> visited, int node) //retunrs whether a node has been visited
         {

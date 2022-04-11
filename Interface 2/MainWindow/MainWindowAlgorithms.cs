@@ -44,7 +44,7 @@ namespace Interface_2
                 line.Stroke = new SolidColorBrush(Colors.Black);//reset the colour
             }
         }
-        public bool DepthHighlightPath(List<Tuple<int, int, int>> edges)
+        public bool mstHighlightPath(List<Tuple<int, int, int>> edges)
         {
             if (edges.Count() != 0)
             {
@@ -70,6 +70,7 @@ namespace Interface_2
                     highlightedLines[i].Stroke = new SolidColorBrush(Colors.Red);
                     if (i != highlightedLines.Count() - 1) { MessageBox.Show("Press OK to show next edge"); }
                 }
+                txExtraInfo2.Text = "Cost: " + total;
                 MessageBox.Show("Press ok to clear Minimum Spanning Tree\nCost: " + total / 2); //weight will be twice what it shuold be
                 foreach (Line line in highlightedLines)
                 {
@@ -111,6 +112,7 @@ namespace Interface_2
                         if (i != highlightedLines.Count() - 1) { MessageBox.Show("Press OK to show next edge"); }
                     }
                     pathString += path[path.Count() - 1];
+                    txExtraInfo2.Text = "Traversal Order:\n" + pathString + "\nCost: " + total;
                     MessageBox.Show("Press ok to clear \nTotal Cost: " + total +"\nPath: " + pathString);
                     foreach (Line line in highlightedLines)
                     {
@@ -164,6 +166,7 @@ namespace Interface_2
             {
                 line.Stroke = new SolidColorBrush(Colors.Black);//reset the colour
             }
+
         }
         private void btnToggleValencies_Click(object sender, RoutedEventArgs e)
         {

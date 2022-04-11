@@ -340,14 +340,16 @@ namespace Interface_2
         }
         private void btnKruskals_Click(object sender, RoutedEventArgs e)
         {
+            ActivateButton(sender);
+            HideValencies();
             if (!Graph.IsConnected())
             {
                 MessageBox.Show("The graph is not connected");
             }
             else
             {
-                List<Tuple<int, int, int>> mstEdges = Graph.Kruskals();
-                DepthHighlightPath(mstEdges);
+                List<Tuple<int, int, int>> mst = Graph.Kruskals();
+                mstHighlightPath(mst);
             }
         }
         public int GetMax(int a, int b)

@@ -455,32 +455,50 @@
                                                 </TextBlock>
                                             </Grid>
                                         </GroupBox>
-                                        <GroupBox Header="Path Finding"
-                                              Grid.Column="1">
+                                        <GroupBox Header="Other"
+                                              Grid.Column="1"
+                                                  Grid.Row="1">
                                             <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="81*"/>
+                                                </Grid.ColumnDefinitions>
                                                 <Grid.RowDefinitions>
                                                     <RowDefinition/>
                                                     <RowDefinition/>
                                                     <RowDefinition/>
                                                 </Grid.RowDefinitions>
+
+                                                <TextBlock Foreground="Black"
+                                               Grid.Row="1"
+                                               Height="20" 
+                                               Margin="30,-3,26,21"
+                                               FontSize="10"
+                                               HorizontalAlignment="Center"> <!-- Have a new window appear when they connect vertices-->
+                                        Enter a path to be highlighted
+                                                </TextBlock>
                                                 <Button Margin="20,12,20,3"
-                                            x:Name="btnDijkstrasShort"
-                                            Click="btnDijkstrasShort_Click">
-                                                    Shortest Route
+                                            x:Name="btnHighlightPaths"
+                                            Grid.Row="1"
+                                            Click="btnHighlightPaths_Click">
+                                                    Highlight Path
+                                                </Button>
+                                                <Button Margin="20,12,20,3"
+                                            x:Name="btnToggleValencies"
+                                            Click="btnToggleValencies_Click">
+                                                    Toggle Valencies
                                                 </Button>
                                                 <TextBlock Foreground="Black"
                                                Grid.Row="0"
                                                Height="20" 
-                                               Margin="23,-3,20,22"
+                                               Margin="32,-3,38,21"
                                                FontSize="10"
-                                               HorizontalAlignment="Center" Width="205">
-                                        find shortest route from A to B With Dijkstra's
+                                               HorizontalAlignment="Center" Width="178">
+                                        show or hide the valency of each vertex
                                                 </TextBlock>
                                             </Grid>
                                         </GroupBox>
                                         <GroupBox Header="Route Inspection"
-                                                  Grid.Column="1"
-                                                  Grid.Row="1">
+                                                  Grid.Column="1">
                                             <Grid>
                                                 <Grid.RowDefinitions>
                                                     <RowDefinition/>
@@ -498,7 +516,7 @@
                                                Margin="30,-3,26,21"
                                                FontSize="10"
                                                HorizontalAlignment="Center" Width="192">
-                                        Shortest route to traverse every edge once
+                                        Lowest cost to traverse every edge once
                                                 </TextBlock>
                                                 <Button Margin="20,12,20,3"
                                                         x:Name="btnRouteInspStartAndEnd"
@@ -512,7 +530,7 @@
                                                Margin="30,-3,26,21"
                                                FontSize="10"
                                                HorizontalAlignment="Center" Width="192">
-                                        Shortest route to traverse every edge once
+                                        Lowest cost to traverse every edge once
                                                 </TextBlock>
                                             </Grid>
                                         </GroupBox>
@@ -524,20 +542,19 @@
                                                     <RowDefinition/>
                                                     <RowDefinition/>
                                                 </Grid.RowDefinitions>
+                                                <Button Margin="20,12,20,3"
+                                            x:Name="btnDijkstrasShort"
+                                            Click="btnDijkstrasShort_Click" Grid.ColumnSpan="2">
+                                                    Dijkstra's Algorithm
+                                                </Button>
                                                 <TextBlock Foreground="Black"
                                                Grid.Row="0"
                                                Height="20" 
-                                               Margin="30,-3,26,21"
+                                               Margin="23,-3,20,22"
                                                FontSize="10"
-                                               HorizontalAlignment="Center"> <!-- Have a new window appear when they connect vertices-->
-                                        Enter a path to be highlighted
+                                               HorizontalAlignment="Center" Width="205" Grid.ColumnSpan="2">
+                                        find shortest route from A to B With Dijkstra's
                                                 </TextBlock>
-                                                <Button Margin="20,12,20,3"
-                                            x:Name="btnHighlightPaths"
-                                            Grid.Row="0"
-                                            Click="btnHighlightPaths_Click">
-                                                    Highlight Path
-                                                </Button>
                                                 <TextBlock Foreground="Black"
                                                Grid.Row="1"
                                                Height="20" 
@@ -546,6 +563,7 @@
                                                HorizontalAlignment="Center"> <!-- Have a new window appear when they connect vertices-->
                                         Perform a Breadth-First traversal
                                                 </TextBlock>
+
                                                 <Button Margin="20,12,20,3"
                                             x:Name="btnBreadthFirst"
                                             Grid.Row="1"
@@ -570,47 +588,16 @@
                                         </GroupBox>
                                     </Grid>
                                 </GroupBox>
-                                <GroupBox Grid.Row="1"
-                                      Grid.Column="0"
-                                      Header="Other Algorithms"
-                                      BorderThickness="2">
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition/>
-                                            <ColumnDefinition/>
-                                        </Grid.ColumnDefinitions>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition/>
-                                            <RowDefinition/>
-                                        </Grid.RowDefinitions>
-                                        <GroupBox Header="Calculating Centrality">
-
-                                        </GroupBox>
-                                        <GroupBox Grid.Column="1"
-                                              Header="Graph Statistics">
-                                            <Grid>
-                                                <Grid.RowDefinitions>
-                                                    <RowDefinition/>
-                                                    <RowDefinition/>
-                                                    <RowDefinition/>
-                                                </Grid.RowDefinitions>
-                                                <Button Margin="20,12,20,3"
-                                            x:Name="btnToggleValencies"
-                                            Click="btnToggleValencies_Click">
-                                                    Toggle Valencies
-                                                </Button>
-                                                <TextBlock Foreground="Black"
-                                               Grid.Row="0"
-                                               Height="20" 
-                                               Margin="40,-3,41,22"
-                                               FontSize="10"
-                                               HorizontalAlignment="Center">
-                                        find shortest route from A to B
-                                                </TextBlock>
-                                            </Grid>
-                                        </GroupBox>
-                                    </Grid>
-                                </GroupBox>
+                                <TextBlock
+                                    Grid.Row="1"
+                                    Margin="30"
+                                    HorizontalAlignment="Center"
+                                    TextAlignment="Center"
+                                    TextWrapping="Wrap"
+                                    FontSize="25"
+                                    x:Name="txExtraInfo2">
+                                    
+                                </TextBlock>
                             </Grid>
                         </TabItem>
                         <TabItem x:Name="tabControlDisplay">

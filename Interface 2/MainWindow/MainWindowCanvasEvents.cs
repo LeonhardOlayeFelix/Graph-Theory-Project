@@ -49,11 +49,12 @@ namespace Interface_2
                     {
                         Tuple<List<Tuple<int, int>>, bool ,string> result = Graph.DepthFirst(startVertexId);
                         List<Tuple<int, int>> edges = result.Item1;
-                        labelExtraInfo.Content = "Traversal Order: " + result.Item3;
                         TraversalHighlightPath(edges);
+                        txExtraInfo2.Text = "Traversal Order: " + result.Item3;
+
                     }
-                    
-                    
+
+
                 }
                 else if (currentButton == btnBreadthFirst)
                 {
@@ -63,10 +64,10 @@ namespace Interface_2
                     {
                         Tuple<List<Tuple<int, int>>, string> result = Graph.BreadthFirst(startVertexId);
                         List<Tuple<int, int>> edges = result.Item1;
-                        labelExtraInfo.Content = "Traversal Order: " + result.Item2;
                         TraversalHighlightPath(edges);
+                        txExtraInfo2.Text = "Traversal Order: " + result.Item2;
                     }
-                    
+
                 }
                 else if (currentButton == btnRouteInspStartAndEnd)
                 {
@@ -199,7 +200,7 @@ namespace Interface_2
                         if (Graph.IsConnected())
                         {
                             List<Tuple<int, int, int>> mst = Graph.Prims(startVertexID);
-                            DepthHighlightPath(mst);
+                            mstHighlightPath(mst);
                         }
                         else
                         {
