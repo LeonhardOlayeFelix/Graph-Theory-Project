@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Interface_2
 {
-    public class UDLinkedList
+    class UDLinkedList
     {
         public int Count; //keep track of and maintain the number of elements in the list
         UDLinkedListNode head; //each list has a head
@@ -30,6 +30,40 @@ namespace Interface_2
             node = null; //set the old head to null
             Count--;//update count
             return value;
+        }
+        public void Append(Tuple<int, int> data)
+        {
+            UDLinkedListNode newNode = new UDLinkedListNode(data);
+            if (head == null)
+            {
+                head = new UDLinkedListNode(data);
+                return;
+            }
+
+            newNode.next = null;
+
+            UDLinkedListNode last = head;
+            while (last.next != null)
+            {
+                last = last.next;
+            }
+
+            last.next = newNode;
+            return;
+        }
+        public UDLinkedListNode Pop()
+        {
+            if (head == null)
+                return null;
+            if (head.next == null)
+                return null;
+
+            UDLinkedListNode secondLast = head;
+            while (secondLast.next.next != null)
+                secondLast = secondLast.next;
+
+            secondLast.next = null;
+            return head;
         }
         public void PrintList() //for testing
         {
