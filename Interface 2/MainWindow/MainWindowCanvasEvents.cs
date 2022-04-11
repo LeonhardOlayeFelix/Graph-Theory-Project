@@ -179,7 +179,7 @@ namespace Interface_2
                         if (Graph.IsConnected())
                         {
                             List<Tuple<int, int, int>> mst = Graph.Prims(startVertexID);
-                            TraversalHighlightPath(mst);
+                            DepthHighlightPath(mst);
                         }
                         else
                         {

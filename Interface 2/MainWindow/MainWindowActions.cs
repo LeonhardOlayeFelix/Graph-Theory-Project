@@ -347,7 +347,7 @@ namespace Interface_2
             else
             {
                 List<Tuple<int, int, int>> mstEdges = Graph.Kruskals();
-                TraversalHighlightPath(mstEdges);
+                DepthHighlightPath(mstEdges);
             }
         }
         public int GetMax(int a, int b)

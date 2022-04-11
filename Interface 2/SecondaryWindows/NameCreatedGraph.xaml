@@ -30,6 +30,7 @@
         <TextBox Grid.Row="1"
                  Margin="0,0 10,0"
                  Grid.Column="1"
+                 Text="Untitled"
                  BorderThickness="3"
                  MaxLength="15"
                  VerticalAlignment="Center"
