@@ -39,7 +39,7 @@
                 <ColumnDefinition Width="47*"/>
             </Grid.ColumnDefinitions>
             <Rectangle Fill="#d9d2d2"
-                        Grid.Column="1"
+                       Grid.Column="1"
                        Panel.ZIndex="2">
             </Rectangle>
             <Grid Grid.Column="0">
@@ -398,7 +398,7 @@
                                                       Margin="20,0,0,0"
                                                       Checked="cbAutoGenEdges_Checked"
                                                       Grid.Row="3">
-                                                  Auto Gen Edge Weights (Randomly)
+                                                Auto Gen Edge Weights (Randomly)
                                             </CheckBox>
                                             <CheckBox VerticalContentAlignment="Center" 
                                                       x:Name="cbAutoGenEdgesValue"
@@ -415,13 +415,13 @@
                                                              FontWeight="Medium"
                                                              HorizontalContentAlignment="Center"
                                                              VerticalContentAlignment="Center">
-                                                        
+
                                                     </TextBox>
                                                 </WrapPanel>
-                                                
+
                                             </CheckBox>
                                         </StackPanel>
-                                        
+
                                     </Grid>
                                 </GroupBox>
                             </Grid>
@@ -623,7 +623,7 @@
                                     TextWrapping="Wrap"
                                     FontSize="25"
                                     x:Name="txExtraInfo2">
-                                    
+
                                 </TextBlock>
                             </Grid>
                         </TabItem>

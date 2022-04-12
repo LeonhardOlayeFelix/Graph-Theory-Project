@@ -56,15 +56,7 @@ namespace Interface_2
             ActivateButton(sender);
         }
 
-        private void mouseMove(object sender, MouseEventArgs e)
-        {
-            //monitors the mouse as it hovers over a vertex
-            if (e.LeftButton == MouseButtonState.Pressed && currentButton == btnDragAndDrop)//if, whilst hovering, they press the vertex
-            {
-                ellipseToDrop = sender as Ellipse; //update teh
-                DragDrop.DoDragDrop(sender as Ellipse, sender as Ellipse, DragDropEffects.Move); //start the drag function on this vertex
-            }
-        }
+        
         private void btnLoadGraph_Click(object sender, RoutedEventArgs e)
         {
 

@@ -393,7 +393,7 @@ namespace Interface_2
                     {
                         Source = colourPickerVertexStroke,
                         UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
-                        Mode = BindingMode.TwoWay
+                        Mode = BindingMode.OneWay
                     };
                     vertexToAdd.SetBinding(Ellipse.StrokeProperty, bindingStroke);
 
@@ -421,7 +421,7 @@ namespace Interface_2
                     vertexToAdd.Margin = new Thickness(-100000); //margin of 100000 so that it resizes around the center.
                     Canvas.SetLeft(vertexToAdd, vertexCenterXMousePos);
                     Canvas.SetTop(vertexToAdd, vertexCenterYMousePos);
-                    Canvas.SetZIndex(vertexToAdd, 3);
+                    Canvas.SetZIndex(vertexToAdd, Zindex++);
 
                     //give the string a Name in the form btn(vertexId)
                     string vertexId = buttonId.ToString();
@@ -466,7 +466,7 @@ namespace Interface_2
                         Canvas.SetTop(vertexLabel, Canvas.GetTop(vertexToAdd) - 9);
                         Canvas.SetLeft(vertexLabel, Canvas.GetLeft(vertexToAdd) - 13);
                     }
-                    Canvas.SetZIndex(vertexLabel, 4);
+                    Canvas.SetZIndex(vertexLabel, Zindex++);
 
 
                     vertexTxBoxList.Add(vertexLabel);//add it to the label list

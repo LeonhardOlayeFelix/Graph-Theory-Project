@@ -27,6 +27,7 @@ namespace Interface_2
         int rInspSelectionCount = 0;
         int rInspStart = 0;
         int startVertex = 0;
+        int Zindex = 2;
         //for loading, creating, and deleting files
         private bool graphCreated = false;
 

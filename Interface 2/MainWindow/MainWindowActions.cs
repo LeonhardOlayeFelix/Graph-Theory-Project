@@ -111,7 +111,7 @@ namespace Interface_2
             double MidPointY = (Canvas.GetTop(smallerEllipse) + Canvas.GetTop(largerEllipse)) / 2;
             Canvas.SetLeft(weightLabel, MidPointX - 4);
             Canvas.SetTop(weightLabel, MidPointY - 9);
-            Canvas.SetZIndex(weightLabel, 5); //needs to be visible above all else
+            Canvas.SetZIndex(weightLabel, 1); //needs to be visible above all else
 
             //add a new edge tuple to the list
             edgeList.Add(Tuple.Create(temp, smallerEllipse, largerEllipse, weightLabel));
@@ -284,6 +284,17 @@ namespace Interface_2
             vertexList = new List<Ellipse>();
             edgeList = new HashSet<Tuple<Line, Ellipse, Ellipse, TextBlock>>();
             graphCreated = false;
+        }
+        private void mouseMove(object sender, MouseEventArgs e)
+        {
+            //monitors the mouse as it hovers over a vertex
+            if (e.LeftButton == MouseButtonState.Pressed && currentButton == btnDragAndDrop)//if, whilst hovering, they press the vertex
+            {
+                ellipseToDrop = sender as Ellipse;
+                ellipseToDrop.Fill = new SolidColorBrush(Colors.Red);
+                DragDrop.DoDragDrop(sender as Ellipse, sender as Ellipse, DragDropEffects.Move); //start the drag function on this vertex
+                RevertEllipseColour();
+            }
         }
         private void mainCanvas_DragOver(object sender, DragEventArgs e)
         {
