@@ -390,7 +390,38 @@
                                             Click="btnDefault_Click">
                                             Default
                                         </Button>
-
+                                        <StackPanel Orientation="Vertical"
+                                                    Grid.Row="3">
+                                            <CheckBox VerticalContentAlignment="Center" 
+                                                      x:Name="cbAutoGenEdges"
+                                                      FontWeight="Bold"
+                                                      Margin="20,0,0,0"
+                                                      Checked="cbAutoGenEdges_Checked"
+                                                      Grid.Row="3">
+                                                  Auto Gen Edge Weights (Randomly)
+                                            </CheckBox>
+                                            <CheckBox VerticalContentAlignment="Center" 
+                                                      x:Name="cbAutoGenEdgesValue"
+                                                      Checked="cbAutoGenEdgesValue_Checked"
+                                                      FontWeight="Bold"
+                                                      Margin="20,4,0,0"
+                                                      Grid.Row="3">
+                                                <WrapPanel>
+                                                    <Label>Auto Gen Edge Weights (Value)</Label>
+                                                    <TextBox Width="25"
+                                                             Text="5"
+                                                             x:Name="txAutoWeight"
+                                                             PreviewTextInput="txAutoWeight_PreviewTextInput" 
+                                                             FontWeight="Medium"
+                                                             HorizontalContentAlignment="Center"
+                                                             VerticalContentAlignment="Center">
+                                                        
+                                                    </TextBox>
+                                                </WrapPanel>
+                                                
+                                            </CheckBox>
+                                        </StackPanel>
+                                        
                                     </Grid>
                                 </GroupBox>
                             </Grid>
@@ -671,7 +702,7 @@
                                         </StackPanel>
                                         <Button Margin="30,17,30,30"
                                             x:Name="btnResetColour"
-                                            Click="btnResetColour_Click">Reset To Default</Button>
+                                            Click="btnResetColour_Click" Content="Reset To Default"/>
                                     </StackPanel>
                                 </GroupBox>
                                 <GroupBox Grid.Column="1"

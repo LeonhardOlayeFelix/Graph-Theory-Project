@@ -10,6 +10,7 @@ using System.Windows.Shapes;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using System.Text.RegularExpressions;
 
 namespace Interface_2
 {
@@ -34,7 +35,6 @@ namespace Interface_2
 
         //the button that is currently activated
         private Button currentButton = null;
-
         //to know whether to show the valencies or not
         string valencyState;
         List<TextBlock> valencyList = null; //a list of all the valency textblocks
@@ -59,9 +59,19 @@ namespace Interface_2
             DisableAllActionButtons();
             DisableTbCtrl();
         }
-
-        
-
+        private void cbAutoGenEdges_Checked(object sender, RoutedEventArgs e)
+        {
+            cbAutoGenEdgesValue.IsChecked = false;
+        }
+        private void cbAutoGenEdgesValue_Checked(object sender, RoutedEventArgs e)
+        {
+            cbAutoGenEdges.IsChecked = false;
+        }
+        private void txAutoWeight_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            Regex regex = new Regex("[^0-9]+");
+            e.Handled = regex.IsMatch(e.Text);
+        }
         
     }
 }

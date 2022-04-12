@@ -23,6 +23,7 @@ namespace Interface_2
             btnDepthFirst.IsEnabled = false;
             btnPrims.IsEnabled = false;
             btnKruskals.IsEnabled = false;
+            btnHighlightPaths.IsEnabled = false;
         }
         public void EnableAllAlgoButtons()
         {
@@ -35,6 +36,7 @@ namespace Interface_2
             btnDepthFirst.IsEnabled = true;
             btnPrims.IsEnabled = true;
             btnKruskals.IsEnabled = true;
+            btnHighlightPaths.IsEnabled = true;
         }
         public void DisableTbCtrl()
         {
@@ -61,7 +63,6 @@ namespace Interface_2
             btnDragAndDrop.IsEnabled = false;
             btnDefault.IsEnabled = false;
             btnGenerateMatrix.IsEnabled = false;
-            btnHighlightPaths.IsEnabled = false;
         }
         public void EnableAllActionButtons()
         {
@@ -74,7 +75,6 @@ namespace Interface_2
             btnDragAndDrop.IsEnabled = true;
             btnDefault.IsEnabled = true;
             btnGenerateMatrix.IsEnabled = true;
-            btnHighlightPaths.IsEnabled = true;
         }
     }
 }

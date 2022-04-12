@@ -141,12 +141,32 @@ namespace Interface_2
             edgeList.Remove(edge);//remove it from the graph
             GenerateAdjList();
         }
+        public Ellipse FindElipse(int vertexId)
+        {
+            foreach (var ctrl in mainCanvas.Children)
+            {
+                try
+                {
+                    Ellipse currentEllipse = (Ellipse)ctrl;
+                    if (currentEllipse.Name.Substring(3) == vertexId.ToString())
+                    {
+                        return currentEllipse;
+                    }
+                }
+                catch
+                {
+
+                }
+            }
+            return null;
+        }
         private void btnResetComponentShape_Click(object sender, RoutedEventArgs e)
         {
             //resets the sliders back to their original form
             edgeThicknessSlider.Value = edgeThicknessSlider.Minimum;
             vertexDiameterSlider.Value = vertexDiameterSlider.Minimum;
             weightAndLabelFontSizeSlider.Value = weightAndLabelFontSizeSlider.Minimum;
+            ActivateButton(sender);
         }
         public HashSet<Tuple<Line, Ellipse, Ellipse, TextBlock>> GetListOfEdgesFromVertex(Ellipse activeVertex) //gets all of the edges coming out of a vertex
         {
@@ -241,16 +261,23 @@ namespace Interface_2
             DisableAllActionButtons();
             DisableTbCtrl();
         }
+        public void ResetSelectionCounts()
+        {
+            buttonSelectionCount = 0;
+            dijkstraSelectionCount = 0;
+            rInspSelectionCount = 0;
+        }
         public void DeleteGraph()
         {
             mainCanvas.Children.Clear();
             btnDeleteGraph.IsEnabled = false;
             labelGraphName.Content = "";
             Graph = new Network();
+            ResetSelectionCounts();
             HideValencies();
             buttonId = 0;
             Graph = null;
-
+            
             lastSelectedVertex = null;
             vertexToConnectTo = null;
             vertexTxBoxList = new List<TextBlock>();
@@ -356,7 +383,6 @@ namespace Interface_2
             {
                 List<Tuple<int, int, int>> mst = Graph.Kruskals();
                 mstHighlightPath(mst);
-                
             }
         }
         public int GetMax(int a, int b)

@@ -45,11 +45,10 @@ namespace Interface_2
             }
             info += "\nCost: " + (cost + Graph.GetSumOfWeights());
             txExtraInfo2.Text = info;
-            MessageBox.Show("The highlighted edges are edges which must be repeated\nTotal Cost: " + (cost + Graph.GetSumOfWeights()));
-            RevertLineColour();
         }
         public bool mstHighlightPath(List<Tuple<int, int, int>> edges)
         {
+            RevertLineColour();
             if (edges.Count() != 0)
             {
                 int total = 0;
@@ -75,8 +74,6 @@ namespace Interface_2
                     if (i != highlightedLines.Count() - 1) { MessageBox.Show("Press OK to show next edge"); }
                 }
                 txExtraInfo2.Text = "Minimum Spanning Tree Weight: " + total / 2;
-                MessageBox.Show("Press ok to clear Minimum Spanning Tree\nCost: " + total / 2); //weight will be twice what it shuold be
-                RevertLineColour();
                 return true;
             }
             return false;
@@ -125,13 +122,13 @@ namespace Interface_2
                         if (i != highlightedLines.Count() - 1) { MessageBox.Show("Press OK to show next edge"); }
                     }
                     pathString += path[path.Count() - 1];
-                    MessageBox.Show("Press ok to clear \nTotal Cost: " + total + "\nPath: " + pathString);
                     txExtraInfo2.Text = "Traversal Order:\n" + pathString + "\nCost: " + total;
-                    RevertLineColour();
+
                 }
                 else //if this isnt true, then a valid path was not passed in.
                 {
                     MessageBox.Show("No Edge between these vertices was found");
+                    RevertEllipseColour();
                 }
             }
             else
@@ -151,6 +148,27 @@ namespace Interface_2
                     UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
                 };
                 edge.Item1.SetBinding(Line.StrokeProperty, bindingStroke);
+            }
+        }
+        public void RevertEllipseColour()
+        {
+            foreach (var ctrl in mainCanvas.Children)
+            {
+                try
+                {
+                    Ellipse currentEllipse = (Ellipse)ctrl;
+                    Binding bindingFill = new Binding("SelectedBrush")
+                    {
+                        Source = colourPickerVertex,
+                        Mode = BindingMode.OneWay,
+                        UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
+                    };
+                    currentEllipse.SetBinding(Ellipse.FillProperty, bindingFill);
+                }
+                catch
+                {
+
+                }
             }
         }
         private void btnHighlightPaths_Click(object sender, RoutedEventArgs e)
@@ -177,17 +195,12 @@ namespace Interface_2
             for (int i = 0; i < highlightedLines.Count(); ++i)
             {
                 highlightedLines[i].Stroke = new SolidColorBrush(Colors.Red);
-                if (i == highlightedLines.Count() - 1)
-                {
-                    MessageBox.Show("Traversal completed.");
-                }
-                else
+                if (i != highlightedLines.Count() - 1)
                 {
                     MessageBox.Show("Press ok to show next edge");
 
                 }
             }
-            RevertLineColour();
 
         }
         private void btnToggleValencies_Click(object sender, RoutedEventArgs e)

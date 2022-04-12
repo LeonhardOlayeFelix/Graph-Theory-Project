@@ -15,6 +15,7 @@ namespace Interface_2
     {
         private void ActivateButton(object btnSender) //highlight a button when its pressed
         {
+            RevertEllipseColour();
             RevertLineColour();
             livePath.Clear(); //incase they were in the midst of the highlight path action
             if (btnSender != null) //make sure that the button isnt null
@@ -52,6 +53,7 @@ namespace Interface_2
             colourPickerWeight.SelectedBrush = new SolidColorBrush(Colors.Black);
             colourPickerLabel.SelectedBrush = new SolidColorBrush(Colors.White);
             colourPickerVertexStroke.SelectedBrush = new SolidColorBrush(Colors.Black);
+            ActivateButton(sender);
         }
 
         private void mouseMove(object sender, MouseEventArgs e)
