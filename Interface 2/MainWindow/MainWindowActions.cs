@@ -222,7 +222,7 @@ namespace Interface_2
         {
             //re-intiliaise all of the attributes declared/defined above
             edgeList = new HashSet<Tuple<Line, Ellipse, Ellipse, TextBlock>>();
-            Graph = new AdjacencySetGraph();
+            Graph = new Network();
             valencyState = "Hidden";
             valencyList = new List<TextBlock>();
             Graph.Name = graphName; //the name that they provided, length = 2 to 15
@@ -246,7 +246,7 @@ namespace Interface_2
             mainCanvas.Children.Clear();
             btnDeleteGraph.IsEnabled = false;
             labelGraphName.Content = "";
-            Graph = new AdjacencySetGraph();
+            Graph = new Network();
             HideValencies();
             buttonId = 0;
             Graph = null;
@@ -302,7 +302,7 @@ namespace Interface_2
         }
         public void GenerateAdjList()
         {
-            txAdjset.Text = Graph.coutAdjList();
+            txAdjset.Text = Graph.PrintAdjList();
         }
         public List<List<int>> GenerateAdjMat()
         {

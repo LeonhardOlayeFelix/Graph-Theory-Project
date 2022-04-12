@@ -18,7 +18,6 @@ namespace Interface_2
     /// </summary>
     public partial class MainWindow : Window
     {
-
         //for the connection process
         Ellipse lastSelectedVertex;
         Ellipse vertexToConnectTo;
@@ -53,7 +52,7 @@ namespace Interface_2
         //for the drag feature                                                              //will be assigned to the ellipse that will be dragged then dropped
         Ellipse ellipseToDrop = null;
         //the actual graph class
-        private AdjacencySetGraph Graph = null;
+        private Network Graph = null;
         public MainWindow()
         {
             InitializeComponent();

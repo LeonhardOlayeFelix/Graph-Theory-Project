@@ -88,11 +88,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="GraphDataStruture\AdjacencySetGraph.cs" />
+    <Compile Include="GraphDataStruture\Network Class\NetworkBasicMethods.cs" />
+    <Compile Include="GraphDataStruture\Network Class\NetworkDijkstrasAlgorithm.cs" />
+    <Compile Include="GraphDataStruture\Network Class\Network.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="GraphDataStruture\Network Class\NetworkAddOrRemove.cs" />
+    <Compile Include="GraphDataStruture\Network Class\NetworkMSTAlgorithms.cs" />
+    <Compile Include="GraphDataStruture\Network Class\NetworkRouteInspection.cs" />
+    <Compile Include="GraphDataStruture\Network Class\NetworkTraversalAlgorithms.cs" />
     <Compile Include="LinkedListsClasses\UDLinkedList.cs" />
     <Compile Include="LinkedListsClasses\UDLinkedListNode.cs" />
     <Compile Include="SecondaryWindows\ConnectEdges.xaml.cs">
@@ -119,7 +125,7 @@
     <Compile Include="SecondaryWindows\NameCreatedGraph.xaml.cs">
       <DependentUpon>NameCreatedGraph.xaml</DependentUpon>
     </Compile>
-    <Compile Include="GraphDataStruture\Node.cs" />
+    <Compile Include="GraphDataStruture\Node\Node.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

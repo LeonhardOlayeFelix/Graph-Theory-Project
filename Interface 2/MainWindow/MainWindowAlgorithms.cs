@@ -38,6 +38,13 @@ namespace Interface_2
             {
                 highlightedLines[i].Stroke = new SolidColorBrush(Colors.Red);
             }
+            string info = "Edges to repeat:\n";
+            foreach (Tuple<int, int> edge in edges)
+            {
+                info += "(" + edge.Item1 + ", " + edge.Item2 + ")" + "   ";
+            }
+            info += "\nCost: " + (cost + Graph.GetSumOfWeights());
+            txExtraInfo2.Text = info;
             MessageBox.Show("The highlighted edges are edges which must be repeated\nTotal Cost: " + (cost + Graph.GetSumOfWeights()));
             RevertLineColour();
         }
@@ -67,7 +74,7 @@ namespace Interface_2
                     highlightedLines[i].Stroke = new SolidColorBrush(Colors.Red);
                     if (i != highlightedLines.Count() - 1) { MessageBox.Show("Press OK to show next edge"); }
                 }
-                txExtraInfo2.Text = "Cost: " + total;
+                txExtraInfo2.Text = "Minimum Spanning Tree Weight: " + total / 2;
                 MessageBox.Show("Press ok to clear Minimum Spanning Tree\nCost: " + total / 2); //weight will be twice what it shuold be
                 RevertLineColour();
                 return true;
@@ -170,7 +177,15 @@ namespace Interface_2
             for (int i = 0; i < highlightedLines.Count(); ++i)
             {
                 highlightedLines[i].Stroke = new SolidColorBrush(Colors.Red);
-                MessageBox.Show("Press ok to show next edge");
+                if (i == highlightedLines.Count() - 1)
+                {
+                    MessageBox.Show("Traversal completed.");
+                }
+                else
+                {
+                    MessageBox.Show("Press ok to show next edge");
+
+                }
             }
             RevertLineColour();
 
