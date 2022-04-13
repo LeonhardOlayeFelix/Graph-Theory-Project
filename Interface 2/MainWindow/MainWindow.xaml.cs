@@ -10,16 +10,12 @@ using System.Windows.Shapes;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
-using System.Text.RegularExpressions;
 
 namespace Interface_2
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
-        //for the connection process
+        //for the algorithms
         Ellipse lastSelectedVertex;
         Ellipse vertexToConnectTo;
         int buttonSelectionCount = 0;
@@ -27,52 +23,33 @@ namespace Interface_2
         int rInspSelectionCount = 0;
         int rInspStart = 0;
         int startVertex = 0;
-        int Zindex = 2;
-        //for loading, creating, and deleting files
-        private bool graphCreated = false;
+        
+        private bool graphCreated = false;//for loading, creating, and deleting files
+        private Button currentButton = null; //the button that is currently activated
+        private Color btnActivatedColour = Color.FromRgb(190, 230, 253);//colour to highlight activated buttons with
 
-        //colour to highlight activated buttons with
-        private Color btnActivatedColour = Color.FromRgb(190, 230, 253);
-
-        //the button that is currently activated
-        private Button currentButton = null;
-        //to know whether to show the valencies or not
-        string valencyState;
         List<TextBlock> valencyList = null; //a list of all the valency textblocks
-        //Id to assigns buttons with
-        int buttonId = 0;
+        
+        List<int> livePath = new List<int>(); //for the highlight path button
 
-        //for the highlight path button
-        List<int> livePath = new List<int>();
+        List<Ellipse> vertexList = null; //list containing all of the ellipses
+        List<TextBlock> vertexTxBoxList = null; //list containging all of the ellipses' labels
+        HashSet<Tuple<Line, Ellipse, Ellipse, TextBlock>> edgeList = null; //hashset of tuples which represents a whole edge: Item1(Line) Item2(first end) Item3(other end) item4(weight)
 
-        //intialise all of the structures
-        List<Ellipse> vertexList = null;
-        List<TextBlock> vertexTxBoxList = null;
-        HashSet<Tuple<Line, Ellipse, Ellipse, TextBlock>> edgeList = null; //hashset of tuples containing in order the Line of the edge,
-                                                                           //the smallest vertex, the largest vertex, the weight
-        //for the drag feature                                                              //will be assigned to the ellipse that will be dragged then dropped
-        Ellipse ellipseToDrop = null;
-        //the actual graph class
-        private Network Graph = null;
+        int Zindex = 2;//will let the shapes overlap each other in an ordered fashion
+        int buttonId = 0; //gives each vertex a unique Id
+        string valencyState; //Hidden or Visible
+
+        Ellipse ellipseToDrop = null; //for the drag and drop function
+
+        private Network Graph = null; //initialise a Network Class
         public MainWindow()
         {
             InitializeComponent();
             DisableAllActionButtons();
             DisableTbCtrl();
         }
-        private void cbAutoGenEdges_Checked(object sender, RoutedEventArgs e)
-        {
-            cbAutoGenEdgesValue.IsChecked = false;
-        }
-        private void cbAutoGenEdgesValue_Checked(object sender, RoutedEventArgs e)
-        {
-            cbAutoGenEdges.IsChecked = false;
-        }
-        private void txAutoWeight_PreviewTextInput(object sender, TextCompositionEventArgs e)
-        {
-            Regex regex = new Regex("[^0-9]+");
-            e.Handled = regex.IsMatch(e.Text);
-        }
+        
         
     }
 }

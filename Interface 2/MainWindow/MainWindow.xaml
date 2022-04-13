@@ -732,7 +732,7 @@
                                         <GroupBox Header="Vertex Diameter">
                                             <StackPanel Orientation="Horizontal">
                                                 <Slider Background="Gray"
-                                                    Minimum="40"
+                                                    Minimum="30"
                                                     Maximum="80"
                                                     Width="180"
                                                     x:Name="vertexDiameterSlider"

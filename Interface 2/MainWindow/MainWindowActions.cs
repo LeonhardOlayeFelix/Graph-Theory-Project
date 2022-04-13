@@ -9,6 +9,7 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Data;
 using System.Data.OleDb;
+using System.Text.RegularExpressions;
 
 namespace Interface_2
 {
@@ -19,35 +20,36 @@ namespace Interface_2
             //gets the smaller and larger vertex
             Ellipse smallerEllipse = GetMinEllipse(v1, v2);
             Ellipse largerEllipse = GetMaxEllipse(v1, v2);
-            //creates the lines soon to be name
-            string lineName = "line" + smallerEllipse.Name.Substring(3).ToString() + "to" + largerEllipse.Name.Substring(3).ToString(); //have the name of the line in the form atob where a < b
-            foreach (Tuple<Line, Ellipse, Ellipse, TextBlock> edge in edgeList)//but first check if a line with name exists
+            //creates the lines soon to be name as "line5to6 for example 
+            string lineName = "line" + smallerEllipse.Name.Substring(3).ToString() + "to" + largerEllipse.Name.Substring(3).ToString(); 
+            foreach (Tuple<Line, Ellipse, Ellipse, TextBlock> edge in edgeList)//before connecting, check if a line already exists
             {
                 if (edge.Item1.Name == lineName)//if it does....
                 {
-                    DeleteEdge(edge);//delete line and its edge
-                    break;//break to stop unecessary looping
+                    DeleteEdge(edge);//delete the edge
+                    break;
                 }
             }
-            Graph.AddEdge(Convert.ToInt32(v1.Name.Substring(3)), Convert.ToInt32(v2.Name.Substring(3)), weight); //update the class
+            Graph.AddEdge(Convert.ToInt32(v1.Name.Substring(3)), Convert.ToInt32(v2.Name.Substring(3)), weight); //update the object
 
-            //creates the line which will be connected
-            Line temp = new Line()
+            //below creates the line which will be connected
+            Line temp = new Line()//set properties
             {
                 StrokeThickness = 4,
                 Name = lineName,
                 Stroke = new SolidColorBrush(Colors.Black)
             };
-            Canvas.SetZIndex(temp, 0); //make sure its underneath everything
-            Binding bindingStroke = new Binding("SelectedBrush")
+            Canvas.SetZIndex(temp, 0); //make sure the line is underneath everything
+
+            Binding bindingStroke = new Binding("SelectedBrush") //this will bind the stroke of the line to the colour picker
             {
                 Source = colourPickerLine,
                 Mode = BindingMode.OneWay,
                 UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
             };
-            temp.SetBinding(Line.StrokeProperty, bindingStroke);
-            //bind the lines x1 to the smaller vertex's x1
-            Binding bindingV1X = new Binding
+            temp.SetBinding(Line.StrokeProperty, bindingStroke); 
+
+            Binding bindingV1X = new Binding //this will bind the X1 coordinate of the line to the smaller ellipse
             {
                 Source = smallerEllipse,
                 Path = new PropertyPath(Canvas.LeftProperty),
@@ -55,8 +57,7 @@ namespace Interface_2
             };
             temp.SetBinding(Line.X1Property, bindingV1X);
 
-            //bind the lines y1 to the samller vertex's y1
-            Binding bindingV1Y = new Binding
+            Binding bindingV1Y = new Binding //this will bind the Y1 coordinates of the line to the smaller ellipse
             {
                 Source = smallerEllipse,
                 Path = new PropertyPath(Canvas.TopProperty),
@@ -64,8 +65,7 @@ namespace Interface_2
             };
             temp.SetBinding(Line.Y1Property, bindingV1Y);
 
-            //bind the buttons x2 to the larger vertex's x2
-            Binding bindingV2X = new Binding
+            Binding bindingV2X = new Binding //this will bind the X2 coordinate of the line to the larger ellipse
             {
                 Source = largerEllipse,
                 Path = new PropertyPath(Canvas.LeftProperty),
@@ -73,29 +73,29 @@ namespace Interface_2
             };
             temp.SetBinding(Line.X2Property, bindingV2X);
 
-            //bind the buttons y2 to the larger vertex's y2
-            Binding bindingV2Y = new Binding
+            Binding bindingV2Y = new Binding //this will bind the Y2 coordinate of the line to the larger ellipse
             {
                 Source = largerEllipse,
                 Path = new PropertyPath(Canvas.TopProperty),
                 UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
             };
             temp.SetBinding(Line.Y2Property, bindingV2Y);
-
-            //the textblock which representes the edge weight
-            TextBlock weightLabel = new TextBlock()
+            
+            //below creates the label which represents the weight of the line
+            TextBlock weightLabel = new TextBlock() //set its properties
             {
                 Text = weight.ToString(),
                 Name = "labelFor" + lineName,
                 FontSize = 15,
             };
-            Binding bindingBG = new Binding("SelectedBrush")
+
+            Binding bindingFG = new Binding("SelectedBrush") //binds the foreground of the label to the colour picker
             {
                 Source = colourPickerLabel,
                 UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
                 Mode = BindingMode.TwoWay
             };
-            weightLabel.SetBinding(TextBlock.ForegroundProperty, bindingBG);
+            weightLabel.SetBinding(TextBlock.ForegroundProperty, bindingFG);
 
             //binding the back colour of the weight to the colour 
             Binding bindingWeightBackcolor = new Binding("SelectedBrush")
@@ -111,20 +111,15 @@ namespace Interface_2
             double MidPointY = (Canvas.GetTop(smallerEllipse) + Canvas.GetTop(largerEllipse)) / 2;
             Canvas.SetLeft(weightLabel, MidPointX - 4);
             Canvas.SetTop(weightLabel, MidPointY - 9);
-            Canvas.SetZIndex(weightLabel, 1); //needs to be visible above all else
+            Canvas.SetZIndex(weightLabel, 1); //needs to be visible above the line
 
             //add a new edge tuple to the list
             edgeList.Add(Tuple.Create(temp, smallerEllipse, largerEllipse, weightLabel));
-            //update logs
-
             //if the weight is 0, show it as an unweighted graph
             mainCanvas.Children.Add(temp);
             if (weight != 0)
-            {
                 mainCanvas.Children.Add(weightLabel);
-            }
             GenerateAdjList();
-
         }
         private Ellipse GetMinEllipse(Ellipse vertex1, Ellipse vertex2) //returns vertex with smallest ID
         {
@@ -134,23 +129,23 @@ namespace Interface_2
         {
             return (Convert.ToInt32(vertex1.Name.Substring(3)) > Convert.ToInt32(vertex2.Name.Substring(3))) ? vertex1 : vertex2;
         }
-        private void DeleteEdge(Tuple<Line, Ellipse, Ellipse, TextBlock> edge) //deletes an edge
+        private void DeleteEdge(Tuple<Line, Ellipse, Ellipse, TextBlock> edge) //deletes an edge, and the things connected to
         {
             mainCanvas.Children.Remove(edge.Item1); //remove the line which is the first item
             mainCanvas.Children.Remove(edge.Item4);//remove the label which is the fourth element
             edgeList.Remove(edge);//remove it from the graph
             GenerateAdjList();
         }
-        public Ellipse FindElipse(int vertexId)
+        public Ellipse FindElipse(int vertexId) //returns the ellipse that matches to an Id
         {
             foreach (var ctrl in mainCanvas.Children)
             {
-                try
+                try //incase the ctrl is not an ellipse
                 {
                     Ellipse currentEllipse = (Ellipse)ctrl;
-                    if (currentEllipse.Name.Substring(3) == vertexId.ToString())
+                    if (currentEllipse.Name.Substring(3) == vertexId.ToString()) //when youve found a match
                     {
-                        return currentEllipse;
+                        return currentEllipse; 
                     }
                 }
                 catch
@@ -163,21 +158,21 @@ namespace Interface_2
         private void btnResetComponentShape_Click(object sender, RoutedEventArgs e)
         {
             //resets the sliders back to their original form
+            ActivateButton(sender);
             edgeThicknessSlider.Value = edgeThicknessSlider.Minimum;
             vertexDiameterSlider.Value = vertexDiameterSlider.Minimum;
             weightAndLabelFontSizeSlider.Value = weightAndLabelFontSizeSlider.Minimum;
-            ActivateButton(sender);
         }
         public HashSet<Tuple<Line, Ellipse, Ellipse, TextBlock>> GetListOfEdgesFromVertex(Ellipse activeVertex) //gets all of the edges coming out of a vertex
         {
-            HashSet<Tuple<Line, Ellipse, Ellipse, TextBlock>> listOfEdges = new HashSet<Tuple<Line, Ellipse, Ellipse, TextBlock>>(); //thing to return
+            HashSet<Tuple<Line, Ellipse, Ellipse, TextBlock>> listOfEdges = new HashSet<Tuple<Line, Ellipse, Ellipse, TextBlock>>(); //data to return
             foreach (Ellipse vertex in vertexList) //loop through vertex list
             {
-                if (vertex != activeVertex)//dont check for an edge from itself to itself
+                if (vertex != activeVertex)//don't check for an edge from itself to itself
                 {
                     Ellipse largerEllipse = GetMaxEllipse(vertex, activeVertex);
-                    Ellipse smallerEllipse = GetMinEllipse(vertex, activeVertex); //orders the ellipses
-                    string lineNameToFind = "line" + smallerEllipse.Name.Substring(3).ToString() + "to" + largerEllipse.Name.Substring(3).ToString(); //name is in the form we expect it to be
+                    Ellipse smallerEllipse = GetMinEllipse(vertex, activeVertex); 
+                    string lineNameToFind = "line" + smallerEllipse.Name.Substring(3).ToString() + "to" + largerEllipse.Name.Substring(3).ToString(); //the name of the line that we are expecting to find
                     foreach (Tuple<Line, Ellipse, Ellipse, TextBlock> edge in edgeList)
                     {
                         if (edge.Item1.Name == lineNameToFind) //when found...
@@ -223,10 +218,10 @@ namespace Interface_2
             }
             HideValencies();
         }
-        private void btnCreateNewGraph_Click(object sender, RoutedEventArgs e)
+        private void btnCreateNewGraph_Click(object sender, RoutedEventArgs e) //creates a new graph
         {
             string name = "";
-            NameCreatedGraph nameGraphWindow = new NameCreatedGraph();
+            NameCreatedGraph nameGraphWindow = new NameCreatedGraph(); //create an instance of the new window
             nameGraphWindow.ShowDialog(); //opens a new window
             if (nameGraphWindow.DialogResult == true) //if they pressed ok rather than the exit button
             {
@@ -269,6 +264,7 @@ namespace Interface_2
         }
         public void DeleteGraph()
         {
+            //set all of the variables to null
             mainCanvas.Children.Clear();
             btnDeleteGraph.IsEnabled = false;
             labelGraphName.Content = "";
@@ -277,7 +273,6 @@ namespace Interface_2
             HideValencies();
             buttonId = 0;
             Graph = null;
-            
             lastSelectedVertex = null;
             vertexToConnectTo = null;
             vertexTxBoxList = new List<TextBlock>();
@@ -298,6 +293,7 @@ namespace Interface_2
         }
         private void mainCanvas_DragOver(object sender, DragEventArgs e)
         {
+            //if the mouse the vertex is being dragged
             Point dropPosition = e.GetPosition(mainCanvas); //current position of the place its being dragged
             Canvas.SetLeft(ellipseToDrop, dropPosition.X);//updates the x coordinate every time its dragged
             Canvas.SetTop(ellipseToDrop, dropPosition.Y);//updates the y coordinate ever time its dragged
@@ -327,7 +323,7 @@ namespace Interface_2
             labelExtraInfo.Content = "Click and Hold vertices to drag them around the canvas";
             ActivateButton(sender);
         }
-        private void mainCanvas_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        private void mainCanvas_PreviewMouseWheel(object sender, MouseWheelEventArgs e) //event to change the size of the vertices
         {
             if (e.Delta > 0) //if mouse is scrolled up, increase slider value
             {
@@ -342,7 +338,7 @@ namespace Interface_2
         {
             txAdjset.Text = Graph.PrintAdjList();
         }
-        public List<List<int>> GenerateAdjMat()
+        public List<List<int>> GenerateAdjMat() //makes the adjacenct list appear in the provided area
         {
             //populates 2d list with adjacency matrix
             List<List<int>> adjMat = Graph.GetAdjacencyMatrix();
@@ -382,9 +378,9 @@ namespace Interface_2
             labelExtraInfo.Content = "Choose a start Vertex";
             ActivateButton(sender);
         }
-        private void btnKruskals_Click(object sender, RoutedEventArgs e)
+        private void btnKruskals_Click(object sender, RoutedEventArgs e) //if the user wants to run kruskals algorithm
         {
-            ActivateButton(sender);
+            ActivateButton(sender); 
             HideValencies();
             if (!Graph.IsConnected())
             {
@@ -393,8 +389,21 @@ namespace Interface_2
             else
             {
                 List<Tuple<int, int, int>> mst = Graph.Kruskals();
-                mstHighlightPath(mst);
+                mstHighlightPath(mst); //highlight the MST
             }
+        }
+        private void cbAutoGenEdges_Checked(object sender, RoutedEventArgs e) //When a connection is made, auto generates a random weight
+        {
+            cbAutoGenEdgesValue.IsChecked = false; //only one check box can be selected at a time
+        }
+        private void cbAutoGenEdgesValue_Checked(object sender, RoutedEventArgs e) //when a connection is made, auto generates the entered weight
+        {
+            cbAutoGenEdges.IsChecked = false;//ditto
+        }
+        private void txAutoWeight_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            Regex regex = new Regex("[^0-9]+");
+            e.Handled = regex.IsMatch(e.Text); //controls the input allowed in the textbox
         }
         public int GetMax(int a, int b)
         {

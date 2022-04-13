@@ -15,10 +15,9 @@ namespace Interface_2
         private void mainCanvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) //if the canvas is pressed
         {
 
-            if (e.OriginalSource is Ellipse) //if they press the Vertex 
+            if (e.OriginalSource is Ellipse) //if they press the ellipse / vertex 
             {
-                //check if they are joining vertices together or deleting vertices (make sure deleting is pressed)
-                if (currentButton == btnDeleteVertex)
+                if (currentButton == btnDeleteVertex) //if they are trying to delete a vertex
                 {
                     Ellipse activeVertex = (Ellipse)e.OriginalSource; //give the button a variable to refer to
                     HashSet<Tuple<Line, Ellipse, Ellipse, TextBlock>> listOfEdgesToRemove = GetListOfEdgesFromVertex(activeVertex);//gets list of edges we need to remove with the vertex
@@ -39,153 +38,8 @@ namespace Interface_2
                             break;
                         }
                     }
-
                 }
-                else if (currentButton == btnDefault)
-                {
-                    RevertEllipseColour();
-                    RevertLineColour();
-                    Ellipse source = (Ellipse)e.OriginalSource;
-                    source.Fill = new SolidColorBrush(Colors.Red);
-                }
-                else if (currentButton == btnDepthFirst)
-                {
-                    RevertEllipseColour();
-                    RevertLineColour();
-                    Ellipse startVertex = (Ellipse)e.OriginalSource;
-                    startVertex.Fill = new SolidColorBrush(Colors.Red);
-                    int startVertexId = Convert.ToInt32(startVertex.Name.Substring(3));//id of the start vertex
-                    if (Graph.GetAdjVertices(startVertexId).Count() != 0) //make sure the node has atleast one edge
-                    {
-                        Tuple<List<Tuple<int, int>>, bool, string> result = Graph.DepthFirst(startVertexId);
-                        List<Tuple<int, int>> edges = result.Item1;
-                        TraversalHighlightPath(edges);
-                        txExtraInfo2.Text = "Traversal Order: " + result.Item3;
-                    }
-                }
-                else if (currentButton == btnBreadthFirst)
-                {
-                    RevertLineColour();
-                    RevertEllipseColour();
-                    Ellipse startVertex = (Ellipse)e.OriginalSource;
-                    startVertex.Fill = new SolidColorBrush(Colors.Red);
-                    int startVertexId = Convert.ToInt32(startVertex.Name.Substring(3)); //id of the start vertex
-                    if (Graph.GetAdjVertices(startVertexId).Count() != 0) //make sure the node has atleast one edge
-                    {
-                        Tuple<List<Tuple<int, int>>, string> result = Graph.BreadthFirst(startVertexId);
-                        List<Tuple<int, int>> edges = result.Item1;
-                        TraversalHighlightPath(edges);
-                        txExtraInfo2.Text = "Traversal Order: " + result.Item2;
-                    }
-                }
-                else if (currentButton == btnHighlightPaths)
-                {
-                    Ellipse activeVertex = (Ellipse)e.OriginalSource;
-                    activeVertex.Fill = new SolidColorBrush(Colors.Red);
-                    int activeVertexId = Convert.ToInt32(activeVertex.Name.Substring(3));
-                    livePath.Add(activeVertexId);
-                    if (livePath.Count() > 1)
-                    {
-                        if ((livePath.Last() == livePath[livePath.Count - 2]) || Graph.GetEdgeWeight(livePath.Last(), livePath[livePath.Count() - 2]) == -1) //if they are attempting to press the 
-                        {
-                            livePath.RemoveAt(livePath.Count() - 1);
-                        }
-                        else
-                        {
-                            DijkstraHighlightPath(livePath, true);
-                        }
-                    }
-                }
-                else if (currentButton == btnRouteInspStartAndEnd)
-                {
-                    if (!Graph.IsConnected())
-                    {
-                        MessageBox.Show("The graph is not connected");
-                    }
-                    else
-                    {
-                        rInspSelectionCount += 1;
-                        if (rInspSelectionCount % 2 == 0) //if even, its the END vertex
-                        {
-                            Ellipse endVertex = (Ellipse)e.OriginalSource;
-                            int endVertexId = Convert.ToInt32(endVertex.Name.Substring(3));
-                            if (Graph.GetValency(endVertexId) % 2 == 1) { endVertex.Fill = new SolidColorBrush(Colors.Red); }
-                            if (Graph.GetValency(endVertexId) % 2 == 0) //if the valency of the end vertex is odd, the algorithm isnt useful here
-                            {
-                                MessageBox.Show("The start and end Vertex must have an ODD valency.");
-                                rInspSelectionCount -= 1; //decrement it as if that selection didnt count
-                            }
-                            else if (rInspStart == endVertexId) //if they are path finding to itself, do nothing
-                            {
-                                EnableAllActionButtons();
-                                EnableTbCtrl();
-                                EnableAllAlgoButtons();
-                                RevertEllipseColour();
-                                btnLoadGraph.IsEnabled = false;
-                                btnSaveGraph.IsEnabled = false;
-                                labelExtraInfo.Content = "";
-                            }
-                            else
-                            {
-                                Tuple<List<Tuple<int, int>>, int> result = Graph.RInspStartAndEnd(rInspStart, endVertexId);//returns the edges to repeated (1) and the cost of repitition (2)
-                                if (!Graph.IsConnected()) //have to make sure that the graph is connected first
-                                {
-                                    MessageBox.Show("The graph is not connected");
-                                }
-                                else if (Graph.IsSemiEulerian()) //if the graph is already semi eulerian then it will be traversable
-                                {
-                                    txExtraInfo2.Text = "No Extra Edges Need To Be Added.";
-                                    EnableAllActionButtons();
-                                    EnableTbCtrl();
-                                    EnableAllAlgoButtons();
-                                    labelExtraInfo.Content = "";
-                                }
-                                else if (result == null)
-                                {
-                                    MessageBox.Show("Appropriate graph was not entered"); //in this case, there was an unexpected eror
-                                }
-                                else
-                                {
-                                    List<Tuple<int, int>> edgesToRepeat = result.Item1; //first item of the tuple reps edges to repeat
-                                    int cost = result.Item2;//second item of the tuple reps the total cost
-                                    RouteInspHighlightPath(edgesToRepeat, cost); //highlights the edges to be repeated and presents the cost
-                                    HideValencies();
-                                }
-                                EnableTbCtrl();
-                                EnableAllActionButtons();
-                                EnableAllAlgoButtons();
-                                RevertEllipseColour();
-                            }
-
-                        }
-                        else if (rInspSelectionCount % 2 == 1) //if selectioncount is odd, then its the START vertex
-                        {
-                            RevertLineColour();
-                            RevertEllipseColour();
-                            DisableTbCtrl();
-                            DisableAllAlgoButtons();
-                            DisableAllActionButtons();
-                            Ellipse v = (Ellipse)e.OriginalSource;
-                            rInspStart = Convert.ToInt32(v.Name.Substring(3));
-                            if (Graph.GetValency(rInspStart) % 2 == 0) //make sure the vertex has an odd valency
-                            {
-                                EnableAllActionButtons();
-                                EnableTbCtrl();
-                                EnableAllAlgoButtons();
-                                MessageBox.Show("The start and end vertex must have an odd valency");
-                                labelExtraInfo.Content = "Choose a START vertex with ODD valency";
-                                rInspSelectionCount -= 1; //if it doesnt, decrement to act as if that selection didnt count
-                            }
-                            else
-                            {
-                                v.Fill = new SolidColorBrush(Colors.Red);
-                                labelExtraInfo.Content = "Choose an END vertex with ODD valency.";
-                            }
-
-                        }
-                    }
-                }
-                else if (currentButton == btnAddConnection) //if they want to add a vertex
+                else if (currentButton == btnAddConnection) //if they want to connect two vertices
                 {
                     buttonSelectionCount += 1;
 
@@ -254,18 +108,163 @@ namespace Interface_2
                         DisableAllActionButtons();
                     }
                 }
-                else if (currentButton == btnPrims)
+                else if (currentButton == btnDefault) //check if they are using the default button
+                {
+                    RevertEllipseColour();
+                    RevertLineColour();
+                    Ellipse source = (Ellipse)e.OriginalSource;
+                    source.Fill = new SolidColorBrush(Colors.Red);
+                }
+                else if (currentButton == btnDepthFirst) //check if they are trying to do a depth first traversal
+                {
+                    RevertEllipseColour();
+                    RevertLineColour();
+                    Ellipse startVertex = (Ellipse)e.OriginalSource;
+                    startVertex.Fill = new SolidColorBrush(Colors.Red);
+                    int startVertexId = Convert.ToInt32(startVertex.Name.Substring(3));//id of the start vertex
+                    if (Graph.GetAdjVertices(startVertexId).Count() != 0) //make sure the node has atleast one edge
+                    {
+                        Tuple<List<Tuple<int, int>>, bool, string> result = Graph.DepthFirst(startVertexId);
+                        List<Tuple<int, int>> edges = result.Item1;
+                        TraversalHighlightPath(edges); //highlight the traversal order
+                        txExtraInfo2.Text = "Traversal Order: " + result.Item3;
+                    }
+                }
+                else if (currentButton == btnBreadthFirst)//check if they are trying to do a breadth first traversal
+                {
+                    RevertLineColour();
+                    RevertEllipseColour();
+                    Ellipse startVertex = (Ellipse)e.OriginalSource;
+                    startVertex.Fill = new SolidColorBrush(Colors.Red);
+                    int startVertexId = Convert.ToInt32(startVertex.Name.Substring(3)); //id of the start vertex
+                    if (Graph.GetAdjVertices(startVertexId).Count() != 0) //make sure the node has atleast one edge
+                    {
+                        Tuple<List<Tuple<int, int>>, string> result = Graph.BreadthFirst(startVertexId);
+                        List<Tuple<int, int>> edges = result.Item1;
+                        TraversalHighlightPath(edges); //highlight the traversal order
+                        txExtraInfo2.Text = "Traversal Order: " + result.Item2;
+                    }
+                }
+                else if (currentButton == btnHighlightPaths)//check if they are trying to do highlight a path
+                {
+                    Ellipse activeVertex = (Ellipse)e.OriginalSource;
+                    activeVertex.Fill = new SolidColorBrush(Colors.Red); //highlight the vertex pressed
+                    int activeVertexId = Convert.ToInt32(activeVertex.Name.Substring(3));
+                    livePath.Add(activeVertexId); //add the vertex to the path that they want to highlight
+                    if (livePath.Count() > 1) //if there is only one vertex in the path then dont do anything
+                    {
+                        if ((livePath.Last() == livePath[livePath.Count - 2]) || Graph.GetEdgeWeight(livePath.Last(), livePath[livePath.Count() - 2]) == -1) //if they are attempting to press the same vertex
+                                                                                                                                                             //twice or connect to a vertex that doesnt exist
+                        {
+                            livePath.RemoveAt(livePath.Count() - 1); //remove the vertex from the list
+                        }
+                        else
+                        {
+                            DijkstraHighlightPath(livePath, true); //highlight the path
+                        }
+                    }
+                }
+                else if (currentButton == btnRouteInspStartAndEnd) //if they are trying to do a route inspection
+                {
+                    if (!Graph.IsConnected()) //can only be done on a connected graph
+                    {
+                        MessageBox.Show("The graph is not connected");
+                    }
+                    else
+                    {
+                        rInspSelectionCount += 1;
+                        if (rInspSelectionCount % 2 == 0) //if even, its the END vertex
+                        {
+                            Ellipse endVertex = (Ellipse)e.OriginalSource;
+                            int endVertexId = Convert.ToInt32(endVertex.Name.Substring(3));
+                            if (Graph.GetValency(endVertexId) % 2 == 1) { endVertex.Fill = new SolidColorBrush(Colors.Red); }
+                            if (Graph.GetValency(endVertexId) % 2 == 0) //if the valency of the end vertex is odd, the algorithm isnt useful here
+                            {
+                                MessageBox.Show("The start and end Vertex must have an ODD valency.");
+                                rInspSelectionCount -= 1; //decrement it as if that selection didnt count
+                            }
+                            else if (rInspStart == endVertexId) //if they are path finding to itself, do nothing
+                            {
+                                EnableAllActionButtons();
+                                EnableTbCtrl();
+                                EnableAllAlgoButtons();
+                                RevertEllipseColour();
+                                btnLoadGraph.IsEnabled = false;
+                                btnSaveGraph.IsEnabled = false;
+                                labelExtraInfo.Content = "";
+                            }
+                            else
+                            {
+                                Tuple<List<Tuple<int, int>>, int> result = Graph.RInspStartAndEnd(rInspStart, endVertexId);//returns the edges to repeated (1) and the cost of repitition (2)
+                                if (!Graph.IsConnected()) //have to make sure that the graph is connected first
+                                {
+                                    MessageBox.Show("The graph is not connected");
+                                }
+                                else if (Graph.IsSemiEulerian()) //if the graph is already semi eulerian then it will be already traversable
+                                {
+                                    txExtraInfo2.Text = "No Extra Edges Need To Be Added.";
+                                    EnableAllActionButtons();
+                                    EnableTbCtrl();
+                                    EnableAllAlgoButtons();
+                                    labelExtraInfo.Content = "";
+                                }
+                                else if (result == null)
+                                {
+                                    MessageBox.Show("Appropriate graph was not entered"); //in this case, there was an unexpected eror
+                                }
+                                else
+                                {
+                                    List<Tuple<int, int>> edgesToRepeat = result.Item1; //first item of the tuple reps edges to repeat
+                                    int cost = result.Item2;//second item of the tuple reps the total cost
+                                    RouteInspHighlightPath(edgesToRepeat, cost); //highlights the edges to be repeated and presents the cost
+                                    HideValencies();
+                                }
+                                EnableTbCtrl();
+                                EnableAllActionButtons();
+                                EnableAllAlgoButtons();
+                                RevertEllipseColour();
+                            }
+
+                        }
+                        else if (rInspSelectionCount % 2 == 1) //if selectioncount is odd, then its the START vertex
+                        {
+                            RevertLineColour();
+                            RevertEllipseColour();
+                            DisableTbCtrl();
+                            DisableAllAlgoButtons();
+                            DisableAllActionButtons();
+                            Ellipse v = (Ellipse)e.OriginalSource;
+                            rInspStart = Convert.ToInt32(v.Name.Substring(3));
+                            if (Graph.GetValency(rInspStart) % 2 == 0) //make sure the vertex has an odd valency
+                            {
+                                EnableAllActionButtons();
+                                EnableTbCtrl();
+                                EnableAllAlgoButtons();
+                                MessageBox.Show("The start and end vertex must have an odd valency");
+                                labelExtraInfo.Content = "Choose a START vertex with ODD valency";
+                                rInspSelectionCount -= 1; //if it doesnt, decrement to act as if that selection didnt count
+                            }
+                            else
+                            {
+                                v.Fill = new SolidColorBrush(Colors.Red);
+                                labelExtraInfo.Content = "Choose an END vertex with ODD valency.";
+                            }
+
+                        }
+                    }
+                }
+                else if (currentButton == btnPrims) //if they are trying to use prims algorithm
                 {
                     if (vertexList.Count() != 0)
                     {
                         RevertEllipseColour();
-                        Ellipse startVertex = (Ellipse)e.OriginalSource;
+                        Ellipse startVertex = (Ellipse)e.OriginalSource; //the vertex to start the MST from
                         startVertex.Fill = new SolidColorBrush(Colors.Red);
                         int startVertexID = Convert.ToInt32(startVertex.Name.Substring(3));
                         if (Graph.IsConnected())
                         {
-                            List<Tuple<int, int, int>> mst = Graph.Prims(startVertexID);
-                            mstHighlightPath(mst);
+                            List<Tuple<int, int, int>> mst = Graph.Prims(startVertexID); 
+                            mstHighlightPath(mst);//highlight the path
                         }
                         else
                         {
@@ -273,14 +272,14 @@ namespace Interface_2
                         }
                     }
                 }
-                else if (currentButton == btnDijkstrasShort)
+                else if (currentButton == btnDijkstrasShort) //if they are trying to run dijkstras algorithm
                 {
                     dijkstraSelectionCount += 1;
                     if (dijkstraSelectionCount % 2 == 0)
                     {
                         Ellipse v = (Ellipse)e.OriginalSource;
                         int vId = Convert.ToInt32(v.Name.Substring(3));
-                        if (startVertex == vId) //if they are connecting it to itself, do nothing
+                        if (startVertex == vId) //if they are path finding it to itself, do nothing
                         {
                             RevertEllipseColour();
                             EnableAllActionButtons();
@@ -308,7 +307,7 @@ namespace Interface_2
                         }
 
                     }
-                    else if (dijkstraSelectionCount % 2 == 1)
+                    else if (dijkstraSelectionCount % 2 == 1) //this is the start vertex
                     {
                         DisableTbCtrl();
                         DisableAllAlgoButtons();
@@ -332,21 +331,21 @@ namespace Interface_2
                     {
                         if (edge.Item1 == activeEdge) //find the correct edge,
                         {
-                            DeleteEdge(edge); //the delete the edge
+                            DeleteEdge(edge); //then delete the edge
                             Graph.RemoveEdge(Convert.ToInt32(edge.Item2.Name.Substring(3)), Convert.ToInt32(edge.Item3.Name.Substring(3))); //update the class graph
                             break;
                         }
                     }
                 }
-                if (currentButton == btnDefault)
+                if (currentButton == btnDefault) //if they are using the default button
                 {
-                    RevertEllipseColour();
+                    RevertEllipseColour(); //reset the colours
                     RevertLineColour();
                     Line source = (Line)e.OriginalSource;
-                    source.Stroke = new SolidColorBrush(Colors.Red);
+                    source.Stroke = new SolidColorBrush(Colors.Red); //highlight the line
                 }
             }
-            else if (buttonSelectionCount % 2 == 1 && currentButton == btnAddConnection) 
+            else if (buttonSelectionCount % 2 == 1 && currentButton == btnAddConnection) //if they pressed the canvas to try and cancel an add connection 
             {
                 buttonSelectionCount -= 1;
                 labelExtraInfo.Content = "";
@@ -355,8 +354,8 @@ namespace Interface_2
                 EnableAllActionButtons();
                 btnSaveGraph.IsEnabled = false;
                 btnLoadGraph.IsEnabled = false;
-            }//if they pressed the canvas to try and cancel an add connection 
-            else if (rInspSelectionCount % 2 == 1 && currentButton == btnRouteInspStartAndEnd)
+            }
+            else if (rInspSelectionCount % 2 == 1 && currentButton == btnRouteInspStartAndEnd)//if they pressed the canvas to try and cancel a route inspection
             {
                 rInspSelectionCount -= 1;
                 labelExtraInfo.Content = "";
@@ -366,8 +365,8 @@ namespace Interface_2
                 EnableAllAlgoButtons();
                 btnSaveGraph.IsEnabled = false;
                 btnLoadGraph.IsEnabled = false;
-            }//if they pressed the canvas to try and cancel a route inspection
-            else if (dijkstraSelectionCount % 2 == 1 && currentButton == btnDijkstrasShort)
+            }
+            else if (dijkstraSelectionCount % 2 == 1 && currentButton == btnDijkstrasShort)//if they pressed the canvas to try and cancel a dijkstras algorithm
             {
                 dijkstraSelectionCount -= 1;
                 labelExtraInfo.Content = "";
@@ -377,103 +376,95 @@ namespace Interface_2
                 EnableAllAlgoButtons();
                 btnSaveGraph.IsEnabled = false;
                 btnLoadGraph.IsEnabled = false;
-            }//if they pressed the canvas to try and cancel a dijkstras algorithm
-            else
+            }
+            else if (currentButton == btnAddVertex) //where a user wants to add a vertex
             {
-                if (currentButton == btnAddVertex) //this is where the button will be added to the canvas
+                Graph.AddVertex(); //update the class
+
+                    
+                Ellipse vertexToAdd = new Ellipse() { StrokeThickness = 2 }; //create the vertex that will be added
+
+                   
+                Binding bindingStroke = new Binding("SelectedBrush") //binding the stroke of the vertices to the color picker
                 {
-                    //update class
-                    Graph.AddVertex();
+                    Source = colourPickerVertexStroke,
+                    UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
+                    Mode = BindingMode.OneWay
+                };
+                vertexToAdd.SetBinding(Ellipse.StrokeProperty, bindingStroke);
 
-                    //create the vertex that will be added
-                    Ellipse vertexToAdd = new Ellipse() { StrokeThickness = 2 };
+                Binding bindingFill = new Binding("SelectedBrush")//binding the fill colour of the vertices to the color picker
+                {
+                    Source = colourPickerVertex,
+                    UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
+                    Mode = BindingMode.OneWay
+                };
+                vertexToAdd.SetBinding(Ellipse.FillProperty, bindingFill);
 
-                    //binding the stroke of the vertices to the color picker
-                    Binding bindingStroke = new Binding("SelectedBrush")
-                    {
-                        Source = colourPickerVertexStroke,
-                        UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
-                        Mode = BindingMode.OneWay
-                    };
-                    vertexToAdd.SetBinding(Ellipse.StrokeProperty, bindingStroke);
+                Binding bindingDiameter = new Binding("Value")//binding the diameter of the vertices to the slider
+                {
+                    Source = vertexDiameterSlider,
+                    UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
+                };
+                vertexToAdd.SetBinding(Ellipse.HeightProperty, bindingDiameter);
+                vertexToAdd.SetBinding(Ellipse.WidthProperty, bindingDiameter);
 
-                    //binding the fill colour of the vertices to the color picker
-                    Binding bindingFill = new Binding("SelectedBrush")
-                    {
-                        Source = colourPickerVertex,
-                        UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
-                        Mode = BindingMode.OneWay
-                    };
-                    vertexToAdd.SetBinding(Ellipse.FillProperty, bindingFill);
+                //positioning the vertex in the canvas.
+                double vertexCenterXMousePos = Mouse.GetPosition(mainCanvas).X;
+                double vertexCenterYMousePos = Mouse.GetPosition(mainCanvas).Y;
+                vertexToAdd.Margin = new Thickness(-100000); //margin of 100000 so that it resizes around the center.
+                Canvas.SetLeft(vertexToAdd, vertexCenterXMousePos);
+                Canvas.SetTop(vertexToAdd, vertexCenterYMousePos);
+                Canvas.SetZIndex(vertexToAdd, Zindex++);
 
-                    //binding the diameter of the vertices to the slider
-                    Binding bindingDiameter = new Binding("Value")
-                    {
-                        Source = vertexDiameterSlider,
-                        UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
-                    };
-                    vertexToAdd.SetBinding(Ellipse.HeightProperty, bindingDiameter);
-                    vertexToAdd.SetBinding(Ellipse.WidthProperty, bindingDiameter);
+                //give the string a Name in the form btn(vertexId)
+                string vertexId = buttonId.ToString();
+                vertexToAdd.Name = "btn" + vertexId;
 
-                    //positioning the vertex in the canvas.
-                    double vertexCenterXMousePos = Mouse.GetPosition(mainCanvas).X;
-                    double vertexCenterYMousePos = Mouse.GetPosition(mainCanvas).Y;
-                    vertexToAdd.Margin = new Thickness(-100000); //margin of 100000 so that it resizes around the center.
-                    Canvas.SetLeft(vertexToAdd, vertexCenterXMousePos);
-                    Canvas.SetTop(vertexToAdd, vertexCenterYMousePos);
-                    Canvas.SetZIndex(vertexToAdd, Zindex++);
+                buttonId += 1; //increment button Id for unique buttons
+                vertexList.Add(vertexToAdd);//add the vertex to the list
+                vertexToAdd.MouseMove += mouseMove;//give the buttons drag and drop event handlers
 
-                    //give the string a Name in the form btn(vertexId)
-                    string vertexId = buttonId.ToString();
-                    vertexToAdd.Name = "btn" + vertexId;
+                TextBlock vertexLabel = new TextBlock()//label for the ID of the vertex
+                {
+                    Text = vertexId,
+                    FontSize = 15,
+                    Foreground = new SolidColorBrush(Colors.Black),
+                    Name = "labelFor" + vertexId,
+                    IsHitTestVisible = false //makes it so that the mouse clicks THROUGH the text block, and onto the ellipse
+                };
 
-                    buttonId += 1; //increment button Id for unique buttons
-                    vertexList.Add(vertexToAdd);//add the vertex to the list
-                    vertexToAdd.MouseMove += mouseMove;//give the buttons drag and drop event handlers
+                Binding bindingBG = new Binding("SelectedBrush")//binding the fill of the textblock to the colour picker
+                {
+                    Source = colourPickerLabel,
+                    UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
+                    Mode = BindingMode.OneWay
+                };
+                vertexLabel.SetBinding(TextBlock.ForegroundProperty, bindingBG);
 
-
-                    //this is the label that describes what ID the vertex holds
-                    TextBlock vertexLabel = new TextBlock()
-                    {
-                        Text = vertexId,
-                        FontSize = 15,
-                        Foreground = new SolidColorBrush(Colors.Black),
-                        Name = "labelFor" + vertexId,
-                        IsHitTestVisible = false //makes it so that the mouse clicks THROUGH the text block, and onto the ellipse
-                    };
-
-                    //binding the fill of the textblock to the colour picker
-                    Binding bindingBG = new Binding("SelectedBrush")
-                    {
-                        Source = colourPickerLabel,
-                        UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
-                        Mode = BindingMode.TwoWay
-                    };
-                    vertexLabel.SetBinding(TextBlock.ForegroundProperty, bindingBG);
-                    //set its position ontop of the vertex, and at its center, depending on the number of digits
-                    if (vertexLabel.Text.Length == 1)
-                    {
-                        Canvas.SetTop(vertexLabel, Canvas.GetTop(vertexToAdd) - 9);
-                        Canvas.SetLeft(vertexLabel, Canvas.GetLeft(vertexToAdd) - 4);
-                    }
-                    else if (vertexLabel.Text.Length == 2)
-                    {
-                        Canvas.SetTop(vertexLabel, Canvas.GetTop(vertexToAdd) - 9);
-                        Canvas.SetLeft(vertexLabel, Canvas.GetLeft(vertexToAdd) - 9);
-                    }
-                    else
-                    {
-                        Canvas.SetTop(vertexLabel, Canvas.GetTop(vertexToAdd) - 9);
-                        Canvas.SetLeft(vertexLabel, Canvas.GetLeft(vertexToAdd) - 13);
-                    }
-                    Canvas.SetZIndex(vertexLabel, Zindex++);
-
-
-                    vertexTxBoxList.Add(vertexLabel);//add it to the label list
-
-                    mainCanvas.Children.Add(vertexToAdd);//add the vertex to the canvas
-                    mainCanvas.Children.Add(vertexLabel); //add the label to the canvas
+                //set its position ontop of the vertex, and at its center, depending on the number of digits
+                if (vertexLabel.Text.Length == 1)
+                {
+                    Canvas.SetTop(vertexLabel, Canvas.GetTop(vertexToAdd) - 9);
+                    Canvas.SetLeft(vertexLabel, Canvas.GetLeft(vertexToAdd) - 4);
                 }
+                else if (vertexLabel.Text.Length == 2)
+                {
+                    Canvas.SetTop(vertexLabel, Canvas.GetTop(vertexToAdd) - 9);
+                    Canvas.SetLeft(vertexLabel, Canvas.GetLeft(vertexToAdd) - 9);
+                }
+                else
+                {
+                    Canvas.SetTop(vertexLabel, Canvas.GetTop(vertexToAdd) - 9);
+                    Canvas.SetLeft(vertexLabel, Canvas.GetLeft(vertexToAdd) - 13);
+                }
+                Canvas.SetZIndex(vertexLabel, Zindex++);
+
+                vertexTxBoxList.Add(vertexLabel);//add it to the label list
+
+                mainCanvas.Children.Add(vertexToAdd);//add the vertex to the canvas
+                mainCanvas.Children.Add(vertexLabel); //add the label to the canvas
+                
             }
             if (graphCreated == true)
             {
