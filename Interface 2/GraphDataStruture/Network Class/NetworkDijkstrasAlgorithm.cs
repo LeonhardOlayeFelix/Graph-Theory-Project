@@ -41,7 +41,7 @@ namespace Interface_2
             for (int row = 0; row < size - 1; ++row)
             {
                 //choose the next minimum vertex and mark it as processed
-                int minVertex = selectMinVertex(value, processed, size);
+                int minVertex = selectLowestVertex(value, processed, size);
                 processed[minVertex] = true;
                 for (int column = 0; column < size; ++column)
                 {
@@ -51,7 +51,7 @@ namespace Interface_2
                     if (adjMat[minVertex][column] != -1 && processed[column] == false && value[minVertex] != 2147483647 && (value[minVertex] + adjMat[minVertex][column] < value[column]))
                     {
                         value[column] = value[minVertex] + adjMat[minVertex][column];
-                        parent[column] = minVertex;
+                        parent[column] = minVertex; //if the case then use it in the shortest path
                     }
                 }
             }
@@ -78,7 +78,7 @@ namespace Interface_2
             }
             return Tuple.Create(path, cost);
         }
-        private int selectMinVertex(List<int> value, List<bool> processed, int size) //gets the vertex that has the lowest value, that is not already processed
+        private int selectLowestVertex(List<int> value, List<bool> processed, int size) //gets the vertex that has the lowest value, that is not already processed
         {
             int minimum = 2147483647;
             int vertex = 0;

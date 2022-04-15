@@ -42,11 +42,10 @@ namespace Interface_2
                 else if (currentButton == btnAddConnection) //if they want to connect two vertices
                 {
                     buttonSelectionCount += 1;
-
                     if (buttonSelectionCount % 2 == 0 && buttonSelectionCount != 0) //if even its the second vertex they want to connect to
                     {
                         vertexToConnectTo = (Ellipse)e.OriginalSource; //this is the vertex they are connecting to
-                        vertexToConnectTo.Fill = new SolidColorBrush(Colors.Red);
+                        vertexToConnectTo.Fill = HighlightColour;
                         ConnectEdges connectEdges = new ConnectEdges();
                         if (lastSelectedVertex == vertexToConnectTo) //if they are connecting it to itself, do nothing
                         {
@@ -102,7 +101,7 @@ namespace Interface_2
                     {
                         Ellipse activeEllipse = (Ellipse)e.OriginalSource;
                         lastSelectedVertex = (Ellipse)e.OriginalSource;
-                        activeEllipse.Fill = new SolidColorBrush(Colors.Red);
+                        activeEllipse.Fill = HighlightColour;
                         labelExtraInfo.Content = "From vertex " + lastSelectedVertex.Name.Substring(3) + " to.....";
                         DisableTbCtrl();
                         DisableAllActionButtons();
@@ -113,14 +112,14 @@ namespace Interface_2
                     RevertEllipseColour();
                     RevertLineColour();
                     Ellipse source = (Ellipse)e.OriginalSource;
-                    source.Fill = new SolidColorBrush(Colors.Red);
+                    source.Fill = HighlightColour;
                 }
                 else if (currentButton == btnDepthFirst) //check if they are trying to do a depth first traversal
                 {
                     RevertEllipseColour();
                     RevertLineColour();
                     Ellipse startVertex = (Ellipse)e.OriginalSource;
-                    startVertex.Fill = new SolidColorBrush(Colors.Red);
+                    startVertex.Fill = HighlightColour;
                     int startVertexId = Convert.ToInt32(startVertex.Name.Substring(3));//id of the start vertex
                     if (Graph.GetAdjVertices(startVertexId).Count() != 0) //make sure the node has atleast one edge
                     {
@@ -135,7 +134,7 @@ namespace Interface_2
                     RevertLineColour();
                     RevertEllipseColour();
                     Ellipse startVertex = (Ellipse)e.OriginalSource;
-                    startVertex.Fill = new SolidColorBrush(Colors.Red);
+                    startVertex.Fill = HighlightColour;
                     int startVertexId = Convert.ToInt32(startVertex.Name.Substring(3)); //id of the start vertex
                     if (Graph.GetAdjVertices(startVertexId).Count() != 0) //make sure the node has atleast one edge
                     {
@@ -148,7 +147,7 @@ namespace Interface_2
                 else if (currentButton == btnHighlightPaths)//check if they are trying to do highlight a path
                 {
                     Ellipse activeVertex = (Ellipse)e.OriginalSource;
-                    activeVertex.Fill = new SolidColorBrush(Colors.Red); //highlight the vertex pressed
+                    activeVertex.Fill = HighlightColour; //highlight the vertex pressed
                     int activeVertexId = Convert.ToInt32(activeVertex.Name.Substring(3));
                     livePath.Add(activeVertexId); //add the vertex to the path that they want to highlight
                     if (livePath.Count() > 1) //if there is only one vertex in the path then dont do anything
@@ -177,7 +176,7 @@ namespace Interface_2
                         {
                             Ellipse endVertex = (Ellipse)e.OriginalSource;
                             int endVertexId = Convert.ToInt32(endVertex.Name.Substring(3));
-                            if (Graph.GetValency(endVertexId) % 2 == 1) { endVertex.Fill = new SolidColorBrush(Colors.Red); }
+                            if (Graph.GetValency(endVertexId) % 2 == 1) { endVertex.Fill = HighlightColour; }
                             if (Graph.GetValency(endVertexId) % 2 == 0) //if the valency of the end vertex is odd, the algorithm isnt useful here
                             {
                                 MessageBox.Show("The start and end Vertex must have an ODD valency.");
@@ -246,7 +245,7 @@ namespace Interface_2
                             }
                             else
                             {
-                                v.Fill = new SolidColorBrush(Colors.Red);
+                                v.Fill = HighlightColour;
                                 labelExtraInfo.Content = "Choose an END vertex with ODD valency.";
                             }
 
@@ -259,7 +258,7 @@ namespace Interface_2
                     {
                         RevertEllipseColour();
                         Ellipse startVertex = (Ellipse)e.OriginalSource; //the vertex to start the MST from
-                        startVertex.Fill = new SolidColorBrush(Colors.Red);
+                        startVertex.Fill = HighlightColour;
                         int startVertexID = Convert.ToInt32(startVertex.Name.Substring(3));
                         if (Graph.IsConnected())
                         {
@@ -291,7 +290,7 @@ namespace Interface_2
                         }
                         else
                         {
-                            v.Fill = new SolidColorBrush(Colors.Red);
+                            v.Fill = HighlightColour;
                             try
                             {
                                 List<int> path = Graph.DijkstrasAlgorithmShort(startVertex, vId).Item1; //get the path from the method
@@ -314,7 +313,7 @@ namespace Interface_2
                         Ellipse v = (Ellipse)e.OriginalSource;
                         RevertEllipseColour();
                         RevertLineColour();
-                        v.Fill = new SolidColorBrush(Colors.Red);
+                        v.Fill = HighlightColour;
                         startVertex = Convert.ToInt32(v.Name.Substring(3));
                         labelExtraInfo.Content = "Shortest Path from " + startVertex + " to...";
                     }
@@ -342,7 +341,7 @@ namespace Interface_2
                     RevertEllipseColour(); //reset the colours
                     RevertLineColour();
                     Line source = (Line)e.OriginalSource;
-                    source.Stroke = new SolidColorBrush(Colors.Red); //highlight the line
+                    source.Stroke = HighlightColour; //highlight the line
                 }
             }
             else if (buttonSelectionCount % 2 == 1 && currentButton == btnAddConnection) //if they pressed the canvas to try and cancel an add connection 

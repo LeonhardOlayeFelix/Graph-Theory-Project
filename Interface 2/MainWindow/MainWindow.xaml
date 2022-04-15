@@ -635,9 +635,9 @@
                                     <ColumnDefinition/>
                                 </Grid.ColumnDefinitions>
                                 <Grid.RowDefinitions>
-                                    <RowDefinition Height="211*"/>
-                                    <RowDefinition Height="187*"/>
-                                    <RowDefinition Height="199*"/>
+                                    <RowDefinition Height="242*"/>
+                                    <RowDefinition Height="155*"/>
+                                    <RowDefinition Height="198*"/>
                                 </Grid.RowDefinitions>
                                 <GroupBox Grid.Column="0"
                                       Grid.Row="0"
@@ -700,6 +700,16 @@
                                                                        Width="40"
                                                                        Color="Black"/>
                                         </StackPanel>
+                                        <StackPanel Orientation="Horizontal"
+                                                Height="20"
+                                                Margin="0,0,0,4">
+                                            <TextBlock VerticalAlignment="Center">Highlight Colour</TextBlock>
+                                            <syncfusion:ColorPickerPalette Margin="55,0,0,0"
+                                                                       x:Name="colourPickerHighlight"
+                                                                       Width="40"
+                                                                       Color="Red"
+                                                                       ColorChanged="colourPickerHighlight_ColorChanged"/>
+                                        </StackPanel>
                                         <Button Margin="30,17,30,30"
                                             x:Name="btnResetColour"
                                             Click="btnResetColour_Click" Content="Reset To Default"/>
@@ -739,7 +749,8 @@
                                                     Height="30"
                                                     TickFrequency="1"
                                                     TickPlacement="Both"
-                                                    IsSnapToTickEnabled="True">
+                                                    IsSnapToTickEnabled="True"
+                                                    Value="40">
                                                 </Slider>
                                                 <TextBlock FontSize="15"
                                                        Text="{Binding ElementName=vertexDiameterSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
@@ -767,7 +778,7 @@
                                                        Width="30"
                                                        Height="30"></TextBlock>
                                                 </StackPanel>
-                                                <Button Margin="30,12,30,30"
+                                                <Button Margin="30,35,30,30"
                                                     x:Name="btnResetComponentShape"
                                                     Click="btnResetComponentShape_Click">Reset To Default</Button>
                                             </StackPanel>

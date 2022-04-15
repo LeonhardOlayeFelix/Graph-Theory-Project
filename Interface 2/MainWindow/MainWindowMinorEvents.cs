@@ -52,6 +52,7 @@ namespace Interface_2
             colourPickerWeight.SelectedBrush = new SolidColorBrush(Colors.Black);
             colourPickerLabel.SelectedBrush = new SolidColorBrush(Colors.White);
             colourPickerVertexStroke.SelectedBrush = new SolidColorBrush(Colors.Black);
+            colourPickerHighlight.SelectedBrush = new SolidColorBrush(Colors.Red);
             ActivateButton(sender);
         }
 

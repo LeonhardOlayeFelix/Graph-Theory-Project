@@ -42,14 +42,15 @@ namespace Interface_2
 
         Ellipse ellipseToDrop = null; //for the drag and drop function
 
+        SolidColorBrush HighlightColour = null;
+        
         private Network Graph = null; //initialise a Network Class
         public MainWindow()
         {
             InitializeComponent();
             DisableAllActionButtons();
             DisableTbCtrl();
+            
         }
-        
-        
     }
 }

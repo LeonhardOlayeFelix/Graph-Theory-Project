@@ -405,6 +405,10 @@ namespace Interface_2
             Regex regex = new Regex("[^0-9]+");
             e.Handled = regex.IsMatch(e.Text); //controls the input allowed in the textbox
         }
+        private void colourPickerHighlight_ColorChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            HighlightColour = (SolidColorBrush)colourPickerHighlight.SelectedBrush;
+        }
         public int GetMax(int a, int b)
         {
             return (a > b) ? a : b;

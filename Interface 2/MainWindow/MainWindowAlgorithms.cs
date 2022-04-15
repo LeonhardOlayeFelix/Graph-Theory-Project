@@ -30,13 +30,15 @@ namespace Interface_2
                 {
                     if (line.Item1.Name == lineName)//detetcs if theres a path because theres a matching name
                     {
+                        FindElipse(smallerId).Fill = HighlightColour;
+                        FindElipse(largerId).Fill = HighlightColour;
                         highlightedLines.Add(line.Item1); //adds it to the list of edges
                     }
                 }
             }
             for (int i = 0; i < highlightedLines.Count(); ++i)
             {
-                highlightedLines[i].Stroke = new SolidColorBrush(Colors.Red);
+                highlightedLines[i].Stroke = HighlightColour;
             }
             string info = "Edges to repeat:\n";
             foreach (Tuple<int, int> edge in edges)
@@ -70,7 +72,7 @@ namespace Interface_2
                 }
                 for (int i = 0; i < highlightedLines.Count(); ++i)
                 {
-                    highlightedLines[i].Stroke = new SolidColorBrush(Colors.Red);
+                    highlightedLines[i].Stroke = HighlightColour;
                     if (i != highlightedLines.Count() - 1) { MessageBox.Show("Press OK to show next edge"); }
                 }
                 txExtraInfo2.Text = "Minimum Spanning Tree Weight: " + total / 2;
@@ -108,7 +110,7 @@ namespace Interface_2
                     {
                         for (int i = 0; i < highlightedLines.Count(); ++i)
                         {
-                            highlightedLines[i].Stroke = new SolidColorBrush(Colors.Red);
+                            highlightedLines[i].Stroke = HighlightColour;
                             pathString += path[i].ToString() + "=>";
                         }
                         pathString += path[path.Count() - 1];
@@ -117,7 +119,7 @@ namespace Interface_2
                     }
                     for (int i = 0; i < highlightedLines.Count(); ++i)
                     {
-                        highlightedLines[i].Stroke = new SolidColorBrush(Colors.Red);
+                        highlightedLines[i].Stroke = HighlightColour;
                         pathString += path[i].ToString() + "=>"; //change the colour and update the path string
                         if (i != highlightedLines.Count() - 1) { MessageBox.Show("Press OK to show next edge"); }
                     }
@@ -194,11 +196,10 @@ namespace Interface_2
             }
             for (int i = 0; i < highlightedLines.Count(); ++i)
             {
-                highlightedLines[i].Stroke = new SolidColorBrush(Colors.Red);
+                highlightedLines[i].Stroke = HighlightColour;
                 if (i != highlightedLines.Count() - 1)
                 {
                     MessageBox.Show("Press ok to show next edge");
-
                 }
             }
 
@@ -242,7 +243,7 @@ namespace Interface_2
                 double vertexY = Canvas.GetTop(vertex) - 40;//holds y coord
                 Canvas.SetLeft(valency, vertexX);//setting x position
                 Canvas.SetTop(valency, vertexY);//setting y position
-                Canvas.SetZIndex(valency, 6);//setting z index
+                Canvas.SetZIndex(valency, int.MaxValue);//setting z index
                 mainCanvas.Children.Add(valency);//show on the canvas
                 valencyList.Add(valency);//add it to the list of valency Textblocks
             }
