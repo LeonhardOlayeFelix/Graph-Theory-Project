@@ -30,8 +30,8 @@ namespace Interface_2
                 {
                     if (line.Item1.Name == lineName)//detetcs if theres a path because theres a matching name
                     {
-                        FindElipse(smallerId).Fill = HighlightColour;
-                        FindElipse(largerId).Fill = HighlightColour;
+                        FindEllipse(smallerId).Fill = HighlightColour;
+                        FindEllipse(largerId).Fill = HighlightColour;
                         highlightedLines.Add(line.Item1); //adds it to the list of edges
                     }
                 }
@@ -43,12 +43,12 @@ namespace Interface_2
             string info = "Edges to repeat:\n";
             foreach (Tuple<int, int> edge in edges)
             {
-                info += "(" + edge.Item1 + ", " + edge.Item2 + ")" + "   ";
+                info += "(" + FindLabel(edge.Item1).Text + ", " + FindLabel(edge.Item2).Text + ")" + "   ";
             }
             info += "\nCost: " + (cost + Graph.GetSumOfWeights());
             txExtraInfo2.Text = info;
         }
-        public bool mstHighlightPath(List<Tuple<int, int, int>> edges)
+        public bool mstHighlightPath(List<Tuple<int, int, int>> edges) //done
         {
             RevertLineColour();
             if (edges.Count() != 0)
@@ -80,7 +80,7 @@ namespace Interface_2
             }
             return false;
         }
-        public void DijkstraHighlightPath(List<int> path, bool livePathhighlighting = false) //a path of vertexIds, in the order they want to be traversed
+        public void DijkstraHighlightPath(List<int> path, bool livePathhighlighting = false) //a path of vertexIds, in the order they want to be traversed //done
         {
             int total = 0;
             if (path.Count() > 1)
@@ -111,19 +111,19 @@ namespace Interface_2
                         for (int i = 0; i < highlightedLines.Count(); ++i)
                         {
                             highlightedLines[i].Stroke = HighlightColour;
-                            pathString += path[i].ToString() + "=>";
+                            pathString += FindLabel(Convert.ToInt32(path[i].ToString())).Text + "=>";
                         }
-                        pathString += path[path.Count() - 1];
+                        pathString += FindLabel(Convert.ToInt32(path[path.Count() - 1])).Text;
                         txExtraInfo2.Text = "Traversal Order:\n" + pathString + "\nCost: " + total;
                         return;
                     }
                     for (int i = 0; i < highlightedLines.Count(); ++i)
                     {
                         highlightedLines[i].Stroke = HighlightColour;
-                        pathString += path[i].ToString() + "=>"; //change the colour and update the path string
+                        pathString += FindLabel(Convert.ToInt32(path[i].ToString())).Text + "=>"; //change the colour and update the path string
                         if (i != highlightedLines.Count() - 1) { MessageBox.Show("Press OK to show next edge"); }
                     }
-                    pathString += path[path.Count() - 1];
+                    pathString += FindLabel(Convert.ToInt32(path[path.Count() - 1])).Text;
                     txExtraInfo2.Text = "Traversal Order:\n" + pathString + "\nCost: " + total;
 
                 }

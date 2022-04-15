@@ -720,23 +720,18 @@
                                       Header="Component Shape"
                                       BorderThickness="2">
                                     <StackPanel>
-                                        <GroupBox Header="Edge Stroke Thickness">
+                                        <GroupBox Header="Vertex Labelling">
                                             <StackPanel Orientation="Horizontal">
-                                                <Slider Background="Gray"
-                                                    Minimum="1"
-                                                    Maximum="15"
-                                                    Width="180"
-                                                    x:Name="edgeThicknessSlider"
-                                                    Height="30"
-                                                    TickFrequency="1"
-                                                    TickPlacement="Both"
-                                                    IsSnapToTickEnabled="True">
-                                                </Slider>
-                                                <TextBlock FontSize="15"
-                                                       Text="{Binding ElementName=edgeThicknessSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
-                                                       Background="Gray"
-                                                       Width="30"
-                                                       Height="30"></TextBlock>
+                                                <CheckBox VerticalContentAlignment="Center" 
+                                                          x:Name="cbAlphabet"
+                                                          FontWeight="Bold"
+                                                          Margin="20,0,0,0"
+                                                          Checked="cbAlphabet_Checked"
+                                                          Unchecked="cbAlphabet_Unchecked"
+                                                          Grid.Row="3"
+                                                          Height="30">
+                                                    Alphabet Labels
+                                                </CheckBox>
                                             </StackPanel>
                                         </GroupBox>
                                         <GroupBox Header="Vertex Diameter">

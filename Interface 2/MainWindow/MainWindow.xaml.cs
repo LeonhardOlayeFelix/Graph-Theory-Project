@@ -23,7 +23,10 @@ namespace Interface_2
         int rInspSelectionCount = 0;
         int rInspStart = 0;
         int startVertex = 0;
-        
+
+        static List<string> normalAlphabet = new List<string>() { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z" };
+        static List<string> alphabet = new List<string>(); //the id that the nodes could be assigned
+
         private bool graphCreated = false;//for loading, creating, and deleting files
         private Button currentButton = null; //the button that is currently activated
         private Color btnActivatedColour = Color.FromRgb(190, 230, 253);//colour to highlight activated buttons with
@@ -50,7 +53,20 @@ namespace Interface_2
             InitializeComponent();
             DisableAllActionButtons();
             DisableTbCtrl();
-            
+            foreach(string letter in normalAlphabet)
+            {
+                alphabet.Add(letter); //first populate with letter
+            }
+            for (int i = 0; i < normalAlphabet.Count(); ++i)
+            {
+                for (int j = 0; j < normalAlphabet.Count(); ++j)
+                {
+                    string newId = normalAlphabet[i] + normalAlphabet[j];
+                    alphabet.Add(newId);
+                }
+            }
+            //now alphabet is populated with "A", "B", "C", "D" ... "AA", "AB", "AC" ... "BA, BB, BC" ... all the way to "ZA, ZB, ZC" so there are many unique ways to
+            //represent nodes with letters now
         }
     }
 }

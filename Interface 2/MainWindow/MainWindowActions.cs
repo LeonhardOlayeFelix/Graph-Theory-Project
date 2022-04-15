@@ -136,7 +136,7 @@ namespace Interface_2
             edgeList.Remove(edge);//remove it from the graph
             GenerateAdjList();
         }
-        public Ellipse FindElipse(int vertexId) //returns the ellipse that matches to an Id
+        public Ellipse FindEllipse(int vertexId) //returns the ellipse that matches to an Id
         {
             foreach (var ctrl in mainCanvas.Children)
             {
@@ -155,11 +155,26 @@ namespace Interface_2
             }
             return null;
         }
+        public TextBlock FindLabel(int vertexId)
+        {
+            foreach (var ctrl in mainCanvas.Children)
+            {
+                try
+                {
+                    TextBlock currentLabel = (TextBlock)ctrl;
+                    if (currentLabel.Name.Substring(8) == vertexId.ToString())
+                    {
+                        return currentLabel;
+                    }
+                }
+                catch { }
+            }
+            return null;
+        }
         private void btnResetComponentShape_Click(object sender, RoutedEventArgs e)
         {
             //resets the sliders back to their original form
             ActivateButton(sender);
-            edgeThicknessSlider.Value = edgeThicknessSlider.Minimum;
             vertexDiameterSlider.Value = vertexDiameterSlider.Minimum;
             weightAndLabelFontSizeSlider.Value = weightAndLabelFontSizeSlider.Minimum;
         }
@@ -299,7 +314,7 @@ namespace Interface_2
             Canvas.SetTop(ellipseToDrop, dropPosition.Y);//updates the y coordinate ever time its dragged
             foreach (TextBlock label in vertexTxBoxList) //look for the label that matches too the ellipse
             {
-                if (label.Text == ellipseToDrop.Name.Substring(3))
+                if (label.Name.Substring(8) == ellipseToDrop.Name.Substring(3))
                 {
                     Canvas.SetLeft(label, dropPosition.X - 4); //update that label too
                     Canvas.SetTop(label, dropPosition.Y - 9);
@@ -392,6 +407,10 @@ namespace Interface_2
                 mstHighlightPath(mst); //highlight the MST
             }
         }
+        private void btnConnect_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
         private void cbAutoGenEdges_Checked(object sender, RoutedEventArgs e) //When a connection is made, auto generates a random weight
         {
             cbAutoGenEdgesValue.IsChecked = false; //only one check box can be selected at a time
@@ -399,6 +418,43 @@ namespace Interface_2
         private void cbAutoGenEdgesValue_Checked(object sender, RoutedEventArgs e) //when a connection is made, auto generates the entered weight
         {
             cbAutoGenEdges.IsChecked = false;//ditto
+        }
+        private void cbAlphabet_Checked(object sender, RoutedEventArgs e)
+        {
+            int maxNumber = alphabet.Count(); //the highest number of uniquely representable nodes using the alphabet
+            if (Graph.GetMaxNodeID() >= maxNumber)
+            {
+                MessageBox.Show("Not enough Letters in the alphabet to represent each vertex"); 
+                cbAlphabet.IsChecked = false;
+            }
+            else
+            {
+                for (int i = 0; i < Graph.GetMaxNodeID() + 1; ++i) //loop through all the nodes
+                {
+                    if (FindEllipse(i) != null) //check in advanced that this operation wont return null
+                    {
+                        TextBlock label = FindLabel(Convert.ToInt32(FindEllipse(i).Name.Substring(3))); //find the label of each vertex
+                        if (label != null) //incase the vertex and label were deleted
+                        {
+                            label.Text = alphabet.ElementAt(i); //change the current label to the alphabet
+                        }
+                    }
+                }
+            }
+        }
+        private void cbAlphabet_Unchecked(object sender, RoutedEventArgs e)
+        {
+            for (int i = 0; i < Graph.GetMaxNodeID() + 1; ++i) //loop through all the nodes
+            {
+                if (FindEllipse(i) != null)//check in advanced that this operation wont return null
+                {
+                    TextBlock label = FindLabel(Convert.ToInt32(FindEllipse(i).Name.Substring(3)));//find the label of each vertex
+                    if (label != null)
+                    {
+                        label.Text = i.ToString(); //change the current label to the number
+                    }
+                }
+            }
         }
         private void txAutoWeight_PreviewTextInput(object sender, TextCompositionEventArgs e)
         {

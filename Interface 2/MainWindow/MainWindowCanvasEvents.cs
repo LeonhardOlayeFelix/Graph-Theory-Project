@@ -29,15 +29,10 @@ namespace Interface_2
                     }
                     mainCanvas.Children.Remove(activeVertex); //then delete the vertex
                     vertexList.Remove(activeVertex);//delete it from the list
-                    foreach (TextBlock vertexLabel in vertexTxBoxList)
-                    {
-                        if (vertexLabel.Text == activeVertex.Name.Substring(3))
-                        {
-                            mainCanvas.Children.Remove(vertexLabel); //delete the label too
-                            vertexTxBoxList.Remove(vertexLabel); //remove the label from the list
-                            break;
-                        }
-                    }
+                    TextBlock label = FindLabel(Convert.ToInt32(activeVertex.Name.Substring(3)));
+                    mainCanvas.Children.Remove(label);
+                    vertexTxBoxList.Remove(label);
+                    
                 }
                 else if (currentButton == btnAddConnection) //if they want to connect two vertices
                 {
@@ -102,7 +97,7 @@ namespace Interface_2
                         Ellipse activeEllipse = (Ellipse)e.OriginalSource;
                         lastSelectedVertex = (Ellipse)e.OriginalSource;
                         activeEllipse.Fill = HighlightColour;
-                        labelExtraInfo.Content = "From vertex " + lastSelectedVertex.Name.Substring(3) + " to.....";
+                        labelExtraInfo.Content = "From vertex " + FindLabel(Convert.ToInt32(lastSelectedVertex.Name.Substring(3))).Text + " to.....";
                         DisableTbCtrl();
                         DisableAllActionButtons();
                     }
@@ -123,10 +118,17 @@ namespace Interface_2
                     int startVertexId = Convert.ToInt32(startVertex.Name.Substring(3));//id of the start vertex
                     if (Graph.GetAdjVertices(startVertexId).Count() != 0) //make sure the node has atleast one edge
                     {
-                        Tuple<List<Tuple<int, int>>, bool, string> result = Graph.DepthFirst(startVertexId);
+                        Tuple<List<Tuple<int, int>>, bool, List<int>> result = Graph.DepthFirst(startVertexId);
                         List<Tuple<int, int>> edges = result.Item1;
                         TraversalHighlightPath(edges); //highlight the traversal order
-                        txExtraInfo2.Text = "Traversal Order: " + result.Item3;
+                        List<int> traversalOrder = result.Item3;
+                        string outputString = "";
+                        for (int i = 0; i < traversalOrder.Count(); ++i)
+                        {
+                            outputString += FindLabel(traversalOrder[i]).Text;
+                            if (i != traversalOrder.Count() - 1) { outputString += "=>"; }//create a string containing the traversal order
+                        }
+                        txExtraInfo2.Text = "Traversal Order: " + outputString;
                     }
                 }
                 else if (currentButton == btnBreadthFirst)//check if they are trying to do a breadth first traversal
@@ -138,10 +140,17 @@ namespace Interface_2
                     int startVertexId = Convert.ToInt32(startVertex.Name.Substring(3)); //id of the start vertex
                     if (Graph.GetAdjVertices(startVertexId).Count() != 0) //make sure the node has atleast one edge
                     {
-                        Tuple<List<Tuple<int, int>>, string> result = Graph.BreadthFirst(startVertexId);
+                        Tuple<List<Tuple<int, int>>, List<int>> result = Graph.BreadthFirst(startVertexId);
                         List<Tuple<int, int>> edges = result.Item1;
                         TraversalHighlightPath(edges); //highlight the traversal order
-                        txExtraInfo2.Text = "Traversal Order: " + result.Item2;
+                        List<int> traversalOrder = result.Item2;
+                        string outputString = "";
+                        for (int i = 0; i < traversalOrder.Count(); ++i)
+                        {
+                            outputString += FindLabel(traversalOrder[i]).Text;
+                            if (i != traversalOrder.Count() - 1) { outputString += "=>"; }//create a string containing the traversal order
+                        }
+                        txExtraInfo2.Text = "Traversal Order: " + outputString;
                     }
                 }
                 else if (currentButton == btnHighlightPaths)//check if they are trying to do highlight a path
@@ -315,7 +324,7 @@ namespace Interface_2
                         RevertLineColour();
                         v.Fill = HighlightColour;
                         startVertex = Convert.ToInt32(v.Name.Substring(3));
-                        labelExtraInfo.Content = "Shortest Path from " + startVertex + " to...";
+                        labelExtraInfo.Content = "Shortest Path from " + FindLabel(Convert.ToInt32(startVertex)).Text + " to...";
                     }
                 }
             }
@@ -378,96 +387,110 @@ namespace Interface_2
             }
             else if (currentButton == btnAddVertex) //where a user wants to add a vertex
             {
-                Graph.AddVertex(); //update the class
-
-                    
-                Ellipse vertexToAdd = new Ellipse() { StrokeThickness = 2 }; //create the vertex that will be added
-
-                   
-                Binding bindingStroke = new Binding("SelectedBrush") //binding the stroke of the vertices to the color picker
+                int maxNumber = alphabet.Count(); //the highest number of uniquely representable nodes using the alphabet
+                if (Graph.GetNumberOfVertices() + Graph.NumberOfDeletedVertices > maxNumber - 1 && cbAlphabet.IsChecked == true)
                 {
-                    Source = colourPickerVertexStroke,
-                    UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
-                    Mode = BindingMode.OneWay
-                };
-                vertexToAdd.SetBinding(Ellipse.StrokeProperty, bindingStroke);
-
-                Binding bindingFill = new Binding("SelectedBrush")//binding the fill colour of the vertices to the color picker
-                {
-                    Source = colourPickerVertex,
-                    UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
-                    Mode = BindingMode.OneWay
-                };
-                vertexToAdd.SetBinding(Ellipse.FillProperty, bindingFill);
-
-                Binding bindingDiameter = new Binding("Value")//binding the diameter of the vertices to the slider
-                {
-                    Source = vertexDiameterSlider,
-                    UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
-                };
-                vertexToAdd.SetBinding(Ellipse.HeightProperty, bindingDiameter);
-                vertexToAdd.SetBinding(Ellipse.WidthProperty, bindingDiameter);
-
-                //positioning the vertex in the canvas.
-                double vertexCenterXMousePos = Mouse.GetPosition(mainCanvas).X;
-                double vertexCenterYMousePos = Mouse.GetPosition(mainCanvas).Y;
-                vertexToAdd.Margin = new Thickness(-100000); //margin of 100000 so that it resizes around the center.
-                Canvas.SetLeft(vertexToAdd, vertexCenterXMousePos);
-                Canvas.SetTop(vertexToAdd, vertexCenterYMousePos);
-                Canvas.SetZIndex(vertexToAdd, Zindex++);
-
-                //give the string a Name in the form btn(vertexId)
-                string vertexId = buttonId.ToString();
-                vertexToAdd.Name = "btn" + vertexId;
-
-                buttonId += 1; //increment button Id for unique buttons
-                vertexList.Add(vertexToAdd);//add the vertex to the list
-                vertexToAdd.MouseMove += mouseMove;//give the buttons drag and drop event handlers
-
-                TextBlock vertexLabel = new TextBlock()//label for the ID of the vertex
-                {
-                    Text = vertexId,
-                    FontSize = 15,
-                    Foreground = new SolidColorBrush(Colors.Black),
-                    Name = "labelFor" + vertexId,
-                    IsHitTestVisible = false //makes it so that the mouse clicks THROUGH the text block, and onto the ellipse
-                };
-
-                Binding bindingBG = new Binding("SelectedBrush")//binding the fill of the textblock to the colour picker
-                {
-                    Source = colourPickerLabel,
-                    UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
-                    Mode = BindingMode.OneWay
-                };
-                vertexLabel.SetBinding(TextBlock.ForegroundProperty, bindingBG);
-
-                //set its position ontop of the vertex, and at its center, depending on the number of digits
-                if (vertexLabel.Text.Length == 1)
-                {
-                    Canvas.SetTop(vertexLabel, Canvas.GetTop(vertexToAdd) - 9);
-                    Canvas.SetLeft(vertexLabel, Canvas.GetLeft(vertexToAdd) - 4);
-                }
-                else if (vertexLabel.Text.Length == 2)
-                {
-                    Canvas.SetTop(vertexLabel, Canvas.GetTop(vertexToAdd) - 9);
-                    Canvas.SetLeft(vertexLabel, Canvas.GetLeft(vertexToAdd) - 9);
+                    MessageBox.Show("Turn off Alphabet Labelling so more Nodes can be represented");
                 }
                 else
                 {
-                    Canvas.SetTop(vertexLabel, Canvas.GetTop(vertexToAdd) - 9);
-                    Canvas.SetLeft(vertexLabel, Canvas.GetLeft(vertexToAdd) - 13);
+                    Graph.AddVertex(); //update the class
+
+
+                    Ellipse vertexToAdd = new Ellipse() { StrokeThickness = 2 }; //create the vertex that will be added
+
+
+                    Binding bindingStroke = new Binding("SelectedBrush") //binding the stroke of the vertices to the color picker
+                    {
+                        Source = colourPickerVertexStroke,
+                        UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
+                        Mode = BindingMode.OneWay
+                    };
+                    vertexToAdd.SetBinding(Ellipse.StrokeProperty, bindingStroke);
+
+                    Binding bindingFill = new Binding("SelectedBrush")//binding the fill colour of the vertices to the color picker
+                    {
+                        Source = colourPickerVertex,
+                        UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
+                        Mode = BindingMode.OneWay
+                    };
+                    vertexToAdd.SetBinding(Ellipse.FillProperty, bindingFill);
+
+                    Binding bindingDiameter = new Binding("Value")//binding the diameter of the vertices to the slider
+                    {
+                        Source = vertexDiameterSlider,
+                        UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
+                    };
+                    vertexToAdd.SetBinding(Ellipse.HeightProperty, bindingDiameter);
+                    vertexToAdd.SetBinding(Ellipse.WidthProperty, bindingDiameter);
+
+                    //positioning the vertex in the canvas.
+                    double vertexCenterXMousePos = Mouse.GetPosition(mainCanvas).X;
+                    double vertexCenterYMousePos = Mouse.GetPosition(mainCanvas).Y;
+                    vertexToAdd.Margin = new Thickness(-100000); //margin of 100000 so that it resizes around the center.
+                    Canvas.SetLeft(vertexToAdd, vertexCenterXMousePos);
+                    Canvas.SetTop(vertexToAdd, vertexCenterYMousePos);
+                    Canvas.SetZIndex(vertexToAdd, Zindex++);
+
+                    //give the string a Name in the form btn(vertexId)
+                    string vertexId = buttonId.ToString();
+                    vertexToAdd.Name = "btn" + vertexId;
+
+                    buttonId += 1; //increment button Id for unique buttons
+                    vertexList.Add(vertexToAdd);//add the vertex to the list
+                    vertexToAdd.MouseMove += mouseMove;//give the buttons drag and drop event handlers
+
+                    TextBlock vertexLabel = new TextBlock()//label for the ID of the vertex
+                    {
+                        FontSize = 15,
+                        Foreground = new SolidColorBrush(Colors.Black),
+                        Name = "labelFor" + vertexId,
+                        IsHitTestVisible = false //makes it so that the mouse clicks THROUGH the text block, and onto the ellipse
+                    };
+                    if ((bool)cbAlphabet.IsChecked)
+                    {
+                        vertexLabel.Text = alphabet.ElementAt(Convert.ToInt32(vertexId));
+                    }
+                    else
+                    {
+                        vertexLabel.Text = vertexId;
+                    }
+                    Binding bindingBG = new Binding("SelectedBrush")//binding the fill of the textblock to the colour picker
+                    {
+                        Source = colourPickerLabel,
+                        UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
+                        Mode = BindingMode.OneWay
+                    };
+                    vertexLabel.SetBinding(TextBlock.ForegroundProperty, bindingBG);
+
+                    //set its position ontop of the vertex, and at its center, depending on the number of digits
+                    if (vertexLabel.Text.Length == 1)
+                    {
+                        Canvas.SetTop(vertexLabel, Canvas.GetTop(vertexToAdd) - 9);
+                        Canvas.SetLeft(vertexLabel, Canvas.GetLeft(vertexToAdd) - 4);
+                    }
+                    else if (vertexLabel.Text.Length == 2)
+                    {
+                        Canvas.SetTop(vertexLabel, Canvas.GetTop(vertexToAdd) - 9);
+                        Canvas.SetLeft(vertexLabel, Canvas.GetLeft(vertexToAdd) - 9);
+                    }
+                    else
+                    {
+                        Canvas.SetTop(vertexLabel, Canvas.GetTop(vertexToAdd) - 9);
+                        Canvas.SetLeft(vertexLabel, Canvas.GetLeft(vertexToAdd) - 13);
+                    }
+                    Canvas.SetZIndex(vertexLabel, Zindex++);
+
+                    vertexTxBoxList.Add(vertexLabel);//add it to the label list
+
+                    mainCanvas.Children.Add(vertexToAdd);//add the vertex to the canvas
+                    mainCanvas.Children.Add(vertexLabel); //add the label to the canvas
+
                 }
-                Canvas.SetZIndex(vertexLabel, Zindex++);
-
-                vertexTxBoxList.Add(vertexLabel);//add it to the label list
-
-                mainCanvas.Children.Add(vertexToAdd);//add the vertex to the canvas
-                mainCanvas.Children.Add(vertexLabel); //add the label to the canvas
-                
-            }
-            if (graphCreated == true)
-            {
-                GenerateAdjList();
+                if (graphCreated == true)
+                {
+                    GenerateAdjList();
+                }
             }
         }
     }

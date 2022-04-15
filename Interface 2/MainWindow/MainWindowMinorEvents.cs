@@ -7,7 +7,8 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
-
+using System.Windows.Media.Imaging;
+using System.IO;
 namespace Interface_2
 {
     public partial class MainWindow : Window

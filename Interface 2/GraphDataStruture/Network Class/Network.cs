@@ -8,7 +8,7 @@ namespace Interface_2
 {
     public partial class Network
     {
-        private int NumberOfDeletedVertices; //keeps track of the number of vertices that have been deleted
+        public int NumberOfDeletedVertices; //keeps track of the number of vertices that have been deleted
         private int NumberOfVertices; //keeps track of the number of vertices
         private int idOfNodetoAdd = 0; //makes sure that the ID of all nodes are unique, as it will be incremented
         private List<Node> VertexSet; //represents the adjacency list: A list containing data of class Node, where each Node contains a HashSet of type Tuple<int, int> 
