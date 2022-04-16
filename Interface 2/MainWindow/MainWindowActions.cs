@@ -15,7 +15,7 @@ namespace Interface_2
 {
     public partial class MainWindow : Window
     {
-        private void ConnectVertices(Ellipse v1, Ellipse v2, int weight)
+        private void ConnectVertices(Ellipse v1, Ellipse v2, int weight) //connects two vertices together 
         {
             //gets the smaller and larger vertex
             Ellipse smallerEllipse = GetMinEllipse(v1, v2);
@@ -97,8 +97,7 @@ namespace Interface_2
             };
             weightLabel.SetBinding(TextBlock.ForegroundProperty, bindingFG);
 
-            //binding the back colour of the weight to the colour 
-            Binding bindingWeightBackcolor = new Binding("SelectedBrush")
+            Binding bindingWeightBackcolor = new Binding("SelectedBrush")//binding the back colour of the weight to the colour 
             {
                 Source = colourPickerWeight,
                 Mode = BindingMode.TwoWay,
@@ -115,7 +114,7 @@ namespace Interface_2
 
             //add a new edge tuple to the list
             edgeList.Add(Tuple.Create(temp, smallerEllipse, largerEllipse, weightLabel));
-            //if the weight is 0, show it as an unweighted graph
+            //if the weight is 0, show it as an unweighted edge
             mainCanvas.Children.Add(temp);
             if (weight != 0)
                 mainCanvas.Children.Add(weightLabel);
@@ -148,10 +147,7 @@ namespace Interface_2
                         return currentEllipse; 
                     }
                 }
-                catch
-                {
-
-                }
+                catch { }
             }
             return null;
         }
@@ -175,7 +171,7 @@ namespace Interface_2
         {
             //resets the sliders back to their original form
             ActivateButton(sender);
-            vertexDiameterSlider.Value = vertexDiameterSlider.Minimum;
+            vertexDiameterSlider.Value = 40;
             weightAndLabelFontSizeSlider.Value = weightAndLabelFontSizeSlider.Minimum;
         }
         public HashSet<Tuple<Line, Ellipse, Ellipse, TextBlock>> GetListOfEdgesFromVertex(Ellipse activeVertex) //gets all of the edges coming out of a vertex
@@ -312,14 +308,9 @@ namespace Interface_2
             Point dropPosition = e.GetPosition(mainCanvas); //current position of the place its being dragged
             Canvas.SetLeft(ellipseToDrop, dropPosition.X);//updates the x coordinate every time its dragged
             Canvas.SetTop(ellipseToDrop, dropPosition.Y);//updates the y coordinate ever time its dragged
-            foreach (TextBlock label in vertexTxBoxList) //look for the label that matches too the ellipse
-            {
-                if (label.Name.Substring(8) == ellipseToDrop.Name.Substring(3))
-                {
-                    Canvas.SetLeft(label, dropPosition.X - 4); //update that label too
-                    Canvas.SetTop(label, dropPosition.Y - 9);
-                }
-            }
+            TextBlock label = FindLabel(Convert.ToInt32(ellipseToDrop.Name.Substring(3)));
+            Canvas.SetLeft(label, dropPosition.X - 4); //update that label too
+            Canvas.SetTop(label, dropPosition.Y - 9);
             foreach (Tuple<Line, Ellipse, Ellipse, TextBlock> edge in edgeList)
             {
                 if (edge.Item2 == ellipseToDrop || edge.Item3 == ellipseToDrop) //look for the weight that matches to vertexes

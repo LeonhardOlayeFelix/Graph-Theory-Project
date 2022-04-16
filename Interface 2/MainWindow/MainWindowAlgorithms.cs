@@ -105,7 +105,6 @@ namespace Interface_2
                 if (highlightedLines.Count() == path.Count() - 1)//if the path is found, then the size of the array is always 1 less than the n. of vertices passed in
                 {
                     string pathString = "";
-                        
                     if (livePathhighlighting)
                     {
                         for (int i = 0; i < highlightedLines.Count(); ++i)
@@ -263,6 +262,5 @@ namespace Interface_2
                 labelExtraInfo.Content = "";
             }
         }
-        
     }
 }
