@@ -8,14 +8,11 @@ namespace Interface_2
 {
     public partial class Network
     {
-        public void AddVertex(int amountToAdd = 1)//adds a vertex to the graph
+        public void AddVertex(double x, double y)//adds a vertex to the graph
         {
-            for (int i = 0; i < amountToAdd; ++i)
-            {
-                VertexSet.Add(new Node(idOfNodetoAdd));//add a node to the hashset containing nodes
+                VertexSet.Add(new Node(idOfNodetoAdd, x, y));//add a node to the hashset containing nodes
                 idOfNodetoAdd += 1;//incrememnt id so all of the IDs are unique
                 NumberOfVertices += 1;//update number of vertices
-            }
         }
         public void RemoveVertex(int vertexToRemove)//remove a vertex
         {

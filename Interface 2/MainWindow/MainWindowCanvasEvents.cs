@@ -107,6 +107,7 @@ namespace Interface_2
                     RevertEllipseColour();
                     RevertLineColour();
                     Ellipse source = (Ellipse)e.OriginalSource;
+                    labelExtraInfo.Content = "Position: " + Graph.GetVertex(Convert.ToInt32(source.Name.Substring(3))).Position.GetPositionTuple();
                     source.Fill = HighlightColour;
                 }
                 else if (currentButton == btnDepthFirst) //check if they are trying to do a depth first traversal
@@ -394,7 +395,6 @@ namespace Interface_2
                 }
                 else
                 {
-                    Graph.AddVertex(); //update the class
                     Ellipse vertexToAdd = new Ellipse() { StrokeThickness = 2 }; //create the vertex that will be added
 
 
@@ -429,10 +429,13 @@ namespace Interface_2
                     Canvas.SetLeft(vertexToAdd, vertexCenterXMousePos);
                     Canvas.SetTop(vertexToAdd, vertexCenterYMousePos);
                     Canvas.SetZIndex(vertexToAdd, Zindex++);
-
                     //give the string a Name in the form btn(vertexId)
                     string vertexId = buttonId.ToString();
                     vertexToAdd.Name = "btn" + vertexId;
+                    Graph.AddVertex(vertexCenterXMousePos, vertexCenterYMousePos); //update the class
+                    labelExtraInfo.Content = "Placed at coordinates: " + Graph.GetVertex(Convert.ToInt32(vertexToAdd.Name.Substring(3))).Position.GetPositionTuple();
+
+                    
 
                     buttonId += 1; //increment button Id for unique buttons
                     vertexList.Add(vertexToAdd);//add the vertex to the list

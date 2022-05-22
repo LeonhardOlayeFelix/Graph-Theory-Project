@@ -4,15 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Interface_2.GraphDataStruture
+namespace Interface_2
 {
-    class Point
+    public class MyPoint
     {
         public double X { get; set; }
         public double Y { get; set; }
         public double originalX { get; }
         public double originalY { get; }
-        public Point(double x, double y)
+        public MyPoint(double x, double y)
         {
             X = x;
             Y = y;
@@ -24,17 +24,17 @@ namespace Interface_2.GraphDataStruture
             X = x;
             Y = y;
         }
-        public Point GetPosition()
+        public MyPoint GetPosition()
         {
-            return new Point(X, Y);
+            return new MyPoint(X, Y);
         }
         public Tuple<double, double> GetPositionTuple()
         {
             return Tuple.Create(X, Y);
         }
-        public Point GetOriginalPosition()
+        public MyPoint GetOriginalPosition()
         {
-            return new Point(originalX, originalY);
+            return new MyPoint(originalX, originalY);
         }
         public Tuple<double, double> GetOriginalPositionTuple()
         {

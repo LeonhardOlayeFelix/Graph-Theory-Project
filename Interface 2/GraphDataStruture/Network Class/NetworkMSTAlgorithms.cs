@@ -13,7 +13,10 @@ namespace Interface_2
             List<Tuple<int, int, int>> listOfSortedEdges = GetListOfSortedEdges(); //use merge sort to get a list of the sorted edges.
             int successful = 0; //the amount of edges that were added without creating a cycle
             Network mst = new Network(); //create a temporary graph data structure
-            mst.AddVertex(GetMaxNodeID() + 1); //add the same amount of vertices as the current graph
+            for (int i = 0; i < GetMaxNodeID() + 1; ++i)//add the same amount of vertices as the current graph
+            {
+                mst.AddVertex(0, 0);
+            }
             while (successful < GetListOfVertices().Count() - 1) //the mst is made when n - 1 successful edges have been added (n = num vertices)
             {
                 Tuple<int, int, int> cheapestEdge = listOfSortedEdges.First();//choose the lowest cost edge (first element)

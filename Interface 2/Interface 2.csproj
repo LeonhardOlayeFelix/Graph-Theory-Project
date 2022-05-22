@@ -99,7 +99,7 @@
     <Compile Include="GraphDataStruture\Network Class\NetworkMSTAlgorithms.cs" />
     <Compile Include="GraphDataStruture\Network Class\NetworkRouteInspection.cs" />
     <Compile Include="GraphDataStruture\Network Class\NetworkTraversalAlgorithms.cs" />
-    <Compile Include="GraphDataStruture\Point.cs" />
+    <Compile Include="GraphDataStruture\MyPoint.cs" />
     <Compile Include="LinkedListsClasses\UDLinkedList.cs" />
     <Compile Include="LinkedListsClasses\UDLinkedListNode.cs" />
     <Compile Include="SecondaryWindows\ConnectEdges.xaml.cs">

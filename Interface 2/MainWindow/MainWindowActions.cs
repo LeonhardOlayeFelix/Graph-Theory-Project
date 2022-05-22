@@ -291,6 +291,41 @@ namespace Interface_2
             edgeList = new HashSet<Tuple<Line, Ellipse, Ellipse, TextBlock>>();
             graphCreated = false;
         }
+        private void btnRevertPositions_Click(object sender, RoutedEventArgs e)
+        {
+            labelExtraInfo.Content = "";
+            foreach (var ctrl in mainCanvas.Children)
+            {
+                try
+                {
+                    Ellipse currentEllipse = (Ellipse)ctrl;
+                    int vertexID = Convert.ToInt32(currentEllipse.Name.Substring(3));
+                    double originalX = Graph.GetVertex(vertexID).Position.originalX; //get original position
+                    double originalY = Graph.GetVertex(vertexID).Position.originalY; //get original position
+                    Graph.GetVertex(vertexID).Position.SetPosition(originalX, originalY); // update their positions in the class
+                    Canvas.SetLeft(currentEllipse, originalX);
+                    Canvas.SetTop(currentEllipse, originalY);
+                    TextBlock label = FindLabel(vertexID);
+                    Canvas.SetLeft(label, originalX - 4); //update that label too
+                    Canvas.SetTop(label, originalY - 9);
+                    foreach (Tuple<Line, Ellipse, Ellipse, TextBlock> edge in edgeList)
+                    {
+                        if (edge.Item2 == currentEllipse || edge.Item3 == currentEllipse) //look for the weight that matches to vertexes
+                        {
+                            double MidPointX = (Canvas.GetLeft(edge.Item2) + Canvas.GetLeft(edge.Item3)) / 2;
+                            double MidPointY = (Canvas.GetTop(edge.Item2) + Canvas.GetTop(edge.Item3)) / 2; //update it to the midpoint of the line as it moves each time
+                            Canvas.SetLeft(edge.Item4, MidPointX - 4);
+                            Canvas.SetTop(edge.Item4, MidPointY - 9);
+                        }
+
+                    }
+                }
+                catch
+                {
+
+                }
+            }
+        }
         private void mouseMove(object sender, MouseEventArgs e)
         {
             //monitors the mouse as it hovers over a vertex
@@ -304,10 +339,15 @@ namespace Interface_2
         }
         private void mainCanvas_DragOver(object sender, DragEventArgs e)
         {
+
             //if the mouse the vertex is being dragged
+            int ellipseToDropID = Convert.ToInt32(ellipseToDrop.Name.Substring(3));
             Point dropPosition = e.GetPosition(mainCanvas); //current position of the place its being dragged
             Canvas.SetLeft(ellipseToDrop, dropPosition.X);//updates the x coordinate every time its dragged
+            Graph.GetVertex(ellipseToDropID).Position.X = dropPosition.X; //udpate its position in the class too
             Canvas.SetTop(ellipseToDrop, dropPosition.Y);//updates the y coordinate ever time its dragged
+            Graph.GetVertex(ellipseToDropID).Position.Y = dropPosition.Y; //update its position in the class too
+            labelExtraInfo.Content = "Drag position: " + Graph.GetVertex(ellipseToDropID).Position.GetPositionTuple();
             TextBlock label = FindLabel(Convert.ToInt32(ellipseToDrop.Name.Substring(3)));
             Canvas.SetLeft(label, dropPosition.X - 4); //update that label too
             Canvas.SetTop(label, dropPosition.Y - 9);

@@ -8,6 +8,18 @@ namespace Interface_2
 {
     public partial class Network
     {
+
+        public Node GetVertex(int VertexID)
+        {
+            for (int i = 0; i < VertexSet.Count(); ++i)
+            {
+                if (VertexSet[i].GetVertexId() == VertexID)
+                {
+                    return VertexSet[i];
+                }
+            }
+            return null;
+        }
         public bool IsInVertexList(int v)//function to check if a vertex exists
         {
             List<int> vertexList = GetListOfVertices();//get the list of vertices
