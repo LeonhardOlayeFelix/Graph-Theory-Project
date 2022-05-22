@@ -102,6 +102,7 @@
     <Compile Include="GraphDataStruture\MyPoint.cs" />
     <Compile Include="LinkedListsClasses\UDLinkedList.cs" />
     <Compile Include="LinkedListsClasses\UDLinkedListNode.cs" />
+    <Compile Include="MainWindow\RenderGraph.cs" />
     <Compile Include="SecondaryWindows\ConnectEdges.xaml.cs">
       <DependentUpon>ConnectEdges.xaml</DependentUpon>
     </Compile>

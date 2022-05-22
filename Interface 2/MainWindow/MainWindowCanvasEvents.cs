@@ -434,9 +434,6 @@ namespace Interface_2
                     vertexToAdd.Name = "btn" + vertexId;
                     Graph.AddVertex(vertexCenterXMousePos, vertexCenterYMousePos); //update the class
                     labelExtraInfo.Content = "Placed at coordinates: " + Graph.GetVertex(Convert.ToInt32(vertexToAdd.Name.Substring(3))).Position.GetPositionTuple();
-
-                    
-
                     buttonId += 1; //increment button Id for unique buttons
                     vertexList.Add(vertexToAdd);//add the vertex to the list
                     vertexToAdd.MouseMove += mouseMove;//give the buttons drag and drop event handlers

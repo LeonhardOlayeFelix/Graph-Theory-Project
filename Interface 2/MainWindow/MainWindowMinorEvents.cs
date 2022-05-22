@@ -69,6 +69,11 @@ namespace Interface_2
         }
         private void btnAddVertex_Click(object sender, RoutedEventArgs e)
         {
+            //Network test = new Network();
+            //test.AddVertex(300, 200);
+            //test.AddVertex(200, 500);
+            //test.AddEdge(0, 1, 6);
+            //RenderGraph(test);
             HideValencies();
             labelExtraInfo.Content = "Click anywhere on the canvas to place a vertex";
             ActivateButton(sender);

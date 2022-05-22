@@ -15,7 +15,7 @@ namespace Interface_2
 {
     public partial class MainWindow : Window
     {
-        private void ConnectVertices(Ellipse v1, Ellipse v2, int weight) //connects two vertices together 
+        private void ConnectVertices(Ellipse v1, Ellipse v2, int weight, bool rendering = false) //connects two vertices together 
         {
             //gets the smaller and larger vertex
             Ellipse smallerEllipse = GetMinEllipse(v1, v2);
@@ -30,7 +30,10 @@ namespace Interface_2
                     break;
                 }
             }
-            Graph.AddEdge(Convert.ToInt32(v1.Name.Substring(3)), Convert.ToInt32(v2.Name.Substring(3)), weight); //update the object
+            if (!rendering)
+            {
+                Graph.AddEdge(Convert.ToInt32(v1.Name.Substring(3)), Convert.ToInt32(v2.Name.Substring(3)), weight); //update the object
+            }
 
             //below creates the line which will be connected
             Line temp = new Line()//set properties
