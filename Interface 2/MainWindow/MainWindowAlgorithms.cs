@@ -10,6 +10,7 @@ using System.Windows.Shapes;
 
 namespace Interface_2
 {
+
     public partial class MainWindow : Window
     {
         private void btnDijkstrasShort_Click(object sender, RoutedEventArgs e)

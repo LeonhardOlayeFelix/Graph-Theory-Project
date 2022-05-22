@@ -13,12 +13,13 @@ using System.Text.RegularExpressions;
 
 namespace Interface_2
 {
+
     public partial class MainWindow : Window
     {
-        public void RenderGraph(Network GraphToRender) //renders a graph onto the canvas
+        public void RenderGraph(Network GraphToRender, string name) //renders a graph onto the canvas
         {
             DeleteGraph();
-            CreateNewGraph("Graph");
+            CreateNewGraph(name);
             Graph = GraphToRender;
             RenderVertices(GraphToRender);
             RenderEdges(GraphToRender);

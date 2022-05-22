@@ -10,8 +10,10 @@ using System.Windows.Shapes;
 using System.Media;
 namespace Interface_2
 {
+
     public partial class MainWindow : Window
     {
+
         private void mainCanvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) //if the canvas is pressed
         {
 
@@ -46,8 +48,6 @@ namespace Interface_2
                         {
                             EnableAllActionButtons();
                             EnableTbCtrl();
-                            btnSaveGraph.IsEnabled = false;
-                            btnLoadGraph.IsEnabled = false;
                             labelExtraInfo.Content = "";
                         }
                         else if ((bool)cbAutoGenEdges.IsChecked) //if the auto generate weight randomly button is checked
@@ -58,8 +58,6 @@ namespace Interface_2
                             labelExtraInfo.Content = "";
                             EnableTbCtrl();
                             EnableAllActionButtons();
-                            btnSaveGraph.IsEnabled = false;
-                            btnLoadGraph.IsEnabled = false;
                         }
                         else if ((bool)cbAutoGenEdgesValue.IsChecked) //if the auto generate weight to 0 button is checked
                         {
@@ -67,8 +65,6 @@ namespace Interface_2
                             labelExtraInfo.Content = "";
                             EnableTbCtrl();
                             EnableAllActionButtons();
-                            btnSaveGraph.IsEnabled = false;
-                            btnLoadGraph.IsEnabled = false;
                         }
                         else if (connectEdges.ShowDialog() == true) // otherwise, open a new form and get the weight
                         {
@@ -77,8 +73,6 @@ namespace Interface_2
                             labelExtraInfo.Content = "";
                             EnableTbCtrl();
                             EnableAllActionButtons();
-                            btnSaveGraph.IsEnabled = false;
-                            btnLoadGraph.IsEnabled = false;
                         }
                         else
                         {
@@ -86,11 +80,10 @@ namespace Interface_2
                             labelExtraInfo.Content = "";
                             EnableTbCtrl();
                             EnableAllActionButtons();
-                            btnSaveGraph.IsEnabled = false;
-                            btnLoadGraph.IsEnabled = false;
+                            
                         }
                         RevertEllipseColour();
-
+                        btnDeleteGraph.IsEnabled = true;
                     }
                     else if (buttonSelectionCount % 2 == 1) //if odd, its the first vertex they pressed to connect to, so set it to lastSelectedVertex
                     {

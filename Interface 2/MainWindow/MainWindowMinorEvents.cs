@@ -62,19 +62,29 @@ namespace Interface_2
         
         private void btnLoadGraph_Click(object sender, RoutedEventArgs e)
         {
+            Network test2 = BinarySerialization.ReadFromBinaryFile<Network>("Untitled"); //change this to have a file the user wants to open
+            RenderGraph(test2, "Untitled"); //change this to have a file the user wants to open
+            btnDeleteGraph.IsEnabled = true;
 
         }
-        private void btnSaveGraph_Click(object sender, RoutedEventArgs e)
+        private void btnSaveGraph_Click(object sender, RoutedEventArgs e)   
         {
-
+            string filename = "Untitled"; //change this to have a filename that the user wants
+            FileStream fs;
+            if (!File.Exists(filename))
+            {
+                fs = File.Create(filename);
+            }
+            else
+            {
+                fs = File.Open(filename, FileMode.Open);
+            }
+            fs.Close();
+            BinarySerialization.WriteToBinaryFile(filename, Graph, false);
         }
         private void btnAddVertex_Click(object sender, RoutedEventArgs e)
         {
-            //Network test = new Network();
-            //test.AddVertex(300, 200);
-            //test.AddVertex(200, 500);
-            //test.AddEdge(0, 1, 6);
-            //RenderGraph(test);
+            
             HideValencies();
             labelExtraInfo.Content = "Click anywhere on the canvas to place a vertex";
             ActivateButton(sender);

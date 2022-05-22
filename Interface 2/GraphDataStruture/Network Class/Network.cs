@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Interface_2
 {
+    [Serializable]
     public partial class Network
     {
         public int NumberOfDeletedVertices; //keeps track of the number of vertices that have been deleted

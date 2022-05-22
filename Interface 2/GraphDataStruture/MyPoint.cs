@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 namespace Interface_2
 {
+    [Serializable]
+
     public class MyPoint
     {
         public double X { get; set; }

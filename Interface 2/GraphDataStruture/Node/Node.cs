@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Interface_2
 {
+    [Serializable]
     public class Node
     {
         private int VertexId; //The unique ID of the node

@@ -13,6 +13,7 @@ using System.Text.RegularExpressions;
 
 namespace Interface_2
 {
+    
     public partial class MainWindow : Window
     {
         private void ConnectVertices(Ellipse v1, Ellipse v2, int weight, bool rendering = false) //connects two vertices together 

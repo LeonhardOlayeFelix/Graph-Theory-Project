@@ -10,6 +10,8 @@ using System.Windows.Shapes;
 
 namespace Interface_2
 {
+    [Serializable]
+
     public partial class MainWindow : Window
     {
         public void DisableAllAlgoButtons()
