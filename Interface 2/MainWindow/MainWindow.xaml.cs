@@ -10,7 +10,7 @@ using System.Windows.Shapes;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
-
+using System.Media;
 namespace Interface_2
 {
     public partial class MainWindow : Window
@@ -23,10 +23,10 @@ namespace Interface_2
         int rInspSelectionCount = 0;
         int rInspStart = 0;
         int startVertex = 0;
-
+        
         static List<string> normalAlphabet = new List<string>() { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z" };
         static List<string> alphabet = new List<string>(); //the id that the nodes could be assigned
-
+        
         private bool graphCreated = false;//for loading, creating, and deleting files
         private Button currentButton = null; //the button that is currently activated
         private Color btnActivatedColour = Color.FromRgb(190, 230, 253);//colour to highlight activated buttons with

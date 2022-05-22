@@ -10,7 +10,7 @@ namespace Interface_2
     {
         private int VertexId; //The unique ID of the node
         private List<Tuple<int, int>> AdjSet; //Hashset - each element is a tuple containing 2 items - .Item1 represents adjacent vertex's ID, .Item2 represents Edge weight
-
+        
         public Node(int vertexId) //constructor
         {
             this.VertexId = vertexId; //initialise vertex ID

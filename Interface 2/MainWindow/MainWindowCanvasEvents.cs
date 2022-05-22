@@ -7,7 +7,7 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
-
+using System.Media;
 namespace Interface_2
 {
     public partial class MainWindow : Window
@@ -224,13 +224,13 @@ namespace Interface_2
                                 {
                                     List<Tuple<int, int>> edgesToRepeat = result.Item1; //first item of the tuple reps edges to repeat
                                     int cost = result.Item2;//second item of the tuple reps the total cost
+                                    RevertEllipseColour();
                                     RouteInspHighlightPath(edgesToRepeat, cost); //highlights the edges to be repeated and presents the cost
                                     HideValencies();
                                 }
                                 EnableTbCtrl();
                                 EnableAllActionButtons();
                                 EnableAllAlgoButtons();
-                                RevertEllipseColour();
                             }
 
                         }
@@ -395,8 +395,6 @@ namespace Interface_2
                 else
                 {
                     Graph.AddVertex(); //update the class
-
-
                     Ellipse vertexToAdd = new Ellipse() { StrokeThickness = 2 }; //create the vertex that will be added
 
 
