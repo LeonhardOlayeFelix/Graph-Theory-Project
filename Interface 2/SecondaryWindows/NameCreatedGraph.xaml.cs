@@ -34,5 +34,10 @@ namespace Interface_2
                 this.Close();
             }
         }
+
+        private void txBoxGraphName_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
     }
 }

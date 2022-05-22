@@ -11,10 +11,13 @@ using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Media;
+using System.Data.OleDb;
+using System.IO;
 namespace Interface_2
 {
     public partial class MainWindow : Window
     {
+
         //for the algorithms
         Ellipse lastSelectedVertex;
         Ellipse vertexToConnectTo;
@@ -67,8 +70,27 @@ namespace Interface_2
             }
             //now alphabet is populated with "A", "B", "C", "D" ... "AA", "AB", "AC" ... "BA, BB, BC" ... all the way to "ZA, ZB, ZC" so there are many unique ways to
             //represent nodes with letters now
-        }
 
+            CreateDatabase();
+        }
+        public const string ConStr = "Provider=Microsoft.Jet.OLEDB.4.0; Data Source=Networking.accdb";
+
+        public void CreateDatabase()
+        {
+            if (!File.Exists("Networking.accdb"))
+            {
+                ADOX.Catalog cat = new ADOX.Catalog();
+                cat.Create(ConStr);
+                OleDbConnection conn = new OleDbConnection(ConStr);
+                conn.Open();
+                OleDbCommand cmd = new OleDbCommand();
+                cmd.Connection = conn;
+                string SQL = "";
+                SQL += "CREATE TABLE Graph(GraphID INTEGER, GraphName VARCHAR(15), NumberOfVertices INTEGER, NumberOfEdges INTEGER)";
+                cmd.CommandText = SQL;
+                cmd.ExecuteNonQuery();
+            }
+        }
         
     }
 }
