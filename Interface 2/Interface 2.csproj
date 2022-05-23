@@ -76,6 +76,20 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="LoadGraph.xaml.cs">
+      <DependentUpon>LoadGraph.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Overwrite.xaml.cs">
+      <DependentUpon>Overwrite.xaml</DependentUpon>
+    </Compile>
+    <Page Include="LoadGraph.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Overwrite.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="SecondaryWindows\ConnectEdges.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

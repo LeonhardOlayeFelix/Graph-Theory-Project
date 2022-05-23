@@ -19,7 +19,7 @@ namespace Interface_2
         public void RenderGraph(Network GraphToRender, string name) //renders a graph onto the canvas
         {
             DeleteGraph();
-            CreateNewGraph(name);
+            CreateNewGraph(name, true);
             Graph = GraphToRender;
             RenderVertices(GraphToRender);
             RenderEdges(GraphToRender);

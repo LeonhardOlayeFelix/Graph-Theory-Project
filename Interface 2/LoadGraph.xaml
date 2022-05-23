@@ -1,0 +1,43 @@
+﻿<Window x:Class="Interface_2.LoadGraph"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Interface_2"
+        mc:Ignorable="d"
+        Title="LoadGraph" Height="175" Width="400">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="143*"/>
+            <ColumnDefinition Width="249*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.ColumnSpan="2"
+                   TextWrapping="Wrap"
+                   FontSize="15"
+                   TextAlignment="Center">Please Select the name of the graph you would like to load below</TextBlock>
+        <ComboBox Grid.Row="1"
+                  x:Name="cbGraphName"
+                  Grid.Column="1"
+                  Margin="7">
+        </ComboBox>
+        <Label Grid.Row="1"
+               HorizontalAlignment="Center"
+               VerticalAlignment="Center"
+               FontSize="15"
+               FontWeight="Medium">Graph Name:</Label>
+        <Button Grid.Row="2"
+                x:Name="btnLoad"
+                Grid.ColumnSpan="2"
+                Margin="85,10,85,10"
+                FontSize="15"
+                FontWeight="Medium"
+                Click="btnLoad_Click">
+            Load Graph
+        </Button>
+    </Grid>
+</Window>

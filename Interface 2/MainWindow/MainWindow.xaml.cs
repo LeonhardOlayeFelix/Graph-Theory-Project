@@ -57,6 +57,7 @@ namespace Interface_2
             InitializeComponent();
             DisableAllActionButtons();
             DisableTbCtrl();
+            btnSaveGraph.IsEnabled = false;
             foreach(string letter in normalAlphabet)
             {
                 alphabet.Add(letter); //first populate with letter
@@ -87,9 +88,10 @@ namespace Interface_2
                 OleDbCommand cmd = new OleDbCommand();
                 cmd.Connection = conn;
                 string SQL = "";
-                SQL += "CREATE TABLE Graph(GraphID INTEGER, GraphName VARCHAR(15), NumberOfVertices INTEGER, NumberOfEdges INTEGER)";
+                SQL += "CREATE TABLE Graph(GraphName VARCHAR(15), DateMade DATE, PRIMARY KEY(GraphName))";
                 cmd.CommandText = SQL;
                 cmd.ExecuteNonQuery();
+                conn.Close();
             }
         }
         

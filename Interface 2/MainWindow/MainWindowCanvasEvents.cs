@@ -84,6 +84,8 @@ namespace Interface_2
                         }
                         RevertEllipseColour();
                         btnDeleteGraph.IsEnabled = true;
+                        btnSaveGraph.IsEnabled = true;
+                        btnLoadGraph.IsEnabled = true;
                     }
                     else if (buttonSelectionCount % 2 == 1) //if odd, its the first vertex they pressed to connect to, so set it to lastSelectedVertex
                     {
@@ -93,6 +95,8 @@ namespace Interface_2
                         labelExtraInfo.Content = "From vertex " + FindLabel(Convert.ToInt32(lastSelectedVertex.Name.Substring(3))).Text + " to.....";
                         DisableTbCtrl();
                         DisableAllActionButtons();
+                        btnSaveGraph.IsEnabled = false;
+                        btnLoadGraph.IsEnabled = false;
                     }
                 }
                 else if (currentButton == btnDefault) //check if they are using the default button
@@ -354,8 +358,8 @@ namespace Interface_2
                 RevertEllipseColour();
                 EnableTbCtrl();
                 EnableAllActionButtons();
-                btnSaveGraph.IsEnabled = false;
-                btnLoadGraph.IsEnabled = false;
+                btnSaveGraph.IsEnabled = true;
+                btnLoadGraph.IsEnabled = true;
             }
             else if (rInspSelectionCount % 2 == 1 && currentButton == btnRouteInspStartAndEnd)//if they pressed the canvas to try and cancel a route inspection
             {
@@ -365,8 +369,8 @@ namespace Interface_2
                 EnableTbCtrl();
                 EnableAllActionButtons();
                 EnableAllAlgoButtons();
-                btnSaveGraph.IsEnabled = false;
-                btnLoadGraph.IsEnabled = false;
+                btnSaveGraph.IsEnabled = true;
+                btnLoadGraph.IsEnabled = true;
             }
             else if (dijkstraSelectionCount % 2 == 1 && currentButton == btnDijkstrasShort)//if they pressed the canvas to try and cancel a dijkstras algorithm
             {
@@ -376,8 +380,8 @@ namespace Interface_2
                 EnableTbCtrl();
                 EnableAllActionButtons();
                 EnableAllAlgoButtons();
-                btnSaveGraph.IsEnabled = false;
-                btnLoadGraph.IsEnabled = false;
+                btnSaveGraph.IsEnabled = true;
+                btnLoadGraph.IsEnabled = true;
             }
             else if (currentButton == btnAddVertex) //where a user wants to add a vertex
             {

@@ -243,25 +243,42 @@ namespace Interface_2
                 name = nameGraphWindow.txBoxGraphName.Text; //re-initialise everything:
                 DeleteGraph();
                 CreateNewGraph(name);
-                btnDeleteGraph.IsEnabled = true;
                 graphCreated = true;
                 txAdjset.Clear();
             }
         }
-        public void CreateNewGraph(string graphName) //creates a new graph
+        public void CreateNewGraph(string graphName, bool rendering = false) //creates a new graph
         {
-            //re-intiliaise all of the attributes declared/defined above
-            edgeList = new HashSet<Tuple<Line, Ellipse, Ellipse, TextBlock>>();
-            Graph = new Network();
-            valencyState = "Hidden";
-            valencyList = new List<TextBlock>();
-            Graph.Name = graphName; //the name that they provided, length = 2 to 15
-            vertexTxBoxList = new List<TextBlock>();
-            vertexList = new List<Ellipse>();
-            graphCreated = true;
-            labelGraphName.Content = graphName;
-            EnableAllActionButtons(); //can only navigate buttons when a graph is created
-            EnableTbCtrl();
+            //check if a graph with that name already exists
+            OleDbConnection conn = new OleDbConnection(ConStr);
+            OleDbCommand cmd = new OleDbCommand();
+            OleDbCommand cmd2 = new OleDbCommand();
+            cmd.Connection = conn;
+            conn.Open();
+            cmd.CommandText = "SELECT * FROM Graph WHERE GraphName = '" + graphName + "'"; //check if there are any graphs with that name
+            OleDbDataReader reader = cmd.ExecuteReader();
+            if (reader.HasRows && !rendering)
+            {
+                MessageBox.Show("A graph with that name already exists, to load it, press the load button");
+            }
+            else
+            {
+                
+                edgeList = new HashSet<Tuple<Line, Ellipse, Ellipse, TextBlock>>();
+                Graph = new Network();
+                valencyState = "Hidden";
+                valencyList = new List<TextBlock>();
+                Graph.Name = graphName; //the name that they provided, length = 2 to 15
+                vertexTxBoxList = new List<TextBlock>();
+                vertexList = new List<Ellipse>();
+                graphCreated = true;
+                labelGraphName.Content = graphName;
+                EnableAllActionButtons(); //can only navigate buttons when a graph is created
+                EnableTbCtrl();
+                btnDeleteGraph.IsEnabled = true;
+                btnSaveGraph.IsEnabled = true;
+            }
+            conn.Close();
         }
         private void btnDeleteGraph_Click(object sender, RoutedEventArgs e)
         {
@@ -294,6 +311,7 @@ namespace Interface_2
             vertexList = new List<Ellipse>();
             edgeList = new HashSet<Tuple<Line, Ellipse, Ellipse, TextBlock>>();
             graphCreated = false;
+            btnSaveGraph.IsEnabled = false;
         }
         private void btnRevertPositions_Click(object sender, RoutedEventArgs e)
         {
