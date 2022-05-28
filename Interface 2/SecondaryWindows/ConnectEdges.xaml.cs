@@ -23,7 +23,8 @@ namespace Interface_2
     {
         public ConnectEdges()
         {
-            InitializeComponent(); 
+            InitializeComponent();
+            txWeight.Focus();
         }
 
         private void buttonConfirmWeight_Click(object sender, RoutedEventArgs e)
@@ -70,6 +71,18 @@ namespace Interface_2
                 this.Close();
             }
             
+        }
+
+        private void txWeight_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Return)
+            {
+                if (txWeight.Text.Length != 0)
+                {
+                    this.DialogResult = true;
+                    this.Close();
+                }
+            }
         }
     }
 }

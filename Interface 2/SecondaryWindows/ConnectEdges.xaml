@@ -28,9 +28,10 @@
                FontSize="15"
                FontWeight="Medium">Edge Weight:</Label>
         <TextBox Grid.Row="1"
-                 Text="0"
+                 TabIndex="0"
                  Margin="0,8,172,8"
                  Grid.Column="1"
+                 KeyDown="txWeight_KeyDown"
                  BorderThickness="3"
                  MaxLength="15"
                  VerticalAlignment="Center"

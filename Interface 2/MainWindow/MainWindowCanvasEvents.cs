@@ -259,6 +259,30 @@ namespace Interface_2
                         }
                     }
                 }
+                else if (currentButton == btnRevertOnePositions)
+                {
+                    Ellipse currentEllipse = (Ellipse)e.OriginalSource;
+                    int vertexID = Convert.ToInt32(currentEllipse.Name.Substring(3));
+                    double originalX = Graph.GetVertex(vertexID).Position.originalX; //get original position
+                    double originalY = Graph.GetVertex(vertexID).Position.originalY; //get original position
+                    Graph.GetVertex(vertexID).Position.SetPosition(originalX, originalY); // update their positions in the class
+                    Canvas.SetLeft(currentEllipse, originalX);
+                    Canvas.SetTop(currentEllipse, originalY);
+                    TextBlock label = FindLabel(vertexID);
+                    Canvas.SetLeft(label, originalX - 4); //update that label too
+                    Canvas.SetTop(label, originalY - 9);
+                    foreach (Tuple<Line, Ellipse, Ellipse, TextBlock> edge in edgeList)
+                    {
+                        if (edge.Item2 == currentEllipse || edge.Item3 == currentEllipse) //look for the weight that matches to vertexes
+                        {
+                            double MidPointX = (Canvas.GetLeft(edge.Item2) + Canvas.GetLeft(edge.Item3)) / 2;
+                            double MidPointY = (Canvas.GetTop(edge.Item2) + Canvas.GetTop(edge.Item3)) / 2; //update it to the midpoint of the line as it moves each time
+                            Canvas.SetLeft(edge.Item4, MidPointX - 4);
+                            Canvas.SetTop(edge.Item4, MidPointY - 9);
+                        }
+
+                    }
+                }
                 else if (currentButton == btnPrims) //if they are trying to use prims algorithm
                 {
                     if (vertexList.Count() != 0)

@@ -94,6 +94,10 @@ namespace Interface_2
                 conn.Close();
             }
         }
-        
+
+        private void btnRevertOnePositions_Click(object sender, RoutedEventArgs e)
+        {
+            ActivateButton(sender);
+        }
     }
 }

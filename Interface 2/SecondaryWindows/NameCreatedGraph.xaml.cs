@@ -23,6 +23,8 @@ namespace Interface_2
         public NameCreatedGraph()
         {
             InitializeComponent();
+            txBoxGraphName.Focus();
+            txBoxGraphName.SelectAll();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

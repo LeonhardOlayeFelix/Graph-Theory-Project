@@ -7,9 +7,9 @@
         xmlns:wpfx="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit/extended"
         mc:Ignorable="d"
         xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
-        Title="Graphing Simulator" Height="720" Width="1200"
-        MinHeight="720" MinWidth="1200"
-        ResizeMode="CanResize"
+        Title="Graphing Simulator" Height="720" Width="1100"
+        MinHeight="900" MinWidth="1500"
+        WindowState="Maximized"
         WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <DataTemplate x:Key="DataTemplate_Level2">
@@ -83,7 +83,8 @@
                       Panel.ZIndex="3"
                   Background="White" 
                   Margin="7">
-                <GroupBox.Header>
+                
+                    <GroupBox.Header>
                     <Label>Options</Label>
                 </GroupBox.Header>
                 <StackPanel>
@@ -518,7 +519,7 @@
                                             x:Name="btnRevertPositions"
                                             Click="btnRevertPositions_Click"
                                                         Grid.Row="2">
-                                                    Revert Vertices positions
+                                                    Revert All Vertices positions
                                                 </Button>
                                                 <TextBlock Foreground="Black"
                                                Grid.Row="1"
@@ -565,6 +566,20 @@
                                                HorizontalAlignment="Center" Width="192">
                                         Lowest cost to traverse every edge once
                                                 </TextBlock>
+                                                <TextBlock Foreground="Black"
+                                               Grid.Row="1"
+                                               Height="20" 
+                                               Margin="50,35,20,21"
+                                               FontSize="10"
+                                               HorizontalAlignment="Center" Width="178" Grid.RowSpan="2">
+                                        Return a single vertex to original postions
+                                                </TextBlock>
+                                                <Button Margin="20,12,20,3"
+                                            x:Name="btnRevertOnePositions"
+                                            Click="btnRevertOnePositions_Click"
+                                                        Grid.Row="2">
+                                                    Revert Single Vertices positions
+                                                </Button>
                                             </Grid>
                                         </GroupBox>
                                         <GroupBox Header="Traversal Algorithms"

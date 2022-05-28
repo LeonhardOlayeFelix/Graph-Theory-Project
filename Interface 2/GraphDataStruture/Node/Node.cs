@@ -79,15 +79,5 @@ namespace Interface_2
         {
             return this.VertexId; //retuns the ID of this vertex
         }
-        public string coutHashSet()
-        {
-            string stringToCout = "";
-            stringToCout = "Node" + VertexId.ToString() + ":\n";
-            for (int i = 0; i < AdjSet.Count(); ++i)
-            {
-                stringToCout += "Neighbour: " + AdjSet.ElementAt(i).Item1.ToString() + ", Cost: " + AdjSet.ElementAt(i).Item2.ToString() + "\n";
-            }
-            return stringToCout;
-        }
     }
 }
