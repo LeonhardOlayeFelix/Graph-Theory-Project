@@ -14,37 +14,24 @@ using System.IO;
 
 namespace Interface_2
 {
-    public static class BinarySerialization
+    public static class BinarySerialization //this class will read and write a given object into a binary file
     {
-        /// <summary>
-        /// Writes the given object instance to a binary file.
-        /// <para>Object type (and all child types) must be decorated with the [Serializable] attribute.</para>
-        /// <para>To prevent a variable from being serialized, decorate it with the [NonSerialized] attribute; cannot be applied to properties.</para>
-        /// </summary>
-        /// <typeparam name="T">The type of object being written to the XML file.</typeparam>
-        /// <param name="filePath">The file path to write the object instance to.</param>
-        /// <param name="objectToWrite">The object instance to write to the XML file.</param>
-        /// <param name="append">If false the file will be overwritten if it already exists. If true the contents will be appended to the file.</param>
-        public static void WriteToBinaryFile<T>(string filePath, T objectToWrite, bool append = false)
+        //writes the object to binary file
+        public static void WriteToBinaryFile<T>(string filePath, T objectToWrite, bool append = false) //takes in type T which is the type of the object
         {
             using (Stream stream = File.Open(filePath, append ? FileMode.Append : FileMode.Create))
             {
-                var binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-                binaryFormatter.Serialize(stream, objectToWrite);
+                var BinaryWriter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter(); 
+                BinaryWriter.Serialize(stream, objectToWrite);//writes the object to the binary file through serialization
             }   
         }
-        /// <summary>
-        /// Reads an object instance from a binary file.
-        /// </summary>
-        /// <typeparam name="T">The type of object to read from the XML.</typeparam>
-        /// <param name="filePath">The file path to read the object instance from.</param>
-        /// <returns>Returns a new instance of the object read from the binary file.</returns>
-        public static T ReadFromBinaryFile<T>(string filePath)
+        //reads an object in from a file
+        public static T ReadFromBinaryFile<T>(string filePath) //needs the file to read and type 
         {
             using (Stream stream = File.Open(filePath, FileMode.Open))
             {
-                var binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-                return (T)binaryFormatter.Deserialize(stream);
+                var BinaryReader = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+                return (T)BinaryReader.Deserialize(stream); //writes the object to the binary file through deserialization
             }
         }
     }

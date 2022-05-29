@@ -7,8 +7,8 @@
         xmlns:wpfx="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit/extended"
         mc:Ignorable="d"
         xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
-        Title="Graphing Simulator" Height="720" Width="1100"
-        MinHeight="900" MinWidth="1500"
+        Title="Graphing Simulator" Height="1080" Width="1920"
+        ResizeMode="NoResize"
         WindowState="Maximized"
         WindowStartupLocation="CenterScreen">
     <Window.Resources>

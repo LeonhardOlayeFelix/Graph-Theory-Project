@@ -134,14 +134,10 @@ namespace Interface_2
         public string PrintAdjList() //returns the string which represents the adjacency list
         {
             string stringToReturn = "";
-            List<Node> adjList = GetAdjacencyList();
-            for (int vertex = 0; vertex < adjList.Count(); ++vertex)
+            List<int> listOfVertices = GetListOfVertices();
+            for (int i = 0; i < listOfVertices.Count(); ++i)
             {
-                List<Tuple<int, int>> adjSet = adjList.ElementAt(vertex).GetAdjVertices();
-                foreach (var tuple in adjSet)
-                {
-                    stringToReturn += adjList.ElementAt(vertex).GetVertexId().ToString() + " --> " + tuple.Item1.ToString() + ", cost: " + tuple.Item2.ToString() + "\n";
-                }
+                stringToReturn += listOfVertices[i] + ": " + string.Join(", ", GetAdjVertices(listOfVertices[i])) + "\n";
             }
             return stringToReturn;
         }
