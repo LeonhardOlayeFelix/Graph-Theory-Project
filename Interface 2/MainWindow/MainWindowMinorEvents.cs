@@ -61,37 +61,25 @@ namespace Interface_2
 
         public void LoadGraph()
         {
-            //OleDbConnection conn = new OleDbConnection(MainWindow.ConStr);
-            //OleDbCommand cmd = new OleDbCommand();
-            //conn.Open();
-            //cmd.Connection = conn;
-            //cmd.CommandText = "SELECT GraphName FROM Graph";
-            //OleDbDataReader reader2 = cmd.ExecuteReader();
-            //if (!reader2.HasRows)
-            //{
-            //    MessageBox.Show("No graphs have previously been saved");
-            //}
-            //else
-            //{
-            //    LoadGraph loadGraph = new LoadGraph();
-            //    if (loadGraph.ShowDialog() == true)
-            //    {
-            //        string fileName = loadGraph.graphToLoad;
-            //        if (fileName == "fail")
-            //        {
-            //            MessageBox.Show("Please select one of the listed graphs");
-            //        }
-            //        else
-            //        {
-            //        Network toLoad = BinarySerialization.ReadFromBinaryFile<Network>(fileName); //change this to have a file the user wants to open
-            //        RenderGraph(toLoad, fileName); //change this to have a file the user wants to open
-            //        btnDeleteGraph.IsEnabled = true;
-            //        }
-                    
-            //    }
-            //}
-            
-            
+
+            LoadGraph loadGraph = new LoadGraph();
+            if (loadGraph.ShowDialog() == true)
+            {
+                string fileName = loadGraph.graphToLoad;
+                if (fileName == "fail")
+                {
+                    MessageBox.Show("Please select one of the listed graphs");
+                }
+                else
+                {
+                    Network toLoad = BinarySerialization.ReadFromBinaryFile<Network>(fileName); //change this to have a file the user wants to open
+                    RenderGraph(toLoad, fileName); //change this to have a file the user wants to open
+                    btnDeleteGraph.IsEnabled = true;
+                }
+
+            }
+
+
         }
         private void btnLoadGraph_Click(object sender, RoutedEventArgs e)
         {
@@ -101,29 +89,84 @@ namespace Interface_2
 
         public void SaveGraph()
         {
-            //OleDbConnection conn = new OleDbConnection(MainWindow.ConStr);
-            //OleDbCommand cmd = new OleDbCommand();
-            //conn.Open();
-            //cmd.Connection = conn;
-            //string filename = Graph.Name; //change this to have a filename that the user wants
-            //FileStream fs;
-            //if (!File.Exists(filename))
-            //{
-            //    fs = File.Create(filename);
-            //    cmd.CommandText = "INSERT INTO Graph VALUES('" + filename + "','" + DateTime.Today.ToString("MM/dd/yyyy") + "')";
-            //    cmd.ExecuteNonQuery();
-            //    fs.Close();
-            //    BinarySerialization.WriteToBinaryFile(filename, Graph, false);
-            //}
-            //else
-            //{
-            //    Overwrite overwrite = new Overwrite();
-            //    if (overwrite.ShowDialog() == true)
-            //    {
-            //        BinarySerialization.WriteToBinaryFile(filename, Graph, false);
-            //    }
-            //}
-            //MessageBox.Show("Graph saved");
+            OleDbConnection conn = new OleDbConnection(MainWindow.ConStr);
+            OleDbCommand cmd = new OleDbCommand();
+            conn.Open();
+            cmd.Connection = conn;
+            string filename = Graph.Name; //change this to have a filename that the user wants
+            FileStream fs;
+            if (StudentIsLoggedIn())
+            {
+                filename += loggedStudent.ID;
+                filename = "StudentGraphs/" + filename;
+                if (!File.Exists(filename))
+                {
+                    fs = File.Create(filename);
+                    cmd.CommandText = $"INSERT INTO StudentGraph VALUES('{filename}','{loggedStudent.ID}','{Graph.Name}','{DateTime.Today.ToString("dd/MM/yyyy")}','{Graph.GetNumberOfVertices()}','{Graph.GetNumberOfEdges()}','{"s"}')";
+                    cmd.ExecuteNonQuery();
+                    fs.Close();
+                    BinarySerialization.WriteToBinaryFile(filename, Graph, false);
+                    MessageBox.Show("Graph saved");
+                }
+                else
+                {
+                    Overwrite overwrite = new Overwrite();
+                    if (overwrite.ShowDialog() == true)
+                    {
+                        cmd.CommandText = $"UPDATE StudentGraph SET NoVertices = {Graph.GetNumberOfVertices()}, NoEdges = {Graph.GetNumberOfEdges()} WHERE Filename = '{filename}' AND StudentID = '{loggedStudent.ID}'";
+                        BinarySerialization.WriteToBinaryFile(filename, Graph, false);
+                        cmd.ExecuteNonQuery();
+                        MessageBox.Show("Graph saved");
+                    }
+                }
+            }
+            else if(TeacherIsLoggedIn())
+            {
+                filename += loggedTeacher.ID;
+                filename = "TeacherGraphs/" + filename;
+                if (!File.Exists(filename))
+                {
+                fs = File.Create(filename);
+                cmd.CommandText = $"INSERT INTO TeacherGraph VALUES('{filename}','{loggedTeacher.ID}','{Graph.Name}','{DateTime.Today.ToString("dd/MM/yyyy")}','{Graph.GetNumberOfVertices()}','{Graph.GetNumberOfEdges()}','{"t"}')";
+                cmd.ExecuteNonQuery();
+                fs.Close();
+                BinarySerialization.WriteToBinaryFile(filename, Graph, false);
+                MessageBox.Show("Graph saved");
+                }
+                else
+                {
+                    Overwrite overwrite = new Overwrite();
+                    if (overwrite.ShowDialog() == true)
+                    {
+                        cmd.CommandText = $"UPDATE TeacherGraph SET NoVertices = {Graph.GetNumberOfVertices()}, NoEdges = {Graph.GetNumberOfEdges()} WHERE Filename = '{filename}' AND TeacherID = '{loggedTeacher.ID}'";
+                        cmd.ExecuteNonQuery();
+                        BinarySerialization.WriteToBinaryFile(filename, Graph, false);
+                        MessageBox.Show("Graph saved");
+                    }
+                }
+            }
+            else
+            {
+                filename = "GuestGraphs/" + filename;
+                if (!File.Exists(filename))
+                {
+                    fs = File.Create(filename);
+                    cmd.CommandText = $"INSERT INTO GuestGraph VALUES('{filename}','{Graph.Name}','{"g"}')";
+                    cmd.ExecuteNonQuery();
+                    fs.Close();
+                    BinarySerialization.WriteToBinaryFile(filename, Graph, false);
+                    MessageBox.Show("Graph Saved");
+                }
+                else
+                {
+                    Overwrite overwrite = new Overwrite();
+                    if (overwrite.ShowDialog() == true)
+                    {
+                        BinarySerialization.WriteToBinaryFile(filename, Graph, false);
+                        MessageBox.Show("Graph saved");
+                    }
+                }
+            }
         }
         private void btnSaveGraph_Click(object sender, RoutedEventArgs e)   
         {

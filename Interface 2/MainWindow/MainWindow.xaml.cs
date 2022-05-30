@@ -18,8 +18,8 @@ namespace Interface_2
 
     public partial class MainWindow : Window
     {
-        public Teacher loggedTeacher = null; //teacher that is logged in
-        public Student loggedStudent = null; //student that is logged in
+        public static Teacher loggedTeacher = null; //teacher that is logged in
+        public static Student loggedStudent = null; //student that is logged in
         //for the algorithms
         Ellipse lastSelectedVertex;
         Ellipse vertexToConnectTo;

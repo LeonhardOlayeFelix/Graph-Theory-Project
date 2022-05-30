@@ -22,6 +22,7 @@ namespace Interface_2
     public partial class LoadGraph : Window
     {
         public string graphToLoad = "";
+        string usertype = "";
         public LoadGraph()
         {
             InitializeComponent();
@@ -29,7 +30,23 @@ namespace Interface_2
             OleDbCommand cmd = new OleDbCommand();
             conn.Open();
             cmd.Connection = conn;
-            cmd.CommandText = "SELECT GraphName FROM Graph";
+            if (MainWindow.StudentIsLoggedIn())
+            {
+                usertype = "s";
+                string ID = MainWindow.loggedStudent.ID;
+                cmd.CommandText = $"SELECT GraphName FROM StudentGraph WHERE StudentID = '{ID}'";
+            } 
+            else if (MainWindow.TeacherIsLoggedIn())
+            {
+                usertype = "t";
+                string ID = MainWindow.loggedTeacher.ID;
+                cmd.CommandText = $"SELECT GraphName FROM TeacherGraph WHERE TeacherID = '{ID}'";
+            }
+            else
+            {
+                usertype = "g";
+                cmd.CommandText = $"SELECT GraphName FROM GuestGraph";
+            }
             DataTable datatable = new DataTable();
             OleDbDataAdapter dataAdapter = new OleDbDataAdapter(cmd);
             dataAdapter.Fill(datatable);
@@ -44,6 +61,9 @@ namespace Interface_2
             try
             {
                 graphToLoad = cbGraphName.SelectedValue.ToString();
+                if (usertype == "s") { graphToLoad = "StudentGraphs/" + graphToLoad + MainWindow.loggedStudent.ID; }
+                else if (usertype == "t") { graphToLoad = "TeacherGraphs/" + graphToLoad + MainWindow.loggedTeacher.ID; }
+                else if (usertype == "g") { graphToLoad = "GuestGraphs/" + graphToLoad; }
             }
             catch
             {

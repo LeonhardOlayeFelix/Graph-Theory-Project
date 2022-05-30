@@ -268,11 +268,11 @@ namespace Interface_2
             conn.Close();
             return null;
         }//initialises a Teacher class instance given a Teacher ID
-        public bool TeacherIsLoggedIn()
+        public static bool TeacherIsLoggedIn()
         {
             return (loggedTeacher != null);
         }
-        public bool StudentIsLoggedIn()
+        public static bool StudentIsLoggedIn()
         {
             return (loggedStudent != null);
         }
