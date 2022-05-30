@@ -18,7 +18,8 @@ namespace Interface_2
 
     public partial class MainWindow : Window
     {
-
+        public Teacher loggedTeacher = null; //teacher that is logged in
+        public Student loggedStudent = null; //student that is logged in
         //for the algorithms
         Ellipse lastSelectedVertex;
         Ellipse vertexToConnectTo;
@@ -72,32 +73,54 @@ namespace Interface_2
             }
             //now alphabet is populated with "A", "B", "C", "D" ... "AA", "AB", "AC" ... "BA, BB, BC" ... all the way to "ZA, ZB, ZC" so there are many unique ways to
             //represent nodes with letters now
-
             CreateDatabase();
+            LogOutProcess();
         }
-        public const string ConStr = "Provider=Microsoft.Jet.OLEDB.4.0; Data Source=Networking.accdb";
-
-        public void CreateDatabase()
+        public const string ConStr = "Provider=Microsoft.Jet.OLEDB.4.0; Data Source=NetworkDB.accdb";
+        public static void CreateDatabase()
         {
-            if (!File.Exists("Networking.accdb"))
+            if (!File.Exists("NetworkDB.accdb")) //if a file doesnt already exist for the database
             {
+                //establish the connection and then create database
                 ADOX.Catalog cat = new ADOX.Catalog();
                 cat.Create(ConStr);
                 OleDbConnection conn = new OleDbConnection(ConStr);
                 conn.Open();
                 OleDbCommand cmd = new OleDbCommand();
                 cmd.Connection = conn;
-                string SQL = "";
-                SQL += "CREATE TABLE Graph(GraphName VARCHAR(15), DateMade DATE, PRIMARY KEY(GraphName))";
-                cmd.CommandText = SQL;
+                cmd.CommandText = "CREATE TABLE Student(StudentID VARCHAR(5), FirstName VARCHAR(30), LastName VARCHAR(30), DateOfBirth DATE, Email VARCHAR(100), SPassword VARCHAR(30), NoAssignmentsSubmitted INTEGER, NoDijkstras INTEGER, NoRInsp INTEGER, NoBFS INTEGER, NoDFS INTEGER, NoPrims INTEGER, NoGraph INTEGER, DateCreated DATE, PRIMARY KEY(StudentID))";
+                cmd.ExecuteNonQuery();
+                cmd.CommandText = "CREATE TABLE Teacher(TeacherID VARCHAR(5), FirstName VARCHAR(30), LastName VARCHAR(30), Email VARCHAR(100), TPassword VARCHAR(30), Title VARCHAR(7), PRIMARY KEY(TeacherID))";
+                cmd.ExecuteNonQuery();
+                cmd.CommandText = "CREATE TABLE StudentGraph(Filename VARCHAR(30), StudentID VARCHAR(5), GraphName VARCHAR(25), DateCreated DATE, NoVertices INTEGER, NoEdges INTEGER, CreatedBy CHAR(1), PRIMARY KEY(Filename), FOREIGN KEY (StudentID) REFERENCES Student(StudentID))";
+                cmd.ExecuteNonQuery();
+                cmd.CommandText = "CREATE TABLE TeacherGraph(Filename VARCHAR(30), TeacherID VARCHAR(5), GraphName VARCHAR(25), DateCreated DATE, NoVertices INTEGER, NoEdges INTEGER, CreatedBy CHAR(1), PRIMARY KEY(Filename), FOREIGN KEY (TeacherID) REFERENCES Teacher(TeacherID))";
+                cmd.ExecuteNonQuery();
+                cmd.CommandText = "CREATE TABLE GuestGraph(Filename VARCHAR(30), GraphName VARCHAR(25), CreatedBy CHAR(1), PRIMARY KEY(Filename))";
+                cmd.ExecuteNonQuery();
+                cmd.CommandText = "CREATE TABLE Assignment(AssignmentID VARCHAR(5), StudentID VARCHAR(5), Filename VARCHAR(30), SetBy VARCHAR(5), GraphName VARCHAR(25), DateSet DATE, DateDue DATE, isLate CHAR(1), isCompleted CHAR(1), PRIMARY KEY(AssignmentID), FOREIGN KEY (StudentID) REFERENCES Student(StudentID))";
+                cmd.ExecuteNonQuery();
+                cmd.CommandText = "CREATE TABLE Class(ClassID VARCHAR(5), TeacherID VARCHAR(5), ClassName VARCHAR(30), PRIMARY KEY(ClassID), FOREIGN KEY (TeacherID) REFERENCES Teacher(TeacherID))";
+                cmd.ExecuteNonQuery();
+                cmd.CommandText = "CREATE TABLE ClassEnrollment(ClassID VARCHAR(5), StudentID VARCHAR(5), FirstName VARCHAR(30), LastName VARCHAR(30), EnrollDate DATE, FOREIGN KEY (ClassID) REFERENCES Class(ClassID), FOREIGN KEY (StudentID) REFERENCES Student(StudentID))";
                 cmd.ExecuteNonQuery();
                 conn.Close();
             }
-        }
+        }//creates a database
 
         private void btnRevertOnePositions_Click(object sender, RoutedEventArgs e)
         {
             ActivateButton(sender);
+        }
+
+        private void btnRegisterStudent_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnRegisterTeacher_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

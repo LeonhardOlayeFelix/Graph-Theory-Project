@@ -115,7 +115,7 @@ namespace Interface_2
             Canvas.SetLeft(weightLabel, MidPointX - 4);
             Canvas.SetTop(weightLabel, MidPointY - 9);
             Canvas.SetZIndex(weightLabel, 1); //needs to be visible above the line
-
+            temp.MouseMove += mouseMove;
             //add a new edge tuple to the list
             edgeList.Add(Tuple.Create(temp, smallerEllipse, largerEllipse, weightLabel));
             //if the weight is 0, show it as an unweighted edge
@@ -250,19 +250,19 @@ namespace Interface_2
         public void CreateNewGraph(string graphName, bool rendering = false) //creates a new graph
         {
             //check if a graph with that name already exists
-            OleDbConnection conn = new OleDbConnection(ConStr);
-            OleDbCommand cmd = new OleDbCommand();
-            OleDbCommand cmd2 = new OleDbCommand();
-            cmd.Connection = conn;
-            conn.Open();
-            cmd.CommandText = "SELECT * FROM Graph WHERE GraphName = '" + graphName + "'"; //check if there are any graphs with that name
-            OleDbDataReader reader = cmd.ExecuteReader();
-            if (reader.HasRows && !rendering)
-            {
-                MessageBox.Show("A graph with that name already exists, to load it, press the load button");
-            }
-            else
-            {
+            //OleDbConnection conn = new OleDbConnection(ConStr);
+            //OleDbCommand cmd = new OleDbCommand();
+            //OleDbCommand cmd2 = new OleDbCommand();
+            //cmd.Connection = conn;
+            //conn.Open();
+            //cmd.CommandText = "SELECT * FROM Graph WHERE GraphName = '" + graphName + "'"; //check if there are any graphs with that name
+            //OleDbDataReader reader = cmd.ExecuteReader();
+            //if (reader.HasRows && !rendering)
+            //{
+            //    MessageBox.Show("A graph with that name already exists, to load it, press the load button");
+            //}
+            //else
+            //{
                 
                 edgeList = new HashSet<Tuple<Line, Ellipse, Ellipse, TextBlock>>();
                 Graph = new Network();
@@ -277,8 +277,8 @@ namespace Interface_2
                 EnableTbCtrl();
                 btnDeleteGraph.IsEnabled = true;
                 btnSaveGraph.IsEnabled = true;
-            }
-            conn.Close();
+            //}
+            //conn.Close();
         }
         private void btnDeleteGraph_Click(object sender, RoutedEventArgs e)
         {

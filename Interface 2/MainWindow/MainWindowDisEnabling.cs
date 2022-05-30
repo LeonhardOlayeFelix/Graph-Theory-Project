@@ -65,6 +65,7 @@ namespace Interface_2
             btnDragAndDrop.IsEnabled = false;
             btnDefault.IsEnabled = false;
             btnGenerateMatrix.IsEnabled = false;
+            
         }
         public void EnableAllActionButtons()
         {
@@ -77,6 +78,7 @@ namespace Interface_2
             btnDragAndDrop.IsEnabled = true;
             btnDefault.IsEnabled = true;
             btnGenerateMatrix.IsEnabled = true;
+            
         }
     }
 }

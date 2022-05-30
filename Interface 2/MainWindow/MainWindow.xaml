@@ -78,13 +78,26 @@
                HorizontalAlignment="Left"
                VerticalAlignment="Bottom"
                x:Name="labelExtraInfo" Height="28" Width="610" Margin="7,0,0,7"/>
+                <Label Foreground="White"
+                    FontSize="15"
+                    FontWeight="Medium"
+                    Content="Logged in as: Guest"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    x:Name="txLoggedInAs" Height="34" Width="259" Margin="622,8,0,19"/>
+                <Label Foreground="White"
+                    FontSize="15"
+                    FontWeight="Medium"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    x:Name="txLoggedID" Height="34" Width="183" Margin="622,27,0,0"/>
             </Grid>
             <GroupBox Grid.Column="1" 
                       Panel.ZIndex="3"
                   Background="White" 
                   Margin="7">
-                
-                    <GroupBox.Header>
+
+                <GroupBox.Header>
                     <Label>Options</Label>
                 </GroupBox.Header>
                 <StackPanel>
@@ -194,10 +207,10 @@
                                         Login In in order to save Graphs
                                         </TextBlock>
                                         <Button Margin="20,14,20,6"
-                                            x:Name="btnSignUp"
+                                            x:Name="btnRegisterStudent"
                                             Grid.Row="1"
-                                            Click="btnSignUp_Click">
-                                            Sign Up
+                                            Click="btnRegisterStudent_Click">
+                                            Register As Student
                                         </Button>
                                         <TextBlock Foreground="Black"
                                                Grid.Row="1"
@@ -208,10 +221,10 @@
                                         Sign Up in order to save Graphs
                                         </TextBlock>
                                         <Button Margin="20,14,20,6"
-                                            x:Name="btnSignOut"
+                                            x:Name="btnRegisterTeacher"
                                             Grid.Row="2"
-                                            Click="btnSignOut_Click">
-                                            Sign Out
+                                            Click="btnRegisterTeacher_Click">
+                                            Register As Teacher
                                         </Button>
                                         <TextBlock Foreground="Black"
                                                Grid.Row="2"
@@ -222,10 +235,10 @@
                                         Sign out of your account
                                         </TextBlock>
                                         <Button Margin="20,14,20,6"
-                                            x:Name="btnClose"
+                                            x:Name="btnLogOut"
                                             Grid.Row="3"
-                                            Click="btnClose_Click">
-                                            Close
+                                            Click="btnLogOut_Click">
+                                            Log Out
                                         </Button>
                                         <TextBlock Foreground="Black"
                                                Grid.Row="3"

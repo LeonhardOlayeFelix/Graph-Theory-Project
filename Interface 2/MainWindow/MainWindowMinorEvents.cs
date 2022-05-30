@@ -61,35 +61,35 @@ namespace Interface_2
 
         public void LoadGraph()
         {
-            OleDbConnection conn = new OleDbConnection(MainWindow.ConStr);
-            OleDbCommand cmd = new OleDbCommand();
-            conn.Open();
-            cmd.Connection = conn;
-            cmd.CommandText = "SELECT GraphName FROM Graph";
-            OleDbDataReader reader2 = cmd.ExecuteReader();
-            if (!reader2.HasRows)
-            {
-                MessageBox.Show("No graphs have previously been saved");
-            }
-            else
-            {
-                LoadGraph loadGraph = new LoadGraph();
-                if (loadGraph.ShowDialog() == true)
-                {
-                    string fileName = loadGraph.graphToLoad;
-                    if (fileName == "fail")
-                    {
-                        MessageBox.Show("Please select one of the listed graphs");
-                    }
-                    else
-                    {
-                    Network toLoad = BinarySerialization.ReadFromBinaryFile<Network>(fileName); //change this to have a file the user wants to open
-                    RenderGraph(toLoad, fileName); //change this to have a file the user wants to open
-                    btnDeleteGraph.IsEnabled = true;
-                    }
+            //OleDbConnection conn = new OleDbConnection(MainWindow.ConStr);
+            //OleDbCommand cmd = new OleDbCommand();
+            //conn.Open();
+            //cmd.Connection = conn;
+            //cmd.CommandText = "SELECT GraphName FROM Graph";
+            //OleDbDataReader reader2 = cmd.ExecuteReader();
+            //if (!reader2.HasRows)
+            //{
+            //    MessageBox.Show("No graphs have previously been saved");
+            //}
+            //else
+            //{
+            //    LoadGraph loadGraph = new LoadGraph();
+            //    if (loadGraph.ShowDialog() == true)
+            //    {
+            //        string fileName = loadGraph.graphToLoad;
+            //        if (fileName == "fail")
+            //        {
+            //            MessageBox.Show("Please select one of the listed graphs");
+            //        }
+            //        else
+            //        {
+            //        Network toLoad = BinarySerialization.ReadFromBinaryFile<Network>(fileName); //change this to have a file the user wants to open
+            //        RenderGraph(toLoad, fileName); //change this to have a file the user wants to open
+            //        btnDeleteGraph.IsEnabled = true;
+            //        }
                     
-                }
-            }
+            //    }
+            //}
             
             
         }
@@ -101,29 +101,29 @@ namespace Interface_2
 
         public void SaveGraph()
         {
-            OleDbConnection conn = new OleDbConnection(MainWindow.ConStr);
-            OleDbCommand cmd = new OleDbCommand();
-            conn.Open();
-            cmd.Connection = conn;
-            string filename = Graph.Name; //change this to have a filename that the user wants
-            FileStream fs;
-            if (!File.Exists(filename))
-            {
-                fs = File.Create(filename);
-                cmd.CommandText = "INSERT INTO Graph VALUES('" + filename + "','" + DateTime.Today.ToString("MM/dd/yyyy") + "')";
-                cmd.ExecuteNonQuery();
-                fs.Close();
-                BinarySerialization.WriteToBinaryFile(filename, Graph, false);
-            }
-            else
-            {
-                Overwrite overwrite = new Overwrite();
-                if (overwrite.ShowDialog() == true)
-                {
-                    BinarySerialization.WriteToBinaryFile(filename, Graph, false);
-                }
-            }
-            MessageBox.Show("Graph saved");
+            //OleDbConnection conn = new OleDbConnection(MainWindow.ConStr);
+            //OleDbCommand cmd = new OleDbCommand();
+            //conn.Open();
+            //cmd.Connection = conn;
+            //string filename = Graph.Name; //change this to have a filename that the user wants
+            //FileStream fs;
+            //if (!File.Exists(filename))
+            //{
+            //    fs = File.Create(filename);
+            //    cmd.CommandText = "INSERT INTO Graph VALUES('" + filename + "','" + DateTime.Today.ToString("MM/dd/yyyy") + "')";
+            //    cmd.ExecuteNonQuery();
+            //    fs.Close();
+            //    BinarySerialization.WriteToBinaryFile(filename, Graph, false);
+            //}
+            //else
+            //{
+            //    Overwrite overwrite = new Overwrite();
+            //    if (overwrite.ShowDialog() == true)
+            //    {
+            //        BinarySerialization.WriteToBinaryFile(filename, Graph, false);
+            //    }
+            //}
+            //MessageBox.Show("Graph saved");
         }
         private void btnSaveGraph_Click(object sender, RoutedEventArgs e)   
         {
@@ -169,26 +169,61 @@ namespace Interface_2
             labelExtraInfo.Content = "Click freely around the Canvas";
             ActivateButton(sender);
         }
-        
-
-        
-
-        private void btnClose_Click(object sender, RoutedEventArgs e)
-        {
-            this.Close();
-        }
-
+       
         private void btnLogin_Click(object sender, RoutedEventArgs e)
         {
+            this.Hide();
+            LoginStudent loginstudent = new LoginStudent();
+            if (loginstudent.ShowDialog() == true)
+            {
+                if (loginstudent.studentJustLogged != null)
+                {
+                    loggedStudent = loginstudent.studentJustLogged;
+                    txLoggedID.Content = "ID: " + loggedStudent.ID;
+                    txLoggedInAs.Content = "Logged in as: " + loggedStudent.firstname + " " + loggedStudent.lastname;
+                }
+                else
+                {
+                    loggedTeacher = loginstudent.teacherJustLogged;
+                    txLoggedID.Content = "ID: " + loggedTeacher.ID;
+                    txLoggedInAs.Content = "Logged in as: " + loggedTeacher.title + " " + loggedTeacher.firstname[0] + " " + loggedTeacher.lastname;
+                }
+                LogInProcess();
+            }
+            this.Show();
         }
-
-        private void btnSignOut_Click(object sender, RoutedEventArgs e)
+        private void LogInProcess()
         {
+            btnRegisterStudent.IsEnabled = false;
+            btnLogin.IsEnabled = false;
+            btnRegisterTeacher.IsEnabled = false;
+            btnLogOut.IsEnabled = true;
         }
-
-        private void btnSignUp_Click(object sender, RoutedEventArgs e)
+        private void LogOutProcess()
+        {
+            loggedStudent = null;
+            loggedTeacher = null;
+            btnLogin.IsEnabled = true;
+            btnRegisterStudent.IsEnabled = true;
+            btnRegisterTeacher.IsEnabled = true;
+            btnLogOut.IsEnabled = false;
+            txLoggedID.Content = "";
+            txLoggedInAs.Content = "Logged in as: Guest";
+        }
+        private void btnLoginTeacher_Click(object sender, RoutedEventArgs e)
         {
 
         }
+
+        private void btnRegister_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnLogOut_Click(object sender, RoutedEventArgs e)
+        {
+            LogOutProcess();
+        }
+
     }
 }
