@@ -176,28 +176,53 @@ namespace Interface_2
             LoginStudent loginstudent = new LoginStudent();
             if (loginstudent.ShowDialog() == true)
             {
-                if (loginstudent.studentJustLogged != null)
+                if (loginstudent.studentJustLogged != null) //this identifies whther they are logged in as a student
                 {
-                    loggedStudent = loginstudent.studentJustLogged;
+                    loggedStudent = loginstudent.studentJustLogged; //initiliase the student instance
                     txLoggedID.Content = "ID: " + loggedStudent.ID;
                     txLoggedInAs.Content = "Logged in as: " + loggedStudent.firstname + " " + loggedStudent.lastname;
+                    StudentLogInProcess();
                 }
                 else
                 {
-                    loggedTeacher = loginstudent.teacherJustLogged;
+                    loggedTeacher = loginstudent.teacherJustLogged; //initialise the teacher instance
                     txLoggedID.Content = "ID: " + loggedTeacher.ID;
                     txLoggedInAs.Content = "Logged in as: " + loggedTeacher.title + " " + loggedTeacher.firstname[0] + " " + loggedTeacher.lastname;
+                    TeacherLogInProcess();
                 }
-                LogInProcess();
             }
             this.Show();
+            
         }
-        private void LogInProcess()
+        private void btnRegisterStudent_Click(object sender, RoutedEventArgs e)
+        {
+            RegisterStudent registerstudent = new RegisterStudent();
+            this.Hide();
+            registerstudent.ShowDialog();
+            this.Show();
+        }
+        private void btnRegisterTeacher_Click(object sender, RoutedEventArgs e)
+        {
+            RegisterTeacher registerteacher = new RegisterTeacher();
+            this.Hide();
+            registerteacher.ShowDialog();
+            this.Show();
+        }
+        private void StudentLogInProcess()
         {
             btnRegisterStudent.IsEnabled = false;
             btnLogin.IsEnabled = false;
             btnRegisterTeacher.IsEnabled = false;
             btnLogOut.IsEnabled = true;
+            DeleteGraph();
+        }
+        private void TeacherLogInProcess()
+        {
+            btnRegisterStudent.IsEnabled = false;
+            btnLogin.IsEnabled = false;
+            btnRegisterTeacher.IsEnabled = false;
+            btnLogOut.IsEnabled = true;
+            DeleteGraph();
         }
         private void LogOutProcess()
         {
@@ -209,16 +234,10 @@ namespace Interface_2
             btnLogOut.IsEnabled = false;
             txLoggedID.Content = "";
             txLoggedInAs.Content = "Logged in as: Guest";
-        }
-        private void btnLoginTeacher_Click(object sender, RoutedEventArgs e)
-        {
+            DeleteGraph();
 
         }
-
-        private void btnRegister_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
+       
 
         private void btnLogOut_Click(object sender, RoutedEventArgs e)
         {

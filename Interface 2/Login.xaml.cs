@@ -72,7 +72,6 @@ namespace Interface_2
             }
             else
             {
-                this.DialogResult = false;
                 MessageBox.Show("Email or Password was incorrect. Please try again.");
             }
         }

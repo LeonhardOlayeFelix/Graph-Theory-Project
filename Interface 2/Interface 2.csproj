@@ -82,15 +82,15 @@
     <Compile Include="Login.xaml.cs">
       <DependentUpon>Login.xaml</DependentUpon>
     </Compile>
-    <Compile Include="LoginTeacher.xaml.cs">
-      <DependentUpon>LoginTeacher.xaml</DependentUpon>
-    </Compile>
     <Compile Include="MainWindow\Databases.cs" />
     <Compile Include="Overwrite.xaml.cs">
       <DependentUpon>Overwrite.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Register.xaml.cs">
-      <DependentUpon>Register.xaml</DependentUpon>
+    <Compile Include="RegisterStudent.xaml.cs">
+      <DependentUpon>RegisterStudent.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="RegisterTeacher.xaml.cs">
+      <DependentUpon>RegisterTeacher.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserClass\User.cs" />
     <Page Include="LoadGraph.xaml">
@@ -101,15 +101,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="LoginTeacher.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Overwrite.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Register.xaml">
+    <Page Include="RegisterStudent.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="RegisterTeacher.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

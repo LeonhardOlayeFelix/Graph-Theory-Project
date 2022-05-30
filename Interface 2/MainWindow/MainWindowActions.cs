@@ -274,6 +274,7 @@ namespace Interface_2
                 graphCreated = true;
                 labelGraphName.Content = graphName;
                 EnableAllActionButtons(); //can only navigate buttons when a graph is created
+                EnableAllAlgoButtons();
                 EnableTbCtrl();
                 btnDeleteGraph.IsEnabled = true;
                 btnSaveGraph.IsEnabled = true;
@@ -297,6 +298,8 @@ namespace Interface_2
         public void DeleteGraph()
         {
             //set all of the variables to null
+            DisableAllActionButtons();
+            DisableAllAlgoButtons();
             mainCanvas.Children.Clear();
             btnDeleteGraph.IsEnabled = false;
             labelGraphName.Content = "";

@@ -1,24 +1,29 @@
-﻿<Window x:Class="Interface_2.LoginStudent"
+﻿<Window x:Class="Interface_2.RegisterStudent"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Interface_2"
         mc:Ignorable="d"
-        WindowStartupLocation="CenterScreen"
-        ResizeMode="NoResize"
         Background="#403D3D"
-        Title="LoginStudent" Height="350" Width="330">
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
+        Title="RegisterStudent" Height="475" Width="330">
     <Border Background="Black" Margin="20" CornerRadius="20">
         <StackPanel Margin="20">
-            <Label Content="Login" Foreground="White" FontSize="25" HorizontalAlignment="Center"/>
+            <Label Content="Student Registration" Foreground="White" FontSize="25" HorizontalAlignment="Center"/>
             <Separator></Separator>
             <Label Content="Email" Foreground="white"/>
             <TextBox x:Name="txEmail" Background="#403D3D" Foreground="White" FontSize="18"/>
             <Label Content="Password" Foreground="white"/>
             <TextBox x:Name="txPassword"  Background="#403D3D" Foreground="White" FontSize="18"/>
+            <Label Content="Firstname" Foreground="white"/>
+            <TextBox x:Name="txFirstname"  Background="#403D3D" Foreground="White" FontSize="18"/>
+            <Label Content="Lastname" Foreground="white"/>
+            <TextBox x:Name="txLastname"  Background="#403D3D" Foreground="White" FontSize="18"/>
+            <DatePicker x:Name ="dpDob" Margin="0,10,0,0" Background="#403D3D"/>
             <StackPanel Orientation="Horizontal" Margin="0,20,0,0" >
-                <Button x:Name ="btnLoginStudentConfirm" Click="btnLoginStudentConfirm_Click" Width="115" Background="#403D3D" Foreground="White" FontSize="18" Content="Login" Margin="0,10,0,0"/>
+                <Button x:Name ="btnRegisterStudentConfirm" Click="btnRegisterStudentConfirm_Click" Width="115" Background="#403D3D" Foreground="White" FontSize="18" Content="Register" Margin="0,10,0,0"/>
                 <Button x:Name ="btnExitStudentLogin" Click="btnExitStudentLogin_Click"  Width="115" Background="#403D3D" Foreground="White" FontSize="18" Content="Exit" Margin="14,10,0,0"/>
             </StackPanel>
         </StackPanel>

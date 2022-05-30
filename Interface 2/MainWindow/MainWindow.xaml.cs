@@ -113,14 +113,6 @@ namespace Interface_2
             ActivateButton(sender);
         }
 
-        private void btnRegisterStudent_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void btnRegisterTeacher_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
+        
     }
 }
