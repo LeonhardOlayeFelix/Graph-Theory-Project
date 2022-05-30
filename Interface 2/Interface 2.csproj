@@ -76,40 +76,40 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="LoadGraph.xaml.cs">
+    <Compile Include="SecondaryWindows\LoadGraph.xaml.cs">
       <DependentUpon>LoadGraph.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Login.xaml.cs">
+    <Compile Include="Accounts\Login.xaml.cs">
       <DependentUpon>Login.xaml</DependentUpon>
     </Compile>
     <Compile Include="MainWindow\Databases.cs" />
-    <Compile Include="Overwrite.xaml.cs">
+    <Compile Include="SecondaryWindows\Overwrite.xaml.cs">
       <DependentUpon>Overwrite.xaml</DependentUpon>
     </Compile>
-    <Compile Include="RegisterStudent.xaml.cs">
+    <Compile Include="Accounts\RegisterStudent.xaml.cs">
       <DependentUpon>RegisterStudent.xaml</DependentUpon>
     </Compile>
-    <Compile Include="RegisterTeacher.xaml.cs">
+    <Compile Include="Accounts\RegisterTeacher.xaml.cs">
       <DependentUpon>RegisterTeacher.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserClass\User.cs" />
-    <Page Include="LoadGraph.xaml">
+    <Page Include="SecondaryWindows\LoadGraph.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Login.xaml">
+    <Page Include="Accounts\Login.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Overwrite.xaml">
+    <Page Include="SecondaryWindows\Overwrite.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="RegisterStudent.xaml">
+    <Page Include="Accounts\RegisterStudent.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="RegisterTeacher.xaml">
+    <Page Include="Accounts\RegisterTeacher.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
