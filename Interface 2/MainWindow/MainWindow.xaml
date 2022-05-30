@@ -204,13 +204,13 @@
                                                Margin="29,0,30,24"
                                                FontSize="10"
                                                HorizontalAlignment="Center">
-                                        Login In in order to save Graphs
+                                        Login as a Student or Teacher
                                         </TextBlock>
                                         <Button Margin="20,14,20,6"
                                             x:Name="btnRegisterStudent"
                                             Grid.Row="1"
                                             Click="btnRegisterStudent_Click">
-                                            Register As Student
+                                            Register an account as a Student
                                         </Button>
                                         <TextBlock Foreground="Black"
                                                Grid.Row="1"
@@ -232,7 +232,7 @@
                                                Margin="29,0,30,24"
                                                FontSize="10"
                                                HorizontalAlignment="Center">
-                                        Sign out of your account
+                                        Register an account as a teacher
                                         </TextBlock>
                                         <Button Margin="20,14,20,6"
                                             x:Name="btnLogOut"
@@ -246,7 +246,8 @@
                                                Margin="29,0,30,24"
                                                FontSize="10"
                                                HorizontalAlignment="Center">
-                                        Close the graphing Simulator
+                                        Log out of your account
+                                            
                                         </TextBlock>
 
                                     </Grid>
@@ -323,12 +324,12 @@
                                             IsEnabled="False">
                                             Delete Graph
                                         </Button>
-                                        <TextBlock Foreground="Red"
+                                        <TextBlock Foreground="Black"
                                                Grid.Row="2"
                                                Height="20" 
                                                Margin="29,0,30,24"
                                                FontSize="10"
-                                               HorizontalAlignment="Center">You <Bold>MUST</Bold> be logged in to do this</TextBlock>
+                                               HorizontalAlignment="Center">Load a graph saved in the database</TextBlock>
                                         <Button Margin="20,15,20,5"
                                             x:Name="btnLoadGraph"
                                             Grid.Column="0"
@@ -336,12 +337,12 @@
                                             Click="btnLoadGraph_Click">
                                             Load Graph
                                         </Button>
-                                        <TextBlock Foreground="Red"
+                                        <TextBlock Foreground="Black"
                                                Grid.Row="3"
                                                Height="20" 
                                                Margin="29,0,30,24"
                                                FontSize="10"
-                                               HorizontalAlignment="Center">You <Bold>MUST</Bold> be logged in to do this</TextBlock>
+                                               HorizontalAlignment="Center">Save a graph to the database</TextBlock>
                                         <Button Margin="20,15,20,5"
                                             x:Name="btnSaveGraph"
                                             Grid.Row="3"
