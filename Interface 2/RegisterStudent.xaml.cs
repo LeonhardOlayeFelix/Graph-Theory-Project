@@ -46,7 +46,7 @@ namespace Interface_2
             {
                 string ID = MainWindow.NextID("S");
                 newStudent = new Student(firstname, lastname, email, password, dpDob.SelectedDate.Value, ID);
-                MainWindow.SaveStudent(newStudent);
+                MainWindow.SaveStudent(newStudent); //adds the student to the database using a function defined in another file
                 this.DialogResult = true;
                 this.Close();
                 MessageBox.Show("Successuflly Signed Up. You can now log in with this account");

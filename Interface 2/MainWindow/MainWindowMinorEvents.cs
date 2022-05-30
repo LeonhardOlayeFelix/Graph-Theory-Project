@@ -62,18 +62,18 @@ namespace Interface_2
         public void LoadGraph()
         {
 
-            LoadGraph loadGraph = new LoadGraph();
+            LoadGraph loadGraph = new LoadGraph(); //open the loadgraph window
             if (loadGraph.ShowDialog() == true)
             {
-                string fileName = loadGraph.graphToLoad;
+                string fileName = loadGraph.graphToLoad; //get the file name from the other window
                 if (fileName == "fail")
                 {
                     MessageBox.Show("Please select one of the listed graphs");
                 }
                 else
                 {
-                    Network toLoad = BinarySerialization.ReadFromBinaryFile<Network>(fileName); //change this to have a file the user wants to open
-                    RenderGraph(toLoad, fileName); //change this to have a file the user wants to open
+                    Network toLoad = BinarySerialization.ReadFromBinaryFile<Network>(fileName); //read the file into the toLoad class instance
+                    RenderGraph(toLoad, fileName); //render the just-loaded graph onto the screen 
                     btnDeleteGraph.IsEnabled = true;
                 }
 
@@ -95,24 +95,28 @@ namespace Interface_2
             cmd.Connection = conn;
             string filename = Graph.Name; //change this to have a filename that the user wants
             FileStream fs;
-            if (StudentIsLoggedIn())
+            if (StudentIsLoggedIn()) //do this portion if the user is saving graphs as a student
             {
                 filename += loggedStudent.ID;
-                filename = "StudentGraphs/" + filename;
-                if (!File.Exists(filename))
+                filename = "StudentGraphs/" + filename; //format the filename we expect to find
+                if (!File.Exists(filename)) //if that file didnt already exist then create the file and write the class instance to that file
                 {
-                    fs = File.Create(filename);
+                    fs = File.Create(filename); 
+                    //update the database to include that new file
                     cmd.CommandText = $"INSERT INTO StudentGraph VALUES('{filename}','{loggedStudent.ID}','{Graph.Name}','{DateTime.Today.ToString("dd/MM/yyyy")}','{Graph.GetNumberOfVertices()}','{Graph.GetNumberOfEdges()}','{"s"}')";
                     cmd.ExecuteNonQuery();
                     fs.Close();
+                    //write the class instance to the binary file
                     BinarySerialization.WriteToBinaryFile(filename, Graph, false);
                     MessageBox.Show("Graph saved");
                 }
                 else
                 {
+                    //if the file did exist then ask the user if they want to over write
                     Overwrite overwrite = new Overwrite();
                     if (overwrite.ShowDialog() == true)
                     {
+                        //update the record since they are overwriting
                         cmd.CommandText = $"UPDATE StudentGraph SET NoVertices = {Graph.GetNumberOfVertices()}, NoEdges = {Graph.GetNumberOfEdges()} WHERE Filename = '{filename}' AND StudentID = '{loggedStudent.ID}'";
                         BinarySerialization.WriteToBinaryFile(filename, Graph, false);
                         cmd.ExecuteNonQuery();
@@ -120,24 +124,27 @@ namespace Interface_2
                     }
                 }
             }
-            else if(TeacherIsLoggedIn())
+            else if(TeacherIsLoggedIn()) //do this portion if the user is saving graphs as a teacher
             {
                 filename += loggedTeacher.ID;
-                filename = "TeacherGraphs/" + filename;
-                if (!File.Exists(filename))
+                filename = "TeacherGraphs/" + filename; //format the filename we expect we find
+                if (!File.Exists(filename))//if that file didnt already exist then create the file and write the class instance to that file
                 {
                 fs = File.Create(filename);
                 cmd.CommandText = $"INSERT INTO TeacherGraph VALUES('{filename}','{loggedTeacher.ID}','{Graph.Name}','{DateTime.Today.ToString("dd/MM/yyyy")}','{Graph.GetNumberOfVertices()}','{Graph.GetNumberOfEdges()}','{"t"}')";
                 cmd.ExecuteNonQuery();
                 fs.Close();
+                //write the class instance to the database
                 BinarySerialization.WriteToBinaryFile(filename, Graph, false);
                 MessageBox.Show("Graph saved");
                 }
                 else
                 {
+                    //if the file did exist then ask the user if they want to over write
                     Overwrite overwrite = new Overwrite();
                     if (overwrite.ShowDialog() == true)
                     {
+                        //update the record since they are overwriting
                         cmd.CommandText = $"UPDATE TeacherGraph SET NoVertices = {Graph.GetNumberOfVertices()}, NoEdges = {Graph.GetNumberOfEdges()} WHERE Filename = '{filename}' AND TeacherID = '{loggedTeacher.ID}'";
                         cmd.ExecuteNonQuery();
                         BinarySerialization.WriteToBinaryFile(filename, Graph, false);
@@ -145,15 +152,17 @@ namespace Interface_2
                     }
                 }
             }
-            else
+            else //this is if the user is saving as a guest
             {
-                filename = "GuestGraphs/" + filename;
-                if (!File.Exists(filename))
+                filename = "GuestGraphs/" + filename; //format the filename
+                if (!File.Exists(filename)) //if the file doesnt already exist
                 {
-                    fs = File.Create(filename);
+                    fs = File.Create(filename); 
+                    //update the database
                     cmd.CommandText = $"INSERT INTO GuestGraph VALUES('{filename}','{Graph.Name}','{"g"}')";
                     cmd.ExecuteNonQuery();
                     fs.Close();
+                    //write it to the file
                     BinarySerialization.WriteToBinaryFile(filename, Graph, false);
                     MessageBox.Show("Graph Saved");
                 }

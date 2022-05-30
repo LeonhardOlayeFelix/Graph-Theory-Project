@@ -40,7 +40,7 @@ namespace Interface_2
             {
                 string ID = MainWindow.NextID("T");
                 newTeacher = new Teacher(firstname, lastname, email, password, title, ID);
-                MainWindow.SaveTeacher(newTeacher);
+                MainWindow.SaveTeacher(newTeacher); //add the new teacher to the database using a function defined in another file
                 this.DialogResult = true;
                 this.Close();
                 MessageBox.Show("Successuflly Signed Up. You can now log in with this account");
