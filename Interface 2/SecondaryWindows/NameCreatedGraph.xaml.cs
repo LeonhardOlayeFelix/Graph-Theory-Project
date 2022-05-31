@@ -41,5 +41,10 @@ namespace Interface_2
         {
 
         }
+
+        private void btnExit_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

@@ -73,7 +73,7 @@ namespace Interface_2
                 else
                 {
                     Network toLoad = BinarySerialization.ReadFromBinaryFile<Network>(fileName); //read the file into the toLoad class instance
-                    RenderGraph(toLoad, fileName); //render the just-loaded graph onto the screen 
+                    RenderGraph(toLoad); //render the just-loaded graph onto the screen 
                     btnDeleteGraph.IsEnabled = true;
                 }
 
@@ -224,7 +224,6 @@ namespace Interface_2
        
         private void btnLogin_Click(object sender, RoutedEventArgs e)
         {
-            this.Hide();
             LoginStudent loginstudent = new LoginStudent();
             if (loginstudent.ShowDialog() == true)
             {
@@ -243,22 +242,16 @@ namespace Interface_2
                     TeacherLogInProcess();
                 }
             }
-            this.Show();
-            
         }
         private void btnRegisterStudent_Click(object sender, RoutedEventArgs e)
         {
             RegisterStudent registerstudent = new RegisterStudent();
-            this.Hide();
             registerstudent.ShowDialog();
-            this.Show();
         }
         private void btnRegisterTeacher_Click(object sender, RoutedEventArgs e)
         {
             RegisterTeacher registerteacher = new RegisterTeacher();
-            this.Hide();
             registerteacher.ShowDialog();
-            this.Show();
         }
         private void StudentLogInProcess()
         {

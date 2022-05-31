@@ -247,39 +247,63 @@ namespace Interface_2
                 txAdjset.Clear();
             }
         }
+        
         public void CreateNewGraph(string graphName, bool rendering = false) //creates a new graph
         {
-            //check if a graph with that name already exists
-            //OleDbConnection conn = new OleDbConnection(ConStr);
-            //OleDbCommand cmd = new OleDbCommand();
-            //OleDbCommand cmd2 = new OleDbCommand();
-            //cmd.Connection = conn;
-            //conn.Open();
-            //cmd.CommandText = "SELECT * FROM Graph WHERE GraphName = '" + graphName + "'"; //check if there are any graphs with that name
-            //OleDbDataReader reader = cmd.ExecuteReader();
-            //if (reader.HasRows && !rendering)
-            //{
-            //    MessageBox.Show("A graph with that name already exists, to load it, press the load button");
-            //}
-            //else
-            //{
-                
+            bool AlreadyExists = false; //tells us whether we should carry on with creating the graph later on
+            OleDbConnection conn = new OleDbConnection(MainWindow.ConStr);
+            conn.Open();
+            OleDbCommand cmd = new OleDbCommand();
+            cmd.Connection = conn;
+            //check whether a graph with the given name already exists for that type of user
+            if (StudentIsLoggedIn() && !rendering)
+            {
+                cmd.CommandText = $"SELECT * FROM StudentGraph WHERE StudentID = '{loggedStudent.ID}' AND GraphName = '{graphName}'";
+                OleDbDataReader reader = cmd.ExecuteReader();
+                if (reader.HasRows)
+                {
+                    AlreadyExists = true;
+                    MessageBox.Show("There is a previously saved graph with this name, go to the menu to load it.");
+                }
+            }
+            else if (TeacherIsLoggedIn() && !rendering)
+            {
+                cmd.CommandText = $"SELECT * FROM TeacherGraph WHERE TeacherID = '{loggedTeacher.ID}' AND GraphName = '{graphName}'";
+                OleDbDataReader reader = cmd.ExecuteReader();
+                if (reader.HasRows)
+                {
+                    AlreadyExists = true;
+                    MessageBox.Show("There is a previously saved graph with this name, go to the menu to load it.");
+                }
+            }
+            else if (!rendering)
+            {
+                cmd.CommandText = $"SELECT * FROM GuestGraph WHERE GraphName = '{graphName}'";
+                OleDbDataReader reader = cmd.ExecuteReader();
+                if (reader.HasRows)
+                {
+                    AlreadyExists = true;
+                    MessageBox.Show("There is a previously saved graph with this name, go to the menu to load it.");
+                }
+            }
+            if (!AlreadyExists)
+            {
+                //re-initiliase everything
                 edgeList = new HashSet<Tuple<Line, Ellipse, Ellipse, TextBlock>>();
                 Graph = new Network();
                 valencyState = "Hidden";
                 valencyList = new List<TextBlock>();
-                Graph.Name = graphName; //the name that they provided, length = 2 to 15
+                Graph.Name = graphName; 
                 vertexTxBoxList = new List<TextBlock>();
                 vertexList = new List<Ellipse>();
                 graphCreated = true;
-                labelGraphName.Content = graphName;
+                labelGraphName.Content = Graph.Name;
                 EnableAllActionButtons(); //can only navigate buttons when a graph is created
                 EnableAllAlgoButtons();
                 EnableTbCtrl();
                 btnDeleteGraph.IsEnabled = true;
                 btnSaveGraph.IsEnabled = true;
-            //}
-            //conn.Close();
+            }
         }
         private void btnDeleteGraph_Click(object sender, RoutedEventArgs e)
         {
@@ -357,7 +381,7 @@ namespace Interface_2
             if (e.LeftButton == MouseButtonState.Pressed && currentButton == btnDragAndDrop)//if, whilst hovering, they press the vertex
             {
                 ellipseToDrop = sender as Ellipse;
-                ellipseToDrop.Fill = new SolidColorBrush(Colors.Red);
+                ellipseToDrop.Fill = HighlightColour;
                 DragDrop.DoDragDrop(sender as Ellipse, sender as Ellipse, DragDropEffects.Move); //start the drag function on this vertex
                 RevertEllipseColour();
             }

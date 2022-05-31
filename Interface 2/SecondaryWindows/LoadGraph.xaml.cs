@@ -30,6 +30,7 @@ namespace Interface_2
             OleDbCommand cmd = new OleDbCommand();
             conn.Open();
             cmd.Connection = conn;
+            //we only want to display the graphs that the user is supposed to have access to.
             if (MainWindow.StudentIsLoggedIn())
             {
                 usertype = "s";
@@ -60,7 +61,7 @@ namespace Interface_2
         {
             try
             {
-                graphToLoad = cbGraphName.SelectedValue.ToString();
+                graphToLoad = cbGraphName.SelectedValue.ToString(); //create the correct graph name
                 if (usertype == "s") { graphToLoad = "StudentGraphs/" + graphToLoad + MainWindow.loggedStudent.ID; }
                 else if (usertype == "t") { graphToLoad = "TeacherGraphs/" + graphToLoad + MainWindow.loggedTeacher.ID; }
                 else if (usertype == "g") { graphToLoad = "GuestGraphs/" + graphToLoad; }
@@ -70,6 +71,11 @@ namespace Interface_2
                 graphToLoad = "fail";
             }
             DialogResult = true;
+            this.Close();
+        }
+
+        private void btnExit_Click(object sender, RoutedEventArgs e)
+        {
             this.Close();
         }
     }

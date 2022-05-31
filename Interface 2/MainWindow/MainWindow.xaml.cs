@@ -113,6 +113,9 @@ namespace Interface_2
             ActivateButton(sender);
         }
 
-        
+        private void optionTabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }

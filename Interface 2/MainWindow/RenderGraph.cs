@@ -16,10 +16,10 @@ namespace Interface_2
 
     public partial class MainWindow : Window
     {
-        public void RenderGraph(Network GraphToRender, string name) //renders a graph onto the canvas
+        public void RenderGraph(Network GraphToRender) //renders a graph onto the canvas
         {
             DeleteGraph();
-            CreateNewGraph(name, true);
+            CreateNewGraph(GraphToRender.Name, true);
             Graph = GraphToRender;
             RenderVertices(GraphToRender);
             RenderEdges(GraphToRender);

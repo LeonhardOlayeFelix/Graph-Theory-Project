@@ -5,46 +5,22 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Interface_2"
         mc:Ignorable="d"
-        Title="Name Graph" Height="175" Width="400"
+        Title="Name Graph" Height="270" Width="335"
         WindowStartupLocation="CenterScreen"
+        Background="#403D3D"
         ResizeMode="NoResize">
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="143*"/>
-            <ColumnDefinition Width="249*"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
-        <TextBlock Grid.ColumnSpan="2"
-                   TextWrapping="Wrap"
-                   FontSize="15"
-                   TextAlignment="Center">Give your Graph a name, with a length of <Bold>2 and 15 characters</Bold>  so it can be referred to at a later time</TextBlock>
-        <Label Grid.Row="1"
-               HorizontalAlignment="Center"
-               VerticalAlignment="Center"
-               FontSize="15"
-               FontWeight="Medium">Graph Name:</Label>
-        <TextBox Grid.Row="1"
-                 Margin="0,0 10,0"
-                 Grid.Column="1"
-                 Text="Untitled"
-                 BorderThickness="3"
-                 MaxLength="15"
-                 VerticalAlignment="Center"
-                 TextAlignment="Left"
-                 FontSize="20"
-                 x:Name="txBoxGraphName">
-        </TextBox>
-        <Button Grid.Row="2"
-                Grid.ColumnSpan="2"
-                Margin="85,10,85,10"
-                FontSize="15"
-                FontWeight="Medium"
-                Click="Button_Click">
-            Create Graph
-        </Button>
-    </Grid>
+    <StackPanel>
+        <Border Background="Black" Margin="20" CornerRadius="20">
+            <StackPanel Margin="20">
+                <Label Content="Create Graph" Foreground="White" FontSize="25" HorizontalAlignment="Center"/>
+                <Separator></Separator>
+                <Label Content="Name:" Foreground="white"/>
+                <TextBox x:Name="txBoxGraphName" Background="#403D3D" Foreground="White" FontSize="18" Text="Untitled"/>
+                <StackPanel Orientation="Horizontal" Margin="0,20,0,0" HorizontalAlignment="Center" >
+                    <Button x:Name ="btnCreate" Click="Button_Click" Width="115" Background="#403D3D" Foreground="White" FontSize="18" Content="Create" Margin="0,10,0,0"/>
+                    <Button x:Name ="btnExit" Click="btnExit_Click"  Width="115" Background="#403D3D" Foreground="White" FontSize="18" Content="Exit" Margin="14,10,0,0"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+    </StackPanel>
 </Window>

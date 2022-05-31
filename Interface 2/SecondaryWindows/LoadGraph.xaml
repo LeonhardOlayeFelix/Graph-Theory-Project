@@ -5,39 +5,21 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Interface_2"
         mc:Ignorable="d"
-        Title="LoadGraph" Height="175" Width="400">
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="143*"/>
-            <ColumnDefinition Width="249*"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
-        <TextBlock Grid.ColumnSpan="2"
-                   TextWrapping="Wrap"
-                   FontSize="15"
-                   TextAlignment="Center">Please Select the name of the graph you would like to load below</TextBlock>
-        <ComboBox Grid.Row="1"
-                  x:Name="cbGraphName"
-                  Grid.Column="1"
-                  Margin="7">
-        </ComboBox>
-        <Label Grid.Row="1"
-               HorizontalAlignment="Center"
-               VerticalAlignment="Center"
-               FontSize="15"
-               FontWeight="Medium">Graph Name:</Label>
-        <Button Grid.Row="2"
-                x:Name="btnLoad"
-                Grid.ColumnSpan="2"
-                Margin="85,10,85,10"
-                FontSize="15"
-                FontWeight="Medium"
-                Click="btnLoad_Click">
-            Load Graph
-        </Button>
-    </Grid>
+        Background="#403D3D"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
+        Title="LoadGraph" Height="260" Width="335">
+    <StackPanel>
+        <Border Background="Black" Margin="20" CornerRadius="20">
+            <StackPanel Margin="20">
+                <Label Content="Choose Graph" Foreground="White" FontSize="25" HorizontalAlignment="Center"/>
+                <Separator></Separator>
+                <ComboBox Name="cbGraphName" Margin="0,20,0,0" Foreground="Black"/>
+                <StackPanel Orientation="Horizontal" Margin="0,20,0,0" HorizontalAlignment="Center" >
+                    <Button x:Name ="btnLoad" Click="btnLoad_Click" Width="115" Background="#403D3D" Foreground="White" FontSize="18" Content="Load" Margin="0,10,0,0"/>
+                    <Button x:Name ="btnExit" Click="btnExit_Click"  Width="115" Background="#403D3D" Foreground="White" FontSize="18" Content="Exit" Margin="14,10,0,0"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+    </StackPanel>
 </Window>

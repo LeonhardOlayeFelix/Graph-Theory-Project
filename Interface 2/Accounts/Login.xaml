@@ -17,7 +17,7 @@
             <TextBox x:Name="txEmail" Background="#403D3D" Foreground="White" FontSize="18"/>
             <Label Content="Password" Foreground="white"/>
             <TextBox x:Name="txPassword"  Background="#403D3D" Foreground="White" FontSize="18"/>
-            <StackPanel Orientation="Horizontal" Margin="0,20,0,0" >
+            <StackPanel Orientation="Horizontal" Margin="0,20,0,0" HorizontalAlignment="Center">
                 <Button x:Name ="btnLoginStudentConfirm" Click="btnLoginStudentConfirm_Click" Width="115" Background="#403D3D" Foreground="White" FontSize="18" Content="Login" Margin="0,10,0,0"/>
                 <Button x:Name ="btnExitStudentLogin" Click="btnExitStudentLogin_Click"  Width="115" Background="#403D3D" Foreground="White" FontSize="18" Content="Exit" Margin="14,10,0,0"/>
             </StackPanel>

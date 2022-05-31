@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Interface_2"
         mc:Ignorable="d"
-        Title="Overwrite" Height="150" Width="400"
+        Title="Overwrite" Height="130" Width="400"
         WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.ColumnDefinitions>

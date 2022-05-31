@@ -117,10 +117,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SecondaryWindows\HighlightPath.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="MainWindow\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -143,9 +139,6 @@
     <Compile Include="MainWindow\SavingNetworks.cs" />
     <Compile Include="SecondaryWindows\ConnectEdges.xaml.cs">
       <DependentUpon>ConnectEdges.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="SecondaryWindows\HighlightPath.xaml.cs">
-      <DependentUpon>HighlightPath.xaml</DependentUpon>
     </Compile>
     <Compile Include="MainWindow\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
