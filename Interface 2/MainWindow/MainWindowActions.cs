@@ -11,6 +11,7 @@ using System.Data;
 using System.Data.OleDb;
 using System.Text.RegularExpressions;
 
+
 namespace Interface_2
 {
     
@@ -290,7 +291,7 @@ namespace Interface_2
             {
                 //re-initiliase everything
                 edgeList = new HashSet<Tuple<Line, Ellipse, Ellipse, TextBlock>>();
-                Graph = new Network();
+                Graph = new Graph();
                 valencyState = "Hidden";
                 valencyList = new List<TextBlock>();
                 Graph.Name = graphName; 
@@ -327,7 +328,7 @@ namespace Interface_2
             mainCanvas.Children.Clear();
             btnDeleteGraph.IsEnabled = false;
             labelGraphName.Content = "";
-            Graph = new Network();
+            Graph = new Graph();
             ResetSelectionCounts();
             HideValencies();
             buttonId = 0;

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Interface_2
 {
-    public partial class Network
+    public partial class Graph
     {
         public Tuple<List<int>, int> DijkstrasAlgorithmShort(int startVertex, int endVertex) //returns tuple 1) path, 2) cost
         {

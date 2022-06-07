@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace Interface_2
 {
-    public partial class Network
+    public partial class Graph
     {
         public List<Tuple<int, int, int>> Kruskals()
         {
             List<Tuple<int, int, int>> listOfSortedEdges = GetListOfSortedEdges(); //use merge sort to get a list of the sorted edges.
             int successful = 0; //the amount of edges that were added without creating a cycle
-            Network mst = new Network(); //create a temporary graph data structure
+            Graph mst = new Graph(); //create a temporary graph data structure
             for (int i = 0; i < GetMaxNodeID() + 1; ++i)//add the same amount of vertices as the current graph
             {
                 mst.AddVertex(0, 0);

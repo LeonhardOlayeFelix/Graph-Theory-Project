@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Interface_2
 {
-    public partial class Network
+    public partial class Graph
     {
         public Tuple<List<Tuple<int, int>>, List<int>> BreadthFirst(int startNode)//returns a Tuple :
                                                                                //Item1: List of tuples (item1 vertex, and item 2 its parent)

@@ -52,7 +52,7 @@ namespace Interface_2
 
         SolidColorBrush HighlightColour = null;
         
-        private Network Graph = null; //initialise a Network Class
+        private Graph Graph = null; //initialise a Network Class
         public MainWindow()
         {
             InitializeComponent();

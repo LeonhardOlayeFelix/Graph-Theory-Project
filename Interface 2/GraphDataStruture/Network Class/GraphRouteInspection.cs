@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Interface_2
 {
-    public partial class Network
+    public partial class Graph
     {
         public Tuple<List<Tuple<int, int>>, int> RInspStartAndEnd(int startVertex, int endVertex) //item1 is the edges to repeat, item2 is the cost of repition
         {

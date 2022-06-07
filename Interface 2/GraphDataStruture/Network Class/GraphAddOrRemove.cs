@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Interface_2
 {
-    public partial class Network
+    public partial class Graph
     {
         public void AddVertex(double x, double y)//adds a vertex to the graph
         {

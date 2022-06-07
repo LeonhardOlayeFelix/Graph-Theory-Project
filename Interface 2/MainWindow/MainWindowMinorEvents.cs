@@ -72,7 +72,7 @@ namespace Interface_2
                 }
                 else
                 {
-                    Network toLoad = BinarySerialization.ReadFromBinaryFile<Network>(fileName); //read the file into the toLoad class instance
+                    Graph toLoad = BinarySerialization.ReadFromBinaryFile<Graph>(fileName); //read the file into the toLoad class instance
                     RenderGraph(toLoad); //render the just-loaded graph onto the screen 
                     btnDeleteGraph.IsEnabled = true;
                 }

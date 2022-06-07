@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Interface_2
 {
     [Serializable]
-    public partial class Network
+    public partial class Graph
     {
         public int NumberOfDeletedVertices; //keeps track of the number of vertices that have been deleted
         private int NumberOfVertices; //keeps track of the number of vertices
@@ -16,7 +16,7 @@ namespace Interface_2
                                       //which represents all of its adjacent vertices and the weight.
         private List<Tuple<int, int, int>> listOfEdges = null; //keeps track of all of the edges in the graph
         public string Name { get; set; }
-        public Network() //constructor
+        public Graph() //constructor
         {
             this.NumberOfVertices = 0;
             this.NumberOfDeletedVertices = 0;

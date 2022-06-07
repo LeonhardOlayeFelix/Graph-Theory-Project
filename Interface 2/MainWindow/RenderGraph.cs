@@ -16,7 +16,7 @@ namespace Interface_2
 
     public partial class MainWindow : Window
     {
-        public void RenderGraph(Network GraphToRender) //renders a graph onto the canvas
+        public void RenderGraph(Graph GraphToRender) //renders a graph onto the canvas
         {
             DeleteGraph();
             CreateNewGraph(GraphToRender.Name, true);
@@ -24,7 +24,7 @@ namespace Interface_2
             RenderVertices(GraphToRender);
             RenderEdges(GraphToRender);
         }
-        private void RenderVertices(Network GraphToRender)
+        private void RenderVertices(Graph GraphToRender)
         {
             buttonId = GraphToRender.GetMaxNodeID() + 1;
             foreach (int vertex in Graph.GetListOfVertices())
@@ -115,7 +115,7 @@ namespace Interface_2
                 mainCanvas.Children.Add(vertexLabel); //add the label to the canvas
             }
         } 
-        private void RenderEdges(Network GraphToRender)
+        private void RenderEdges(Graph GraphToRender)
         {
             foreach (Node vertex in GraphToRender.GetAdjacencyList())
             {
