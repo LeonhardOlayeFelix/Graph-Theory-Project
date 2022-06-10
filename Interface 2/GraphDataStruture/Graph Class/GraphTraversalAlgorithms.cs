@@ -26,11 +26,11 @@ namespace Interface_2
             List<int> adjNodes = GetAdjVertices(startNode); //get the nodes that are adjacent to that start node
             for (int i = 0; i < adjNodes.Count(); ++i)
             {
-                queue.Append(Tuple.Create(adjNodes[i], startNode)); //add all the adjacent nodes to the queue
+                queue.EnQueue(Tuple.Create(adjNodes[i], startNode)); //add all the adjacent nodes to the queue
             }
             while (queue.Count != 0)//do this until the stack is empty
             {
-                Tuple<int, int> topOfQueue = queue.PopFront(); //take and save the vertex at the front of the list
+                Tuple<int, int> topOfQueue = queue.DeQueue(); //take and save the vertex at the front of the list
                 visited.Add(topOfQueue); //mark this vertex as visited
                 int parentNode = topOfQueue.Item1; //the parent of the next-generated adj vertices will be item1 of this vertex
                 outputList.Add(parentNode);
@@ -38,7 +38,7 @@ namespace Interface_2
                 for (int i = 0; i < adjNodes.Count(); ++i)//loop through the adjacent vertices
                 {
                     if (!NodeVisited(visited, adjNodes[i]) && !queue.Contains(adjNodes[i]))//if not visited and not already in queue
-                        queue.Append(Tuple.Create(adjNodes[i], parentNode));//append them onto the stack
+                        queue.EnQueue(Tuple.Create(adjNodes[i], parentNode));//append them onto the stack
                 }
             }
             visited.RemoveAt(0); //remove (startvertex, -1) from the list since its not an edge
@@ -64,12 +64,12 @@ namespace Interface_2
             UDLinkedList stack = new UDLinkedList(); //create an instance of the linked list for the stack
             for (int i = 0; i < adjNodes.Count(); ++i)
             {
-                stack.PushFront(Tuple.Create(adjNodes[i], startNode)); //add all the adjacent nodes to the stack
+                stack.Push(Tuple.Create(adjNodes[i], startNode)); //add all the adjacent nodes to the stack
             }
             bool cycleExists = false;
             while (stack.Count != 0) //do this until the stack is empty
             {
-                Tuple<int, int> topOfStack = stack.PopFront(); //take and save the vertex at the top of the starck
+                Tuple<int, int> topOfStack = stack.DeQueue(); //take and save the vertex at the top of the starck
                 visited.Add(topOfStack); //mark this vertex as visited
                 int parentNode = topOfStack.Item1; //the parent of the next-generated adj vertices will be item1 of this vertex
                 adjNodes = GetAdjVertices(parentNode);//get the adj vertices
@@ -81,7 +81,7 @@ namespace Interface_2
                         cycleExists = true; //if an unvisited node appears more than one time in the stack, then there is a cycle
                     }
                     if (!NodeVisited(visited, adjNodes[i]) && !stack.Contains(adjNodes[i])) //if not visited and not already in stack
-                        stack.PushFront(Tuple.Create(adjNodes[i], parentNode)); //push them to the front of the stack
+                        stack.Push(Tuple.Create(adjNodes[i], parentNode)); //push them to the front of the stack
                 }
             }
             visited.RemoveAt(0); //remove (startvertex, -1) from the list since its not an edge

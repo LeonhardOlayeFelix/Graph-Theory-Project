@@ -15,14 +15,14 @@ namespace Interface_2
             head = null; //at first the head will be null;
             Count = 0; //and the count will be 0
         }
-        public void PushFront(Tuple<int, int> data) //push an element onto the front of a list
+        public void Push(Tuple<int, int> data) //push an element onto the front of a list
         {
             UDLinkedListNode node = new UDLinkedListNode(data);
             node.next = head;//this nodes link will now be this lists head
             head = node; //this lists head will now be this node
             Count++; //update count
         }
-        public Tuple<int, int> PopFront() //pop an element off the front of a list, return what was popped
+        public Tuple<int, int> DeQueue() //pop an element off the front of a list, return what was popped
         {
             Tuple<int, int> value = head.data; //first get the head data so we can return it
             UDLinkedListNode node = head; //create a reference to the current head
@@ -31,7 +31,7 @@ namespace Interface_2
             Count--;//update count
             return value;
         }
-        public void Append(Tuple<int, int> data)
+        public void EnQueue(Tuple<int, int> data)
         {
             UDLinkedListNode newNode = new UDLinkedListNode(data);
             if (head == null)  //if the list was empty

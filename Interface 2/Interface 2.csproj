@@ -121,17 +121,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="GraphDataStruture\Network Class\GraphBasicMethods.cs" />
-    <Compile Include="GraphDataStruture\Network Class\GraphDijkstrasAlgorithm.cs" />
-    <Compile Include="GraphDataStruture\Network Class\Graph.cs" />
+    <Compile Include="GraphDataStruture\Graph Class\GraphBasicMethods.cs" />
+    <Compile Include="GraphDataStruture\Graph Class\GraphDijkstrasAlgorithm.cs" />
+    <Compile Include="GraphDataStruture\Graph Class\Graph.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="GraphDataStruture\Network Class\GraphAddOrRemove.cs" />
-    <Compile Include="GraphDataStruture\Network Class\GraphMSTAlgorithms.cs" />
-    <Compile Include="GraphDataStruture\Network Class\GraphRouteInspection.cs" />
-    <Compile Include="GraphDataStruture\Network Class\GraphTraversalAlgorithms.cs" />
+    <Compile Include="GraphDataStruture\Graph Class\GraphAddOrRemove.cs" />
+    <Compile Include="GraphDataStruture\Graph Class\GraphMSTAlgorithms.cs" />
+    <Compile Include="GraphDataStruture\Graph Class\GraphRouteInspection.cs" />
+    <Compile Include="GraphDataStruture\Graph Class\GraphTraversalAlgorithms.cs" />
     <Compile Include="GraphDataStruture\MyPoint.cs" />
     <Compile Include="LinkedListsClasses\UDLinkedList.cs" />
     <Compile Include="LinkedListsClasses\UDLinkedListNode.cs" />
