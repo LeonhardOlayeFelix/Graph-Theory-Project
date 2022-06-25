@@ -81,7 +81,7 @@ namespace Interface_2
         {
             if (!File.Exists("NetworkDB.accdb")) //if a file doesnt already exist for the database
             {
-                //establish the connection and then create database
+                //establish the connection and then create database 
                 ADOX.Catalog cat = new ADOX.Catalog();
                 cat.Create(ConStr);
                 OleDbConnection conn = new OleDbConnection(ConStr);

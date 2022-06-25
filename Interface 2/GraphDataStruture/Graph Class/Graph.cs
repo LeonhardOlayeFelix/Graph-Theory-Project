@@ -9,13 +9,12 @@ namespace Interface_2
     [Serializable]
     public partial class Graph
     {
-        public int NumberOfDeletedVertices; //keeps track of the number of vertices that have been deleted
-        private int NumberOfVertices; //keeps track of the number of vertices
+        public int NumberOfDeletedVertices; //number of vertices that have been deleted
+        private int NumberOfVertices; //number of vertices in graph
         private int idOfNodetoAdd = 0; //makes sure that the ID of all nodes are unique, as it will be incremented
-        private List<Node> VertexSet; //represents the adjacency list: A list containing data of class Node, where each Node contains a HashSet of type Tuple<int, int> 
-                                      //which represents all of its adjacent vertices and the weight.
-        private List<Tuple<int, int, int>> listOfEdges = null; //keeps track of all of the edges in the graph
-        public string Name { get; set; }
+        private List<Node> VertexSet; //Adjacency List made up of vertices
+        private List<Tuple<int, int, int>> listOfEdges = null; //list of edges in graph (u,v,weight)
+        public string Name { get; set; } //name of graph
         public Graph() //constructor
         {
             this.NumberOfVertices = 0;

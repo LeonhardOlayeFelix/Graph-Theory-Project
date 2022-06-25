@@ -10,19 +10,34 @@ namespace Interface_2
     {
         public int Count; //keep track of and maintain the number of elements in the list
         UDLinkedListNode head; //each list has a head
-        public UDLinkedList()
+        public UDLinkedList() //constructor
         {
             head = null; //at first the head will be null;
             Count = 0; //and the count will be 0
         }
-        public void Push(Tuple<int, int> data) //push an element onto the front of a list
+        public void Push(Tuple<int, int> data) //push an element onto the front of a stack
         {
             UDLinkedListNode node = new UDLinkedListNode(data);
             node.next = head;//this nodes link will now be this lists head
             head = node; //this lists head will now be this node
             Count++; //update count
         }
-        public Tuple<int, int> DeQueue() //pop an element off the front of a list, return what was popped
+        public Tuple<int, int> Pop() //pop an element off the top of the stack
+        {
+            if (head == null)
+                return null; //if theres nothing in the list return null
+            if (head.next == null)//if there was one item in the list, also return null
+                return null;
+
+            UDLinkedListNode secondLast = head;
+            while (secondLast.next.next != null) //finds the second to last item since .next.next is 2 items away
+                secondLast = secondLast.next; //update secondLast
+            Count--;//decrement the count
+            Tuple<int, int> value = secondLast.next.data; //to return what was popped
+            secondLast.next = null;//set the last item to null
+            return value; //return what was popped
+        }
+        public Tuple<int, int> DeQueue() //take an element off the front of a queue
         {
             Tuple<int, int> value = head.data; //first get the head data so we can return it
             UDLinkedListNode node = head; //create a reference to the current head
@@ -31,7 +46,7 @@ namespace Interface_2
             Count--;//update count
             return value;
         }
-        public void EnQueue(Tuple<int, int> data)
+        public void EnQueue(Tuple<int, int> data) //add element to back of queue
         {
             UDLinkedListNode newNode = new UDLinkedListNode(data);
             if (head == null)  //if the list was empty
@@ -52,21 +67,7 @@ namespace Interface_2
             Count++;
             return;
         }
-        public Tuple<int, int> Pop()
-        {
-            if (head == null)
-                return null; //if theres nothing in the list return null
-            if (head.next == null)//if there was one item in the list, also return null
-                return null;
-
-            UDLinkedListNode secondLast = head; 
-            while (secondLast.next.next != null) //finds the second to last item since .next.next is 2 items away
-                secondLast = secondLast.next; //update secondLast
-            Count--;//decrement the count
-            Tuple<int, int> value = secondLast.next.data; //to return what was popped
-            secondLast.next = null;//set the last item to null
-            return value; //return what was popped
-        }
+        
         public void PrintList() //for testing
         {
             UDLinkedListNode runner = head;

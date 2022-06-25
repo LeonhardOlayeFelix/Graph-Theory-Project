@@ -11,14 +11,14 @@ namespace Interface_2
     {
         private int VertexId; //The unique ID of the node
         private List<Tuple<int, int>> AdjSet; //Hashset - each element is a tuple containing 2 items - .Item1 represents adjacent vertex's ID, .Item2 represents Edge weight
-        public MyPoint Position { get; set; }
+        public MyPoint Position { get; set; } //a point class instance which represents its position on the canvas
         public Node(int vertexId, double x, double y) //constructor
         {
             this.VertexId = vertexId; //initialise vertex ID
             this.AdjSet = new List<Tuple<int, int>>(); //initialise the Hashset
             Position = new MyPoint(x, y);
         }
-        public void AddEdge(int NeighbourIdIndex, int Weight) //Method to add edge
+        public void AddEdge(int NeighbourIdIndex, int Weight) //A method which adds connections from this vertex to other vertices
         {
             if (EdgeExists(NeighbourIdIndex)) //check if edge exists so we can replace it
             {
@@ -33,7 +33,7 @@ namespace Interface_2
             }
             this.AdjSet.Add(Tuple.Create(NeighbourIdIndex, Weight));//now replace the connection with the updated connection
         }
-        public void RemoveEdge(int NeighbourIdIndex) //Method to remove edge from here to NeighbourID
+        public void RemoveEdge(int NeighbourIdIndex) //Method to remove the connection from this vertex to the passed in vertexID
         {
             Tuple<int, int> tupleToRemove = null; //make a temporary variable to store the tuple we need to remove
             foreach (Tuple<int, int> tuple in AdjSet) //loop through the adjacenct vertices
@@ -49,7 +49,7 @@ namespace Interface_2
             }
         }
 
-        public bool EdgeExists(int NeighbourId) //function to check if an edge to neighbourID exists
+        public bool EdgeExists(int NeighbourId) //method to check if a connection from this vertex to the passed in vertex exists
         {
             foreach (Tuple<int, int> tuple in AdjSet) // loop through this nodes adjacent Vertices
             {
@@ -60,7 +60,7 @@ namespace Interface_2
             }
             return false;//return false for no edge existing
         }
-        public int GetWeight(int NeighbourIdIndex) //function to get the weight of the edge connecting this Node and NeighbourIDIndex
+        public int GetWeight(int NeighbourIdIndex) //Method to get the cost of connection from this vertex to the passed in vertex
         {
             foreach (var tuple in AdjSet)//loop through the Adjacenct Vertices
             {
@@ -71,11 +71,11 @@ namespace Interface_2
             }
             return -1; //if we get to this point, then NeighbourIdIndex was not a valid vertex as it wasnt found, so return -1
         }
-        public List<Tuple<int, int>> GetAdjVertices() //function to retreive all the adjacent vertices to this node
+        public List<Tuple<int, int>> GetAdjVertices() //Method to retreive all this vertex's neighbors
         {
             return this.AdjSet; //returns the adjacency set
         }
-        public int GetVertexId() //function to get the ID of this vertex
+        public int GetVertexId() //Method to get the ID of this vertex
         {
             return this.VertexId; //retuns the ID of this vertex
         }

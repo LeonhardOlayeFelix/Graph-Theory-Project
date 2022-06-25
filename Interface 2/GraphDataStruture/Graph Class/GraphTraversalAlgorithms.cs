@@ -37,7 +37,7 @@ namespace Interface_2
                 adjNodes = GetAdjVertices(parentNode);//get the adjacent vertices
                 for (int i = 0; i < adjNodes.Count(); ++i)//loop through the adjacent vertices
                 {
-                    if (!NodeVisited(visited, adjNodes[i]) && !queue.Contains(adjNodes[i]))//if not visited and not already in queue
+                    if (!VertexVisited(visited, adjNodes[i]) && !queue.Contains(adjNodes[i]))//if not visited and not already in queue
                         queue.EnQueue(Tuple.Create(adjNodes[i], parentNode));//append them onto the stack
                 }
             }
@@ -80,14 +80,14 @@ namespace Interface_2
                     {
                         cycleExists = true; //if an unvisited node appears more than one time in the stack, then there is a cycle
                     }
-                    if (!NodeVisited(visited, adjNodes[i]) && !stack.Contains(adjNodes[i])) //if not visited and not already in stack
+                    if (!VertexVisited(visited, adjNodes[i]) && !stack.Contains(adjNodes[i])) //if not visited and not already in stack
                         stack.Push(Tuple.Create(adjNodes[i], parentNode)); //push them to the front of the stack
                 }
             }
             visited.RemoveAt(0); //remove (startvertex, -1) from the list since its not an edge
             return Tuple.Create(visited, cycleExists, outputList); //return the ordered edges, the cycle and the traversal order
         }
-        private bool NodeVisited(List<Tuple<int, int>> visited, int node) //retunrs whether a node has been visited
+        private bool VertexVisited(List<Tuple<int, int>> visited, int node) //returns true if a vertex has been visited
         {
             for (int i = 0; i < visited.Count(); ++i)
             {

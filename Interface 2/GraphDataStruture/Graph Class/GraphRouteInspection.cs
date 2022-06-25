@@ -8,7 +8,7 @@ namespace Interface_2
 {
     public partial class Graph
     {
-        public Tuple<List<Tuple<int, int>>, int> RInspStartAndEnd(int startVertex, int endVertex) //item1 is the edges to repeat, item2 is the cost of repition
+        public Tuple<List<Tuple<int, int>>, int> RInspStartAndEnd(int startVertex, int endVertex) //Route inspection – returns the repeated edges and cost of repitition
         {
             if (!IsInVertexList(startVertex) || !IsInVertexList(endVertex))
             {
@@ -23,12 +23,12 @@ namespace Interface_2
             oddVertices.Remove(endVertex);
             return GetOptimalCombination(oddVertices);
         }
-        public Tuple<List<Tuple<int, int>>, int> RInspStartAtEnd() //item1 is the edges to repeat, item2 is the cost of repition
+        public Tuple<List<Tuple<int, int>>, int> RInspStartAtEnd() //Route inspection starting and ending at different vertices – returns the repeated edges and cost of repetition
         {
             List<int> oddVertices = GetOddVertices();//get a list of all the odd vertices
             return GetOptimalCombination(oddVertices);
         }
-        public Tuple<List<Tuple<int, int>>, int> GetOptimalCombination(List<int> oddVertices)
+        public Tuple<List<Tuple<int, int>>, int> GetOptimalCombination(List<int> oddVertices)//gets optimal edges to repeat 
         {
             List<List<List<int>>> combinations = Partition(oddVertices); //partition the odd vertices into pairs
             List<List<Tuple<List<int>, int>>> CombinationsCost = new List<List<Tuple<List<int>, int>>>(); //example: [[#path, cost],[#path, cost]]

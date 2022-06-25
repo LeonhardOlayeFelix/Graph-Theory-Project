@@ -9,7 +9,7 @@ namespace Interface_2
     public partial class Graph
     {
 
-        public Node GetVertex(int VertexID)
+        public Node GetVertex(int VertexID) //returns the Node instance, given an ID
         {
             for (int i = 0; i < VertexSet.Count(); ++i)
             {
@@ -76,7 +76,7 @@ namespace Interface_2
         {
             return VertexSet;
         }
-        public int GetSumOfWeights()
+        public int GetSumOfWeights() //returns the sum of weights
         {
             int sum = 0;
             foreach (Node node in VertexSet) //loop through each node
@@ -88,7 +88,7 @@ namespace Interface_2
             }
             return sum / 2; //because its counted each edge twice
         }
-        public int GetNumberOfVertices()//retreives the number of vertices
+        public int GetNumberOfVertices()//retrieves the number of vertices
         {
             return this.NumberOfVertices;
         }
@@ -101,7 +101,7 @@ namespace Interface_2
             }
             return ListOfVertices;
         }
-        public int GetValency(int v1)//get the valency of a node
+        public int GetValency(int v1)//get the valency of a vertex
         {
             if (IsInVertexList(v1))//first, make sure the vertex exists
             {
@@ -124,12 +124,6 @@ namespace Interface_2
                 total += GetValency(vertexList.ElementAt(i));//add the valency of each vertex to total by repetitvely calling getvalency() on each vertex
             }
             return total;
-        }
-        public string PrintValency(int v) //returns the string which represents the valency of vertex v
-        {
-            string stringToReturn = "";
-            stringToReturn += "Valency of Vertex " + v.ToString() + ": " + GetValency(v).ToString() + "\n";
-            return stringToReturn;
         }
         public string PrintAdjList() //returns the string which represents the adjacency list
         {
@@ -243,7 +237,7 @@ namespace Interface_2
             }
             return pathCost;
         }
-        public bool IsSemiEulerian()
+        public bool IsSemiEulerian() //returns true if the graph is semi eulerian
         {
             int numOddVertices = 0;
             foreach (Node vertex in VertexSet)

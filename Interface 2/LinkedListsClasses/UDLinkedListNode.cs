@@ -11,7 +11,7 @@ namespace Interface_2
         public Tuple<int, int> data; //each node has a piece of data
         public UDLinkedListNode next;//and the node that it points to
 
-        public UDLinkedListNode(Tuple<int, int> v)
+        public UDLinkedListNode(Tuple<int, int> v) //constructor
         {
             data = v;
             next = null;

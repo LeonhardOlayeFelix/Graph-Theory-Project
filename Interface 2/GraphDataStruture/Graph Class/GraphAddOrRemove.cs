@@ -10,7 +10,7 @@ namespace Interface_2
     {
         public void AddVertex(double x, double y)//adds a vertex to the graph
         {
-                VertexSet.Add(new Node(idOfNodetoAdd, x, y));//add a node to the hashset containing nodes
+            VertexSet.Add(new Node(idOfNodetoAdd, x, y));//add a node to the hashset containing nodes
                 idOfNodetoAdd += 1;//incrememnt id so all of the IDs are unique
                 NumberOfVertices += 1;//update number of vertices
         }
@@ -52,7 +52,7 @@ namespace Interface_2
                 }
             }
         }
-        public void AddEdge(int v1, int v2, int weight = 0) //Makes the input nodes adjacent to each other with a weight of the input
+        public void AddEdge(int v1, int v2, int weight = 0) //Makes a connection
         {
 
             if (v1 == v2)

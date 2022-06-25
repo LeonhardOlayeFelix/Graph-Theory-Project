@@ -36,7 +36,7 @@ namespace Interface_2
             {
                 value.Add(2147483647);//populate with maximum number
             }
-            parent[startVertex] = -1; //begin with source node
+            parent[startVertex] = -1; //begin with startVertex
             value[startVertex] = 0;
             for (int row = 0; row < size - 1; ++row)
             {
@@ -78,7 +78,7 @@ namespace Interface_2
             }
             return Tuple.Create(path, cost);
         }
-        private int selectLowestVertex(List<int> value, List<bool> processed, int size) //gets the vertex that has the lowest value, that is not already processed
+        private int selectLowestVertex(List<int> value, List<bool> processed, int size) //returns the vertex that has the lowest value, that is not already processed
         {
             int minimum = 2147483647;
             int vertex = 0;

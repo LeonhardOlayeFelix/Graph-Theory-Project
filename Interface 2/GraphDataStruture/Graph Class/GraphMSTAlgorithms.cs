@@ -8,7 +8,7 @@ namespace Interface_2
 {
     public partial class Graph
     {
-        public List<Tuple<int, int, int>> Kruskals()
+        public List<Tuple<int, int, int>> Kruskals() //uses Kruskals Algo for MST
         {
             List<Tuple<int, int, int>> listOfSortedEdges = GetListOfSortedEdges(); //use merge sort to get a list of the sorted edges.
             int successful = 0; //the amount of edges that were added without creating a cycle
@@ -34,7 +34,7 @@ namespace Interface_2
             List<Tuple<int, int, int>> mstEdges = mst.GetListOfSortedEdges(); //by here, the mst is made
             return mstEdges; //so return their sorted edges
         }
-        private List<Tuple<int, int, int>> MergeSort(List<Tuple<int, int, int>> edges) //recurcsively splits the list into right and left until the size is 1
+        private List<Tuple<int, int, int>> MergeSort(List<Tuple<int, int, int>> edges) //recursively splits the list into right and left until the size is 1
         {
             if (edges.Count() <= 1) { return edges; } //base case (where the size is 1)
 
@@ -56,7 +56,7 @@ namespace Interface_2
             right = MergeSort(right);
             return Merge(left, right); //merge these two lists while sorting them using the merge method
         }
-        private List<Tuple<int, int, int>> Merge(List<Tuple<int, int, int>> left, List<Tuple<int, int, int>> right)
+        private List<Tuple<int, int, int>> Merge(List<Tuple<int, int, int>> left, List<Tuple<int, int, int>> right) //merges the lists in correct order
         {
             List<Tuple<int, int, int>> result = new List<Tuple<int, int, int>>(); //empty list which will store the sorted list
             while (NotEmpty(left) && NotEmpty(right)) //whilst both of the lists are non-empty
