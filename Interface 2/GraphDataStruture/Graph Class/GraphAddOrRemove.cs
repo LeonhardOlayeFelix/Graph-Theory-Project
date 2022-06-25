@@ -8,92 +8,116 @@ namespace Interface_2
 {
     public partial class Graph
     {
-        public void AddVertex(double x, double y)//adds a vertex to the graph
+        public void AddVertex(double x, double y)
         {
-            VertexSet.Add(new Node(idOfNodetoAdd, x, y));//add a node to the hashset containing nodes
-                idOfNodetoAdd += 1;//incrememnt id so all of the IDs are unique
-                NumberOfVertices += 1;//update number of vertices
+            //adds a vertex to the adjacency list
+            vertexSet.Add(new Vertex(iDVertex, x, y));
+            iDVertex += 1;
+            numberOfVertices += 1;
         }
-        public void RemoveVertex(int vertexToRemove)//remove a vertex
+        public void RemoveVertex(int vertexToRemove)
         {
-
-            if (!IsInVertexList(vertexToRemove)) //make sure that the vertex exists first
+            //remove a vertex from the graph
+            if (!IsInVertexList(vertexToRemove)) 
             {
+                //if the passed in vertex doesnt exist (error handling)
                 throw new ArgumentOutOfRangeException("This vertex does not exist");
             }
-            else //if it does...
+            else 
             {
-                for (int i = 0; i < NumberOfVertices; ++i)
+                //if the passed in vertex does exist
+                for (int i = 0; i < numberOfVertices; ++i)
                 {
-                    if (VertexSet.ElementAt(i).GetVertexId() == vertexToRemove)
+                    if (vertexSet.ElementAt(i).GetVertexId() == vertexToRemove)
                     {
-
-                        //first remove all of the edges coming INTO the vertex
-                        foreach (Node node in VertexSet)//loops through node
+                        //first remove all of the edges coming into the vertex
+                        foreach (Vertex vertex in vertexSet)
                         {
-                            foreach (Tuple<int, int> tuple in node.GetAdjVertices())//loop through the hashset of tuples within each node
+                            //looping through adjacency set
+                            foreach (Tuple<int, int> tuple in vertex.GetAdjVertices())
                             {
-                                if (tuple.Item1 == vertexToRemove)//if the tuples item1 is the same as the vertex to remove, then its an edge that needs to be deleted
+                                //loop through each vertex's Neighbours
+                                if (tuple.Item1 == vertexToRemove)
                                 {
-                                    RemoveEdge(node.GetVertexId(), vertexToRemove); //remove said edge
-                                    break;//MUST do this since you cannot edit a tuple after its been editted inside of a loop
+                                    //if an edge was found, remove it using another method
+                                    RemoveEdge(vertex.GetVertexId(), vertexToRemove); 
+                                    break;
                                 }
                             }
                         }
-                        VertexSet.Remove(VertexSet.ElementAt(i)); //now delete the vertex, since all incoming edges have been discarded
-                        NumberOfDeletedVertices += 1;//update the number of deleted vertices
-                        NumberOfVertices -= 1;//update the number of vertices
+                        //now all edges coming into vertex are discarded, delete vertex
+                        vertexSet.Remove(vertexSet.ElementAt(i)); 
+                        numberOfDeletedVertices += 1;
+                        numberOfVertices -= 1;
                         break;
                     }
-                    else if (i == NumberOfVertices - 1)
+                    else if (i == numberOfVertices - 1)
                     {
+                        //error handling
                         throw new ArgumentException("This vertex does not exist");
                     }
                 }
             }
         }
-        public void AddEdge(int v1, int v2, int weight = 0) //Makes a connection
+        public void AddEdge(int v1, int v2, int weight = 0)
         {
-
+            //adds an edge between passed in vertices
             if (v1 == v2)
             {
+                //error handling - no looped connections
                 throw new ArgumentException("Cannot make a vertex adjacent to itself.");
             }
-            if (!IsInVertexList(v1) || !IsInVertexList(v2)) //make sure that the vertex exists.
+            if (!IsInVertexList(v1) || !IsInVertexList(v2)) 
             {
+                //error handling - check for existence
                 throw new ArgumentException("Vertex does not exist.");
             }
-            List<int> vertexList = GetListOfVertices(); //get a list of the current vertices
-            int v1Index = vertexList.IndexOf(v1);//gets the index of the vertex in the vertices list incase some vertices have been deleted.
-            int v2Index = vertexList.IndexOf(v2);//gets the index of the vertex in the vertices list incase some vertices have been deleted.
-            this.VertexSet.ElementAt(v1Index).AddEdge(v2, weight); //adds the edge using the AddEdge Method that the Nodes have
-            this.VertexSet.ElementAt(v2Index).AddEdge(v1, weight); //Does it both ways since this is an undirected graph
-            listOfEdges.Add(Tuple.Create(v1, v2, weight)); //update list of edges
+            //Create connection here
+            List<int> vertexList = GetListOfVertices();
+            listOfEdges.Add(Tuple.Create(v1, v2, weight));
+
+            //index of vertex in list - some vertices could be deleted.
+            int v1Index = vertexList.IndexOf(v1);
+            int v2Index = vertexList.IndexOf(v2);
+
+            //Update the vertices instances themselves
+            this.vertexSet.ElementAt(v1Index).AddEdge(v2, weight); 
+            this.vertexSet.ElementAt(v2Index).AddEdge(v1, weight); 
         }
-        public void RemoveEdge(int v1, int v2)//function that deletes a connection
+        public void RemoveEdge(int v1, int v2)
         {
-            if (!IsInVertexList(v1) || !IsInVertexList(v2))//if the input vertex is not in the list
+            //removes an edge between vertices
+            if (!IsInVertexList(v1) || !IsInVertexList(v2))
             {
+                //error handling - existence
                 throw new ArgumentException("Vertex Does not exist");
             }
-            else if (VertexSet.ElementAt(GetListOfVertices().IndexOf(v1)).EdgeExists(v2))//must use the index of v1 in the vertices list, incase any vertices have been deleted, as it will represent the ID too.
-            {//need to make sure the edge exists first too
-                List<int> vertexList = GetListOfVertices();//get list of vertices
-                if (v1 == v2)
-                {
-                    throw new ArgumentException("An edge does not exist from itself to itself");
-                }
-                int v1Index = vertexList.IndexOf(v1);
-                int v2Index = vertexList.IndexOf(v2);
-                int weight = GetEdgeWeight(v1, v2);
-                this.VertexSet.ElementAt(v1Index).RemoveEdge(v2);//pass in the index since some of the vertices may have been deleted
-                this.VertexSet.ElementAt(v2Index).RemoveEdge(v1); //undirected graph
-                listOfEdges.Remove(Tuple.Create(v1, v2, weight)); //update list of edges
-                listOfEdges.Remove(Tuple.Create(v2, v1, weight)); //update this way incase it was saved like this
+            else if (!vertexSet.ElementAt(GetListOfVertices().IndexOf(v1)).EdgeExists(v2))
+            {
+                //error handling - existence
+                throw new ArgumentException($"No edge exists from {v1} to {v2}");
+            }
+            else if (v1 == v2)
+            {
+                //error handling - no looped edges
+                throw new ArgumentException("An edge does not exist from itself to itself");
             }
             else
             {
-                throw new ArgumentException($"No edge exists from {v1} to {v2}");
+                //removes edge here
+                List<int> vertexList = GetListOfVertices();
+                int v1Index = vertexList.IndexOf(v1);
+                int v2Index = vertexList.IndexOf(v2);
+                int weight = GetEdgeWeight(v1, v2);
+                //update the vertices instances themselves
+                this.vertexSet.ElementAt(v1Index).RemoveEdge(v2); 
+                this.vertexSet.ElementAt(v2Index).RemoveEdge(v1);
+
+                //update list of edges
+                listOfEdges.Remove(Tuple.Create(v1, v2, weight));
+
+                //incase vertices were saved the other way
+                listOfEdges.Remove(Tuple.Create(v2, v1, weight)); 
             }
         }
         

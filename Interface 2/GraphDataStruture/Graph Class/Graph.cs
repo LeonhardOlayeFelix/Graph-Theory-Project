@@ -9,18 +9,20 @@ namespace Interface_2
     [Serializable]
     public partial class Graph
     {
-        public int NumberOfDeletedVertices; //number of vertices that have been deleted
-        private int NumberOfVertices; //number of vertices in graph
-        private int idOfNodetoAdd = 0; //makes sure that the ID of all nodes are unique, as it will be incremented
-        private List<Node> VertexSet; //Adjacency List made up of vertices
+        //declare attributes
+        public int numberOfDeletedVertices;
+        private int numberOfVertices;
+        private int iDVertex = 0; //this increments
+        private List<Vertex> vertexSet; //Adjacency List 
         private List<Tuple<int, int, int>> listOfEdges = null; //list of edges in graph (u,v,weight)
-        public string Name { get; set; } //name of graph
-        public Graph() //constructor
+        public string Name { get; set; }
+        public Graph()
         {
-            this.NumberOfVertices = 0;
-            this.NumberOfDeletedVertices = 0;
-            this.VertexSet = new List<Node>();
-            listOfEdges = new List<Tuple<int, int, int>>();
+            //initiliase attributes
+            this.numberOfVertices = 0;
+            this.numberOfDeletedVertices = 0;
+            this.vertexSet = new List<Vertex>();
+            this.listOfEdges = new List<Tuple<int, int, int>>();
         }
     }
 }

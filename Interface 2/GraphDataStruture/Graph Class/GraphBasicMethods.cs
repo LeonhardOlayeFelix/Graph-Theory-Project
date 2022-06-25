@@ -8,125 +8,152 @@ namespace Interface_2
 {
     public partial class Graph
     {
-
-        public Node GetVertex(int VertexID) //returns the Node instance, given an ID
+        public Vertex GetVertex(int VertexID) 
         {
-            for (int i = 0; i < VertexSet.Count(); ++i)
+            //returns Vertex instance given an ID
+            for (int i = 0; i < vertexSet.Count(); ++i)
             {
-                if (VertexSet[i].GetVertexId() == VertexID)
+                if (vertexSet[i].GetVertexId() == VertexID)
                 {
-                    return VertexSet[i];
+                    return vertexSet[i];
                 }
             }
             return null;
         }
-        public bool IsInVertexList(int v)//function to check if a vertex exists
+        public bool IsInVertexList(int v)
         {
-            List<int> vertexList = GetListOfVertices();//get the list of vertices
-            foreach (int vertex in vertexList)//loop through it
+            //returns true if vertex exists
+            List<int> vertexList = GetListOfVertices();
+            foreach (int vertex in vertexList)
             {
                 if (v == vertex)
                 {
-                    return true;//if a match is found return true
+                    return true;
                 }
             }
-            return false;//otherwise return false
+            return false;
         }
-        public List<int> GetAdjVertices(int vertex) //gets the adjacent vertices of a vertex
+        public List<int> GetAdjVertices(int vertex) 
         {
-
-            if (!IsInVertexList(vertex)) //make sure that the input vertex exists first.
-                throw new ArgumentOutOfRangeException("Vertex does note exist");
-            List<int> adjacentVertices = new List<int>();
-            for (int i = 0; i < VertexSet.Count(); ++i)
+            //returns list of neighbours of a vertex
+            if (!IsInVertexList(vertex))
             {
-                if (VertexSet[i].GetVertexId() == vertex)
+                //error handling - existence
+                throw new ArgumentOutOfRangeException("Vertex does note exist");
+            }
+            List<int> adjacentVertices = new List<int>();
+            for (int i = 0; i < vertexSet.Count(); ++i)
+            {
+                if (vertexSet[i].GetVertexId() == vertex)
                 {
-                    foreach (Tuple<int, int> adjVertex in VertexSet[i].GetAdjVertices())
+                    foreach (Tuple<int, int> neighbour in vertexSet[i].GetAdjVertices())
                     {
-                        adjacentVertices.Add(adjVertex.Item1);
+                        adjacentVertices.Add(neighbour.Item1);
                     }
                 }
             }
             return adjacentVertices;
         }
-        public int GetEdgeWeight(int v1, int v2) //gets weight between to vertices
+        public int GetEdgeWeight(int v1, int v2) 
         {
+            //returns weight on an edge
             int weight = -1;
-            foreach (Node vertex in VertexSet)
+            foreach (Vertex vertex in vertexSet)
             {
                 if (vertex.GetVertexId() == v1)
                 {
                     weight = vertex.GetWeight(v2);
                 }
             }
-            return weight; //returns -1 if no edge was found
+            //return -1 if there was no edge
+            return weight;
         }
-        public List<Tuple<int, int, int>> GetListOfEdges() //item1: vertex1, Item2: Vertex2, Item3: Cost
+        public List<Tuple<int, int, int>> GetListOfEdges() 
         {
+            //returns list of edges
             return listOfEdges;
         }
-        public List<Tuple<int, int, int>> GetListOfSortedEdges() //uses merge sort to get a list of sorted edges
+        public List<Tuple<int, int, int>> GetListOfSortedEdges() 
         {
-            List<Tuple<int, int, int>> unsortedEdges = GetListOfEdges();//get the unsorted list
-            List<Tuple<int, int, int>> sortedEdges = MergeSort(unsortedEdges); //run the merge sort on the unsorted list
+            //merge sorts list of edges
+            List<Tuple<int, int, int>> unsortedEdges = GetListOfEdges();
+            List<Tuple<int, int, int>> sortedEdges = MergeSort(unsortedEdges);
             return sortedEdges;
         }
-        public List<Node> GetAdjacencyList()//gets the adjacency list of the graph
+        public List<Vertex> GetAdjacencyList()
         {
-            return VertexSet;
+            //returns adjacency list
+            return vertexSet;
         }
-        public int GetSumOfWeights() //returns the sum of weights
+        public int GetSumOfWeights() 
         {
+            //returns the sum of weights
             int sum = 0;
-            foreach (Node node in VertexSet) //loop through each node
+            foreach (Vertex node in vertexSet) 
             {
-                foreach (Tuple<int, int> adjacentVertex in node.GetAdjVertices())//loop through each adj vertex
+                //loop through adjacency list
+                foreach (Tuple<int, int> adjacentVertex in node.GetAdjVertices())
                 {
-                    sum += adjacentVertex.Item2; //loop through each tuple and get the weight, update sum
+                    //loop through each vertex's neighbours
+                    sum += adjacentVertex.Item2; //add weight to sum
                 }
             }
-            return sum / 2; //because its counted each edge twice
+            //each edge is counted twice
+            return sum / 2;
         }
-        public int GetNumberOfVertices()//retrieves the number of vertices
+        public int GetNumberOfVertices()
         {
-            return this.NumberOfVertices;
+            //returns the number of vertices
+            return this.numberOfVertices;
         }
-        public List<int> GetListOfVertices()//retreives a list of vertices
+        public List<int> GetListOfVertices()
         {
+            //returns list of vertices
             List<int> ListOfVertices = new List<int>();
-            foreach (Node node in VertexSet)//loop through the nodes
+            foreach (Vertex node in vertexSet)
             {
-                ListOfVertices.Add(node.GetVertexId());//add the ID of each node into the list.
+                //loop through adjacency list
+                ListOfVertices.Add(node.GetVertexId());
             }
             return ListOfVertices;
         }
-        public int GetValency(int v1)//get the valency of a vertex
+        public int GetValency(int v1)
         {
-            if (IsInVertexList(v1))//first, make sure the vertex exists
+            //returns the valency of a vertex
+            if (!IsInVertexList(v1))
             {
-                foreach (Node node in VertexSet)//loop through each node
+                //error handling - existence
+                throw new ArgumentException("this vertex does not exist.");
+            }
+            else
+            {
+                foreach (Vertex node in vertexSet)
                 {
-                    if (node.GetVertexId() == v1) //when you find the match
+                    //loop through adjacency list to find right vertex
+                    if (node.GetVertexId() == v1) 
                     {
-                        return node.GetAdjVertices().Count();//return the number of adjacent vertices
+                        return node.GetAdjVertices().Count();
                     }
                 }
             }
-            return -1;//if the vertex doesnt exist, return -1 as an indicator
+            //flag
+            return -1;
         }
-        public int GetSumValency()//get the sum of all of the valencies
+        public int GetSumValency()
         {
+            //return the sum of all of the valencies
             int total = 0;
             List<int> vertexList = GetListOfVertices();
             for (int i = 0; i < vertexList.Count(); ++i)
             {
-                total += GetValency(vertexList.ElementAt(i));//add the valency of each vertex to total by repetitvely calling getvalency() on each vertex
+                //call getvalency on each vertex
+                total += GetValency(vertexList.ElementAt(i));
             }
             return total;
         }
-        public string PrintAdjList() //returns the string which represents the adjacency list
+        public string PrintAdjList() 
         {
+            //returns adjacency list as string
             string stringToReturn = "";
             List<int> listOfVertices = GetListOfVertices();
             for (int i = 0; i < listOfVertices.Count(); ++i)
@@ -135,22 +162,24 @@ namespace Interface_2
             }
             return stringToReturn;
         }
-        public int GetMaxNodeID() //returns the highest Node ID
+        public int GetMaxVertexID() 
         {
+            //returns the highest Vertex ID
             int maxId = -10;
-            foreach (Node node in VertexSet)
+            foreach (Vertex vertex in vertexSet)
             {
-                if (node.GetVertexId() > maxId)
+                if (vertex.GetVertexId() > maxId)
                 {
-                    maxId = node.GetVertexId();
+                    maxId = vertex.GetVertexId();
                 }
             }
             return maxId;
         }
-        public List<List<int>> GetAdjacencyMatrix() //returns the adjacency matrix as a 2d list
+        public List<List<int>> GetAdjacencyMatrix()
         {
-            int size = GetMaxNodeID() + 1; //need a size one greater since the nodes start from 0
-            List<List<int>> adjMatrix = new List<List<int>>(); //where we will store the matrix
+            //returns adjacency matrix
+            int size = GetMaxVertexID() + 1;
+            List<List<int>> adjMatrix = new List<List<int>>();
             for (int row = 0; row < size; ++row)
             {
                 adjMatrix.Add(new List<int>());
@@ -160,74 +189,96 @@ namespace Interface_2
                     adjMatrix[row].Add(-1);
                 }
             }
-            foreach (Node node in VertexSet)
+            foreach (Vertex node in vertexSet)
             {
-                //intialise all entries which will have a connection
+                //intialise all entries which have a connection
                 foreach (Tuple<int, int> adjacentVertex in node.GetAdjVertices())
                 {
-                    adjMatrix[node.GetVertexId()][adjacentVertex.Item1] = adjacentVertex.Item2; //update the position in the matrix 
-                    adjMatrix[adjacentVertex.Item1][node.GetVertexId()] = adjacentVertex.Item2;//both ways
+                    adjMatrix[node.GetVertexId()][adjacentVertex.Item1] = adjacentVertex.Item2; 
+                    adjMatrix[adjacentVertex.Item1][node.GetVertexId()] = adjacentVertex.Item2;
                 }
             }
             return adjMatrix;
         }
-        public List<int> GetOddVertices() //returns a list of all the odd valency vertices (for route inspection)
+        public List<int> GetOddVertices() 
         {
+            //returns odd valency vertices
             List<int> oddVertices = new List<int>();
-            foreach (Node vertex in VertexSet)
+            foreach (Vertex vertex in vertexSet)
             {
+                //loop through adjacency list
                 if (GetValency(vertex.GetVertexId()) % 2 == 1)
                 {
-                    oddVertices.Add(vertex.GetVertexId()); //once identified, append to list
+                    oddVertices.Add(vertex.GetVertexId());
                 }
             }
             return oddVertices;
         }
-        private bool IsValidEdge(int u, int v, bool[] isInMst) //Check if the passed in edge is available for use in the MST
+        private bool IsValidEdge(int u, int v, bool[] isInMst)
         {
-            if (u == v) //a vertex to itself is not valid
+            //Check if the passed in edge is available for use in the MST
+            if (u == v)
+            {
+                //vertex to itself is not valid
                 return false;
-            if (isInMst[u] == false && isInMst[v] == false) //exactly one of the vertices need to be in the MST so return false
+            }
+            if (isInMst[u] == false && isInMst[v] == false)
+            {
+                //exactly one of the vertices need to be in the MST so return false
                 return false;
-            else if (isInMst[u] == true && isInMst[v] == true)//exactly one of the vertices need to be in the MST so return false
+            }
+            else if (isInMst[u] == true && isInMst[v] == true)
+            {
+                //exactly one of the vertices need to be in the MST so return false
                 return false;
+            }
             return true;
         }
         public int GetNumberOfEdges()
         {
+            //returns number of edges in graph
             return GetSumValency() / 2;
         }
         public bool ContainsCycle()
         {
-            foreach (Node vertex in VertexSet)
+            //returns true if the graph contains a cycle
+            foreach (Vertex vertex in vertexSet)
             {
-                if (DepthFirst(vertex.GetVertexId()).Item2) //Start from every node incase the graph is disconnected and only looks at one part
+                //Check from every vertex incase the graph is disconnected
+                if (DepthFirst(vertex.GetVertexId()).Item2) 
                 {
-                    return true; //if a cycle is found at anypoint, return true;
+                    //item 2 is true if the graph has a cycle
+                    return true;
                 }
             }
-            return false; //if a cycle wasnt found, then return false;
-        }
-        public bool IsConnected() //returns true if the graph is connected, false if not
-        {
-            if (GetNumberOfVertices() == 1)
-            {
-                return true; //a graph with 1 node is connected
-            }
-            List<Tuple<int, int>> DFSresult = DepthFirst(GetMaxNodeID()).Item1;
-            if (DFSresult.Count() == GetNumberOfVertices() - 1)
-                return true; //if the result of DFS includes all of the vertices it is connected
             return false;
         }
-        public int GetPathCost(List<int> path) //returns the cost of a path
+        public bool IsConnected() 
         {
+            //returns true if the graph is connected
+            if (GetNumberOfVertices() == 1)
+            {
+                //a graph with 1 vertex is connected
+                return true; 
+            }
+            List<Tuple<int, int>> DFSresult = DepthFirst(GetMaxVertexID()).Item1;
+            if (DFSresult.Count() == GetNumberOfVertices() - 1)
+            {
+                //if the result of DFS includes all of the vertices it is connected
+                return true; 
+            }
+            return false;
+        }
+        public int GetWalkCost(List<int> path) 
+        {
+            //returns cost of a walk
             int pathCost = 0;
             for (int i = 0; i < path.Count() - 1; ++i)
             {
-                int edgeWeight = GetEdgeWeight(path[i], path[i + 1]); //get the weight between the vertices
-                if (edgeWeight == -1) //it returns -1 if theres no edge
+                int edgeWeight = GetEdgeWeight(path[i], path[i + 1]);
+                if (edgeWeight == -1)
                 {
-                    pathCost = -1; //set cost to -1
+                    pathCost = -1;
                     break;
                 }
                 else
@@ -237,10 +288,11 @@ namespace Interface_2
             }
             return pathCost;
         }
-        public bool IsSemiEulerian() //returns true if the graph is semi eulerian
+        public bool IsSemiEulerian() 
         {
+            //returns true if the graph is semi eulerian
             int numOddVertices = 0;
-            foreach (Node vertex in VertexSet)
+            foreach (Vertex vertex in vertexSet)
             {
                 if (GetValency(vertex.GetVertexId()) % 2 == 1)
                 {
@@ -248,27 +300,30 @@ namespace Interface_2
                 }
             }
             if (numOddVertices == 2)
+            {
                 return true;
+            }
             return false;
         }
-        public bool IsEulerian() //returns true if the graph is eulerian
+        public bool IsEulerian()
         {
-            foreach (Node vertex in VertexSet)
+            //returns true if the graph is eulerian
+            foreach (Vertex vertex in vertexSet)
             {
                 if (GetValency(vertex.GetVertexId()) % 2 == 1)
                 {
-                    return false; //returns false if an odd vertex is found
+                    return false;
                 }
             }
-            return true; //returns true since no odd vertices were found
+            return true;
         }
-        private int GetMax(int a, int b) //gets the larger value
+        private int GetMax(int a, int b) 
         {
             return (a > b) ? a : b;
         }
         private int GetMin(int a, int b)
         {
-            return (a < b) ? a : b; //gets the smaller value
+            return (a < b) ? a : b;
         }
     }
 }

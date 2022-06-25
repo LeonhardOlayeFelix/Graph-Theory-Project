@@ -158,7 +158,7 @@
     <Compile Include="SecondaryWindows\NameCreatedGraph.xaml.cs">
       <DependentUpon>NameCreatedGraph.xaml</DependentUpon>
     </Compile>
-    <Compile Include="GraphDataStruture\Node\Node.cs" />
+    <Compile Include="GraphDataStruture\Node\Vertex.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

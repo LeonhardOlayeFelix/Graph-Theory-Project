@@ -8,126 +8,151 @@ namespace Interface_2
 {
     public partial class Graph
     {
-        public Tuple<List<Tuple<int, int>>, int> RInspStartAndEnd(int startVertex, int endVertex) //Route inspection – returns the repeated edges and cost of repitition
+        public Tuple<List<Tuple<int, int>>, int> RInspStartAndEnd(int startVertex, int endVertex) 
         {
+            //Route inspection starting and ending at same vertex
             if (!IsInVertexList(startVertex) || !IsInVertexList(endVertex))
             {
+                //error handling - existence
                 throw new Exception("Input vertex does not exist.");
             }
             else if (GetValency(startVertex) % 2 == 0 || GetValency(endVertex) % 2 == 0)
             {
+                //error handling - validation
                 throw new Exception("Both the start vertex and end vertex need to have an odd valency");
             }
-            List<int> oddVertices = GetOddVertices();//get a list of all the odd vertices
-            oddVertices.Remove(startVertex); //the start and end vertex dont need to be made even
+            List<int> oddVertices = GetOddVertices();
+            //the start and end vertex dont need to be made even
+            oddVertices.Remove(startVertex); 
             oddVertices.Remove(endVertex);
             return GetOptimalCombination(oddVertices);
         }
-        public Tuple<List<Tuple<int, int>>, int> RInspStartAtEnd() //Route inspection starting and ending at different vertices – returns the repeated edges and cost of repetition
+        public Tuple<List<Tuple<int, int>>, int> RInspStartAtEnd() 
         {
-            List<int> oddVertices = GetOddVertices();//get a list of all the odd vertices
+            //Route inspection starting and ending at same vertex
+            List<int> oddVertices = GetOddVertices();
             return GetOptimalCombination(oddVertices);
         }
-        public Tuple<List<Tuple<int, int>>, int> GetOptimalCombination(List<int> oddVertices)//gets optimal edges to repeat 
+        public Tuple<List<Tuple<int, int>>, int> GetOptimalCombination(List<int> oddVertices)
         {
-            List<List<List<int>>> combinations = Partition(oddVertices); //partition the odd vertices into pairs
-            List<List<Tuple<List<int>, int>>> CombinationsCost = new List<List<Tuple<List<int>, int>>>(); //example: [[#path, cost],[#path, cost]]
-            for (int i = 0; i < combinations.Count(); ++i) //loop through each combination
+            //gets optimal way to repeat edges
+
+            //partition the odd vertices into pairs, 3d list
+            List<List<List<int>>> combinations = Partition(oddVertices);
+
+            //populate with combinations list and costs example: [[#path, cost],[#path, cost]]
+            List<List<Tuple<List<int>, int>>> CombinationsCost = new List<List<Tuple<List<int>, int>>>(); 
+
+            for (int i = 0; i < combinations.Count(); ++i) 
             {
-                CombinationsCost.Add(new List<Tuple<List<int>, int>>()); //create a new element so we can add the cost and path below
+                //loop through each combination
+
+                //create a new element so we can add the cost and path below
+                CombinationsCost.Add(new List<Tuple<List<int>, int>>()); 
                 for (int j = 0; j < combinations[i].Count(); ++j)
                 {
-                    CombinationsCost[i].Add(DijkstrasAlgorithmShort(combinations[i][j][0], combinations[i][j][1])); //populate the element just made
+                    //populate the element just made with cheapest way of connecting vertices
+                    CombinationsCost[i].Add(DijkstrasAlgorithmShort(combinations[i][j][0], combinations[i][j][1]));
                 }
             }
-            int index = selectMinPairing(CombinationsCost); //returns the index of the lowest cost pairing
-            //Console.WriteLine(k); ////checking
-            List<Tuple<int, int>> edgesToRepeat = new List<Tuple<int, int>>(); //the edges that will need to be repeated
+            //index of the lowest cost pairing
+            int index = selectMinPairing(CombinationsCost); 
+           
+            List<Tuple<int, int>> edgesToRepeat = new List<Tuple<int, int>>();
             List<Tuple<List<int>, int>> optimalCombo = new List<Tuple<List<int>, int>>();
             try
             {
-                optimalCombo = CombinationsCost[index];//get the combination that had the lowest cost
+                //get the combination that had the lowest cost
+                optimalCombo = CombinationsCost[index];
             }
             catch
             {
-                return null; //incase anything goes wrong
+                //error handling
+                return null; 
             };
-            int total = 0;//the cost
+            int cost = 0;
             foreach (Tuple<List<int>, int> pathAndCost in optimalCombo)
             {
-                total += pathAndCost.Item2;//update the cost
-                List<int> path = pathAndCost.Item1; //get the path e.g (1,2,3,4,5)
+                //evaluate the cost of repitition and the edges to repeat
+                cost += pathAndCost.Item2;
+                List<int> path = pathAndCost.Item1;
                 for (int i = 0; i < path.Count() - 1; ++i)
                 {
                     edgesToRepeat.Add(Tuple.Create(GetMin(path[i], path[i + 1]), GetMax(path[i], path[i + 1])));//get the path as different edges, e.g.
                                                                                                                 //(1,2),(2,3),(3,4),(4,5);
                 }
             }
-            return Tuple.Create(edgesToRepeat, total);
+            return Tuple.Create(edgesToRepeat, cost);
         }
-        private int selectMinPairing(List<List<Tuple<List<int>, int>>> combinations) //returns the index of the lowest cost combination for route inspection
+        private int selectMinPairing(List<List<Tuple<List<int>, int>>> combinations) 
         {
-            int min = int.MaxValue; //initialise the lowest cost to the minimum value
-            int index = 0;//set the index to 0
+            //returns the index of the lowest cost combination for route inspection
+            int min = int.MaxValue;
+            int index = 0;
             for (int i = 0; i < combinations.Count(); ++i)
             {
-                int temp = 0; //set temp so it restarts every time
+                //reinitialise temp in each loop
+                int temp = 0;
 
                 for (int j = 0; j < combinations[i].Count(); ++j)
                 {
-                    temp += combinations[i][j].Item2; //add the cost of the combination temp
+                    //add the cost of the combination to temp
+                    temp += combinations[i][j].Item2; 
                 }
-                //Console.WriteLine(temp); ////checking
-                if (temp < min)//if the temp was a lower cost...
+                if (temp < min)
                 {
-                    index = i;//set the new index
-                    min = temp;//replace min
+                    //if the temp was a lower cost...
+                    index = i;
+                    min = temp;
                 }
 
             }
             return index;//return the index that the lowest combination is at
         }
-        private static List<List<int>> AddListAtoListB(List<List<int>> listA, List<List<int>> listB) //adds two dimensional lists together for route inspection pair partitioning
+        private static List<List<int>> AddListAtoListB(List<List<int>> listA, List<List<int>> listB) 
         {
+            //add two dimensional lists together for route inspection
             List<List<int>> ResultTwoDimList = new List<List<int>>() { };
             for (int i = 0; i < listA.Count; ++i)
             {
-                ResultTwoDimList.Add(listA[i]); //add onto the end of resulttwodimlist
+                ResultTwoDimList.Add(listA[i]);
             }
             for (int i = 0; i < listB.Count; ++i)
             {
-                ResultTwoDimList.Add(listB[i]);//add onto the end of resulttwodimlist
+                ResultTwoDimList.Add(listB[i]);
             }
             return ResultTwoDimList;
         }
-        private static List<int> AddListAtoListB(List<int> listA, List<int> listB) //adding lists together - for route inspection partitioning
+        private static List<int> AddListAtoListB(List<int> listA, List<int> listB)
         {
+            //add one dimensional lists together for route inspection
             List<int> listResult = new List<int>() { };
             for (int i = 0; i < listA.Count; ++i)
             {
-                listResult.Add(listA[i]); //add onto the end of listresult
+                listResult.Add(listA[i]); 
             }
             for (int i = 0; i < listB.Count; ++i)
             {
-                listResult.Add(listB[i]); //add onto the end of listresult
+                listResult.Add(listB[i]); 
             }
             return listResult;
         }
-        private static List<int> SliceList(List<int> list, int start, int end) //cuts a list at specified interval and returns cut list
+        private static List<int> SliceList(List<int> list, int start, int end) 
         {
-
-            end = (end == -1) ? list.Count : end;  //passing in -1 means the end of the list
-            start = (start == -1) ? 0 : start; //passing in -1 means the start of the list
+            //cuts a list at specified interval and returns cut list
+            end = (end == -1) ? list.Count : end;  //passing in -1 for end means the end of the list
+            start = (start == -1) ? 0 : start; //passing in -1 for start means the start of the list
             List<int> sublist = new List<int>() { };
             for (int i = start; i < end; ++i)
             {
-                sublist.Add(list[i]); //takes the list at the specified positions
+                sublist.Add(list[i]);
             }
             return sublist;
-        } //c# version of slicing
-        private static List<List<List<int>>> Partition(List<int> a) //returns all the possible combinations in a 3 dimensional list
+        }
+        private static List<List<List<int>>> Partition(List<int> a) 
         {
-            if (a.Count == 2) //if its two items, theres only one combination
+            //returns all the possible combinations in a 3 dimensional list
+            if (a.Count == 2) //base case - two items have one combination
             {
                 List<List<List<int>>> temp = new List<List<List<int>>>() { new List<List<int>>() { new List<int>() { a[0], a[1] } } };
                 return temp;
@@ -135,12 +160,16 @@ namespace Interface_2
             List<List<List<int>>> ret = new List<List<List<int>>>() { }; //return value
             for (int i = 1; i < a.Count; ++i)
             {
-                List<List<int>> p1 = new List<List<int>>() { new List<int>() { a[0], a[i] } }; //split apart: [0,1] [2,3,4,5]
-                List<int> rem = AddListAtoListB(SliceList(a, 1, i), SliceList(a, i + 1, -1)); //generate combinations of [2,3,4,5] recursively
-                List<List<List<int>>> res = Partition(rem);
-                foreach (var ri in res)
+                //split apart: [0,1] [2,3,4,5]
+                List<List<int>> p1 = new List<List<int>>() { new List<int>() { a[0], a[i] } };
+
+                //generate combinations of [2,3,4,5] recursively
+                List<int> temp = AddListAtoListB(SliceList(a, 1, i), SliceList(a, i + 1, -1)); 
+
+                List<List<List<int>>> result = Partition(temp);
+                foreach (var combo in result)
                 {
-                    ret.Add(AddListAtoListB(p1, ri)); //add that combination to [0,1]
+                    ret.Add(AddListAtoListB(p1, combo)); //add those combination to [0,1]
                 }
             }
             return ret;

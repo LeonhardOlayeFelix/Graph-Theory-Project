@@ -503,14 +503,14 @@ namespace Interface_2
         private void cbAlphabet_Checked(object sender, RoutedEventArgs e)
         {
             int maxNumber = alphabet.Count(); //the highest number of uniquely representable nodes using the alphabet
-            if (Graph.GetMaxNodeID() >= maxNumber)
+            if (Graph.GetMaxVertexID() >= maxNumber)
             {
                 MessageBox.Show("Not enough Letters in the alphabet to represent each vertex"); 
                 cbAlphabet.IsChecked = false;
             }
             else
             {
-                for (int i = 0; i < Graph.GetMaxNodeID() + 1; ++i) //loop through all the nodes
+                for (int i = 0; i < Graph.GetMaxVertexID() + 1; ++i) //loop through all the nodes
                 {
                     if (FindEllipse(i) != null) //check in advanced that this operation wont return null
                     {
@@ -525,7 +525,7 @@ namespace Interface_2
         }
         private void cbAlphabet_Unchecked(object sender, RoutedEventArgs e)
         {
-            for (int i = 0; i < Graph.GetMaxNodeID() + 1; ++i) //loop through all the nodes
+            for (int i = 0; i < Graph.GetMaxVertexID() + 1; ++i) //loop through all the nodes
             {
                 if (FindEllipse(i) != null)//check in advanced that this operation wont return null
                 {

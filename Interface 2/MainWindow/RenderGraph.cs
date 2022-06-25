@@ -26,7 +26,7 @@ namespace Interface_2
         }
         private void RenderVertices(Graph GraphToRender)
         {
-            buttonId = GraphToRender.GetMaxNodeID() + 1;
+            buttonId = GraphToRender.GetMaxVertexID() + 1;
             foreach (int vertex in Graph.GetListOfVertices())
             {
                 Ellipse vertexToAdd = new Ellipse() { StrokeThickness = 2 }; //create the vertex that will be added
@@ -117,7 +117,7 @@ namespace Interface_2
         } 
         private void RenderEdges(Graph GraphToRender)
         {
-            foreach (Node vertex in GraphToRender.GetAdjacencyList())
+            foreach (Vertex vertex in GraphToRender.GetAdjacencyList())
             {
                 foreach (Tuple<int, int> connection in vertex.GetAdjVertices())
                 {

@@ -410,7 +410,7 @@ namespace Interface_2
             else if (currentButton == btnAddVertex) //where a user wants to add a vertex
             {
                 int maxNumber = alphabet.Count(); //the highest number of uniquely representable nodes using the alphabet
-                if (Graph.GetNumberOfVertices() + Graph.NumberOfDeletedVertices > maxNumber - 1 && cbAlphabet.IsChecked == true)
+                if (Graph.GetNumberOfVertices() + Graph.numberOfDeletedVertices > maxNumber - 1 && cbAlphabet.IsChecked == true)
                 {
                     MessageBox.Show("Turn off Alphabet Labelling so more Nodes can be represented");
                 }
