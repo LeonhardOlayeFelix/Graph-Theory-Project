@@ -248,7 +248,6 @@ namespace Interface_2
                 txAdjset.Clear();
             }
         }
-        
         public void CreateNewGraph(string graphName, bool rendering = false) //creates a new graph
         {
             bool AlreadyExists = false; //tells us whether we should carry on with creating the graph later on
@@ -389,7 +388,6 @@ namespace Interface_2
         }
         private void mainCanvas_DragOver(object sender, DragEventArgs e)
         {
-
             //if the mouse the vertex is being dragged
             int ellipseToDropID = Convert.ToInt32(ellipseToDrop.Name.Substring(3));
             Point dropPosition = e.GetPosition(mainCanvas); //current position of the place its being dragged

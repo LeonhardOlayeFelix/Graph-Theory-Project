@@ -18,9 +18,8 @@ namespace Interface_2
 
     public partial class MainWindow : Window
     {
-        public static Teacher loggedTeacher = null; //teacher that is logged in
-        public static Student loggedStudent = null; //student that is logged in
-        //for the algorithms
+        public static Teacher loggedTeacher = null;
+        public static Student loggedStudent = null;
         Ellipse lastSelectedVertex;
         Ellipse vertexToConnectTo;
         int buttonSelectionCount = 0;
@@ -28,8 +27,7 @@ namespace Interface_2
         int rInspSelectionCount = 0;
         int rInspStart = 0;
         int startVertex = 0;
-        
-        static List<string> normalAlphabet = new List<string>() { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z" };
+
         static List<string> alphabet = new List<string>(); //the id that the nodes could be assigned
         
         private bool graphCreated = false;//for loading, creating, and deleting files
@@ -52,9 +50,10 @@ namespace Interface_2
 
         SolidColorBrush HighlightColour = null;
         
-        private Graph Graph = null; //initialise a Network Class
+        private Graph Graph = null; //initialise a Graph Class
         public MainWindow()
         {
+            List<string> normalAlphabet = new List<string>() { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z" };
             InitializeComponent();
             DisableAllActionButtons();
             DisableTbCtrl();

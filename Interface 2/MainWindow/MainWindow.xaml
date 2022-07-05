@@ -212,7 +212,7 @@
                                             x:Name="btnRegisterStudent"
                                             Grid.Row="1"
                                             Click="btnRegisterStudent_Click">
-                                            Register an account as a Student
+                                            Register As Student
                                         </Button>
                                         <TextBlock Foreground="Black"
                                                Grid.Row="1"
@@ -220,7 +220,7 @@
                                                Margin="29,0,30,24"
                                                FontSize="10"
                                                HorizontalAlignment="Center">
-                                        Sign Up in order to save Graphs
+                                        Register as a student (keeps saved graphs confidential)
                                         </TextBlock>
                                         <Button Margin="20,14,20,6"
                                             x:Name="btnRegisterTeacher"
@@ -234,7 +234,7 @@
                                                Margin="29,0,30,24"
                                                FontSize="10"
                                                HorizontalAlignment="Center">
-                                        Register an account as a teacher
+                                        Register as a teacher (keeps saved graphs confidential)
                                         </TextBlock>
                                         <Button Margin="20,14,20,6"
                                             x:Name="btnLogOut"
