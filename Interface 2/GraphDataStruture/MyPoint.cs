@@ -49,15 +49,5 @@ namespace Interface_2
             //returns original position as tuple
             return Tuple.Create(originalX, originalY);
         }
-        public double GetOriginalX()
-        {
-            //returns original x coordinate
-            return originalX;
-        }
-        public double GetOriginalY()
-        {
-            //returns original y coordinate
-            return originalY;
-        }
     }
 }
