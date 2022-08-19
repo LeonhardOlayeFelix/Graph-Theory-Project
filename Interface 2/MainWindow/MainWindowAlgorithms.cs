@@ -73,8 +73,7 @@ namespace Interface_2
                 }
                 for (int i = 0; i < highlightedLines.Count(); ++i)
                 {
-                    highlightedLines[i].Stroke = HighlightColour;
-                    if (i != highlightedLines.Count() - 1) { MessageBox.Show("Press OK to show next edge"); }
+                    InitiateHighlightStoryboard(highlightedLines[i], TimeSpan.FromSeconds(1));
                 }
                 txExtraInfo2.Text = "Minimum Spanning Tree Weight: " + total / 2;
                 return true;
@@ -83,10 +82,11 @@ namespace Interface_2
         }
         public void DijkstraHighlightPath(List<int> path, bool livePathhighlighting = false) //a path of vertexIds, in the order they want to be traversed //done
         {
+            
             int total = 0;
             if (path.Count() > 1)
             {
-                List<Line> highlightedLines = new List<Line>(); //gets the list of lines to highlight at the end
+                List<Line> highlightedLines = new List<Line>(); //converts the vertices list into lines
                 for (int i = 0; i < path.Count() - 1; ++i)
                 {
                     int Vertex1 = path.ElementAt(i);
@@ -119,13 +119,14 @@ namespace Interface_2
                     }
                     for (int i = 0; i < highlightedLines.Count(); ++i)
                     {
-                        highlightedLines[i].Stroke = HighlightColour;
-                        pathString += FindLabel(Convert.ToInt32(path[i].ToString())).Text + "=>"; //change the colour and update the path string
-                        if (i != highlightedLines.Count() - 1) { MessageBox.Show("Press OK to show next edge"); }
+                        pathString += FindLabel(Convert.ToInt32(path[i].ToString())).Text + "=>"; 
                     }
                     pathString += FindLabel(Convert.ToInt32(path[path.Count() - 1])).Text;
                     txExtraInfo2.Text = "Traversal Order:\n" + pathString + "\nCost: " + total;
-
+                    foreach (Line line in highlightedLines)
+                    {
+                        InitiateHighlightStoryboard(line, TimeSpan.FromSeconds(1));
+                    }
                 }
                 else //if this isnt true, then a valid path was not passed in.
                 {

@@ -39,13 +39,13 @@ namespace Interface_2
             }
 
             //below creates the line which will be connected
-            Line temp = new Line()//set properties
+            Line line = new Line()//set properties
             {
                 StrokeThickness = 4,
                 Name = lineName,
                 Stroke = new SolidColorBrush(Colors.Black)
             };
-            Canvas.SetZIndex(temp, 0); //make sure the line is underneath everything
+            Canvas.SetZIndex(line, 0); //make sure the line is underneath everything
 
             Binding bindingStroke = new Binding("SelectedBrush") //this will bind the stroke of the line to the colour picker
             {
@@ -53,7 +53,7 @@ namespace Interface_2
                 Mode = BindingMode.OneWay,
                 UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
             };
-            temp.SetBinding(Line.StrokeProperty, bindingStroke); 
+            line.SetBinding(Line.StrokeProperty, bindingStroke); 
 
             Binding bindingV1X = new Binding //this will bind the X1 coordinate of the line to the smaller ellipse
             {
@@ -61,7 +61,7 @@ namespace Interface_2
                 Path = new PropertyPath(Canvas.LeftProperty),
                 UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
             };
-            temp.SetBinding(Line.X1Property, bindingV1X);
+            line.SetBinding(Line.X1Property, bindingV1X);
 
             Binding bindingV1Y = new Binding //this will bind the Y1 coordinates of the line to the smaller ellipse
             {
@@ -69,7 +69,7 @@ namespace Interface_2
                 Path = new PropertyPath(Canvas.TopProperty),
                 UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
             };
-            temp.SetBinding(Line.Y1Property, bindingV1Y);
+            line.SetBinding(Line.Y1Property, bindingV1Y);
 
             Binding bindingV2X = new Binding //this will bind the X2 coordinate of the line to the larger ellipse
             {
@@ -77,7 +77,7 @@ namespace Interface_2
                 Path = new PropertyPath(Canvas.LeftProperty),
                 UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
             };
-            temp.SetBinding(Line.X2Property, bindingV2X);
+            line.SetBinding(Line.X2Property, bindingV2X);
 
             Binding bindingV2Y = new Binding //this will bind the Y2 coordinate of the line to the larger ellipse
             {
@@ -85,7 +85,7 @@ namespace Interface_2
                 Path = new PropertyPath(Canvas.TopProperty),
                 UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
             };
-            temp.SetBinding(Line.Y2Property, bindingV2Y);
+            line.SetBinding(Line.Y2Property, bindingV2Y);
             
             //below creates the label which represents the weight of the line
             TextBlock weightLabel = new TextBlock() //set its properties
@@ -117,11 +117,10 @@ namespace Interface_2
             Canvas.SetLeft(weightLabel, MidPointX - 4);
             Canvas.SetTop(weightLabel, MidPointY - 9);
             Canvas.SetZIndex(weightLabel, 1); //needs to be visible above the line
-            temp.MouseMove += mouseMove;
+            line.MouseMove += mouseMove;
             //add a new edge tuple to the list
-            edgeList.Add(Tuple.Create(temp, smallerEllipse, largerEllipse, weightLabel));
-            //if the weight is 0, show it as an unweighted edge
-            mainCanvas.Children.Add(temp);
+            edgeList.Add(Tuple.Create(line, smallerEllipse, largerEllipse, weightLabel));
+            InitiateLineStoryboard(line, TimeSpan.FromSeconds(0.2)); //start line storyboard
             if (weight != 0)
                 mainCanvas.Children.Add(weightLabel);
             GenerateAdjList();
@@ -140,6 +139,20 @@ namespace Interface_2
             mainCanvas.Children.Remove(edge.Item4);//remove the label which is the fourth element
             edgeList.Remove(edge);//remove it from the graph
             GenerateAdjList();
+        }
+        public Line FindLine(int a, int b)
+        {
+            int smallerId = GetMin(a, b);
+            int largerId = GetMax(a, b);
+            string lineName = "line" + smallerId.ToString() + "to" + largerId.ToString(); //uses this to check if theres a path
+            foreach (Tuple<Line, Ellipse, Ellipse, TextBlock> edge in edgeList)
+            {
+                if (edge.Item1.Name == lineName)//detetcs if theres a path because theres a matching name
+                {
+                    return edge.Item1;
+                }
+            }
+            return null;
         }
         public Ellipse FindEllipse(int vertexId) //returns the ellipse that matches to an Id
         {

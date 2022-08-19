@@ -305,6 +305,7 @@ namespace Interface_2
                 }
                 else if (currentButton == btnDijkstrasShort) //if they are trying to run dijkstras algorithm
                 {
+                    ClearHighlightedLines();
                     dijkstraSelectionCount += 1;
                     if (dijkstraSelectionCount % 2 == 0)
                     {
@@ -500,7 +501,7 @@ namespace Interface_2
                     vertexList.Add(vertexToAdd);
                     mainCanvas.Children.Add(vertexToAdd);//add the vertex to the canvas
                     mainCanvas.Children.Add(vertexLabel); //add the label to the canvas
-                    WidenObject(vertexDiameterSlider.Value, TimeSpan.FromSeconds(0.2), vertexToAdd); //begin story board
+                    InitiateVertexStoryboard(vertexDiameterSlider.Value, TimeSpan.FromSeconds(0.2), vertexToAdd); //begin story board
                     
                 }
                 if (graphCreated == true)

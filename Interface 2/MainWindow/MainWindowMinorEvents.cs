@@ -16,10 +16,12 @@ namespace Interface_2
 {
     public partial class MainWindow : Window
     {
+        List<Line> linesToDelete = new List<Line>();
         private void ActivateButton(object btnSender) //highlight a button when its pressed
         {
             RevertEllipseColour();
             RevertLineColour();
+            ClearHighlightedLines();
             livePath.Clear(); //incase they were in the midst of the highlight path action
             if (btnSender != null) //make sure that the button isnt null
             {
@@ -30,6 +32,14 @@ namespace Interface_2
                     currentButton.Background = new SolidColorBrush(btnActivatedColour); //'activate' the current button
                 }
             }
+        }
+        public void ClearHighlightedLines()
+        {
+            foreach (Line line in linesToDelete)
+            {
+                mainCanvas.Children.Remove(line);
+            }
+            linesToDelete.Clear();
         }
         private void DeactivateButton() //'deactivates' button
         {
@@ -60,15 +70,49 @@ namespace Interface_2
             colourPickerHighlight.SelectedBrush = new SolidColorBrush(Colors.Red);
             ActivateButton(sender);
         }
-        public void WidenObject(double newDiameter, TimeSpan duration, Ellipse vertex)
+        public void InitiateVertexStoryboard(double newDiameter, TimeSpan duration, Ellipse vertex)
         {
             DoubleAnimation animation = new DoubleAnimation(newDiameter, duration);
             animation.FillBehavior = FillBehavior.Stop;
-            animation.Completed += new EventHandler(Story_Completed);
+            animation.Completed += new EventHandler(VertexStory_Completed);
             vertex.BeginAnimation(Ellipse.HeightProperty, animation);
             vertex.BeginAnimation(Ellipse.WidthProperty, animation);
         }
-        public void Story_Completed(object sender, EventArgs e)
+        public void InitiateHighlightStoryboard(Line line, TimeSpan duration)
+        {
+            Line line1 = new Line();
+            mainCanvas.Children.Add(line1);
+            line1.Stroke = HighlightColour;
+            line1.StrokeThickness = line.StrokeThickness;
+            line1.X1 = line.X1;
+            line1.Y1 = line.Y1;
+            line1.X2 = line.X2;
+            line1.Y2 = line.Y2;
+            Storyboard sb = new Storyboard();
+            DoubleAnimation animation = new DoubleAnimation(line1.Y1, line1.Y2, duration);
+            DoubleAnimation animation1 = new DoubleAnimation(line1.X1, line1.X2, duration);
+            Storyboard.SetTargetProperty(animation, new PropertyPath("(Line.Y2)"));
+            Storyboard.SetTargetProperty(animation1, new PropertyPath("(Line.X2)"));
+            sb.Children.Add(animation);
+            sb.Children.Add(animation1);
+            linesToDelete.Add(line1);
+            line1.BeginStoryboard(sb);
+        }
+        public void InitiateLineStoryboard(Line line, TimeSpan duration)
+        {
+            mainCanvas.Children.Add(line);
+            Storyboard sb = new Storyboard();
+            DoubleAnimation animation = new DoubleAnimation(line.Y1, line.Y2, duration);
+            DoubleAnimation animation1 = new DoubleAnimation(line.X1, line.X2, duration);
+            animation.FillBehavior = FillBehavior.Stop;
+            animation1.FillBehavior = FillBehavior.Stop;
+            Storyboard.SetTargetProperty(animation, new PropertyPath("(Line.Y2)"));
+            Storyboard.SetTargetProperty(animation1, new PropertyPath("(Line.X2)"));
+            sb.Children.Add(animation);
+            sb.Children.Add(animation1);
+            line.BeginStoryboard(sb);
+        }
+        public void VertexStory_Completed(object sender, EventArgs e)
         {
             Binding bindingDiameter = new Binding("Value")//binding the diameter of the vertices to the slider
             {
