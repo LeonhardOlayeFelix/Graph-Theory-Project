@@ -10,7 +10,7 @@ using System.Windows.Shapes;
 using System.Data;
 using System.Data.OleDb;
 using System.Text.RegularExpressions;
-
+using System.Windows.Media.Animation;
 
 namespace Interface_2
 {
@@ -19,6 +19,7 @@ namespace Interface_2
     {
         private void ConnectVertices(Ellipse v1, Ellipse v2, int weight, bool rendering = false) //connects two vertices together 
         {
+            
             //gets the smaller and larger vertex
             Ellipse smallerEllipse = GetMinEllipse(v1, v2);
             Ellipse largerEllipse = GetMaxEllipse(v1, v2);

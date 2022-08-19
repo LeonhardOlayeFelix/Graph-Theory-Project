@@ -14,6 +14,7 @@ namespace Interface_2
         public UDLinkedListNode(Tuple<int, int> v)
         {
             data = v;
+            
             next = null;
         }
     }

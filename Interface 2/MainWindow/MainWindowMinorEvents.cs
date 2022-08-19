@@ -10,6 +10,8 @@ using System.Windows.Shapes;
 using System.Windows.Media.Imaging;
 using System.IO;
 using System.Data.OleDb;
+using System.Windows.Media.Animation;
+
 namespace Interface_2
 {
     public partial class MainWindow : Window
@@ -58,7 +60,33 @@ namespace Interface_2
             colourPickerHighlight.SelectedBrush = new SolidColorBrush(Colors.Red);
             ActivateButton(sender);
         }
+        public void WidenObject(double newDiameter, TimeSpan duration, Ellipse vertex)
+        {
+            DoubleAnimation animation = new DoubleAnimation(newDiameter, duration);
+            animation.FillBehavior = FillBehavior.Stop;
+            animation.Completed += new EventHandler(Story_Completed);
+            vertex.BeginAnimation(Ellipse.HeightProperty, animation);
+            vertex.BeginAnimation(Ellipse.WidthProperty, animation);
+        }
+        public void Story_Completed(object sender, EventArgs e)
+        {
+            Binding bindingDiameter = new Binding("Value")//binding the diameter of the vertices to the slider
+            {
+                Source = vertexDiameterSlider,
+                UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
+            };
+            foreach (var ctrl in mainCanvas.Children)
+            {
+                try
+                {
+                    Ellipse vertex = (Ellipse)ctrl;
+                    vertex.SetBinding(Ellipse.HeightProperty, bindingDiameter);
+                    vertex.SetBinding(Ellipse.WidthProperty, bindingDiameter);
 
+                }
+                catch { }
+            }
+        }
         public void LoadGraph()
         {
 

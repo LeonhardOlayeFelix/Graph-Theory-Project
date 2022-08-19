@@ -8,6 +8,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Media;
+using System.Threading;
 namespace Interface_2
 {
 
@@ -435,13 +436,8 @@ namespace Interface_2
                     };
                     vertexToAdd.SetBinding(Ellipse.FillProperty, bindingFill);
 
-                    Binding bindingDiameter = new Binding("Value")//binding the diameter of the vertices to the slider
-                    {
-                        Source = vertexDiameterSlider,
-                        UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
-                    };
-                    vertexToAdd.SetBinding(Ellipse.HeightProperty, bindingDiameter);
-                    vertexToAdd.SetBinding(Ellipse.WidthProperty, bindingDiameter);
+                    vertexToAdd.Height = 0;
+                    vertexToAdd.Width = 0;
 
                     //positioning the vertex in the canvas.
                     double vertexCenterXMousePos = Mouse.GetPosition(mainCanvas).X;
@@ -501,10 +497,11 @@ namespace Interface_2
                     Canvas.SetZIndex(vertexLabel, Zindex++);
 
                     vertexTxBoxList.Add(vertexLabel);//add it to the label list
-
+                    vertexList.Add(vertexToAdd);
                     mainCanvas.Children.Add(vertexToAdd);//add the vertex to the canvas
                     mainCanvas.Children.Add(vertexLabel); //add the label to the canvas
-
+                    WidenObject(vertexDiameterSlider.Value, TimeSpan.FromSeconds(0.2), vertexToAdd); //begin story board
+                    
                 }
                 if (graphCreated == true)
                 {
