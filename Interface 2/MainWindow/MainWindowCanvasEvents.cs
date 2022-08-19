@@ -356,7 +356,6 @@ namespace Interface_2
             }
             else if (e.OriginalSource is Line) //if they click on a line in the canvas
             {
-                //check if they are deleting edges (make sure deleting is pressed)
                 if (currentButton == btnDeleteConnection)
                 {
                     //give the line a variable to refer to

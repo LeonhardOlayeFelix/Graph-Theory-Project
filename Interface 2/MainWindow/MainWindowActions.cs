@@ -122,7 +122,7 @@ namespace Interface_2
             line.MouseMove += mouseMove;
             //add a new edge tuple to the list
             edgeList.Add(Tuple.Create(line, smallerEllipse, largerEllipse, weightLabel));
-            InitiateLineStoryboard(line, TimeSpan.FromSeconds(0.35)); //start line storyboard
+            InitiateLineStoryboard(line, TimeSpan.FromSeconds(0.2)); //start line storyboard
             if (weight != 0)
                 mainCanvas.Children.Add(weightLabel);
             GenerateAdjList();
@@ -143,7 +143,7 @@ namespace Interface_2
             }
             mainCanvas.Children.Remove(edge.Item1); //remove the line which is the first item
             mainCanvas.Children.Remove(edge.Item4);//remove the label which is the fourth element
-            InitiateDeleteLineStoryboard(edge.Item1, TimeSpan.FromSeconds(0.2));
+            InitiateDeleteLineStoryboard(edge.Item1, TimeSpan.FromSeconds(0.1));
             edgeList.Remove(edge);//remove it from the graph
             GenerateAdjList();
         }
