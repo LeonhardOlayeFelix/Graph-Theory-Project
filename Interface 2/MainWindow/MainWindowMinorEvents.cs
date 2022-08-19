@@ -78,6 +78,25 @@ namespace Interface_2
             vertex.BeginAnimation(Ellipse.HeightProperty, animation);
             vertex.BeginAnimation(Ellipse.WidthProperty, animation);
         }
+        public void InitiateDeleteLineStoryboard(Line line, TimeSpan duration)
+        {
+            Line line1 = new Line();
+            mainCanvas.Children.Add(line1);
+            line1.Stroke = line.Stroke;
+            line1.StrokeThickness = line.StrokeThickness;
+            line1.X1 = line.X1;
+            line1.Y1 = line.Y1;
+            line1.X2 = line.X2;
+            line1.Y2 = line.Y2;
+            Storyboard sb = new Storyboard();
+            DoubleAnimation animation = new DoubleAnimation(line1.Y2, line1.Y1, duration);
+            DoubleAnimation animation1 = new DoubleAnimation(line1.X2, line1.X1, duration);
+            Storyboard.SetTargetProperty(animation, new PropertyPath("(Line.Y2)"));
+            Storyboard.SetTargetProperty(animation1, new PropertyPath("(Line.X2)"));
+            sb.Children.Add(animation);
+            sb.Children.Add(animation1);
+            line1.BeginStoryboard(sb);
+        }
         public void InitiateHighlightStoryboard(Line line, TimeSpan duration)
         {
             Line line1 = new Line();

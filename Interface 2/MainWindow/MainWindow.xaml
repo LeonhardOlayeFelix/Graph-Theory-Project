@@ -30,9 +30,9 @@
             </ItemsControl>
         </DataTemplate>
     </Window.Resources>
-    
+
     <Grid>
-        
+
         <Grid Background="#d9d2d2"
           Margin="2">
             <Grid.ColumnDefinitions>
@@ -248,7 +248,7 @@
                                                FontSize="10"
                                                HorizontalAlignment="Center">
                                         Log out of your account
-                                            
+
                                         </TextBlock>
 
                                     </Grid>
@@ -270,28 +270,53 @@
                                 <GroupBox Grid.Row="2"
                                       Grid.Column="1">
                                     <GroupBox.Header>
-                                        <Bold>Adjacency Matrix</Bold>
+                                        <Bold>General</Bold>
                                     </GroupBox.Header>
                                     <Grid>
                                         <Grid.RowDefinitions>
-                                            <RowDefinition Height="26*"/>
-                                            <RowDefinition Height="31*"/>
-                                            <RowDefinition Height="119*"/>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
                                         </Grid.RowDefinitions>
-                                        <TextBlock FontSize="10"
-                                               TextWrapping="Wrap"
-                                               TextAlignment="Center">
-                                        Updating the matrix after each command causes slow execution, instead heres a button:
-                                        </TextBlock>
-                                        <Button Margin="20,5,20,5"
-                                            Grid.Row="1"
-                                            x:Name="btnGenerateMatrix"
-                                            Click="btnGenerateMatrix_Click">
-                                            Generate
+                                        <Button Margin="20,10,20,10"
+                                            x:Name="btnRevertPositions"
+                                            Click="btnRevertPositions_Click"
+                                            Grid.Row="0">
+                                            Revert All Vertices positions
                                         </Button>
-                                        <ScrollViewer Grid.Row="2" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-                                            <ItemsControl x:Name="lst" ItemTemplate="{DynamicResource DataTemplate_Level1}" />
-                                        </ScrollViewer>
+                                        <TextBlock Foreground="Black"
+                                               Grid.Row="0"
+                                               Height="20" 
+                                               Margin="128,-1,119,25"
+                                               FontSize="10"
+                                               HorizontalAlignment="Center" Width="178">
+                                        Return All vertices to their original postions
+                                        </TextBlock>
+                                        <Button Margin="20,10,20,10"
+                                            Grid.Row="2"
+                                            x:Name="btnDeleteAllEdges"
+                                            Click="btnDeleteAllEdges_Click">
+                                            Delete All Edges
+                                        </Button>
+                                        <TextBlock Foreground="Black"
+                                               Height="20" 
+                                               Margin="124,42,123,26"
+                                               FontSize="10"
+                                               HorizontalAlignment="Center" Width="178" Grid.RowSpan="2">
+                                        Return a single vertex to original postions
+                                        </TextBlock>
+                                        <Button Margin="20,10,20,10"
+                                            x:Name="btnRevertOnePositions"
+                                            Click="btnRevertOnePositions_Click"
+                                            Grid.Row="1">
+                                            Revert A Vertex's position
+                                        </Button>
+                                        <TextBlock Foreground="Black"
+                                            Height="20" 
+                                            Margin="135,39,112,29"
+                                            FontSize="10"
+                                            HorizontalAlignment="Center" Width="178" Grid.RowSpan="2" Grid.Row="1" Text="Delete all edges within the canvas"/>
                                     </Grid>
                                 </GroupBox>
                                 <GroupBox Grid.Row="2"
@@ -530,20 +555,7 @@
                                             Click="btnToggleValencies_Click">
                                                     Toggle Valencies
                                                 </Button>
-                                                <Button Margin="20,12,20,3"
-                                            x:Name="btnRevertPositions"
-                                            Click="btnRevertPositions_Click"
-                                                        Grid.Row="2">
-                                                    Revert All Vertices positions
-                                                </Button>
-                                                <TextBlock Foreground="Black"
-                                               Grid.Row="1"
-                                               Height="20" 
-                                               Margin="50,35,20,21"
-                                               FontSize="10"
-                                               HorizontalAlignment="Center" Width="178" Grid.RowSpan="2">
-                                        Return vertices to original postions
-                                                </TextBlock>
+
                                             </Grid>
                                         </GroupBox>
                                         <GroupBox Header="Route Inspection"
@@ -581,20 +593,7 @@
                                                HorizontalAlignment="Center" Width="192">
                                         Lowest cost to traverse every edge once
                                                 </TextBlock>
-                                                <TextBlock Foreground="Black"
-                                               Grid.Row="1"
-                                               Height="20" 
-                                               Margin="50,35,20,21"
-                                               FontSize="10"
-                                               HorizontalAlignment="Center" Width="178" Grid.RowSpan="2">
-                                        Return a single vertex to original postions
-                                                </TextBlock>
-                                                <Button Margin="20,12,20,3"
-                                            x:Name="btnRevertOnePositions"
-                                            Click="btnRevertOnePositions_Click"
-                                                        Grid.Row="2">
-                                                    Revert Single Vertices positions
-                                                </Button>
+
                                             </Grid>
                                         </GroupBox>
                                         <GroupBox Header="Traversal Algorithms"

@@ -64,8 +64,10 @@ namespace Interface_2
             btnTakeScreenshot.IsEnabled = false;
             btnDragAndDrop.IsEnabled = false;
             btnDefault.IsEnabled = false;
-            btnGenerateMatrix.IsEnabled = false;
-            
+            btnRevertOnePositions.IsEnabled = false;
+            btnRevertPositions.IsEnabled = false;
+            btnDeleteAllEdges.IsEnabled = false; ;
+
         }
         public void EnableAllActionButtons()
         {
@@ -77,8 +79,9 @@ namespace Interface_2
             btnTakeScreenshot.IsEnabled = true;
             btnDragAndDrop.IsEnabled = true;
             btnDefault.IsEnabled = true;
-            btnGenerateMatrix.IsEnabled = true;
-            
+            btnRevertOnePositions.IsEnabled = true;
+            btnRevertPositions.IsEnabled = true;
+            btnDeleteAllEdges.IsEnabled = true;
         }
     }
 }

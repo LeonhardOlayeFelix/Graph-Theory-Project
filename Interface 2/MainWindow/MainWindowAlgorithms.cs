@@ -39,7 +39,7 @@ namespace Interface_2
             }
             for (int i = 0; i < highlightedLines.Count(); ++i)
             {
-                highlightedLines[i].Stroke = HighlightColour;
+                InitiateHighlightStoryboard(highlightedLines[i], TimeSpan.FromSeconds(1));
             }
             string info = "Edges to repeat:\n";
             foreach (Tuple<int, int> edge in edges)

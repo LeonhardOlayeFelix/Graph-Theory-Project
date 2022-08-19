@@ -173,6 +173,7 @@ namespace Interface_2
                 }
                 else if (currentButton == btnRouteInspStartAndEnd) //if they are trying to do a route inspection
                 {
+                    ClearHighlightedLines();
                     if (!Graph.IsConnected()) //can only be done on a connected graph
                     {
                         MessageBox.Show("The graph is not connected");
@@ -288,6 +289,7 @@ namespace Interface_2
                 {
                     if (vertexList.Count() != 0)
                     {
+                        ClearHighlightedLines();
                         RevertEllipseColour();
                         Ellipse startVertex = (Ellipse)e.OriginalSource; //the vertex to start the MST from
                         startVertex.Fill = HighlightColour;
@@ -364,7 +366,6 @@ namespace Interface_2
                         if (edge.Item1 == activeEdge) //find the correct edge,
                         {
                             DeleteEdge(edge); //then delete the edge
-                            Graph.RemoveEdge(Convert.ToInt32(edge.Item2.Name.Substring(3)), Convert.ToInt32(edge.Item3.Name.Substring(3))); //update the class graph
                             break;
                         }
                     }

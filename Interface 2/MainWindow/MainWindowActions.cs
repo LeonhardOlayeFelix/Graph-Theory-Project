@@ -23,13 +23,14 @@ namespace Interface_2
             //gets the smaller and larger vertex
             Ellipse smallerEllipse = GetMinEllipse(v1, v2);
             Ellipse largerEllipse = GetMaxEllipse(v1, v2);
-            //creates the lines soon to be name as "line5to6 for example 
+            //creates the lines soon-to-be name as "line5to6 for example 
             string lineName = "line" + smallerEllipse.Name.Substring(3).ToString() + "to" + largerEllipse.Name.Substring(3).ToString(); 
             foreach (Tuple<Line, Ellipse, Ellipse, TextBlock> edge in edgeList)//before connecting, check if a line already exists
             {
                 if (edge.Item1.Name == lineName)//if it does....
                 {
-                    DeleteEdge(edge);//delete the edge
+                    if (rendering) { return; }
+                    DeleteEdge(edge, rendering);//delete the edge
                     break;
                 }
             }
@@ -93,6 +94,7 @@ namespace Interface_2
                 Text = weight.ToString(),
                 Name = "labelFor" + lineName,
                 FontSize = 15,
+                IsHitTestVisible = false
             };
 
             Binding bindingFG = new Binding("SelectedBrush") //binds the foreground of the label to the colour picker
@@ -120,7 +122,7 @@ namespace Interface_2
             line.MouseMove += mouseMove;
             //add a new edge tuple to the list
             edgeList.Add(Tuple.Create(line, smallerEllipse, largerEllipse, weightLabel));
-            InitiateLineStoryboard(line, TimeSpan.FromSeconds(0.2)); //start line storyboard
+            InitiateLineStoryboard(line, TimeSpan.FromSeconds(0.35)); //start line storyboard
             if (weight != 0)
                 mainCanvas.Children.Add(weightLabel);
             GenerateAdjList();
@@ -133,23 +135,37 @@ namespace Interface_2
         {
             return (Convert.ToInt32(vertex1.Name.Substring(3)) > Convert.ToInt32(vertex2.Name.Substring(3))) ? vertex1 : vertex2;
         }
-        private void DeleteEdge(Tuple<Line, Ellipse, Ellipse, TextBlock> edge) //deletes an edge, and the things connected to
+        private void DeleteEdge(Tuple<Line, Ellipse, Ellipse, TextBlock> edge, bool rendering = false) //deletes an edge, and the things connected to
         {
+            if (!rendering)
+            {
+                Graph.RemoveEdge(Convert.ToInt32(edge.Item2.Name.Substring(3)), Convert.ToInt32(edge.Item3.Name.Substring(3))); //update the class graph
+            }
             mainCanvas.Children.Remove(edge.Item1); //remove the line which is the first item
             mainCanvas.Children.Remove(edge.Item4);//remove the label which is the fourth element
+            InitiateDeleteLineStoryboard(edge.Item1, TimeSpan.FromSeconds(0.2));
             edgeList.Remove(edge);//remove it from the graph
             GenerateAdjList();
         }
-        public Line FindLine(int a, int b)
+        private void btnDeleteAllEdges_Click(object sender, RoutedEventArgs e)
         {
-            int smallerId = GetMin(a, b);
-            int largerId = GetMax(a, b);
-            string lineName = "line" + smallerId.ToString() + "to" + largerId.ToString(); //uses this to check if theres a path
+            List<Tuple<Line, Ellipse, Ellipse, TextBlock>> edgesToDelete = new List<Tuple<Line, Ellipse, Ellipse, TextBlock>>();
+            foreach (var edge in edgeList)
+            {
+                edgesToDelete.Add(edge);
+            }
+            foreach (var edge in edgesToDelete)
+            {
+                DeleteEdge(edge);
+            }
+        }
+        public Tuple<Line, Ellipse, Ellipse, TextBlock> FindEdge(string lineName)
+        {
             foreach (Tuple<Line, Ellipse, Ellipse, TextBlock> edge in edgeList)
             {
                 if (edge.Item1.Name == lineName)//detetcs if theres a path because theres a matching name
                 {
-                    return edge.Item1;
+                    return edge;
                 }
             }
             return null;
@@ -472,7 +488,6 @@ namespace Interface_2
                 adjMat.Insert(0, headers);
             }
             //show the list in the form of a table
-            lst.ItemsSource = adjMat;
             return adjMat;
             //return incase its necessary for future use
         }
