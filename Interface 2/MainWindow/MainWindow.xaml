@@ -752,7 +752,7 @@
                                                                        x:Name="colourPickerHighlight"
                                                                        Width="40"
                                                                        Color="Red"
-                                                                       ColorChanged="colourPickerHighlight_ColorChanged"/>
+                                                                       ColorChanged="ColourPickerHighlight_ColorChanged"/>
                                         </StackPanel>
                                         <Button Margin="30,17,30,30"
                                             x:Name="btnResetColour"
