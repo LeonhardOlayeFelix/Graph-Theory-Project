@@ -77,6 +77,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="GraphDataStruture\Graph Class\GraphMethods.cs" />
+    <Compile Include="MainWindow\MWStoryBoards.cs" />
     <Compile Include="SecondaryWindows\LoadGraph.xaml.cs">
       <DependentUpon>LoadGraph.xaml</DependentUpon>
     </Compile>
@@ -135,8 +136,8 @@
     <Compile Include="GraphDataStruture\MyPoint.cs" />
     <Compile Include="LinkedListsClasses\UDLinkedList.cs" />
     <Compile Include="LinkedListsClasses\UDLinkedListNode.cs" />
-    <Compile Include="MainWindow\RenderGraph.cs" />
-    <Compile Include="MainWindow\SavingNetworks.cs" />
+    <Compile Include="MainWindow\MWRendering.cs" />
+    <Compile Include="MainWindow\MWSaving.cs" />
     <Compile Include="SecondaryWindows\ConnectEdges.xaml.cs">
       <DependentUpon>ConnectEdges.xaml</DependentUpon>
     </Compile>
@@ -150,11 +151,11 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MainWindow\MainWindowActions.cs" />
-    <Compile Include="MainWindow\MainWindowAlgorithms.cs" />
-    <Compile Include="MainWindow\MainWindowDisEnabling.cs" />
-    <Compile Include="MainWindow\MainWindowCanvasEvents.cs" />
-    <Compile Include="MainWindow\MainWindowMinorEvents.cs" />
+    <Compile Include="MainWindow\MWActions.cs" />
+    <Compile Include="MainWindow\MWAlgorithms.cs" />
+    <Compile Include="MainWindow\MWButtonManagement.cs" />
+    <Compile Include="MainWindow\MWCanvasEvents.cs" />
+    <Compile Include="MainWindow\MWEvents.cs" />
     <Compile Include="SecondaryWindows\NameCreatedGraph.xaml.cs">
       <DependentUpon>NameCreatedGraph.xaml</DependentUpon>
     </Compile>

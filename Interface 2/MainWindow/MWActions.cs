@@ -9,8 +9,8 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Data;
 using System.Data.OleDb;
-using System.Text.RegularExpressions;
 using System.Windows.Media.Animation;
+using System.IO;
 
 namespace Interface_2
 {
@@ -149,18 +149,6 @@ namespace Interface_2
             edgeList.Remove(edge);//remove it from the graph
             GenerateAdjList();
         }
-        private void btnDeleteAllEdges_Click(object sender, RoutedEventArgs e)
-        {
-            List<Tuple<Line, Ellipse, Ellipse, TextBlock>> edgesToDelete = new List<Tuple<Line, Ellipse, Ellipse, TextBlock>>();
-            foreach (var edge in edgeList)
-            {
-                edgesToDelete.Add(edge);
-            }
-            foreach (var edge in edgesToDelete)
-            {
-                DeleteEdge(edge);
-            }
-        }
         public Tuple<Line, Ellipse, Ellipse, TextBlock> FindEdge(string lineName)
         {
             foreach (Tuple<Line, Ellipse, Ellipse, TextBlock> edge in edgeList)
@@ -204,13 +192,6 @@ namespace Interface_2
             }
             return null;
         }
-        private void btnResetComponentShape_Click(object sender, RoutedEventArgs e)
-        {
-            //resets the sliders back to their original form
-            ActivateButton(sender);
-            vertexDiameterSlider.Value = 40;
-            weightAndLabelFontSizeSlider.Value = weightAndLabelFontSizeSlider.Minimum;
-        }
         public HashSet<Tuple<Line, Ellipse, Ellipse, TextBlock>> GetListOfEdgesFromVertex(Ellipse activeVertex) //gets all of the edges coming out of a vertex
         {
             HashSet<Tuple<Line, Ellipse, Ellipse, TextBlock>> listOfEdges = new HashSet<Tuple<Line, Ellipse, Ellipse, TextBlock>>(); //data to return
@@ -231,54 +212,6 @@ namespace Interface_2
                 }
             }
             return listOfEdges; //return the list of edges
-        }
-        private void btnRouteInspStartAndEnd_Click(object sender, RoutedEventArgs e)
-        {
-            ShowValencies();
-            labelExtraInfo.Content = "Choose a START vertex with an ODD valency";
-            ActivateButton(sender);
-        }
-        private void btnRouteInspStartAtEnd_Click(object sender, RoutedEventArgs e)
-        {
-            if (vertexList.Count() != 0)
-            {
-                ActivateButton(sender);
-                Tuple<List<Tuple<int, int>>, int> result = Graph.RInspStartAtEnd();//returns the edges to repeated (1) and the cost of repitition (2)
-                if (!Graph.IsConnected()) //have to make sure that the graph is connected first
-                {
-                    MessageBox.Show("The graph is not connected");
-                }
-                else if (Graph.IsEulerian()) //if the graph is already eulerian then it will be traversable
-                {
-                    MessageBox.Show("This graph is traversable");
-                }
-                else if (result == null)
-                {
-                    MessageBox.Show("Appropriate graph was not entered"); //in this case, there was an unexpected error
-
-                }
-                else
-                {
-                    List<Tuple<int, int>> edgesToRepeat = result.Item1; //first item of the tuple
-                    int cost = result.Item2;//second item of the tuple
-                    RouteInspHighlightPath(edgesToRepeat, cost); //highlights the edges to be repeated and presents the cost
-                }
-            }
-            HideValencies();
-        }
-        private void btnCreateNewGraph_Click(object sender, RoutedEventArgs e) //creates a new graph
-        {
-            string name = "";
-            NameCreatedGraph nameGraphWindow = new NameCreatedGraph(); //create an instance of the new window
-            nameGraphWindow.ShowDialog(); //opens a new window
-            if (nameGraphWindow.DialogResult == true) //if they pressed ok rather than the exit button
-            {
-                name = nameGraphWindow.txBoxGraphName.Text; //re-initialise everything:
-                DeleteGraph();
-                CreateNewGraph(name);
-                graphCreated = true;
-                txAdjset.Clear();
-            }
         }
         public void CreateNewGraph(string graphName, bool rendering = false) //creates a new graph
         {
@@ -337,14 +270,6 @@ namespace Interface_2
                 btnSaveGraph.IsEnabled = true;
             }
         }
-        private void btnDeleteGraph_Click(object sender, RoutedEventArgs e)
-        {
-            HideValencies();
-            txAdjset.Clear();
-            DeleteGraph();
-            DisableAllActionButtons();
-            DisableTbCtrl();
-        }
         public void ResetSelectionCounts()
         {
             buttonSelectionCount = 0;
@@ -371,94 +296,6 @@ namespace Interface_2
             edgeList = new HashSet<Tuple<Line, Ellipse, Ellipse, TextBlock>>();
             graphCreated = false;
             btnSaveGraph.IsEnabled = false;
-        }
-        private void btnRevertPositions_Click(object sender, RoutedEventArgs e)
-        {
-            labelExtraInfo.Content = "";
-            foreach (var ctrl in mainCanvas.Children)
-            {
-                try
-                {
-                    Ellipse currentEllipse = (Ellipse)ctrl;
-                    int vertexID = Convert.ToInt32(currentEllipse.Name.Substring(3));
-                    double originalX = Graph.GetVertex(vertexID).Position.originalX; //get original position
-                    double originalY = Graph.GetVertex(vertexID).Position.originalY; //get original position
-                    Graph.GetVertex(vertexID).Position.SetPosition(originalX, originalY); // update their positions in the class
-                    Canvas.SetLeft(currentEllipse, originalX);
-                    Canvas.SetTop(currentEllipse, originalY);
-                    TextBlock label = FindLabel(vertexID);
-                    Canvas.SetLeft(label, originalX - 4); //update that label too
-                    Canvas.SetTop(label, originalY - 9);
-                    foreach (Tuple<Line, Ellipse, Ellipse, TextBlock> edge in edgeList)
-                    {
-                        if (edge.Item2 == currentEllipse || edge.Item3 == currentEllipse) //look for the weight that matches to vertexes
-                        {
-                            double MidPointX = (Canvas.GetLeft(edge.Item2) + Canvas.GetLeft(edge.Item3)) / 2;
-                            double MidPointY = (Canvas.GetTop(edge.Item2) + Canvas.GetTop(edge.Item3)) / 2; //update it to the midpoint of the line as it moves each time
-                            Canvas.SetLeft(edge.Item4, MidPointX - 4);
-                            Canvas.SetTop(edge.Item4, MidPointY - 9);
-                        }
-
-                    }
-                }
-                catch
-                {
-
-                }
-            }
-        }
-        private void mouseMove(object sender, MouseEventArgs e)
-        {
-            //monitors the mouse as it hovers over a vertex
-            if (e.LeftButton == MouseButtonState.Pressed && currentButton == btnDragAndDrop)//if, whilst hovering, they press the vertex
-            {
-                ellipseToDrop = sender as Ellipse;
-                ellipseToDrop.Fill = HighlightColour;
-                DragDrop.DoDragDrop(sender as Ellipse, sender as Ellipse, DragDropEffects.Move); //start the drag function on this vertex
-                RevertEllipseColour();
-            }
-        }
-        private void mainCanvas_DragOver(object sender, DragEventArgs e)
-        {
-            //if the mouse the vertex is being dragged
-            int ellipseToDropID = Convert.ToInt32(ellipseToDrop.Name.Substring(3));
-            Point dropPosition = e.GetPosition(mainCanvas); //current position of the place its being dragged
-            Canvas.SetLeft(ellipseToDrop, dropPosition.X);//updates the x coordinate every time its dragged
-            Graph.GetVertex(ellipseToDropID).Position.X = dropPosition.X; //udpate its position in the class too
-            Canvas.SetTop(ellipseToDrop, dropPosition.Y);//updates the y coordinate ever time its dragged
-            Graph.GetVertex(ellipseToDropID).Position.Y = dropPosition.Y; //update its position in the class too
-            labelExtraInfo.Content = "Drag position: " + Graph.GetVertex(ellipseToDropID).Position.GetPositionTuple();
-            TextBlock label = FindLabel(Convert.ToInt32(ellipseToDrop.Name.Substring(3)));
-            Canvas.SetLeft(label, dropPosition.X - 4); //update that label too
-            Canvas.SetTop(label, dropPosition.Y - 9);
-            foreach (Tuple<Line, Ellipse, Ellipse, TextBlock> edge in edgeList)
-            {
-                if (edge.Item2 == ellipseToDrop || edge.Item3 == ellipseToDrop) //look for the weight that matches to vertexes
-                {
-                    double MidPointX = (Canvas.GetLeft(edge.Item2) + Canvas.GetLeft(edge.Item3)) / 2;
-                    double MidPointY = (Canvas.GetTop(edge.Item2) + Canvas.GetTop(edge.Item3)) / 2; //update it to the midpoint of the line as it moves each time
-                    Canvas.SetLeft(edge.Item4, MidPointX - 4);
-                    Canvas.SetTop(edge.Item4, MidPointY - 9);
-                }
-
-            }
-        }
-        private void btnDragAndDrop_Click(object sender, RoutedEventArgs e)
-        {
-            HideValencies();
-            labelExtraInfo.Content = "Click and Hold vertices to drag them around the canvas";
-            ActivateButton(sender);
-        }
-        private void mainCanvas_PreviewMouseWheel(object sender, MouseWheelEventArgs e) //event to change the size of the vertices
-        {
-            if (e.Delta > 0) //if mouse is scrolled up, increase slider value
-            {
-                vertexDiameterSlider.Value += 2; //this increases the vertex diameter (bound)
-            }
-            else if (e.Delta < 0)//if mouse is scrolled down, increase slider value
-            {
-                vertexDiameterSlider.Value -= 2;//this decreases the vertex diameter (bound)
-            }
         }
         public void GenerateAdjList()
         {
@@ -493,88 +330,177 @@ namespace Interface_2
             return adjMat;
             //return incase its necessary for future use
         }
-        private void btnGenerateMatrix_Click(object sender, RoutedEventArgs e)
+        private void StudentLogInProcess()
         {
-            labelExtraInfo.Content = "Updated Adjacency Matrix.";
-            GenerateAdjMat(); //function generates the matrix
+            btnRegisterStudent.IsEnabled = false;
+            btnLogin.IsEnabled = false;
+            btnRegisterTeacher.IsEnabled = false;
+            btnLogOut.IsEnabled = true;
+            DeleteGraph();
         }
-        private void btnPrims_Click(object sender, RoutedEventArgs e)
+        private void TeacherLogInProcess()
         {
-            labelExtraInfo.Content = "Choose a start Vertex";
-            ActivateButton(sender);
+            btnRegisterStudent.IsEnabled = false;
+            btnLogin.IsEnabled = false;
+            btnRegisterTeacher.IsEnabled = false;
+            btnLogOut.IsEnabled = true;
+            DeleteGraph();
         }
-        private void btnKruskals_Click(object sender, RoutedEventArgs e) //if the user wants to run kruskals algorithm
+        private void LogOutProcess()
         {
-            ActivateButton(sender); 
-            HideValencies();
-            if (!Graph.IsConnected())
-            {
-                MessageBox.Show("The graph is not connected");
-            }
-            else
-            {
-                List<Tuple<int, int, int>> mst = Graph.Kruskals();
-                mstHighlightPath(mst); //highlight the MST
-            }
-        }
-        private void btnConnect_Click(object sender, RoutedEventArgs e)
-        {
+            loggedStudent = null;
+            loggedTeacher = null;
+            btnLogin.IsEnabled = true;
+            btnRegisterStudent.IsEnabled = true;
+            btnRegisterTeacher.IsEnabled = true;
+            btnLogOut.IsEnabled = false;
+            txLoggedID.Content = "";
+            txLoggedInAs.Content = "Logged in as: Guest";
+            DeleteGraph();
 
         }
-        private void cbAutoGenEdges_Checked(object sender, RoutedEventArgs e) //When a connection is made, auto generates a random weight
+        public void SaveGraph()
         {
-            cbAutoGenEdgesValue.IsChecked = false; //only one check box can be selected at a time
-        }
-        private void cbAutoGenEdgesValue_Checked(object sender, RoutedEventArgs e) //when a connection is made, auto generates the entered weight
-        {
-            cbAutoGenEdges.IsChecked = false;//ditto
-        }
-        private void cbAlphabet_Checked(object sender, RoutedEventArgs e)
-        {
-            int maxNumber = alphabet.Count(); //the highest number of uniquely representable nodes using the alphabet
-            if (Graph.GetMaxVertexID() >= maxNumber)
+            OleDbConnection conn = new OleDbConnection(MainWindow.ConStr);
+            OleDbCommand cmd = new OleDbCommand();
+            conn.Open();
+            cmd.Connection = conn;
+            string filename = Graph.Name; //change this to have a filename that the user wants
+            FileStream fs;
+            if (StudentIsLoggedIn()) //do this portion if the user is saving graphs as a student
             {
-                MessageBox.Show("Not enough Letters in the alphabet to represent each vertex"); 
-                cbAlphabet.IsChecked = false;
-            }
-            else
-            {
-                for (int i = 0; i < Graph.GetMaxVertexID() + 1; ++i) //loop through all the nodes
+                filename += loggedStudent.ID;
+                filename = "StudentGraphs/" + filename; //format the filename we expect to find
+                if (!File.Exists(filename)) //if that file didnt already exist then create the file and write the class instance to that file
                 {
-                    if (FindEllipse(i) != null) //check in advanced that this operation wont return null
+                    fs = File.Create(filename);
+                    //update the database to include that new file
+                    cmd.CommandText = $"INSERT INTO StudentGraph VALUES('{filename}','{loggedStudent.ID}','{Graph.Name}','{DateTime.Today.ToString("dd/MM/yyyy")}','{Graph.GetNumberOfVertices()}','{Graph.GetNumberOfEdges()}','{"s"}')";
+                    cmd.ExecuteNonQuery();
+                    fs.Close();
+                    //write the class instance to the binary file
+                    BinarySerialization.WriteToBinaryFile(filename, Graph, false);
+                    MessageBox.Show("Graph saved");
+                }
+                else
+                {
+                    //if the file did exist then ask the user if they want to over write
+                    Overwrite overwrite = new Overwrite();
+                    if (overwrite.ShowDialog() == true)
                     {
-                        TextBlock label = FindLabel(Convert.ToInt32(FindEllipse(i).Name.Substring(3))); //find the label of each vertex
-                        if (label != null) //incase the vertex and label were deleted
-                        {
-                            label.Text = alphabet.ElementAt(i); //change the current label to the alphabet
-                        }
+                        //update the record since they are overwriting
+                        cmd.CommandText = $"UPDATE StudentGraph SET NoVertices = {Graph.GetNumberOfVertices()}, NoEdges = {Graph.GetNumberOfEdges()} WHERE Filename = '{filename}' AND StudentID = '{loggedStudent.ID}'";
+                        BinarySerialization.WriteToBinaryFile(filename, Graph, false);
+                        cmd.ExecuteNonQuery();
+                        MessageBox.Show("Graph saved");
+                    }
+                }
+            }
+            else if (TeacherIsLoggedIn()) //do this portion if the user is saving graphs as a teacher
+            {
+                filename += loggedTeacher.ID;
+                filename = "TeacherGraphs/" + filename; //format the filename we expect we find
+                if (!File.Exists(filename))//if that file didnt already exist then create the file and write the class instance to that file
+                {
+                    fs = File.Create(filename);
+                    cmd.CommandText = $"INSERT INTO TeacherGraph VALUES('{filename}','{loggedTeacher.ID}','{Graph.Name}','{DateTime.Today.ToString("dd/MM/yyyy")}','{Graph.GetNumberOfVertices()}','{Graph.GetNumberOfEdges()}','{"t"}')";
+                    cmd.ExecuteNonQuery();
+                    fs.Close();
+                    //write the class instance to the database
+                    BinarySerialization.WriteToBinaryFile(filename, Graph, false);
+                    MessageBox.Show("Graph saved");
+                }
+                else
+                {
+                    //if the file did exist then ask the user if they want to over write
+                    Overwrite overwrite = new Overwrite();
+                    if (overwrite.ShowDialog() == true)
+                    {
+                        //update the record since they are overwriting
+                        cmd.CommandText = $"UPDATE TeacherGraph SET NoVertices = {Graph.GetNumberOfVertices()}, NoEdges = {Graph.GetNumberOfEdges()} WHERE Filename = '{filename}' AND TeacherID = '{loggedTeacher.ID}'";
+                        cmd.ExecuteNonQuery();
+                        BinarySerialization.WriteToBinaryFile(filename, Graph, false);
+                        MessageBox.Show("Graph saved");
+                    }
+                }
+            }
+            else //this is if the user is saving as a guest
+            {
+                filename = "GuestGraphs/" + filename; //format the filename
+                if (!File.Exists(filename)) //if the file doesnt already exist
+                {
+                    fs = File.Create(filename);
+                    //update the database
+                    cmd.CommandText = $"INSERT INTO GuestGraph VALUES('{filename}','{Graph.Name}','{"g"}')";
+                    cmd.ExecuteNonQuery();
+                    fs.Close();
+                    //write it to the file
+                    BinarySerialization.WriteToBinaryFile(filename, Graph, false);
+                    MessageBox.Show("Graph Saved");
+                }
+                else
+                {
+                    Overwrite overwrite = new Overwrite();
+                    if (overwrite.ShowDialog() == true)
+                    {
+                        BinarySerialization.WriteToBinaryFile(filename, Graph, false);
+                        MessageBox.Show("Graph saved");
                     }
                 }
             }
         }
-        private void cbAlphabet_Unchecked(object sender, RoutedEventArgs e)
+        public void LoadGraph()
         {
-            for (int i = 0; i < Graph.GetMaxVertexID() + 1; ++i) //loop through all the nodes
+
+            LoadGraph loadGraph = new LoadGraph(); //open the loadgraph window
+            if (loadGraph.ShowDialog() == true)
             {
-                if (FindEllipse(i) != null)//check in advanced that this operation wont return null
+                string fileName = loadGraph.graphToLoad; //get the file name from the other window
+                if (fileName == "fail")
                 {
-                    TextBlock label = FindLabel(Convert.ToInt32(FindEllipse(i).Name.Substring(3)));//find the label of each vertex
-                    if (label != null)
-                    {
-                        label.Text = i.ToString(); //change the current label to the number
-                    }
+                    MessageBox.Show("Please select one of the listed graphs");
+                }
+                else
+                {
+                    Graph toLoad = BinarySerialization.ReadFromBinaryFile<Graph>(fileName); //read the file into the toLoad class instance
+                    RenderGraph(toLoad); //render the just-loaded graph onto the screen 
+                    btnDeleteGraph.IsEnabled = true;
+                }
+
+            }
+
+
+        }
+        private void DeactivateButton() //'deactivates' button
+        {
+            if (currentButton != null)
+                currentButton.Background = new SolidColorBrush(Color.FromRgb(221, 221, 221));
+        }
+        public void ClearHighlightedLines()
+        {
+            foreach (Line line in linesToDelete)
+            {
+                mainCanvas.Children.Remove(line);
+            }
+            linesToDelete.Clear();
+        }
+        private void ActivateButton(object btnSender) //highlight a button when its pressed
+        {
+            RevertEllipseColour();
+            RevertLineColour();
+            ClearHighlightedLines();
+            livePath.Clear(); //incase they were in the midst of the highlight path action
+            if (btnSender != null) //make sure that the button isnt null
+            {
+                if (currentButton != (Button)btnSender) //if the same button is not pressed
+                {
+                    DeactivateButton(); //'deactivate' the previous button
+                    currentButton = (Button)btnSender;
+                    currentButton.Background = new SolidColorBrush(btnActivatedColour); //'activate' the current button
                 }
             }
         }
-        private void txAutoWeight_PreviewTextInput(object sender, TextCompositionEventArgs e)
-        {
-            Regex regex = new Regex("[^0-9]+");
-            e.Handled = regex.IsMatch(e.Text); //controls the input allowed in the textbox
-        }
-        private void colourPickerHighlight_ColorChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            HighlightColour = (SolidColorBrush)colourPickerHighlight.SelectedBrush;
-        }
+
         public int GetMax(int a, int b)
         {
             return (a > b) ? a : b;
