@@ -16,7 +16,6 @@ namespace Interface_2
 {
     public static class BinarySerialization //this class will read and write a given object into a binary file
     {
-        //writes the object to binary file
         public static void WriteToBinaryFile<T>(string filePath, T objectToWrite, bool append = false) //takes in type T which is the type of the object
         {
             using (Stream stream = File.Open(filePath, append ? FileMode.Append : FileMode.Create))
@@ -25,7 +24,6 @@ namespace Interface_2
                 BinaryWriter.Serialize(stream, objectToWrite);//writes the object to the binary file through serialization
             }   
         }
-        //reads an object in from a file
         public static T ReadFromBinaryFile<T>(string filePath) //needs the file to read and type 
         {
             using (Stream stream = File.Open(filePath, FileMode.Open))

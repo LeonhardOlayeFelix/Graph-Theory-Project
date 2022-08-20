@@ -56,7 +56,7 @@ namespace Interface_2
             List<string> normalAlphabet = new List<string>() { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z" };
             InitializeComponent();
             DisableAllActionButtons();
-            DisableTbCtrl();
+            DisableTabControl();
             btnSaveGraph.IsEnabled = false;
             foreach(string letter in normalAlphabet)
             {

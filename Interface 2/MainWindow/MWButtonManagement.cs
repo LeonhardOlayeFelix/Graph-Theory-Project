@@ -14,7 +14,7 @@ namespace Interface_2
 
     public partial class MainWindow : Window
     {
-        public void DisableAllAlgoButtons()
+        public void DisableAllAlgorithmButtons()
         {
             btnDijkstrasShort.IsEnabled = false;
             btnHighlightPaths.IsEnabled = false;
@@ -26,33 +26,6 @@ namespace Interface_2
             btnPrims.IsEnabled = false;
             btnKruskals.IsEnabled = false;
             btnHighlightPaths.IsEnabled = false;
-        }
-        public void EnableAllAlgoButtons()
-        {
-            btnDijkstrasShort.IsEnabled = true;
-            btnHighlightPaths.IsEnabled = true;
-            btnToggleValencies.IsEnabled = true;
-            btnRouteInspStartAndEnd.IsEnabled = true;
-            btnRouteInspStartAtEnd.IsEnabled = true;
-            btnBreadthFirst.IsEnabled = true;
-            btnDepthFirst.IsEnabled = true;
-            btnPrims.IsEnabled = true;
-            btnKruskals.IsEnabled = true;
-            btnHighlightPaths.IsEnabled = true;
-        }
-        public void DisableTbCtrl()
-        {
-            //disable all the tab controls apart from action and adjset
-            tabControlAlgorithms.IsEnabled = false;
-            tabControlDisplay.IsEnabled = false;
-            tabControlActions.IsEnabled = false;
-        }
-        public void EnableTbCtrl()
-        {
-            //enable all the tab controls
-            tabControlAlgorithms.IsEnabled = true;
-            tabControlDisplay.IsEnabled = true;
-            tabControlActions.IsEnabled = true;
         }
         public void DisableAllActionButtons()
         {
@@ -69,6 +42,26 @@ namespace Interface_2
             btnDeleteAllEdges.IsEnabled = false; ;
 
         }
+        public void DisableTabControl()
+        {
+            //disable all the tab controls apart from action and adjset
+            tabControlAlgorithms.IsEnabled = false;
+            tabControlDisplay.IsEnabled = false;
+            tabControlActions.IsEnabled = false;
+        }
+        public void EnableAllAlgorithmButtons()
+        {
+            btnDijkstrasShort.IsEnabled = true;
+            btnHighlightPaths.IsEnabled = true;
+            btnToggleValencies.IsEnabled = true;
+            btnRouteInspStartAndEnd.IsEnabled = true;
+            btnRouteInspStartAtEnd.IsEnabled = true;
+            btnBreadthFirst.IsEnabled = true;
+            btnDepthFirst.IsEnabled = true;
+            btnPrims.IsEnabled = true;
+            btnKruskals.IsEnabled = true;
+            btnHighlightPaths.IsEnabled = true;
+        }
         public void EnableAllActionButtons()
         {
             //enables all of the action buttons 
@@ -83,5 +76,13 @@ namespace Interface_2
             btnRevertPositions.IsEnabled = true;
             btnDeleteAllEdges.IsEnabled = true;
         }
+        public void EnableTabControl()
+        {
+            //enable all the tab controls
+            tabControlAlgorithms.IsEnabled = true;
+            tabControlDisplay.IsEnabled = true;
+            tabControlActions.IsEnabled = true;
+        }
+
     }
 }

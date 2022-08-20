@@ -429,7 +429,7 @@
                                             x:Name="btnDefault"
                                             Grid.Row="2"
                                             Click="btnDefault_Click">
-                                            Default
+                                            Select
                                         </Button>
                                         <StackPanel Orientation="Vertical"
                                                     Grid.Row="3">
@@ -794,26 +794,29 @@
                                                 <TextBlock FontSize="15"
                                                        Text="{Binding ElementName=vertexDiameterSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                                        Background="Gray"
+                                                       Foreground="White"
                                                        Width="30"
                                                        Height="30"></TextBlock>
                                             </StackPanel>
                                         </GroupBox>
-                                        <GroupBox Header="Weight Font Size">
+                                        <GroupBox Header="Path Walker Duration">
                                             <StackPanel>
                                                 <StackPanel Orientation="Horizontal">
                                                     <Slider Background="Gray"
-                                                    Minimum="10"
-                                                    Maximum="25"
+                                                    Minimum="1"
+                                                    Maximum="5"
                                                     Width="180"
-                                                    x:Name="weightAndLabelFontSizeSlider"
+                                                    x:Name="pathWalkerDurationSlider"
                                                     Height="30"
+                                                    Value="1"
                                                     TickFrequency="1"
                                                     TickPlacement="Both"
                                                     IsSnapToTickEnabled="True">
                                                     </Slider>
                                                     <TextBlock FontSize="15"
-                                                       Text="{Binding ElementName=weightFontSizeSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
+                                                       Text="{Binding ElementName=pathWalkerDurationSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"
                                                        Background="Gray"
+                                                       Foreground="White"
                                                        Width="30"
                                                        Height="30"></TextBlock>
                                                 </StackPanel>

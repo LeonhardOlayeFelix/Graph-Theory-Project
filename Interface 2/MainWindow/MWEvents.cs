@@ -127,7 +127,7 @@ namespace Interface_2
             txAdjset.Clear();
             DeleteGraph();
             DisableAllActionButtons();
-            DisableTbCtrl();
+            DisableTabControl();
         }
         private void btnDepthFirst_Click(object sender, RoutedEventArgs e)
         {
@@ -269,7 +269,7 @@ namespace Interface_2
             //resets the sliders back to their original form
             ActivateButton(sender);
             vertexDiameterSlider.Value = 40;
-            weightAndLabelFontSizeSlider.Value = weightAndLabelFontSizeSlider.Minimum;
+            pathWalkerDurationSlider.Value = pathWalkerDurationSlider.Minimum;
         }
         private void btnRouteInspStartAndEnd_Click(object sender, RoutedEventArgs e)
         {
@@ -282,26 +282,7 @@ namespace Interface_2
             if (vertexList.Count() != 0)
             {
                 ActivateButton(sender);
-                Tuple<List<Tuple<int, int>>, int> result = Graph.RInspStartAtEnd();//returns the edges to repeated (1) and the cost of repitition (2)
-                if (!Graph.IsConnected()) //have to make sure that the graph is connected first
-                {
-                    MessageBox.Show("The graph is not connected");
-                }
-                else if (Graph.IsEulerian()) //if the graph is already eulerian then it will be traversable
-                {
-                    MessageBox.Show("This graph is traversable");
-                }
-                else if (result == null)
-                {
-                    MessageBox.Show("Appropriate graph was not entered"); //in this case, there was an unexpected error
-
-                }
-                else
-                {
-                    List<Tuple<int, int>> edgesToRepeat = result.Item1; //first item of the tuple
-                    int cost = result.Item2;//second item of the tuple
-                    RouteInspHighlightPath(edgesToRepeat, cost); //highlights the edges to be repeated and presents the cost
-                }
+                RouteInspectionStartAtEnd();
             }
             HideValencies();
         }

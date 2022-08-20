@@ -84,8 +84,8 @@ namespace Interface_2
                 graphCreated = true;
                 labelGraphName.Content = Graph.Name;
                 EnableAllActionButtons(); //can only navigate buttons when a graph is created
-                EnableAllAlgoButtons();
-                EnableTbCtrl();
+                EnableAllAlgorithmButtons();
+                EnableTabControl();
                 btnDeleteGraph.IsEnabled = true;
                 btnSaveGraph.IsEnabled = true;
             }
@@ -210,23 +210,22 @@ namespace Interface_2
                 mainCanvas.Children.Add(weightLabel);
             GenerateAdjList();
         }
-        private void DeleteEdge(Tuple<Line, Ellipse, Ellipse, TextBlock> edge, bool rendering = false, bool deletingVertex = false) //deletes an edge, and the things connected to
+        public void DecrementSelectionCount(ref int count)
         {
-            if (!rendering && !deletingVertex)
-            {
-                Graph.RemoveEdge(Convert.ToInt32(edge.Item2.Name.Substring(3)), Convert.ToInt32(edge.Item3.Name.Substring(3))); //update the class graph
-            }
-            mainCanvas.Children.Remove(edge.Item1); //remove the line which is the first item
-            mainCanvas.Children.Remove(edge.Item4);//remove the label which is the fourth element
-            InitiateDeleteLineStoryboard(edge.Item1, TimeSpan.FromSeconds(0.1));
-            edgeList.Remove(edge);//remove it from the graph
-            GenerateAdjList();
+            count -= 1;
+            labelExtraInfo.Content = "";
+            RevertEllipseColour();
+            EnableTabControl();
+            EnableAllAlgorithmButtons();
+            EnableAllActionButtons();
+            btnSaveGraph.IsEnabled = true;
+            btnLoadGraph.IsEnabled = true;
         }
         public void DeleteGraph()
         {
             //set all of the variables to null
             DisableAllActionButtons();
-            DisableAllAlgoButtons();
+            DisableAllAlgorithmButtons();
             mainCanvas.Children.Clear();
             btnDeleteGraph.IsEnabled = false;
             labelGraphName.Content = "";
