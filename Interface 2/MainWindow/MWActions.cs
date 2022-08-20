@@ -17,6 +17,87 @@ namespace Interface_2
     
     public partial class MainWindow : Window
     {
+        private void ActivateButton(object btnSender) //highlight a button when its pressed
+        {
+            RevertEllipseColour();
+            RevertLineColour();
+            ClearHighlightedLines();
+            livePath.Clear(); //incase they were in the midst of the highlight path action
+            if (btnSender != null) //make sure that the button isnt null
+            {
+                if (currentButton != (Button)btnSender) //if the same button is not pressed
+                {
+                    DeactivateButton(); //'deactivate' the previous button
+                    currentButton = (Button)btnSender;
+                    currentButton.Background = new SolidColorBrush(btnActivatedColour); //'activate' the current button
+                }
+            }
+        }
+        public void CreateNewGraph(string graphName, bool rendering = false) //creates a new graph
+        {
+            bool AlreadyExists = false; //tells us whether we should carry on with creating the graph later on
+            OleDbConnection conn = new OleDbConnection(MainWindow.ConStr);
+            conn.Open();
+            OleDbCommand cmd = new OleDbCommand();
+            cmd.Connection = conn;
+            //check whether a graph with the given name already exists for that type of user
+            if (StudentIsLoggedIn() && !rendering)
+            {
+                cmd.CommandText = $"SELECT * FROM StudentGraph WHERE StudentID = '{loggedStudent.ID}' AND GraphName = '{graphName}'";
+                OleDbDataReader reader = cmd.ExecuteReader();
+                if (reader.HasRows)
+                {
+                    AlreadyExists = true;
+                    MessageBox.Show("There is a previously saved graph with this name, go to the menu to load it.");
+                }
+            }
+            else if (TeacherIsLoggedIn() && !rendering)
+            {
+                cmd.CommandText = $"SELECT * FROM TeacherGraph WHERE TeacherID = '{loggedTeacher.ID}' AND GraphName = '{graphName}'";
+                OleDbDataReader reader = cmd.ExecuteReader();
+                if (reader.HasRows)
+                {
+                    AlreadyExists = true;
+                    MessageBox.Show("There is a previously saved graph with this name, go to the menu to load it.");
+                }
+            }
+            else if (!rendering)
+            {
+                cmd.CommandText = $"SELECT * FROM GuestGraph WHERE GraphName = '{graphName}'";
+                OleDbDataReader reader = cmd.ExecuteReader();
+                if (reader.HasRows)
+                {
+                    AlreadyExists = true;
+                    MessageBox.Show("There is a previously saved graph with this name, go to the menu to load it.");
+                }
+            }
+            if (!AlreadyExists)
+            {
+                //re-initiliase everything
+                edgeList = new HashSet<Tuple<Line, Ellipse, Ellipse, TextBlock>>();
+                Graph = new Graph();
+                valencyState = "Hidden";
+                valencyList = new List<TextBlock>();
+                Graph.Name = graphName;
+                vertexTxBoxList = new List<TextBlock>();
+                vertexList = new List<Ellipse>();
+                graphCreated = true;
+                labelGraphName.Content = Graph.Name;
+                EnableAllActionButtons(); //can only navigate buttons when a graph is created
+                EnableAllAlgoButtons();
+                EnableTbCtrl();
+                btnDeleteGraph.IsEnabled = true;
+                btnSaveGraph.IsEnabled = true;
+            }
+        }
+        public void ClearHighlightedLines()
+        {
+            foreach (Line line in linesToDelete)
+            {
+                mainCanvas.Children.Remove(line);
+            }
+            linesToDelete.Clear();
+        }
         private void ConnectVertices(Ellipse v1, Ellipse v2, int weight, bool rendering = false) //connects two vertices together 
         {
             
@@ -129,14 +210,6 @@ namespace Interface_2
                 mainCanvas.Children.Add(weightLabel);
             GenerateAdjList();
         }
-        private Ellipse GetMinEllipse(Ellipse vertex1, Ellipse vertex2) //returns vertex with smallest ID
-        {
-            return (Convert.ToInt32(vertex1.Name.Substring(3)) < Convert.ToInt32(vertex2.Name.Substring(3))) ? vertex1 : vertex2;
-        }
-        private Ellipse GetMaxEllipse(Ellipse vertex1, Ellipse vertex2) //return vertex with largest ID
-        {
-            return (Convert.ToInt32(vertex1.Name.Substring(3)) > Convert.ToInt32(vertex2.Name.Substring(3))) ? vertex1 : vertex2;
-        }
         private void DeleteEdge(Tuple<Line, Ellipse, Ellipse, TextBlock> edge, bool rendering = false, bool deletingVertex = false) //deletes an edge, and the things connected to
         {
             if (!rendering && !deletingVertex)
@@ -148,133 +221,6 @@ namespace Interface_2
             InitiateDeleteLineStoryboard(edge.Item1, TimeSpan.FromSeconds(0.1));
             edgeList.Remove(edge);//remove it from the graph
             GenerateAdjList();
-        }
-        public Tuple<Line, Ellipse, Ellipse, TextBlock> FindEdge(string lineName)
-        {
-            foreach (Tuple<Line, Ellipse, Ellipse, TextBlock> edge in edgeList)
-            {
-                if (edge.Item1.Name == lineName)//detetcs if theres a path because theres a matching name
-                {
-                    return edge;
-                }
-            }
-            return null;
-        }
-        public Ellipse FindEllipse(int vertexId) //returns the ellipse that matches to an Id
-        {
-            foreach (var ctrl in mainCanvas.Children)
-            {
-                try //incase the ctrl is not an ellipse
-                {
-                    Ellipse currentEllipse = (Ellipse)ctrl;
-                    if (currentEllipse.Name.Substring(3) == vertexId.ToString()) //when youve found a match
-                    {
-                        return currentEllipse; 
-                    }
-                }
-                catch { }
-            }
-            return null;
-        }
-        public TextBlock FindLabel(int vertexId)
-        {
-            foreach (var ctrl in mainCanvas.Children)
-            {
-                try
-                {
-                    TextBlock currentLabel = (TextBlock)ctrl;
-                    if (currentLabel.Name.Substring(8) == vertexId.ToString())
-                    {
-                        return currentLabel;
-                    }
-                }
-                catch { }
-            }
-            return null;
-        }
-        public HashSet<Tuple<Line, Ellipse, Ellipse, TextBlock>> GetListOfEdgesFromVertex(Ellipse activeVertex) //gets all of the edges coming out of a vertex
-        {
-            HashSet<Tuple<Line, Ellipse, Ellipse, TextBlock>> listOfEdges = new HashSet<Tuple<Line, Ellipse, Ellipse, TextBlock>>(); //data to return
-            foreach (Ellipse vertex in vertexList) //loop through vertex list
-            {
-                if (vertex != activeVertex)//don't check for an edge from itself to itself
-                {
-                    Ellipse largerEllipse = GetMaxEllipse(vertex, activeVertex);
-                    Ellipse smallerEllipse = GetMinEllipse(vertex, activeVertex); 
-                    string lineNameToFind = "line" + smallerEllipse.Name.Substring(3).ToString() + "to" + largerEllipse.Name.Substring(3).ToString(); //the name of the line that we are expecting to find
-                    foreach (Tuple<Line, Ellipse, Ellipse, TextBlock> edge in edgeList)
-                    {
-                        if (edge.Item1.Name == lineNameToFind) //when found...
-                        {
-                            listOfEdges.Add(edge);//add it to the list of edges
-                        }
-                    }
-                }
-            }
-            return listOfEdges; //return the list of edges
-        }
-        public void CreateNewGraph(string graphName, bool rendering = false) //creates a new graph
-        {
-            bool AlreadyExists = false; //tells us whether we should carry on with creating the graph later on
-            OleDbConnection conn = new OleDbConnection(MainWindow.ConStr);
-            conn.Open();
-            OleDbCommand cmd = new OleDbCommand();
-            cmd.Connection = conn;
-            //check whether a graph with the given name already exists for that type of user
-            if (StudentIsLoggedIn() && !rendering)
-            {
-                cmd.CommandText = $"SELECT * FROM StudentGraph WHERE StudentID = '{loggedStudent.ID}' AND GraphName = '{graphName}'";
-                OleDbDataReader reader = cmd.ExecuteReader();
-                if (reader.HasRows)
-                {
-                    AlreadyExists = true;
-                    MessageBox.Show("There is a previously saved graph with this name, go to the menu to load it.");
-                }
-            }
-            else if (TeacherIsLoggedIn() && !rendering)
-            {
-                cmd.CommandText = $"SELECT * FROM TeacherGraph WHERE TeacherID = '{loggedTeacher.ID}' AND GraphName = '{graphName}'";
-                OleDbDataReader reader = cmd.ExecuteReader();
-                if (reader.HasRows)
-                {
-                    AlreadyExists = true;
-                    MessageBox.Show("There is a previously saved graph with this name, go to the menu to load it.");
-                }
-            }
-            else if (!rendering)
-            {
-                cmd.CommandText = $"SELECT * FROM GuestGraph WHERE GraphName = '{graphName}'";
-                OleDbDataReader reader = cmd.ExecuteReader();
-                if (reader.HasRows)
-                {
-                    AlreadyExists = true;
-                    MessageBox.Show("There is a previously saved graph with this name, go to the menu to load it.");
-                }
-            }
-            if (!AlreadyExists)
-            {
-                //re-initiliase everything
-                edgeList = new HashSet<Tuple<Line, Ellipse, Ellipse, TextBlock>>();
-                Graph = new Graph();
-                valencyState = "Hidden";
-                valencyList = new List<TextBlock>();
-                Graph.Name = graphName; 
-                vertexTxBoxList = new List<TextBlock>();
-                vertexList = new List<Ellipse>();
-                graphCreated = true;
-                labelGraphName.Content = Graph.Name;
-                EnableAllActionButtons(); //can only navigate buttons when a graph is created
-                EnableAllAlgoButtons();
-                EnableTbCtrl();
-                btnDeleteGraph.IsEnabled = true;
-                btnSaveGraph.IsEnabled = true;
-            }
-        }
-        public void ResetSelectionCounts()
-        {
-            buttonSelectionCount = 0;
-            dijkstraSelectionCount = 0;
-            rInspSelectionCount = 0;
         }
         public void DeleteGraph()
         {
@@ -297,9 +243,94 @@ namespace Interface_2
             graphCreated = false;
             btnSaveGraph.IsEnabled = false;
         }
+        private void DeactivateButton() //'deactivates' button
+        {
+            if (currentButton != null)
+                currentButton.Background = new SolidColorBrush(Color.FromRgb(221, 221, 221));
+        }
+        public Ellipse FindEllipse(int vertexId) //returns the ellipse that matches to an Id
+        {
+            foreach (var ctrl in mainCanvas.Children)
+            {
+                try //incase the ctrl is not an ellipse
+                {
+                    Ellipse currentEllipse = (Ellipse)ctrl;
+                    if (currentEllipse.Name.Substring(3) == vertexId.ToString()) //when youve found a match
+                    {
+                        return currentEllipse;
+                    }
+                }
+                catch { }
+            }
+            return null;
+        }
+        public TextBlock FindLabel(int vertexId)
+        {
+            foreach (var ctrl in mainCanvas.Children)
+            {
+                try
+                {
+                    TextBlock currentLabel = (TextBlock)ctrl;
+                    if (currentLabel.Name.Substring(8) == vertexId.ToString())
+                    {
+                        return currentLabel;
+                    }
+                }
+                catch { }
+            }
+            return null;
+        }
+        public Tuple<Line, Ellipse, Ellipse, TextBlock> FindEdge(string lineName)
+        {
+            foreach (Tuple<Line, Ellipse, Ellipse, TextBlock> edge in edgeList)
+            {
+                if (edge.Item1.Name == lineName)//detetcs if theres a path because theres a matching name
+                {
+                    return edge;
+                }
+            }
+            return null;
+        }
+        private Ellipse GetMinEllipse(Ellipse vertex1, Ellipse vertex2) //returns vertex with smallest ID
+        {
+            return (Convert.ToInt32(vertex1.Name.Substring(3)) < Convert.ToInt32(vertex2.Name.Substring(3))) ? vertex1 : vertex2;
+        }
+        private Ellipse GetMaxEllipse(Ellipse vertex1, Ellipse vertex2) //return vertex with largest ID
+        {
+            return (Convert.ToInt32(vertex1.Name.Substring(3)) > Convert.ToInt32(vertex2.Name.Substring(3))) ? vertex1 : vertex2;
+        }
+        public int GetMax(int a, int b)
+        {
+            return (a > b) ? a : b;
+        }
+        public int GetMin(int a, int b)
+        {
+            return (a < b) ? a : b;
+        }
         public void GenerateAdjList()
         {
             txAdjset.Text = Graph.PrintAdjList();
+        }
+        public HashSet<Tuple<Line, Ellipse, Ellipse, TextBlock>> GetListOfEdgesFromVertex(Ellipse activeVertex) //gets all of the edges coming out of a vertex
+        {
+            HashSet<Tuple<Line, Ellipse, Ellipse, TextBlock>> listOfEdges = new HashSet<Tuple<Line, Ellipse, Ellipse, TextBlock>>(); //data to return
+            foreach (Ellipse vertex in vertexList) //loop through vertex list
+            {
+                if (vertex != activeVertex)//don't check for an edge from itself to itself
+                {
+                    Ellipse largerEllipse = GetMaxEllipse(vertex, activeVertex);
+                    Ellipse smallerEllipse = GetMinEllipse(vertex, activeVertex); 
+                    string lineNameToFind = "line" + smallerEllipse.Name.Substring(3).ToString() + "to" + largerEllipse.Name.Substring(3).ToString(); //the name of the line that we are expecting to find
+                    foreach (Tuple<Line, Ellipse, Ellipse, TextBlock> edge in edgeList)
+                    {
+                        if (edge.Item1.Name == lineNameToFind) //when found...
+                        {
+                            listOfEdges.Add(edge);//add it to the list of edges
+                        }
+                    }
+                }
+            }
+            return listOfEdges; //return the list of edges
         }
         public List<List<int>> GenerateAdjMat() //makes the adjacenct list appear in the provided area
         {
@@ -330,21 +361,18 @@ namespace Interface_2
             return adjMat;
             //return incase its necessary for future use
         }
-        private void StudentLogInProcess()
+        public void HideValencies()
         {
-            btnRegisterStudent.IsEnabled = false;
-            btnLogin.IsEnabled = false;
-            btnRegisterTeacher.IsEnabled = false;
-            btnLogOut.IsEnabled = true;
-            DeleteGraph();
-        }
-        private void TeacherLogInProcess()
-        {
-            btnRegisterStudent.IsEnabled = false;
-            btnLogin.IsEnabled = false;
-            btnRegisterTeacher.IsEnabled = false;
-            btnLogOut.IsEnabled = true;
-            DeleteGraph();
+            if (valencyList != null) //make sure we arent looping through a null list
+            {
+                foreach (TextBlock valency in valencyList)
+                {
+                    mainCanvas.Children.Remove(valency); //remove each of the valency textblocks
+                }
+                valencyList.Clear(); //Update the valency List
+                valencyState = "Hidden"; //update the state
+                labelExtraInfo.Content = "";
+            }
         }
         private void LogOutProcess()
         {
@@ -358,6 +386,76 @@ namespace Interface_2
             txLoggedInAs.Content = "Logged in as: Guest";
             DeleteGraph();
 
+        }
+        public void LoadGraph()
+        {
+
+            LoadGraph loadGraph = new LoadGraph(); //open the loadgraph window
+            if (loadGraph.ShowDialog() == true)
+            {
+                string fileName = loadGraph.graphToLoad; //get the file name from the other window
+                if (fileName == "fail")
+                {
+                    MessageBox.Show("Please select one of the listed graphs");
+                }
+                else
+                {
+                    Graph toLoad = BinarySerialization.ReadFromBinaryFile<Graph>(fileName); //read the file into the toLoad class instance
+                    RenderGraph(toLoad); //render the just-loaded graph onto the screen 
+                    btnDeleteGraph.IsEnabled = true;
+                }
+
+            }
+
+
+        }
+        public void ResetSelectionCounts()
+        {
+            buttonSelectionCount = 0;
+            dijkstraSelectionCount = 0;
+            rInspSelectionCount = 0;
+        }
+        public void RevertLineColour() //rebinds the colour of the lines to the colour picker
+        {
+            foreach (var edge in edgeList)
+            {
+                Binding bindingStroke = new Binding("SelectedBrush")
+                {
+                    Source = colourPickerLine,
+                    Mode = BindingMode.OneWay,
+                    UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
+                };
+                edge.Item1.SetBinding(Line.StrokeProperty, bindingStroke);
+            }
+        }
+        public void RevertEllipseColour()//rebinds the colour of the ellipses to the colour picker
+        {
+            foreach (var ctrl in mainCanvas.Children)
+            {
+                try
+                {
+                    Ellipse currentEllipse = (Ellipse)ctrl;
+                    Binding bindingFill = new Binding("SelectedBrush")
+                    {
+                        Source = colourPickerVertex,
+                        Mode = BindingMode.OneWay,
+                        UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
+                    };
+                    currentEllipse.SetBinding(Ellipse.FillProperty, bindingFill);
+                }
+                catch
+                {
+
+                }
+            }
+        }
+        private void StudentLogInProcess()
+        {
+            btnRegisterStudent.IsEnabled = false;
+            btnLogin.IsEnabled = false;
+            btnRegisterTeacher.IsEnabled = false;
+            btnLogOut.IsEnabled = true;
+            DeleteGraph();
         }
         public void SaveGraph()
         {
@@ -449,65 +547,43 @@ namespace Interface_2
                 }
             }
         }
-        public void LoadGraph()
+        public void ShowValencies()
         {
-
-            LoadGraph loadGraph = new LoadGraph(); //open the loadgraph window
-            if (loadGraph.ShowDialog() == true)
+            int sumValency = 0; //represents the total valency
+            foreach (Ellipse vertex in vertexList)
             {
-                string fileName = loadGraph.graphToLoad; //get the file name from the other window
-                if (fileName == "fail")
+                TextBlock valency = new TextBlock()
                 {
-                    MessageBox.Show("Please select one of the listed graphs");
-                }
-                else
+                    FontSize = 20,
+                    Name = "Val" + vertex.Name.Substring(3), //set the name to Val(buttonId)
+                    Text = Graph.GetValency(Convert.ToInt32(vertex.Name.Substring(3))).ToString() //calls the graph class, which gets the valency of a vertex 
+                };
+                Binding bindingBG = new Binding("SelectedBrush")
                 {
-                    Graph toLoad = BinarySerialization.ReadFromBinaryFile<Graph>(fileName); //read the file into the toLoad class instance
-                    RenderGraph(toLoad); //render the just-loaded graph onto the screen 
-                    btnDeleteGraph.IsEnabled = true;
-                }
-
+                    Source = colourPickerLabel,
+                    UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
+                    Mode = BindingMode.TwoWay
+                };
+                valency.SetBinding(TextBlock.ForegroundProperty, bindingBG);
+                sumValency += Convert.ToInt32(valency.Text); //adds the valency we just evaluated to the total
+                double vertexX = Canvas.GetLeft(vertex) - 5; //holds x coord
+                double vertexY = Canvas.GetTop(vertex) - 40;//holds y coord
+                Canvas.SetLeft(valency, vertexX);//setting x position
+                Canvas.SetTop(valency, vertexY);//setting y position
+                Canvas.SetZIndex(valency, int.MaxValue);//setting z index
+                mainCanvas.Children.Add(valency);//show on the canvas
+                valencyList.Add(valency);//add it to the list of valency Textblocks
             }
-
-
+            valencyState = "Shown"; //update the state
+            labelExtraInfo.Content = "Sum of the Valencies: " + sumValency; //tell the user
         }
-        private void DeactivateButton() //'deactivates' button
+        private void TeacherLogInProcess()
         {
-            if (currentButton != null)
-                currentButton.Background = new SolidColorBrush(Color.FromRgb(221, 221, 221));
-        }
-        public void ClearHighlightedLines()
-        {
-            foreach (Line line in linesToDelete)
-            {
-                mainCanvas.Children.Remove(line);
-            }
-            linesToDelete.Clear();
-        }
-        private void ActivateButton(object btnSender) //highlight a button when its pressed
-        {
-            RevertEllipseColour();
-            RevertLineColour();
-            ClearHighlightedLines();
-            livePath.Clear(); //incase they were in the midst of the highlight path action
-            if (btnSender != null) //make sure that the button isnt null
-            {
-                if (currentButton != (Button)btnSender) //if the same button is not pressed
-                {
-                    DeactivateButton(); //'deactivate' the previous button
-                    currentButton = (Button)btnSender;
-                    currentButton.Background = new SolidColorBrush(btnActivatedColour); //'activate' the current button
-                }
-            }
-        }
-
-        public int GetMax(int a, int b)
-        {
-            return (a > b) ? a : b;
-        }
-        public int GetMin(int a, int b)
-        {
-            return (a < b) ? a : b;
+            btnRegisterStudent.IsEnabled = false;
+            btnLogin.IsEnabled = false;
+            btnRegisterTeacher.IsEnabled = false;
+            btnLogOut.IsEnabled = true;
+            DeleteGraph();
         }
     }
 }

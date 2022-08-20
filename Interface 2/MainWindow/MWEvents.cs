@@ -115,6 +115,12 @@ namespace Interface_2
                 DeleteEdge(edge);
             }
         }
+        private void btnDijkstrasShort_Click(object sender, RoutedEventArgs e)
+        {
+            HideValencies();
+            labelExtraInfo.Content = "Click a vertex to find the lowest cost route to the next clicked vertex";
+            ActivateButton(sender);
+        }
         private void btnDeleteGraph_Click(object sender, RoutedEventArgs e)
         {
             HideValencies();
@@ -151,6 +157,11 @@ namespace Interface_2
             HideValencies();
             labelExtraInfo.Content = "Click and Hold vertices to drag them around the canvas";
             ActivateButton(sender);
+        }
+        private void btnHighlightPaths_Click(object sender, RoutedEventArgs e)
+        {
+            ActivateButton(sender);
+            labelExtraInfo.Content = "Click on the vertices that you want the path to connect.";
         }
         private void btnGenerateMatrix_Click(object sender, RoutedEventArgs e)
         {
@@ -360,6 +371,22 @@ namespace Interface_2
             HideValencies();
             labelExtraInfo.Content = "Screenshot Taken";
             ActivateButton(sender);
+        }
+        private void btnToggleValencies_Click(object sender, RoutedEventArgs e)
+        {
+            ActivateButton(sender);
+            if (valencyState == "Hidden")
+            {
+                ShowValencies(); //if hidden when pressed, we want to show
+            }
+            else if (valencyState == "Shown")
+            {
+                HideValencies();//if shown when pressed we want to hide
+            }
+            else
+            {
+                throw new Exception("Invalid valencyState"); //anything else is invalid
+            }
         }
     }
 }
