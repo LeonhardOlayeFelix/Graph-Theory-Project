@@ -70,25 +70,7 @@ namespace Interface_2
             ActivateButton(sender);
         }
         
-        public void VertexStory_Completed(object sender, EventArgs e)
-        {
-            Binding bindingDiameter = new Binding("Value")//binding the diameter of the vertices to the slider
-            {
-                Source = vertexDiameterSlider,
-                UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
-            };
-            foreach (var ctrl in mainCanvas.Children)
-            {
-                try
-                {
-                    Ellipse vertex = (Ellipse)ctrl;
-                    vertex.SetBinding(Ellipse.HeightProperty, bindingDiameter);
-                    vertex.SetBinding(Ellipse.WidthProperty, bindingDiameter);
-
-                }
-                catch { }
-            }
-        }
+        
         public void LoadGraph()
         {
 

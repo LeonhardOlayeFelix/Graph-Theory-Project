@@ -28,14 +28,15 @@ namespace Interface_2
                     //loop through lines and delete any lines that come out of it
                     foreach (Tuple<Line, Ellipse, Ellipse, TextBlock> edge in listOfEdgesToRemove)
                     {
-                        DeleteEdge(edge); //calls function to delete the edge from cavas
+                        DeleteEdge(edge, false, true); //calls function to delete the edge from cavas
                     }
-                    mainCanvas.Children.Remove(activeVertex); //then delete the vertex
+                    //mainCanvas.Children.Remove(activeVertex);
+                    InitiateDeleteVertexStoryboard(activeVertex, TimeSpan.FromSeconds(0.2)); //then delete the vertex
                     vertexList.Remove(activeVertex);//delete it from the list
                     TextBlock label = FindLabel(Convert.ToInt32(activeVertex.Name.Substring(3)));
                     mainCanvas.Children.Remove(label);
                     vertexTxBoxList.Remove(label);
-                    
+                    txAdjset.Text = Graph.PrintAdjList();
                 }
                 else if (currentButton == btnAddConnection) //if they want to connect two vertices
                 {

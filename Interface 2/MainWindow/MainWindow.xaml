@@ -439,7 +439,7 @@
                                                       Margin="20,0,0,0"
                                                       Checked="cbAutoGenEdges_Checked"
                                                       Grid.Row="3">
-                                                Auto Gen Edge Weights (Randomly)
+                                                Randomly generate edge weights
                                             </CheckBox>
                                             <CheckBox VerticalContentAlignment="Center" 
                                                       x:Name="cbAutoGenEdgesValue"
@@ -448,9 +448,10 @@
                                                       Margin="20,4,0,0"
                                                       Grid.Row="3">
                                                 <WrapPanel>
-                                                    <Label>Auto Gen Edge Weights (Value)</Label>
+                                                    <Label Margin="-5,-5,0,-5">Generate edge with specified weight</Label>
                                                     <TextBox Width="25"
                                                              Text="5"
+                                                             
                                                              x:Name="txAutoWeight"
                                                              PreviewTextInput="txAutoWeight_PreviewTextInput" 
                                                              FontWeight="Medium"
@@ -494,6 +495,14 @@
                                                     <RowDefinition/>
                                                     <RowDefinition/>
                                                 </Grid.RowDefinitions>
+                                                <CheckBox VerticalContentAlignment="Center" 
+                                                      x:Name="cbManualGeneration"
+                                                      FontWeight="Bold"
+                                                      Margin="20,0,0,0"
+                                                      Checked="cbAutoGenEdges_Checked"
+                                                      Grid.Row="3">
+                                                    Reveal the edges manually using enter
+                                                </CheckBox>
                                                 <Button Margin="20,12,20,3"
                                                         x:Name="btnPrims"
                                                         Click="btnPrims_Click">

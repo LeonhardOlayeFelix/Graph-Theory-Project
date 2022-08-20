@@ -122,7 +122,9 @@ namespace Interface_2
             line.MouseMove += mouseMove;
             //add a new edge tuple to the list
             edgeList.Add(Tuple.Create(line, smallerEllipse, largerEllipse, weightLabel));
-            InitiateLineStoryboard(line, TimeSpan.FromSeconds(0.2)); //start line storyboard
+            List<int> order = new List<int>() { Convert.ToInt32(v1.Name.Substring(3)), Convert.ToInt32(v2.Name.Substring(3)) };
+            //InitiateHighlightPathStoryboard(edgeAsList, TimeSpan.FromSeconds((rendering) ? 0.75 : 0.2), false);
+            InitiateLineStoryboard(line, TimeSpan.FromSeconds((rendering)? 0.75: 0.2), order); //start line storyboard
             if (weight != 0)
                 mainCanvas.Children.Add(weightLabel);
             GenerateAdjList();
@@ -135,9 +137,9 @@ namespace Interface_2
         {
             return (Convert.ToInt32(vertex1.Name.Substring(3)) > Convert.ToInt32(vertex2.Name.Substring(3))) ? vertex1 : vertex2;
         }
-        private void DeleteEdge(Tuple<Line, Ellipse, Ellipse, TextBlock> edge, bool rendering = false) //deletes an edge, and the things connected to
+        private void DeleteEdge(Tuple<Line, Ellipse, Ellipse, TextBlock> edge, bool rendering = false, bool deletingVertex = false) //deletes an edge, and the things connected to
         {
-            if (!rendering)
+            if (!rendering && !deletingVertex)
             {
                 Graph.RemoveEdge(Convert.ToInt32(edge.Item2.Name.Substring(3)), Convert.ToInt32(edge.Item3.Name.Substring(3))); //update the class graph
             }
