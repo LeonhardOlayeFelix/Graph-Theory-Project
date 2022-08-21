@@ -69,25 +69,39 @@ namespace Interface_2
             }
             return adjacentVertices;
         }
-        public int GetEdgeWeight(int v1, int v2)
+        /// <summary>
+        /// Returns the weight on an edge between vertices
+        /// </summary>
+        /// <param name="vertex1">The Vertex that is on one end of the edge</param>
+        /// <param name="vertex2">The vertex that is on the other end of the edge</param>
+        /// <returns></returns>
+        public int GetEdgeWeight(int vertex1, int vertex2)
         {
             //returns weight on an edge
             int weight = -1;
             foreach (Vertex vertex in vertexSet)
             {
-                if (vertex.GetVertexId() == v1)
+                if (vertex.GetVertexId() == vertex1)
                 {
-                    weight = vertex.GetWeight(v2);
+                    weight = vertex.GetWeight(vertex2);
                 }
             }
             //return -1 if there was no edge
             return weight;
         }
+        /// <summary>
+        /// Returns a list of all the edges in the graph
+        /// </summary>
+        /// <returns></returns>
         public List<Tuple<int, int, int>> GetListOfEdges()
         {
             //returns list of edges
             return listOfEdges;
         }
+        /// <summary>
+        /// returns a merge sorted list of all the edges in the graph
+        /// </summary>
+        /// <returns></returns>
         public List<Tuple<int, int, int>> GetListOfSortedEdges()
         {
             //merge sorts list of edges
@@ -95,11 +109,19 @@ namespace Interface_2
             List<Tuple<int, int, int>> sortedEdges = MergeSort(unsortedEdges);
             return sortedEdges;
         }
+        /// <summary>
+        /// returns the adjacency list
+        /// </summary>
+        /// <returns></returns>
         public List<Vertex> GetAdjacencyList()
         {
             //returns adjacency list
             return vertexSet;
         }
+        /// <summary>
+        /// returns the sum of all the weights in the graph
+        /// </summary>
+        /// <returns></returns>
         public int GetSumOfWeights()
         {
             //returns the sum of weights
@@ -116,11 +138,19 @@ namespace Interface_2
             //each edge is counted twice
             return sum / 2;
         }
+        /// <summary>
+        /// returns the number of vertices in the graph
+        /// </summary>
+        /// <returns></returns>
         public int GetNumberOfVertices()
         {
             //returns the number of vertices
             return this.numberOfVertices;
         }
+        /// <summary>
+        /// returns the list of vertices in the graph
+        /// </summary>
+        /// <returns></returns>
         public List<int> GetListOfVertices()
         {
             //returns list of vertices
@@ -132,10 +162,15 @@ namespace Interface_2
             }
             return ListOfVertices;
         }
-        public int GetValency(int v1)
+        /// <summary>
+        /// returns the valency of a vertex
+        /// </summary>
+        /// <param name="vertex1"></param>
+        /// <returns></returns>
+        public int GetValency(int vertex1)
         {
             //returns the valency of a vertex
-            if (!IsInVertexList(v1))
+            if (!IsInVertexList(vertex1))
             {
                 //error handling - existence
                 throw new ArgumentException("this vertex does not exist.");
@@ -145,7 +180,7 @@ namespace Interface_2
                 foreach (Vertex node in vertexSet)
                 {
                     //loop through adjacency list to find right vertex
-                    if (node.GetVertexId() == v1)
+                    if (node.GetVertexId() == vertex1)
                     {
                         return node.GetAdjVertices().Count();
                     }
@@ -154,6 +189,10 @@ namespace Interface_2
             //flag
             return -1;
         }
+        /// <summary>
+        /// returns the total valency of the graph
+        /// </summary>
+        /// <returns></returns>
         public int GetSumValency()
         {
             //return the sum of all of the valencies
@@ -166,6 +205,10 @@ namespace Interface_2
             }
             return total;
         }
+        /// <summary>
+        /// returns the adjacency list as a output-able string
+        /// </summary>
+        /// <returns></returns>
         public string PrintAdjList()
         {
             //returns adjacency list as string
@@ -177,6 +220,10 @@ namespace Interface_2
             }
             return stringToReturn;
         }
+        /// <summary>
+        /// returns the vertex with the highest ID
+        /// </summary>
+        /// <returns></returns>
         public int GetMaxVertexID()
         {
             //returns the highest Vertex ID
@@ -190,6 +237,10 @@ namespace Interface_2
             }
             return maxId;
         }
+        /// <summary>
+        /// returns the adjacency matrix as a 2 dimensional list
+        /// </summary>
+        /// <returns></returns>
         public List<List<int>> GetAdjacencyMatrix()
         {
             //returns adjacency matrix
@@ -215,6 +266,10 @@ namespace Interface_2
             }
             return adjMatrix;
         }
+        /// <summary>
+        /// returns all of the vertices whose valency is odd
+        /// </summary>
+        /// <returns></returns>
         public List<int> GetOddVertices()
         {
             //returns odd valency vertices
@@ -229,31 +284,46 @@ namespace Interface_2
             }
             return oddVertices;
         }
-        private bool IsValidEdge(int u, int v, bool[] isInMst)
+        /// <summary>
+        /// returns true if the passed in edge is available for use in the minimum spanning tree
+        /// </summary>
+        /// <param name="vertex1"></param>
+        /// <param name="vertex2"></param>
+        /// <param name="isInMst"></param>
+        /// <returns></returns>
+        private bool IsValidEdge(int vertex1, int vertex2, bool[] isInMst)
         {
             //Check if the passed in edge is available for use in the MST
-            if (u == v)
+            if (vertex1 == vertex2)
             {
                 //vertex to itself is not valid
                 return false;
             }
-            if (isInMst[u] == false && isInMst[v] == false)
+            if (isInMst[vertex1] == false && isInMst[vertex2] == false)
             {
                 //exactly one of the vertices need to be in the MST so return false
                 return false;
             }
-            else if (isInMst[u] == true && isInMst[v] == true)
+            else if (isInMst[vertex1] == true && isInMst[vertex2] == true)
             {
                 //exactly one of the vertices need to be in the MST so return false
                 return false;
             }
             return true;
         }
+        /// <summary>
+        /// return the number of edges in the graph
+        /// </summary>
+        /// <returns></returns>
         public int GetNumberOfEdges()
         {
             //returns number of edges in graph
             return GetSumValency() / 2;
         }
+        /// <summary>
+        /// returns true if the graph contains a cycle
+        /// </summary>
+        /// <returns></returns>
         public bool ContainsCycle()
         {
             //returns true if the graph contains a cycle
@@ -268,6 +338,10 @@ namespace Interface_2
             }
             return false;
         }
+        /// <summary>
+        /// returns true if the graph is connected
+        /// </summary>
+        /// <returns></returns>
         public bool IsConnected()
         {
             //returns true if the graph is connected
@@ -284,6 +358,11 @@ namespace Interface_2
             }
             return false;
         }
+        /// <summary>
+        /// returns the cost of a walk
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
         public int GetWalkCost(List<int> path)
         {
             //returns cost of a walk
@@ -303,6 +382,10 @@ namespace Interface_2
             }
             return pathCost;
         }
+        /// <summary>
+        /// returns true if the graph is semu eulerian
+        /// </summary>
+        /// <returns></returns>
         public bool IsSemiEulerian()
         {
             //returns true if the graph is semi eulerian
@@ -320,6 +403,10 @@ namespace Interface_2
             }
             return false;
         }
+        /// <summary>
+        /// returns true if the graph is eulerian
+        /// </summary>
+        /// <returns></returns>
         public bool IsEulerian()
         {
             //returns true if the graph is eulerian
@@ -332,10 +419,22 @@ namespace Interface_2
             }
             return true;
         }
+        /// <summary>
+        /// returns larger number of a and b
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
         private int GetMax(int a, int b)
         {
             return (a > b) ? a : b;
         }
+        /// <summary>
+        /// returns smaller number of a and b
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
         private int GetMin(int a, int b)
         {
             return (a < b) ? a : b;
