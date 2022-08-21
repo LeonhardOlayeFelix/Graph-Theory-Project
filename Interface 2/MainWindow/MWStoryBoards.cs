@@ -15,6 +15,8 @@ namespace Interface_2
 
     public partial class MainWindow : Window
     {
+        Timer timer = new Timer();
+        Timer timer1 = new Timer();
         public void InitiateVertexStoryboard(double newDiameter, TimeSpan duration, Ellipse vertex)
         {
             //initialise animation
@@ -170,7 +172,7 @@ namespace Interface_2
                 line1.BeginStoryboard(sb);
             }
         }
-        public void InitiatePathWalkerStoryboard(List<int> path)
+        public void InitiatePathWalkerStoryboard(List<int> path, bool recursed = false)
         {
             //initialise pathwalker
             Ellipse pathWalker = new Ellipse
@@ -185,11 +187,17 @@ namespace Interface_2
             int pathWalkerDuration = Convert.ToInt32(pathWalkerDurationSlider.Value);
             int count = 0;
             int totalTime = 1000 * pathWalkerDuration * (path.Count); //time taken for pathwalker to complete journey
-
-            //setup the timer for the pathwalker
-            Timer timer = new Timer() { Interval = 1000 * pathWalkerDuration};
-            Timer timer1 = new Timer() { Interval = totalTime };
-            timer1.Elapsed += (sender, e) => { timer.Stop(); timer1.Stop(); };
+            timer = new Timer() { Interval = 1000 * pathWalkerDuration};
+            timer1 = new Timer() { Interval = totalTime };
+            timer1.Elapsed += (sender, e) =>
+            {
+                timer.Stop(); 
+                timer1.Stop();
+                this.Dispatcher.Invoke(() =>
+                {
+                    InitiatePathWalkerStoryboard(path);
+                });
+            };
             timer.Elapsed += (sender, e) =>
             {
                 this.Dispatcher.Invoke(() =>

@@ -22,6 +22,8 @@ namespace Interface_2
             RevertEllipseColour();
             RevertLineColour();
             ClearHighlightedLines();
+            timer.Stop();
+            timer1.Stop();
             livePath.Clear(); //incase they were in the midst of the highlight path action
             if (btnSender != null) //make sure that the button isnt null
             {
