@@ -14,6 +14,11 @@ namespace Interface_2
 {
     public partial class MainWindow : Window
     {
+        /// <summary>
+        /// To be Called when the selection count is even. Being even indicates that this is where an edge is being connected TO, so
+        /// it should actually be rendered on screen here.
+        /// </summary>
+        /// <param name="vertexToConnectTo">The vertex on the other end of the edge</param>
         public void AddConnectionEven(Ellipse vertexToConnectTo)
         {
             vertexToConnectTo.Fill = HighlightColour;
@@ -61,6 +66,11 @@ namespace Interface_2
             btnSaveGraph.IsEnabled = true;
             btnLoadGraph.IsEnabled = true;
         }
+        /// <summary>
+        /// To be Called when the selection count is odd. Being odd indicates that this is where an edge is being connected FROM, so
+        /// it shouldn't be rendered on the screen yet.
+        /// </summary>
+        /// <param name="vertexToConnectFrom">the vertex on one end of the edge</param>
         public void AddConnectionOdd(Ellipse vertexToConnectFrom)
         {
             vertexToConnectFrom.Fill = HighlightColour;
@@ -71,6 +81,10 @@ namespace Interface_2
             btnSaveGraph.IsEnabled = false;
             btnLoadGraph.IsEnabled = false;
         }
+        /// <summary>
+        /// Displays the result of a breadth first search
+        /// </summary>
+        /// <param name="startVertex">Vertex to start the search from</param>
         public void BreadthFirst(Ellipse startVertex)
         {
             RevertLineColour();
@@ -92,6 +106,10 @@ namespace Interface_2
                 txExtraInfo2.Text = "Traversal Order: " + outputString;
             }
         }
+        /// <summary>
+        /// Deletes a vertex from the canvas
+        /// </summary>
+        /// <param name="activeVertex">Vertex that is to be deleted</param>
         public void DeleteVertex(Ellipse activeVertex)
         {
             HashSet<Tuple<Line, Ellipse, Ellipse, TextBlock>> listOfEdgesToRemove = GetListOfEdgesFromVertex(activeVertex);//gets list of edges we need to remove with the vertex
@@ -109,7 +127,13 @@ namespace Interface_2
             vertexTxBoxList.Remove(label);
             txAdjset.Text = Graph.PrintAdjList();
         }
-        private void DeleteEdge(Tuple<Line, Ellipse, Ellipse, TextBlock> edge, bool rendering = false, bool deletingVertex = false) //deletes an edge, and the things connected to
+        /// <summary>
+        /// Deletes an edge from the canvas
+        /// </summary>
+        /// <param name="edge">The edge that is to be deleted</param>
+        /// <param name="rendering">True only if this method is being used to load a previously saved graph</param>
+        /// <param name="deletingVertex">True only if this function is being called as a result of a vertex is being deleted</param>
+        private void DeleteEdge(Tuple<Line, Ellipse, Ellipse, TextBlock> edge, bool rendering = false, bool deletingVertex = false)
         {
             if (!rendering && !deletingVertex)
             {
@@ -121,6 +145,10 @@ namespace Interface_2
             edgeList.Remove(edge);//remove it from the graph
             GenerateAdjList();
         }
+        /// <summary>
+        /// Displays the result of a depth first search
+        /// </summary>
+        /// <param name="startVertex">Vertex to start the search from</param>
         public void DepthFirst(Ellipse startVertex)
         {
             RevertEllipseColour();
@@ -142,6 +170,11 @@ namespace Interface_2
                 txExtraInfo2.Text = "Traversal Order: " + outputString;
             }
         }
+        /// <summary>
+        /// To be called when the selection count is even. Being even indicates that the pressed vertex is the end vertex. 
+        /// Displays the result of dijkstras algorithm
+        /// </summary>
+        /// <param name="endVertex"></param>
         public void DijkstraEven(Ellipse endVertex)
         {
             int vId = Convert.ToInt32(endVertex.Name.Substring(3));
@@ -170,6 +203,11 @@ namespace Interface_2
                 EnableAllAlgorithmButtons();
             }
         }
+        /// <summary>
+        /// To be called when the selection count is odd. Being odd indicates that the pressed vertex is the start vertex. Does not do 
+        /// dijkstras algorithm as the end vertex hasn't yet been specified
+        /// </summary>
+        /// <param name="startVertex"></param>
         public void DijkstraOdd(Ellipse startVertex)
         {
             DisableTabControl();
@@ -180,6 +218,10 @@ namespace Interface_2
             this.startVertex = Convert.ToInt32(startVertex.Name.Substring(3));
             labelExtraInfo.Content = "Shortest Path from " + FindLabel(Convert.ToInt32(this.startVertex)).Text + " to...";
         }
+        /// <summary>
+        /// Highlights a path as a user adds more vertices to this path
+        /// </summary>
+        /// <param name="activeVertex">The vertex that should be added to the path</param>
         public void HighlightPaths(Ellipse activeVertex)
         {
             List<int> adjVertices = Graph.GetAdjVertices(Convert.ToInt32(activeVertex.Name.Substring(3)));
@@ -205,6 +247,10 @@ namespace Interface_2
                 }
             }
         }
+        /// <summary>
+        /// Displays the result of prim's algorithm
+        /// </summary>
+        /// <param name="startVertex">Start vertex for prim's algorithm</param>
         public void Prims(Ellipse startVertex)
         {
             ClearHighlightedLines();
@@ -221,6 +267,12 @@ namespace Interface_2
                 MessageBox.Show("The graph is not connected.");
             }
         }
+        /// <summary>
+        /// Route inspection Algorithm starting and ending at different vertices.
+        /// To be called when selection count is even. Being even indicates that this is the end point vertex for the Route 
+        /// Inspection Algorithm. Displays the result of Route Inspection Algorithm on screen
+        /// </summary>
+        /// <param name="endVertex">The end point for the algorithm</param>
         public void RouteInspStartAndEndEven(Ellipse endVertex)
         {
             int endVertexId = Convert.ToInt32(endVertex.Name.Substring(3));
@@ -272,6 +324,12 @@ namespace Interface_2
                 EnableAllAlgorithmButtons();
             }
         }
+        /// <summary>
+        /// Route inspection Algorithm starting and ending at different vertices.
+        /// To be called when selection count is odd. Being odd indicates that this is the start point vertex for the Route
+        /// Inspection Algorithm. Does not perform the algorithm at this stage.
+        /// </summary>
+        /// <param name="startVertex"></param>
         public void RouteInspStartAndEndOdd(Ellipse startVertex)
         {
             RevertLineColour();
@@ -295,6 +353,9 @@ namespace Interface_2
                 labelExtraInfo.Content = "Choose an END vertex with ODD valency.";
             }
         }
+        /// <summary>
+        /// Displays the result of The route inspection algorithm starting and ending at the same vertex
+        /// </summary>
         public void RouteInspectionStartAtEnd()
         {
             Tuple<List<Tuple<int, int>>, int> result = Graph.RInspStartAtEnd();//returns the edges to repeated (1) and the cost of repitition (2)
@@ -318,6 +379,10 @@ namespace Interface_2
                 RouteInspHighlightPath(edgesToRepeat, cost); //highlights the edges to be repeated and presents the cost
             }
         }
+        /// <summary>
+        /// Reverts the position of a specified Ellipse to the position it was created at.
+        /// </summary>
+        /// <param name="currentEllipse">The Ellipse whose position is to be reverted</param>
         public void RevertOneVertexPosition(Ellipse currentEllipse)
         {
             int vertexID = Convert.ToInt32(currentEllipse.Name.Substring(3));
