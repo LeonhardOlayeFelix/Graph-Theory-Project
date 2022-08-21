@@ -17,7 +17,11 @@ namespace Interface_2
     
     public partial class MainWindow : Window
     {
-        private void ActivateButton(object btnSender) //highlight a button when its pressed
+        /// <summary>
+        /// Highlights a button that has been pressed
+        /// </summary>
+        /// <param name="btnSender">Button that was pressed</param>
+        private void ActivateButton(object btnSender)
         {
             RevertEllipseColour();
             RevertLineColour();
@@ -35,7 +39,12 @@ namespace Interface_2
                 }
             }
         }
-        public void CreateNewGraph(string graphName, bool rendering = false) //creates a new graph
+        /// <summary>
+        /// Responsible for re-initialisation of attributes when a new graph is created
+        /// </summary>
+        /// <param name="graphName">The name of the new graph</param>
+        /// <param name="rendering">True only if this method is being used to load a previously saved graph</param>
+        public void CreateNewGraph(string graphName, bool rendering = false)
         {
             bool AlreadyExists = false; //tells us whether we should carry on with creating the graph later on
             OleDbConnection conn = new OleDbConnection(MainWindow.ConStr);
@@ -92,6 +101,9 @@ namespace Interface_2
                 btnSaveGraph.IsEnabled = true;
             }
         }
+        /// <summary>
+        /// Clears all of the highlighted lines that are on the screen
+        /// </summary>
         public void ClearHighlightedLines()
         {
             foreach (Line line in linesToDelete)
@@ -100,7 +112,14 @@ namespace Interface_2
             }
             linesToDelete.Clear();
         }
-        private void ConnectVertices(Ellipse v1, Ellipse v2, int weight, bool rendering = false) //connects two vertices together 
+        /// <summary>
+        /// Connects two vertices together
+        /// </summary>
+        /// <param name="v1">Vertex from one end of the edge</param>
+        /// <param name="v2">Vertex from the other end of the edge</param>
+        /// <param name="weight">Edge Weight</param>
+        /// <param name="rendering">True only if this method is being used to load a previously saved graph</param>
+        private void ConnectVertices(Ellipse v1, Ellipse v2, int weight, bool rendering = false) 
         {
             
             //gets the smaller and larger vertex
@@ -212,6 +231,10 @@ namespace Interface_2
                 mainCanvas.Children.Add(weightLabel);
             GenerateAdjList();
         }
+        /// <summary>
+        /// Responsible for decreasing the selection counts
+        /// </summary>
+        /// <param name="count">The type of selection count to be decremented</param>
         public void DecrementSelectionCount(ref int count)
         {
             count -= 1;
@@ -223,6 +246,9 @@ namespace Interface_2
             btnSaveGraph.IsEnabled = true;
             btnLoadGraph.IsEnabled = true;
         }
+        /// <summary>
+        /// Responsible for the cleanup when a graph is deleted
+        /// </summary>
         public void DeleteGraph()
         {
             //set all of the variables to null
@@ -244,12 +270,20 @@ namespace Interface_2
             graphCreated = false;
             btnSaveGraph.IsEnabled = false;
         }
-        private void DeactivateButton() //'deactivates' button
+        /// <summary>
+        /// Deactivates the currently activated button
+        /// </summary>
+        private void DeactivateButton()
         {
             if (currentButton != null)
                 currentButton.Background = new SolidColorBrush(Color.FromRgb(221, 221, 221));
         }
-        public Ellipse FindEllipse(int vertexId) //returns the ellipse that matches to an Id
+        /// <summary>
+        /// Returns the ellipse that corresponds with a specified vertex ID
+        /// </summary>
+        /// <param name="vertexId">The ID of the Vertex whose Ellipse is to be found</param>
+        /// <returns></returns>
+        public Ellipse FindEllipse(int vertexId)
         {
             foreach (var ctrl in mainCanvas.Children)
             {
@@ -265,6 +299,11 @@ namespace Interface_2
             }
             return null;
         }
+        /// <summary>
+        /// Returns the label that corresponds with a specified vertex ID
+        /// </summary>
+        /// <param name="vertexId">The ID of the vertex whose Label is to be found</param>
+        /// <returns></returns>
         public TextBlock FindLabel(int vertexId)
         {
             foreach (var ctrl in mainCanvas.Children)
@@ -281,6 +320,11 @@ namespace Interface_2
             }
             return null;
         }
+        /// <summary>
+        /// Returns the edge that corresponds with a specified name
+        /// </summary>
+        /// <param name="lineName">Name of the edge of the form "lineatob" where a < b</param>
+        /// <returns></returns>
         public Tuple<Line, Ellipse, Ellipse, TextBlock> FindEdge(string lineName)
         {
             foreach (Tuple<Line, Ellipse, Ellipse, TextBlock> edge in edgeList)
@@ -292,35 +336,67 @@ namespace Interface_2
             }
             return null;
         }
-        private Ellipse GetMinEllipse(Ellipse vertex1, Ellipse vertex2) //returns vertex with smallest ID
+        /// <summary>
+        /// Returns the Ellipse that has the smaller ID
+        /// </summary>
+        /// <param name="Ellipse1"></param>
+        /// <param name="Ellipse2"></param>
+        /// <returns></returns>
+        private Ellipse GetMinEllipse(Ellipse Ellipse1, Ellipse Ellipse2)
         {
-            return (Convert.ToInt32(vertex1.Name.Substring(3)) < Convert.ToInt32(vertex2.Name.Substring(3))) ? vertex1 : vertex2;
+            return (Convert.ToInt32(Ellipse1.Name.Substring(3)) < Convert.ToInt32(Ellipse2.Name.Substring(3))) ? Ellipse1 : Ellipse2;
         }
-        private Ellipse GetMaxEllipse(Ellipse vertex1, Ellipse vertex2) //return vertex with largest ID
+        /// <summary>
+        /// Returns the Ellipse that has the larger ID
+        /// </summary>
+        /// <param name="Ellipse1"></param>
+        /// <param name="Ellipse2"></param>
+        /// <returns></returns>
+        private Ellipse GetMaxEllipse(Ellipse Ellipse1, Ellipse Ellipse2)
         {
-            return (Convert.ToInt32(vertex1.Name.Substring(3)) > Convert.ToInt32(vertex2.Name.Substring(3))) ? vertex1 : vertex2;
+            return (Convert.ToInt32(Ellipse1.Name.Substring(3)) > Convert.ToInt32(Ellipse2.Name.Substring(3))) ? Ellipse1 : Ellipse2;
         }
+        /// <summary>
+        /// Returns the smaller number of a and b
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
         public int GetMax(int a, int b)
         {
             return (a > b) ? a : b;
         }
+        /// <summary>
+        /// Returns the larger number of a and b
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
         public int GetMin(int a, int b)
         {
             return (a < b) ? a : b;
         }
+        /// <summary>
+        /// Updates the on-screen textbox which displays the adjacency list
+        /// </summary>
         public void GenerateAdjList()
         {
             txAdjset.Text = Graph.PrintAdjList();
         }
-        public HashSet<Tuple<Line, Ellipse, Ellipse, TextBlock>> GetListOfEdgesFromVertex(Ellipse activeVertex) //gets all of the edges coming out of a vertex
+        /// <summary>
+        /// Returns a Hashset of all of the edges coming out an Ellipse
+        /// </summary>
+        /// <param name="activeEllipse">Ellipse to find neighbours for</param>
+        /// <returns></returns>
+        public HashSet<Tuple<Line, Ellipse, Ellipse, TextBlock>> GetListOfEdgesFromVertex(Ellipse activeEllipse)
         {
             HashSet<Tuple<Line, Ellipse, Ellipse, TextBlock>> listOfEdges = new HashSet<Tuple<Line, Ellipse, Ellipse, TextBlock>>(); //data to return
             foreach (Ellipse vertex in vertexList) //loop through vertex list
             {
-                if (vertex != activeVertex)//don't check for an edge from itself to itself
+                if (vertex != activeEllipse)//don't check for an edge from itself to itself
                 {
-                    Ellipse largerEllipse = GetMaxEllipse(vertex, activeVertex);
-                    Ellipse smallerEllipse = GetMinEllipse(vertex, activeVertex); 
+                    Ellipse largerEllipse = GetMaxEllipse(vertex, activeEllipse);
+                    Ellipse smallerEllipse = GetMinEllipse(vertex, activeEllipse); 
                     string lineNameToFind = "line" + smallerEllipse.Name.Substring(3).ToString() + "to" + largerEllipse.Name.Substring(3).ToString(); //the name of the line that we are expecting to find
                     foreach (Tuple<Line, Ellipse, Ellipse, TextBlock> edge in edgeList)
                     {
@@ -333,7 +409,11 @@ namespace Interface_2
             }
             return listOfEdges; //return the list of edges
         }
-        public List<List<int>> GenerateAdjMat() //makes the adjacenct list appear in the provided area
+        /// <summary>
+        /// Makes the adjacency list appear in the on-screen area
+        /// </summary>
+        /// <returns></returns>
+        public List<List<int>> GenerateAdjMat()
         {
             //populates 2d list with adjacency matrix
             List<List<int>> adjMat = Graph.GetAdjacencyMatrix();
@@ -362,6 +442,9 @@ namespace Interface_2
             return adjMat;
             //return incase its necessary for future use
         }
+        /// <summary>
+        /// Hides all of the valencies
+        /// </summary>
         public void HideValencies()
         {
             if (valencyList != null) //make sure we arent looping through a null list
@@ -375,6 +458,9 @@ namespace Interface_2
                 labelExtraInfo.Content = "";
             }
         }
+        /// <summary>
+        /// Manages the buttons that should be enabled and disabled once a user logs out
+        /// </summary>
         private void LogOutProcess()
         {
             loggedStudent = null;
@@ -388,6 +474,9 @@ namespace Interface_2
             DeleteGraph();
 
         }
+        /// <summary>
+        /// Loads a previously-saved graph
+        /// </summary>
         public void LoadGraph()
         {
 
@@ -410,13 +499,19 @@ namespace Interface_2
 
 
         }
+        /// <summary>
+        /// Reinitialise all of the selection counts back to 0
+        /// </summary>
         public void ResetSelectionCounts()
         {
             buttonSelectionCount = 0;
             dijkstraSelectionCount = 0;
             rInspSelectionCount = 0;
         }
-        public void RevertLineColour() //rebinds the colour of the lines to the colour picker
+        /// <summary>
+        /// rebinds the colour of the Lines in the canvas to the colour picker
+        /// </summary>
+        public void RevertLineColour()
         {
             foreach (var edge in edgeList)
             {
@@ -429,7 +524,10 @@ namespace Interface_2
                 edge.Item1.SetBinding(Line.StrokeProperty, bindingStroke);
             }
         }
-        public void RevertEllipseColour()//rebinds the colour of the ellipses to the colour picker
+        /// <summary>
+        /// rebinds the colour of the Ellipses in the canvas to the colour picker
+        /// </summary>
+        public void RevertEllipseColour()
         {
             foreach (var ctrl in mainCanvas.Children)
             {
@@ -450,6 +548,9 @@ namespace Interface_2
                 }
             }
         }
+        /// <summary>
+        /// Manages the buttons that should be enabled and disabled once a student logs in
+        /// </summary>
         private void StudentLogInProcess()
         {
             btnRegisterStudent.IsEnabled = false;
@@ -458,6 +559,9 @@ namespace Interface_2
             btnLogOut.IsEnabled = true;
             DeleteGraph();
         }
+        /// <summary>
+        /// Saves the graph that is currently made to the database
+        /// </summary>
         public void SaveGraph()
         {
             OleDbConnection conn = new OleDbConnection(MainWindow.ConStr);
@@ -548,6 +652,9 @@ namespace Interface_2
                 }
             }
         }
+        /// <summary>
+        /// Display all of the valencies on the screen
+        /// </summary>
         public void ShowValencies()
         {
             int sumValency = 0; //represents the total valency
@@ -578,6 +685,9 @@ namespace Interface_2
             valencyState = "Shown"; //update the state
             labelExtraInfo.Content = "Sum of the Valencies: " + sumValency; //tell the user
         }
+        /// <summary>
+        /// Manages the buttons that should be enabled and disabled once a student logs in
+        /// </summary>
         private void TeacherLogInProcess()
         {
             btnRegisterStudent.IsEnabled = false;
