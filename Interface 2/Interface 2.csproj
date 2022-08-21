@@ -85,7 +85,7 @@
     <Compile Include="Accounts\Login.xaml.cs">
       <DependentUpon>Login.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MainWindow\Databases.cs" />
+    <Compile Include="MainWindow\DatabaseManagement.cs" />
     <Compile Include="SecondaryWindows\Overwrite.xaml.cs">
       <DependentUpon>Overwrite.xaml</DependentUpon>
     </Compile>
