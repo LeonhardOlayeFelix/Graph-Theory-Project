@@ -14,7 +14,12 @@ namespace Interface_2
 
     public partial class MainWindow : Window
     {
-        public void DijkstraHighlightPath(List<int> path, bool livePathhighlighting = false) //a path of vertexIds, in the order they want to be traversed //done
+        /// <summary>
+        /// Highlights the path that dijkstras algorithm has resulted in
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="livePathhighlighting">True only if the Highlight path button is activated</param>
+        public void DijkstraHighlightPath(List<int> path, bool livePathhighlighting = false) 
         {
 
             int total = 0;
@@ -71,6 +76,11 @@ namespace Interface_2
                 MessageBox.Show("No Edge between these vertices was found");
             }
         }
+        /// <summary>
+        /// Highlights the path that a minimum spanning tree algorithm has resulted in
+        /// </summary>
+        /// <param name="edges">The edges that will be highlighted tuple(vertex, vertex, weight)</param>
+        /// <returns></returns>
         public bool mstHighlightPath(List<Tuple<int, int, int>> edges)
         {
             RevertLineColour();
@@ -116,6 +126,11 @@ namespace Interface_2
             }
             return false;
         }
+        /// <summary>
+        /// Highlights the edges that a route inspection algorithm has deemed needing repeating
+        /// </summary>
+        /// <param name="edges">The edges that will be highlighted tuple(vertex, vertex)</param>
+        /// <param name="cost">The cost of repeating the edges</param>
         public void RouteInspHighlightPath(List<Tuple<int, int>> edges, int cost)
         {
             List<Line> highlightedLines = new List<Line>(); //gets the list of lines to highlight at the end
@@ -146,6 +161,10 @@ namespace Interface_2
             info += "\nCost: " + (cost + Graph.GetSumOfWeights());
             txExtraInfo2.Text = info;
         }
+        /// <summary>
+        /// Highlighs the edges that a breadth or depth first search has specified
+        /// </summary>
+        /// <param name="edges">The edges that will be highlighted</param>
         private void TraversalHighlightPath(List<Tuple<int, int>> edges)
         {
             List<Line> highlightedLines = new List<Line>(); //gets the list of lines to highlight at the end

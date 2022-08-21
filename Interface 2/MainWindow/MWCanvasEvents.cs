@@ -14,8 +14,12 @@ namespace Interface_2
 
     public partial class MainWindow : Window
     {
-
-        private void mainCanvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) //if the canvas is pressed
+        /// <summary>
+        /// The section of code that determines what happens when the canvas, or anything on the canvas is clicked.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void mainCanvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
 
             if (e.OriginalSource is Ellipse) //if they press the ellipse / vertex 

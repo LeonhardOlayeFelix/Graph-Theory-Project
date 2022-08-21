@@ -15,7 +15,7 @@ namespace Interface_2
 {
     public partial class MainWindow : Window
     {
-        List<Line> linesToDelete = new List<Line>();
+        //All of the event handlers
         private void btnAddVertex_Click(object sender, RoutedEventArgs e)
         {
 
@@ -29,11 +29,11 @@ namespace Interface_2
             labelExtraInfo.Content = "Click two vertices you want to connect and provide the weight";
             ActivateButton(sender);
         }
-        private void cbAutoGenEdges_Checked(object sender, RoutedEventArgs e) //When a connection is made, auto generates a random weight
+        private void cbAutoGenEdges_Checked(object sender, RoutedEventArgs e)
         {
             cbAutoGenEdgesValue.IsChecked = false; //only one check box can be selected at a time
         }
-        private void cbAutoGenEdgesValue_Checked(object sender, RoutedEventArgs e) //when a connection is made, auto generates the entered weight
+        private void cbAutoGenEdgesValue_Checked(object sender, RoutedEventArgs e)
         {
             cbAutoGenEdges.IsChecked = false;//ditto
         }
@@ -85,7 +85,7 @@ namespace Interface_2
             HideValencies();
             labelExtraInfo.Content = "Choose a root vertex";
         }
-        private void btnCreateNewGraph_Click(object sender, RoutedEventArgs e) //creates a new graph
+        private void btnCreateNewGraph_Click(object sender, RoutedEventArgs e)
         {
             ActivateButton(btnCreateNewGraph);
             string name = "";
@@ -169,7 +169,7 @@ namespace Interface_2
             labelExtraInfo.Content = "Updated Adjacency Matrix.";
             GenerateAdjMat(); //function generates the matrix
         }
-        private void btnKruskals_Click(object sender, RoutedEventArgs e) //if the user wants to run kruskals algorithm
+        private void btnKruskals_Click(object sender, RoutedEventArgs e)
         {
             ActivateButton(sender);
             HideValencies();
@@ -251,7 +251,7 @@ namespace Interface_2
 
             }
         }
-        private void mainCanvas_PreviewMouseWheel(object sender, MouseWheelEventArgs e) //event to change the size of the vertices
+        private void mainCanvas_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
             if (e.Delta > 0) //if mouse is scrolled up, increase slider value
             {

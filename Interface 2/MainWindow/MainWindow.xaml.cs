@@ -18,6 +18,7 @@ namespace Interface_2
 
     public partial class MainWindow : Window
     {
+        List<Line> linesToDelete = new List<Line>();
         public static Teacher loggedTeacher = null;
         public static Student loggedStudent = null;
         Ellipse lastSelectedVertex;
@@ -76,6 +77,9 @@ namespace Interface_2
             LogOutProcess();
         }
         public const string ConStr = "Provider=Microsoft.Jet.OLEDB.4.0; Data Source=NetworkDB.accdb";
+        /// <summary>
+        /// Creates the database if it hasn't already been created
+        /// </summary>
         public static void CreateDatabase()
         {
             if (!File.Exists("NetworkDB.accdb")) //if a file doesnt already exist for the database

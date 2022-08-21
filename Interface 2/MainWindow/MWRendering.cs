@@ -16,7 +16,11 @@ namespace Interface_2
 
     public partial class MainWindow : Window
     {
-        public void RenderGraph(Graph GraphToRender) //renders a graph onto the canvas
+        /// <summary>
+        /// Renders a graph onto the screen
+        /// </summary>
+        /// <param name="GraphToRender">Graph that will be rendered</param>
+        public void RenderGraph(Graph GraphToRender)
         {
             DeleteGraph();
             CreateNewGraph(GraphToRender.Name, true);
@@ -24,6 +28,10 @@ namespace Interface_2
             RenderVertices(GraphToRender);
             RenderEdges(GraphToRender);
         }
+        /// <summary>
+        /// Renders the Vertices onto the screen
+        /// </summary>
+        /// <param name="GraphToRender">Graph whose vertices will be rendered</param>
         private void RenderVertices(Graph GraphToRender)
         {
             buttonId = GraphToRender.GetMaxVertexID() + 1;
@@ -115,6 +123,10 @@ namespace Interface_2
                 mainCanvas.Children.Add(vertexLabel); //add the label to the canvas
             }
         } 
+        /// <summary>
+        /// renders the Edges onto the screen
+        /// </summary>
+        /// <param name="GraphToRender">Graph whose edges will be rendered</param>
         private void RenderEdges(Graph GraphToRender)
         {
             foreach (Vertex vertex in GraphToRender.GetAdjacencyList())
