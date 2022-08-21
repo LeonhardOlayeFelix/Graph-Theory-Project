@@ -28,30 +28,21 @@ namespace Interface_2
         int rInspSelectionCount = 0;
         int rInspStart = 0;
         int startVertex = 0;
-
-        static List<string> alphabet = new List<string>(); //the id that the nodes could be assigned
-        
-        private bool graphCreated = false;//for loading, creating, and deleting files
-        private Button currentButton = null; //the button that is currently activated
-        private Color btnActivatedColour = Color.FromRgb(190, 230, 253);//colour to highlight activated buttons with
-
-        List<TextBlock> valencyList = null; //a list of all the valency textblocks
-        
-        List<int> livePath = new List<int>(); //for the highlight path button
-
-        List<Ellipse> vertexList = null; //list containing all of the ellipses
-        List<TextBlock> vertexTxBoxList = null; //list containging all of the ellipses' labels
-        HashSet<Tuple<Line, Ellipse, Ellipse, TextBlock>> edgeList = null; //hashset of tuples which represents a whole edge: Item1(Line) Item2(first end) Item3(other end) item4(weight)
-
-        int Zindex = 2;//will let the shapes overlap each other in an ordered fashion
-        int buttonId = 0; //gives each vertex a unique Id
-        string valencyState; //Hidden or Visible
-
-        Ellipse ellipseToDrop = null; //for the drag and drop function
-
+        static List<string> alphabet = new List<string>();
+        private bool graphCreated = false;
+        private Button currentButton = null;
+        private Color btnActivatedColour = Color.FromRgb(190, 230, 253);
+        List<TextBlock> valencyList = null;
+        List<int> livePath = new List<int>();
+        List<Ellipse> vertexList = null;
+        List<TextBlock> vertexTxBoxList = null;
+        HashSet<Tuple<Line, Ellipse, Ellipse, TextBlock>> edgeList = null;
+        int Zindex = 2;
+        int buttonId = 0;
+        string valencyState;
+        Ellipse ellipseToDrop = null;
         SolidColorBrush HighlightColour = null;
-        
-        private Graph Graph = null; //initialise a Graph Class
+        private Graph Graph = null;
         public MainWindow()
         {
             List<string> normalAlphabet = new List<string>() { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z" };

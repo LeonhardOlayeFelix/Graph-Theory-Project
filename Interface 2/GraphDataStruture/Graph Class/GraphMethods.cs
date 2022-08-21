@@ -8,35 +8,50 @@ namespace Interface_2
 {
     public partial class Graph
     {
-        public Vertex GetVertex(int VertexID)
+        /// <summary>
+        /// Returns the Instance of a vertex given its ID
+        /// </summary>
+        /// <param name="vertexID">ID of the vertex</param>
+        /// <returns></returns>
+        public Vertex GetVertex(int vertexID)
         {
             //returns Vertex instance given an ID
             for (int i = 0; i < vertexSet.Count(); ++i)
             {
-                if (vertexSet[i].GetVertexId() == VertexID)
+                if (vertexSet[i].GetVertexId() == vertexID)
                 {
                     return vertexSet[i];
                 }
             }
             return null;
         }
-        public bool IsInVertexList(int v)
+        /// <summary>
+        /// Returns true if the specified vertex is a part of the graph
+        /// </summary>
+        /// <param name="vertexID"></param>
+        /// <returns></returns>
+        public bool IsInVertexList(int vertexID)
         {
             //returns true if vertex exists
             List<int> vertexList = GetListOfVertices();
             foreach (int vertex in vertexList)
             {
-                if (v == vertex)
+                if (vertexID == vertex)
                 {
                     return true;
                 }
             }
             return false;
         }
-        public List<int> GetAdjVertices(int vertex)
+        /// <summary>
+        /// Returns the adjacent vertices of a specified vertex
+        /// </summary>
+        /// <param name="vertexID"></param>
+        /// <returns></returns>
+        public List<int> GetAdjVertices(int vertexID)
         {
             //returns list of neighbours of a vertex
-            if (!IsInVertexList(vertex))
+            if (!IsInVertexList(vertexID))
             {
                 //error handling - existence
                 throw new ArgumentOutOfRangeException("Vertex does note exist");
@@ -44,7 +59,7 @@ namespace Interface_2
             List<int> adjacentVertices = new List<int>();
             for (int i = 0; i < vertexSet.Count(); ++i)
             {
-                if (vertexSet[i].GetVertexId() == vertex)
+                if (vertexSet[i].GetVertexId() == vertexID)
                 {
                     foreach (Tuple<int, int> neighbour in vertexSet[i].GetAdjVertices())
                     {

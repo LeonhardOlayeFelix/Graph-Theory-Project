@@ -8,6 +8,12 @@ namespace Interface_2
 {
     public partial class Graph
     {
+        /// <summary>
+        /// Runs the Dijkstras algorithm on this graph instance
+        /// </summary>
+        /// <param name="startVertex">Start Vertex</param>
+        /// <param name="endVertex">Start Vertex</param>
+        /// <returns>Returns the shortest path as a list and the cost of that path</returns>
         public Tuple<List<int>, int> DijkstrasAlgorithmShort(int startVertex, int endVertex) 
         {
             //returns shortest path as tuple 1) path, 2) cost
@@ -94,6 +100,13 @@ namespace Interface_2
             }
             return Tuple.Create(path, cost);
         }
+        /// <summary>
+        /// Selects the next lowest cost, unprocessed vertex for dijkstras algorithm
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="processed"></param>
+        /// <param name="size"></param>
+        /// <returns></returns>
         private int selectLowestVertex(List<int> value, List<bool> processed, int size) 
         {
             //returns the vertex that has the lowest value, that is not already processed
