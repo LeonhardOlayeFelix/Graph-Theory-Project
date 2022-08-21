@@ -8,6 +8,11 @@ namespace Interface_2
 {
     public partial class Graph
     {
+        /// <summary>
+        /// Adds a vertex to the graph, also designating it a position
+        /// </summary>
+        /// <param name="x">x coordinate of vertex</param>
+        /// <param name="y">y coordinate of vertex</param>
         public void AddVertex(double x, double y)
         {
             //adds a vertex to the adjacency list
@@ -15,6 +20,10 @@ namespace Interface_2
             iDVertex += 1;
             numberOfVertices += 1;
         }
+        /// <summary>
+        /// Removes a specified vertex from the graph
+        /// </summary>
+        /// <param name="vertexToRemove">The Vertex that will be removed from the graph</param>
         public void RemoveVertex(int vertexToRemove)
         {
             //remove a vertex from the graph
@@ -59,6 +68,12 @@ namespace Interface_2
                 }
             }
         }
+        /// <summary>
+        /// Creates a connection between two specified vertices known as an edge which holds a specified weight
+        /// </summary>
+        /// <param name="v1">Vertex on one end of the edge</param>
+        /// <param name="v2">Vertex on the other end of the edge</param>
+        /// <param name="weight">Weight on edge</param>
         public void AddEdge(int v1, int v2, int weight = 0)
         {
             //adds an edge between passed in vertices
@@ -84,6 +99,11 @@ namespace Interface_2
             this.vertexSet.ElementAt(v1Index).AddEdge(v2, weight); 
             this.vertexSet.ElementAt(v2Index).AddEdge(v1, weight); 
         }
+        /// <summary>
+        /// Removes an exisiting connection between two specified vertices
+        /// </summary>
+        /// <param name="v1">Vertex on one end of the edge</param>
+        /// <param name="v2">Vertex on other end of the edge</param>
         public void RemoveEdge(int v1, int v2)
         {
             //removes an edge between vertices

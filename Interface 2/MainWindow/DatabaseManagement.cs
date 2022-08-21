@@ -15,6 +15,11 @@ namespace Interface_2
 {
     public partial class MainWindow : Window
     {
+        /// <summary>
+        /// Saves a teacher to the database
+        /// </summary>
+        /// <param name="teacher">The Teacher that will be saved</param>
+        /// <returns></returns>
         public static bool SaveTeacher(Teacher teacher)
         {
             if (!emailExists(teacher.email)) //makes sure the teacher hasnt already signed up with this email
@@ -32,7 +37,11 @@ namespace Interface_2
                 return true;
             }
             return false;
-        }//Saves a teacher to the database
+        }
+        /// <summary>
+        /// Saves a student to the database
+        /// </summary>
+        /// <param name="student">The Student that will be saved</param>
         public static void SaveStudent(Student student)
         {
             if (!emailExists(student.email))//makes sure the student hasnt already signed up with this email
@@ -50,7 +59,12 @@ namespace Interface_2
                 cmd.ExecuteNonQuery();
                 conn.Close();
             }
-        }//saves a student to the database
+        }
+        /// <summary>
+        /// Creates a class and saves it to the database
+        /// </summary>
+        /// <param name="className">The Name of the class</param>
+        /// <param name="teacher">The class's Teacher</param>
         public static void CreateClass(string className, Teacher teacher)
         {
             string classID = NextID("C"); //generates the class ID 
@@ -62,7 +76,11 @@ namespace Interface_2
             cmd.CommandText = $"INSERT INTO Class VALUES('{classID}', '{teacher.ID}', '{className}')";
             cmd.ExecuteNonQuery();
             conn.Close();
-        }//saves a new class into the database
+        }
+        /// <summary>
+        /// Deletes a class from the database
+        /// </summary>
+        /// <param name="classID">ID of class to delete</param>
         public static void DeleteClass(string classID)
         {
             OleDbConnection conn = new OleDbConnection(ConStr);
@@ -75,7 +93,12 @@ namespace Interface_2
             //now clear the class record
             cmd.CommandText = $"DELETE FROM Class WHERE ClassID = '{classID}'";
             cmd.ExecuteNonQuery();
-        }//delete a class from the database
+        }
+        /// <summary>
+        /// Returns True if the specified email is already present within the database
+        /// </summary>
+        /// <param name="email">The email the database will check for</param>
+        /// <returns></returns>
         public static bool emailExists(string email)
         {
             OleDbConnection conn = new OleDbConnection(MainWindow.ConStr);
@@ -101,7 +124,12 @@ namespace Interface_2
             }
             conn.Close();
             return false;
-        }//checks if the email passed in already exists in the database
+        }
+        /// <summary>
+        /// Returns true if a specified teacher is already present within the database
+        /// </summary>
+        /// <param name="teacher">The teacher the database will check for</param>
+        /// <returns></returns>
         public static bool TeacherAlreadySaved(Teacher teacher)
         {
             string ID = teacher.ID;
@@ -118,7 +146,12 @@ namespace Interface_2
             }
             conn.Close();
             return false;
-        } //checks if a teacher is already in a database given a class instance
+        } 
+        /// <summary>
+        /// Returns true if a specified student is already present within the database
+        /// </summary>
+        /// <param name="student">The student the database will check for</param>
+        /// <returns></returns>
         public static bool StudentAlreadySaved(Student student)
         {
             string ID = student.ID;
@@ -135,7 +168,12 @@ namespace Interface_2
             }
             conn.Close();
             return false;
-        } //checks if a student is already in a database given a class instance
+        } 
+        /// <summary>
+        /// Returns the ID of a specified student using their email
+        /// </summary>
+        /// <param name="email">The email of student</param>
+        /// <returns></returns>
         public static string GetStudentID(string email)
         {
             string ID = "";
@@ -154,7 +192,12 @@ namespace Interface_2
             }
             conn.Close();
             return ID;
-        } //returns the ID of a student when passed their email
+        }
+        /// <summary>
+        /// Returns the ID of a specified teacher using their email
+        /// </summary>
+        /// <param name="email">The email of the teacher</param>
+        /// <returns></returns>
         public static string GetTeacherID(string email)
         {
             string ID = "";
@@ -173,7 +216,12 @@ namespace Interface_2
             }
             conn.Close();
             return ID;
-        } //Returns the ID of the Teacher when passed their email
+        } 
+        /// <summary>
+        /// Enrolls a specified student into a specified class, saving it to the database
+        /// </summary>
+        /// <param name="ClassID">ID of the class that the student will be added to</param>
+        /// <param name="student">The student that will be added to the class</param>
         public static void EnrollStudent(string ClassID, Student student)
         {
             if (!IsInClass(ClassID, student)) //only do this if the student is not already in this class
@@ -187,7 +235,12 @@ namespace Interface_2
                 cmd.ExecuteNonQuery();
                 conn.Close();
             }
-        } //enrolls a student into the passed in class
+        }
+        /// <summary>
+        /// Removes a specified student from a specified class
+        /// </summary>
+        /// <param name="ClassID">ID of the class the student will be removed from</param>
+        /// <param name="student">The student that is being removed from the class</param>
         public static void RemoveStudent(string ClassID, Student student)
         {
             OleDbConnection conn = new OleDbConnection(MainWindow.ConStr);
@@ -197,7 +250,13 @@ namespace Interface_2
             //deletes the record 
             cmd.CommandText = $"DELETE FROM ClassEnrollment WHERE ClassID = '{ClassID}' AND StudentID = '{student.ID}'";
             cmd.ExecuteNonQuery();
-        } //remoevs a student from the class
+        }
+        /// <summary>
+        /// Returns true if a specified student is in a specified class
+        /// </summary>
+        /// <param name="ClassID">ID of the Class to check against</param>
+        /// <param name="student">The student to check for</param>
+        /// <returns></returns>
         public static bool IsInClass(string ClassID, Student student)
         {
             OleDbConnection conn = new OleDbConnection(MainWindow.ConStr);
@@ -214,8 +273,13 @@ namespace Interface_2
             }
             conn.Close();
             return false;
-        }//returns whether a student is in a class
-        public static List<Student> ListClass(string ClassID) //returns a list of all the students in a class
+        }
+        /// <summary>
+        /// Returns a list of all the students in a class
+        /// </summary>
+        /// <param name="ClassID">The ID of the class</param>
+        /// <returns></returns>
+        public static List<Student> ListClass(string ClassID) 
         {
             List<Student> Ids = new List<Student>();
             OleDbConnection conn = new OleDbConnection(MainWindow.ConStr);
@@ -232,6 +296,11 @@ namespace Interface_2
             conn.Close();
             return Ids;
         }
+        /// <summary>
+        /// Initialises a Student instance with a passed in StudentID
+        /// </summary>
+        /// <param name="StudentID">ID of the student</param>
+        /// <returns></returns>
         public static Student InitialiseStudent(string StudentID)
         {
             OleDbConnection conn = new OleDbConnection(MainWindow.ConStr);
@@ -249,7 +318,12 @@ namespace Interface_2
             }
             conn.Close();
             return null;
-        }//initialises a student class instance given a student ID
+        }
+        /// <summary>
+        /// Initialises a Teacher instance with a passed in TeacherID
+        /// </summary>
+        /// <param name="TeacherID">ID of the teacher</param>
+        /// <returns></returns>
         public static Teacher InitialiseTeacher(string TeacherID)
         {
             OleDbConnection conn = new OleDbConnection(MainWindow.ConStr);
@@ -267,15 +341,28 @@ namespace Interface_2
             }
             conn.Close();
             return null;
-        }//initialises a Teacher class instance given a Teacher ID
+        }
+        /// <summary>
+        /// Returns true if a teacher is currently logged in
+        /// </summary>
+        /// <returns></returns>
         public static bool TeacherIsLoggedIn()
         {
             return (loggedTeacher != null);
         }
+        /// <summary>
+        /// Returns true if a student is currently logged in
+        /// </summary>
+        /// <returns></returns>
         public static bool StudentIsLoggedIn()
         {
             return (loggedStudent != null);
         }
+        /// <summary>
+        /// Generates the next ID
+        /// </summary>
+        /// <param name="IDType">The Type of ID that is to be generated</param>
+        /// <returns></returns>
         public static string NextID(string IDType)
         {
             int NextID;
