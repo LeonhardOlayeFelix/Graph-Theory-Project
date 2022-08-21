@@ -107,16 +107,6 @@ namespace Interface_2
             }
         }//creates a database
 
-        private void btnRevertOnePositions_Click(object sender, RoutedEventArgs e)
-        {
-            ActivateButton(sender);
-        }
-
-        private void optionTabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
-
         
     }
 }

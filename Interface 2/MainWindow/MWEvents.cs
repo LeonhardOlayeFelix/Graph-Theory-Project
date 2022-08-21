@@ -87,6 +87,7 @@ namespace Interface_2
         }
         private void btnCreateNewGraph_Click(object sender, RoutedEventArgs e) //creates a new graph
         {
+            ActivateButton(btnCreateNewGraph);
             string name = "";
             NameCreatedGraph nameGraphWindow = new NameCreatedGraph(); //create an instance of the new window
             nameGraphWindow.ShowDialog(); //opens a new window
@@ -184,11 +185,12 @@ namespace Interface_2
         }
         private void btnLoadGraph_Click(object sender, RoutedEventArgs e)
         {
+            ActivateButton(btnLoadGraph);
             LoadGraph();
-
         }
         private void btnLogin_Click(object sender, RoutedEventArgs e)
         {
+            ActivateButton(btnLogin);
             LoginStudent loginstudent = new LoginStudent();
             if (loginstudent.ShowDialog() == true)
             {
@@ -210,6 +212,7 @@ namespace Interface_2
         }
         private void btnLogOut_Click(object sender, RoutedEventArgs e)
         {
+            ActivateButton(btnLogOut);
             LogOutProcess();
         }
         private void mouseMove(object sender, MouseEventArgs e)
@@ -301,6 +304,7 @@ namespace Interface_2
         private void btnRevertPositions_Click(object sender, RoutedEventArgs e)
         {
             labelExtraInfo.Content = "";
+            ActivateButton(btnRevertPositions);
             foreach (var ctrl in mainCanvas.Children)
             {
                 try
@@ -333,18 +337,25 @@ namespace Interface_2
                 }
             }
         }
+        private void btnRevertOnePositions_Click(object sender, RoutedEventArgs e)
+        {
+            ActivateButton(sender);
+        }
         private void btnRegisterStudent_Click(object sender, RoutedEventArgs e)
         {
+            ActivateButton(btnRegisterStudent);
             RegisterStudent registerstudent = new RegisterStudent();
             registerstudent.ShowDialog();
         }
         private void btnRegisterTeacher_Click(object sender, RoutedEventArgs e)
         {
+            ActivateButton(btnRegisterTeacher);
             RegisterTeacher registerteacher = new RegisterTeacher();
             registerteacher.ShowDialog();
         }
         private void btnSaveGraph_Click(object sender, RoutedEventArgs e)   
         {
+            ActivateButton(btnSaveGraph);
             SaveGraph();
         }
         private void btnTakeScreenshot_Click(object sender, RoutedEventArgs e)

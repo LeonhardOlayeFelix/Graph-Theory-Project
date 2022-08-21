@@ -20,6 +20,8 @@ namespace Interface_2
 
             if (e.OriginalSource is Ellipse) //if they press the ellipse / vertex 
             {
+                timer1.Stop();
+                timer.Stop();
                 if (currentButton == btnDeleteVertex) //if they are trying to delete a vertex
                 {
                     Ellipse activeVertex = (Ellipse)e.OriginalSource; //give the button a variable to refer to

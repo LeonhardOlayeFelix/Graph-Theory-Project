@@ -151,8 +151,6 @@ namespace Interface_2
                 EnableAllActionButtons();
                 EnableAllAlgorithmButtons();
                 EnableTabControl();
-                btnSaveGraph.IsEnabled = false;
-                btnLoadGraph.IsEnabled = false;
                 labelExtraInfo.Content = "";
             }
             else
