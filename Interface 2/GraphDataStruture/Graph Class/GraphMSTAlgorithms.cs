@@ -8,6 +8,10 @@ namespace Interface_2
 {
     public partial class Graph
     {
+        /// <summary>
+        /// completes kruskals algorithm, returning a list of edges within the minimum spannig tree tuple(vertex, vertex, cost)
+        /// </summary>
+        /// <returns></returns>
         public List<Tuple<int, int, int>> Kruskals() 
         {
             //uses Kruskals Algo for MST
@@ -115,6 +119,11 @@ namespace Interface_2
             //returns true if the list is not empty
             return list.Count != 0; 
         }
+        /// <summary>
+        /// Completes prims algorithm, returning a list of edges within the minimum spanning tree tuple(vertex, vertex, cost)
+        /// </summary>
+        /// <param name="startVertex"> The Vertex the minimum spanning tree starts from</param>
+        /// <returns></returns>
         public List<Tuple<int, int, int>> Prims(int startVertex = -1) 
         {
             //uses Prims Algo for MST

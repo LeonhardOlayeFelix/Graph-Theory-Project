@@ -8,6 +8,13 @@ namespace Interface_2
 {
     public partial class Graph
     {
+        /// <summary>
+        /// completes the route inspection algorithm which takes a start vertex and an end vertex returning a list of edges to repeat
+        /// and the total cost of repitition as tuple(list(vertex, vertex), cost)
+        /// </summary>
+        /// <param name="startVertex">the vertex where the algorithm will choose as its start point</param>
+        /// <param name="endVertex">the vertex where the algorithm will choose as its end point</param>
+        /// <returns></returns>
         public Tuple<List<Tuple<int, int>>, int> RInspStartAndEnd(int startVertex, int endVertex) 
         {
             //Route inspection starting and ending at same vertex
@@ -27,15 +34,24 @@ namespace Interface_2
             oddVertices.Remove(endVertex);
             return GetOptimalCombination(oddVertices);
         }
+        /// <summary>
+        /// completes the route inspection algorithm where the start vertex and end vertex are the same so a start vertex is not
+        /// required. returns a list of edges to repeat and the total cost of repitition as tuple(list(vertex, vertex), cost)
+        /// </summary>
+        /// <returns></returns>
         public Tuple<List<Tuple<int, int>>, int> RInspStartAtEnd() 
         {
             //Route inspection starting and ending at same vertex
             List<int> oddVertices = GetOddVertices();
             return GetOptimalCombination(oddVertices);
         }
-        public Tuple<List<Tuple<int, int>>, int> GetOptimalCombination(List<int> oddVertices)
+        /// <summary>
+        /// finds the optimal combination of edges to repeat for the route inspection algorithm
+        /// </summary>
+        /// <param name="oddVertices">A list of all the vertices with an odd valency</param>
+        /// <returns></returns>
+        private Tuple<List<Tuple<int, int>>, int> GetOptimalCombination(List<int> oddVertices)
         {
-            //gets optimal way to repeat edges
 
             //partition the odd vertices into pairs, 3d list
             List<List<List<int>>> combinations = Partition(oddVertices);
@@ -84,6 +100,11 @@ namespace Interface_2
             }
             return Tuple.Create(edgesToRepeat, cost);
         }
+        /// <summary>
+        /// chooses the cheapest out of all of the possible combination of edges in the route inspection algorithm
+        /// </summary>
+        /// <param name="combinations"></param>
+        /// <returns></returns>
         private int selectMinPairing(List<List<Tuple<List<int>, int>>> combinations) 
         {
             //returns the index of the lowest cost combination for route inspection
@@ -137,6 +158,13 @@ namespace Interface_2
             }
             return listResult;
         }
+        /// <summary>
+        /// A c# version of the python slicing function on lists. Splits a list into parts using specified starting and end points.
+        /// </summary>
+        /// <param name="list">The list that will be spliced</param>
+        /// <param name="start">where to start splicing from. passing in -1 indicates the start of the list</param>
+        /// <param name="end">where to end splicing from. passing in -1 indicates the end of the list</param>
+        /// <returns></returns>
         private static List<int> SliceList(List<int> list, int start, int end) 
         {
             //cuts a list at specified interval and returns cut list
@@ -149,22 +177,27 @@ namespace Interface_2
             }
             return sublist;
         }
-        private static List<List<List<int>>> Partition(List<int> a) 
+        /// <summary>
+        /// Takes a list of integers and returns all of the different ways those integers can be paired together using recursion
+        /// </summary>
+        /// <param name="list">The list that will be partitioned</param>
+        /// <returns></returns>
+        private static List<List<List<int>>> Partition(List<int> list) 
         {
             //returns all the possible combinations in a 3 dimensional list
-            if (a.Count == 2) //base case - two items have one combination
+            if (list.Count == 2) //base case - two items have one combination
             {
-                List<List<List<int>>> temp = new List<List<List<int>>>() { new List<List<int>>() { new List<int>() { a[0], a[1] } } };
+                List<List<List<int>>> temp = new List<List<List<int>>>() { new List<List<int>>() { new List<int>() { list[0], list[1] } } };
                 return temp;
             }
             List<List<List<int>>> ret = new List<List<List<int>>>() { }; //return value
-            for (int i = 1; i < a.Count; ++i)
+            for (int i = 1; i < list.Count; ++i)
             {
                 //split apart: [0,1] [2,3,4,5]
-                List<List<int>> p1 = new List<List<int>>() { new List<int>() { a[0], a[i] } };
+                List<List<int>> p1 = new List<List<int>>() { new List<int>() { list[0], list[i] } };
 
                 //generate combinations of [2,3,4,5] recursively
-                List<int> temp = AddListAtoListB(SliceList(a, 1, i), SliceList(a, i + 1, -1)); 
+                List<int> temp = AddListAtoListB(SliceList(list, 1, i), SliceList(list, i + 1, -1)); 
 
                 List<List<List<int>>> result = Partition(temp);
                 foreach (var combo in result)
