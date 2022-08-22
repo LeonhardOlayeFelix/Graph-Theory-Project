@@ -32,7 +32,7 @@ namespace Interface_2
             else if ((bool)cbAutoGenEdges.IsChecked) //if the auto generate weight randomly button is checked
             {
                 Random random = new Random();
-                int weight = random.Next(1, 26);
+                int weight = random.Next(1, 16);
                 ConnectVertices(lastSelectedVertex, vertexToConnectTo, weight);
                 labelExtraInfo.Content = "";
                 EnableTabControl();
