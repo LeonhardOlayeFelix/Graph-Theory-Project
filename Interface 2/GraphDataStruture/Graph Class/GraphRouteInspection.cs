@@ -130,10 +130,10 @@ namespace Interface_2
             }
             return index;//return the index that the lowest combination is at
         }
-        private static List<List<int>> AddListAtoListB(List<List<int>> listA, List<List<int>> listB) 
+        private static List<List<T>> AddListAtoListB<T>(List<List<T>> listA, List<List<T>> listB) 
         {
             //add two dimensional lists together for route inspection
-            List<List<int>> ResultTwoDimList = new List<List<int>>() { };
+            List<List<T>> ResultTwoDimList = new List<List<T>>() { };
             for (int i = 0; i < listA.Count; ++i)
             {
                 ResultTwoDimList.Add(listA[i]);
@@ -144,10 +144,10 @@ namespace Interface_2
             }
             return ResultTwoDimList;
         }
-        private static List<int> AddListAtoListB(List<int> listA, List<int> listB)
+        private static List<T> AddListAtoListB<T>(List<T> listA, List<T> listB)
         {
             //add one dimensional lists together for route inspection
-            List<int> listResult = new List<int>() { };
+            List<T> listResult = new List<T>() { };
             for (int i = 0; i < listA.Count; ++i)
             {
                 listResult.Add(listA[i]); 
@@ -165,12 +165,12 @@ namespace Interface_2
         /// <param name="start">where to start splicing from. passing in -1 indicates the start of the list</param>
         /// <param name="end">where to end splicing from. passing in -1 indicates the end of the list</param>
         /// <returns></returns>
-        private static List<int> SliceList(List<int> list, int start, int end) 
+        private static List<T> SliceList<T>(List<T> list, int start, int end) 
         {
             //cuts a list at specified interval and returns cut list
             end = (end == -1) ? list.Count : end;  //passing in -1 for end means the end of the list
             start = (start == -1) ? 0 : start; //passing in -1 for start means the start of the list
-            List<int> sublist = new List<int>() { };
+            List<T> sublist = new List<T>() { };
             for (int i = start; i < end; ++i)
             {
                 sublist.Add(list[i]);
@@ -178,28 +178,28 @@ namespace Interface_2
             return sublist;
         }
         /// <summary>
-        /// Takes a list of integers and returns all of the different ways those integers can be paired together using recursion
+        /// Takes a list of type T and returns all of the different ways they can be paired together using recursion
         /// </summary>
         /// <param name="list">The list that will be partitioned</param>
         /// <returns></returns>
-        private static List<List<List<int>>> Partition(List<int> list) 
+        private static List<List<List<T>>> Partition<T>(List<T> list) 
         {
             //returns all the possible combinations in a 3 dimensional list
             if (list.Count == 2) //base case - two items have one combination
             {
-                List<List<List<int>>> temp = new List<List<List<int>>>() { new List<List<int>>() { new List<int>() { list[0], list[1] } } };
+                List<List<List<T>>> temp = new List<List<List<T>>>() { new List<List<T>>() { new List<T>() { list[0], list[1] } } };
                 return temp;
             }
-            List<List<List<int>>> ret = new List<List<List<int>>>() { }; //return value
+            List<List<List<T>>> ret = new List<List<List<T>>>() { }; //return value
             for (int i = 1; i < list.Count; ++i)
             {
                 //split apart: [0,1] [2,3,4,5]
-                List<List<int>> p1 = new List<List<int>>() { new List<int>() { list[0], list[i] } };
+                List<List<T>> p1 = new List<List<T>>() { new List<T>() { list[0], list[i] } };
 
                 //generate combinations of [2,3,4,5] recursively
-                List<int> temp = AddListAtoListB(SliceList(list, 1, i), SliceList(list, i + 1, -1)); 
+                List<T> temp = AddListAtoListB(SliceList(list, 1, i), SliceList(list, i + 1, -1)); 
 
-                List<List<List<int>>> result = Partition(temp);
+                List<List<List<T>>> result = Partition(temp);
                 foreach (var combo in result)
                 {
                     ret.Add(AddListAtoListB(p1, combo)); //add those combination to [0,1]

@@ -8,17 +8,13 @@ namespace Interface_2
 {
     public partial class Graph
     {
+        /// <summary>
+        /// completes breadth first search on graph returning: a list of vertices visited and their parents, along with the output list
+        /// returns as tuple(list(tuple(vertex, parent), outputlist)
+        /// </summary>
+        /// <param name="startNode">where the traversal starts from</param>
+        /// <returns></returns>
         public Tuple<List<Tuple<int, int>>, List<int>> BreadthFirst(int startNode)
-        //returns a Tuple :
-        //Item1: List of tuples (item1 vertex, and item 2 its parent)
-        //Item2: Traversal Order List
-
-        /*Step 1: Choose any one vertex randomly, to start traversing.
-        Step 2: Visit its adjacent unvisited vertex.
-        Step 3: Mark it as visited and display it.
-        Step 4: Insert the visited vertex into the queue.
-        Step 5: If there is no adjacent vertex, remove the first vertex from the queue.
-        Step 6: Repeat the above steps until the queue is empty.*/
         {
             UDLinkedList queue = new UDLinkedList();
             List<Tuple<int, int>> visited = new List<Tuple<int, int>>();
@@ -51,18 +47,13 @@ namespace Interface_2
             visited.RemoveAt(0); 
             return Tuple.Create(visited, outputList);
         }
+        /// <summary>
+        /// complete Depth first search on graph returning: a list of vertices visited and their parents, True if the graph contains a 
+        /// cycle, and the output list
+        /// </summary>
+        /// <param name="startNode">where the traversal starts from</param>
+        /// <returns></returns>
         public Tuple<List<Tuple<int, int>>, bool, List<int>> DepthFirst(int startNode)
-        //returns a Tuple :
-        //Item1: List of tuples (item1 vertex, and item 2 its parent)
-        //Item2: bool which represents whether a cycle was found
-        //Item3: Traversal Order List
-
-        /*Step 1: Start by putting any one of the graph's vertices 
-                  on top of a stack.
-          Step 2: Take the top item of the stack and add it to the visited list.
-          Step 3: Create a list of that vertex's adjacent nodes. Add the ones 
-                  which aren't in the visited list to the top of the stack.
-          Step 4: Keep repeating steps 2 and 3 until the stack is empty.*/
         {
             UDLinkedList stack = new UDLinkedList();
             List<Tuple<int, int>> visited = new List<Tuple<int, int>>();
@@ -99,6 +90,12 @@ namespace Interface_2
             visited.RemoveAt(0); 
             return Tuple.Create(visited, cycleExists, outputList);
         }
+        /// <summary>
+        /// returns true if a vertex has already been visited during a traversal
+        /// </summary>
+        /// <param name="visited"></param>
+        /// <param name="node"></param>
+        /// <returns></returns>
         private bool VertexVisited(List<Tuple<int, int>> visited, int node) 
         {
             //returns true if a vertex has been visited
