@@ -32,11 +32,22 @@ namespace Interface_2
             else if ((bool)cbAutoGenEdges.IsChecked) //if the auto generate weight randomly button is checked
             {
                 Random random = new Random();
-                int weight = random.Next(1, 16);
-                ConnectVertices(lastSelectedVertex, vertexToConnectTo, weight);
-                labelExtraInfo.Content = "";
-                EnableTabControl();
-                EnableAllActionButtons();
+                int lowerBound = Convert.ToInt32(txRandomGenLB.Text);
+                int upperBound = Convert.ToInt32(txRandomGenUB.Text)+1;
+                if (lowerBound >= upperBound)
+                {
+                    MessageBox.Show("The randomiser's lower bound must be less than the upper bound");
+                    EnableAllActionButtons();
+                    EnableTabControl();
+                }
+                else
+                {
+                    int weight = random.Next(lowerBound, upperBound);
+                    ConnectVertices(lastSelectedVertex, vertexToConnectTo, weight);
+                    labelExtraInfo.Content = "";
+                    EnableTabControl();
+                    EnableAllActionButtons();
+                }
             }
             else if ((bool)cbAutoGenEdgesValue.IsChecked) //if the auto generate weight to 0 button is checked
             {

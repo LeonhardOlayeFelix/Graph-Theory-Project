@@ -22,7 +22,7 @@ namespace Interface_2
     public partial class LoadGraph : Window
     {
         public string graphToLoad = "";
-        string usertype = "";
+        public string usertype = "";
         public LoadGraph()
         {
             InitializeComponent();

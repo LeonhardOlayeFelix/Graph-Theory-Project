@@ -293,12 +293,35 @@
                                                HorizontalAlignment="Center" Width="178">
                                         Return All vertices to their original postions
                                         </TextBlock>
+
                                         <Button Margin="20,10,20,10"
                                             Grid.Row="2"
                                             x:Name="btnDeleteAllEdges"
                                             Click="btnDeleteAllEdges_Click">
                                             Delete All Edges
                                         </Button>
+                                        <Grid Grid.Row="3">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition/>
+                                                <ColumnDefinition Width="150"/>
+                                                <ColumnDefinition Width="50"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Button Margin="20,10,10,10"
+                                            x:Name="btnRandomGraph"
+                                            Click="BtnRandomGraph_Click">
+                                                Generate a random graph
+                                            </Button>
+                                            <TextBlock
+                                                       VerticalAlignment="Center"
+                                                       HorizontalAlignment="Center" Grid.ColumnSpan="3" Margin="224,14,47,15">Number of vertices (<Bold>Max 75</Bold>):</TextBlock>
+                                            <TextBox
+                                                Grid.Column="2"
+                                                Margin="10"
+                                                x:Name="txNumVertices"
+                                                HorizontalContentAlignment="Center"
+                                                VerticalAlignment="Center">10</TextBox>
+                                        </Grid>
+
                                         <TextBlock Foreground="Black"
                                                Height="20" 
                                                Margin="124,42,123,26"
@@ -317,6 +340,11 @@
                                             Margin="135,39,112,29"
                                             FontSize="10"
                                             HorizontalAlignment="Center" Width="178" Grid.RowSpan="2" Grid.Row="1" Text="Delete all edges within the canvas"/>
+                                        <TextBlock Foreground="Black"
+                                            Height="20" 
+                                            Margin="135,39,112,29"
+                                            FontSize="10"
+                                            HorizontalAlignment="Center" Width="178" Grid.RowSpan="2" Grid.Row="2" Text="Generate a random graph"/>
                                     </Grid>
                                 </GroupBox>
                                 <GroupBox Grid.Row="2"
@@ -433,32 +461,50 @@
                                         </Button>
                                         <StackPanel Orientation="Vertical"
                                                     Grid.Row="3">
+
                                             <CheckBox VerticalContentAlignment="Center" 
                                                       x:Name="cbAutoGenEdges"
                                                       FontWeight="Bold"
                                                       Margin="20,0,0,0"
                                                       Checked="cbAutoGenEdges_Checked"
                                                       Grid.Row="3">
-                                                Randomly generate edge weights
+                                                <WrapPanel>
+                                                    <Label Content="Randomly generate edge weights"/>
+                                                    <TextBox Width="25"
+                                                             Margin="0,2,0,2"
+                                                             Text="0"
+                                                             x:Name="txRandomGenLB"
+                                                             PreviewTextInput="txAutoWeight_PreviewTextInput" 
+                                                             FontWeight="Medium"
+                                                             HorizontalContentAlignment="Center"
+                                                             VerticalContentAlignment="Center"/>
+                                                    <Label Content="to"/>
+                                                    <TextBox Width="25"
+                                                             Margin="0,2,0,2"
+                                                             Text="15"
+                                                             x:Name="txRandomGenUB"
+                                                             PreviewTextInput="txAutoWeight_PreviewTextInput" 
+                                                             FontWeight="Medium"
+                                                             HorizontalContentAlignment="Center"
+                                                             VerticalContentAlignment="Center"/>
+                                                </WrapPanel>
+
                                             </CheckBox>
                                             <CheckBox VerticalContentAlignment="Center" 
                                                       x:Name="cbAutoGenEdgesValue"
                                                       Checked="cbAutoGenEdgesValue_Checked"
                                                       FontWeight="Bold"
-                                                      Margin="20,4,0,0"
+                                                      Margin="20,0,0,0"
                                                       Grid.Row="3">
                                                 <WrapPanel>
-                                                    <Label Margin="-5,-5,0,-5">Generate edge with specified weight</Label>
+                                                    <Label Margin="0,-5,0,-5">Generate edge with specified weight</Label>
                                                     <TextBox Width="25"
                                                              Text="5"
-                                                             
                                                              x:Name="txAutoWeight"
                                                              PreviewTextInput="txAutoWeight_PreviewTextInput" 
                                                              FontWeight="Medium"
                                                              HorizontalContentAlignment="Center"
-                                                             VerticalContentAlignment="Center">
-
-                                                    </TextBox>
+                                                             VerticalContentAlignment="Center"/>
                                                 </WrapPanel>
 
                                             </CheckBox>
@@ -499,6 +545,7 @@
                                                       x:Name="cbManualGeneration"
                                                       FontWeight="Bold"
                                                       Margin="20,0,0,0"
+                                                          IsChecked="True"
                                                       Checked="cbAutoGenEdges_Checked"
                                                       Grid.Row="3">
                                                     Reveal the edges manually using enter

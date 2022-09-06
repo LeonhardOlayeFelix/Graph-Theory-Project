@@ -479,7 +479,6 @@ namespace Interface_2
         /// </summary>
         public void LoadGraph()
         {
-
             LoadGraph loadGraph = new LoadGraph(); //open the loadgraph window
             if (loadGraph.ShowDialog() == true)
             {

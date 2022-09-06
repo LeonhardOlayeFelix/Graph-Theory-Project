@@ -11,7 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-
+using System.IO;
 namespace Interface_2
 {
     /// <summary>
@@ -25,8 +25,8 @@ namespace Interface_2
             InitializeComponent();
             txBoxGraphName.Focus();
             txBoxGraphName.SelectAll();
-        }
 
+        }
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             graphName = txBoxGraphName.Text;
@@ -39,7 +39,7 @@ namespace Interface_2
 
         private void txBoxGraphName_TextChanged(object sender, TextChangedEventArgs e)
         {
-
+            
         }
 
         private void btnExit_Click(object sender, RoutedEventArgs e)
