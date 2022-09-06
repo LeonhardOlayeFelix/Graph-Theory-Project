@@ -102,9 +102,6 @@ namespace Interface_2
             }
         }//creates a database
 
-        private void BtnRandomGraph_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
+        
     }
 }

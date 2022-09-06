@@ -29,6 +29,52 @@ namespace Interface_2
             labelExtraInfo.Content = "Click two vertices you want to connect and provide the weight";
             ActivateButton(sender);
         }
+        /// <summary>
+        /// Generates a random graph
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void BtnRandomGraph_Click(object sender, RoutedEventArgs e)
+        {
+            int numVertices = Convert.ToInt32(txNumVertices.Text);
+            Random rand = new Random();
+            Graph randomGraph = new Graph();
+            for (int i = 0; i < numVertices; ++i)
+            {
+                double randomX;
+                double randomY;
+                int canvasHeight = Convert.ToInt32(mainCanvas.ActualHeight);
+                int canvasWidth = Convert.ToInt32(mainCanvas.ActualWidth);
+                randomX = rand.Next(canvasWidth);
+                randomY = rand.Next(canvasHeight);
+                randomGraph.AddVertex(randomX, randomY);
+            }
+            //by here the vertices have been generated and given random coordinates
+            int maxEdges = Convert.ToInt32(0.5*(numVertices)*(numVertices - 1));
+            for (int i = 0; i < rand.Next(maxEdges); ++i)
+            {
+                int v1 = rand.Next(numVertices);
+                int v2 = rand.Next(numVertices);
+                while (v1 == v2)
+                {
+                    v2 = rand.Next(numVertices);
+                }
+                int weight = rand.Next(Convert.ToInt32(txRandomGenLB.Text), Convert.ToInt32(txRandomGenUB.Text));
+                randomGraph.AddEdge(v1, v2, weight);
+            }
+            while (!randomGraph.IsConnected())
+            {
+                int v1 = rand.Next(numVertices);
+                int v2 = rand.Next(numVertices);
+                while (v1 == v2)
+                {
+                    v2 = rand.Next(numVertices);
+                }
+                int weight = rand.Next(Convert.ToInt32(txRandomGenLB.Text), Convert.ToInt32(txRandomGenUB.Text));
+                randomGraph.AddEdge(v1, v2, weight);
+            }
+            RenderGraph(randomGraph);
+        }
         private void cbAutoGenEdges_Checked(object sender, RoutedEventArgs e)
         {
             cbAutoGenEdgesValue.IsChecked = false; //only one check box can be selected at a time
