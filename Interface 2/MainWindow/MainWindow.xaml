@@ -293,7 +293,6 @@
                                                HorizontalAlignment="Center" Width="178">
                                         Return All vertices to their original postions
                                         </TextBlock>
-
                                         <Button Margin="20,10,20,10"
                                             Grid.Row="2"
                                             x:Name="btnDeleteAllEdges"
