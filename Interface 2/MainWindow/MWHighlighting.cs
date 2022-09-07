@@ -81,7 +81,7 @@ namespace Interface_2
         /// </summary>
         /// <param name="edges">The edges that will be highlighted tuple(vertex, vertex, weight)</param>
         /// <returns></returns>
-        public bool mstHighlightPath(List<Tuple<int, int, int>> edges)
+        public bool mstHighlightPath(List<Tuple<int, int, int>> edges, int cost = -1)
         {
             RevertLineColour();
             if (edges.Count() != 0)
@@ -97,7 +97,6 @@ namespace Interface_2
                     {
                         if (line.Item1.Name == lineName)//detetcs if theres a path because theres a matching name
                         {
-                            total += Graph.GetEdgeWeight(smallerId, largerId);
                             highlightedLines.Add(line.Item1); //adds it to the list of edges
                             total += Convert.ToInt32(line.Item4.Text);
                         }
@@ -121,7 +120,7 @@ namespace Interface_2
                         InitiateHighlightLineStoryboard(highlightedLines[i], TimeSpan.FromSeconds(1));
                     }
                 }
-                txExtraInfo2.Text = "Minimum Spanning Tree Weight: " + total / 2;
+                txExtraInfo2.Text = "Minimum Spanning Tree Weight: " + Convert.ToString((cost == -1)? total: cost);
                 return true;
             }
             return false;

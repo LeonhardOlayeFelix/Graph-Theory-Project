@@ -12,40 +12,36 @@ namespace Interface_2
         /// completes kruskals algorithm, returning a list of edges within the minimum spannig tree tuple(vertex, vertex, cost)
         /// </summary>
         /// <returns></returns>
-        public List<Tuple<int, int, int>> Kruskals() 
+        public Tuple<List<Tuple<int, int, int>>, int> Kruskals() 
         {
             //uses Kruskals Algo for MST
-            List<Tuple<int, int, int>> listOfSortedEdges = GetListOfSortedEdges(); 
-            int successful = 0; //number of successful additions
-            Graph mst = new Graph(); //create a temporary graph instance
-            for (int i = 0; i < GetMaxVertexID() + 1; ++i)
+            List<Tuple<int, int, int>> listOfSortedEdges = GetListOfSortedEdges();
+            Graph mst = new Graph();
+            for (int i = 0; i < GetMaxVertexID() + 1; i++)
             {
-                //add the same amount of vertices as the current graph
-                mst.AddVertex(0, 0);
+                mst.AddVertex(0,0);
+                if (!IsInVertexList(i))
+                {
+                    mst.RemoveVertex(i);
+                }
             }
-            while (successful < GetListOfVertices().Count() - 1)
+            int successful = 0;
+            for (int i = 0; i < listOfSortedEdges.Count(); ++i)
             {
-                //keep doing until n-1 edges are added (n = num of vertices)
-
-                //choose the lowest cost edge (first element)
-                Tuple<int, int, int> cheapestEdge = listOfSortedEdges.First();
-                listOfSortedEdges.RemoveAt(0);
-
-                //add that edge to the new graph
-                mst.AddEdge(cheapestEdge.Item1, cheapestEdge.Item2, cheapestEdge.Item3); 
+                if (successful == mst.GetNumberOfVertices()) { break; }
+                mst.AddEdge(listOfSortedEdges[i].Item1, listOfSortedEdges[i].Item2, listOfSortedEdges[i].Item3);
                 if (mst.ContainsCycle())
                 {
-                    //if that edge caused the new graph to have a cycle, then remove it
-                    mst.RemoveEdge(cheapestEdge.Item1, cheapestEdge.Item2); 
+                    mst.RemoveEdge(listOfSortedEdges[i].Item1, listOfSortedEdges[i].Item2);
                 }
-                else
+                else if (!mst.ContainsCycle())
                 {
-                    //if it didnt cause a cycle, then increment successful
-                    successful += 1;
+                    successful++;
                 }
             }
             List<Tuple<int, int, int>> mstEdges = mst.GetListOfSortedEdges();
-            return mstEdges; 
+            int cost = mst.GetSumOfWeights();
+            return new Tuple<List<Tuple<int, int, int>>, int>(mstEdges, cost);
         }
         private List<Tuple<int, int, int>> MergeSort(List<Tuple<int, int, int>> edges) 
         {

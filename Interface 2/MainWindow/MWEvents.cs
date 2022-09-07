@@ -181,8 +181,8 @@ namespace Interface_2
             }
             else
             {
-                List<Tuple<int, int, int>> mst = Graph.Kruskals();
-                mstHighlightPath(mst); //highlight the MST
+                Tuple<List<Tuple<int, int, int>>, int> mst = Graph.Kruskals();
+                mstHighlightPath(mst.Item1, mst.Item2); //highlight the MST
             }
         }
         private void btnLoadGraph_Click(object sender, RoutedEventArgs e)
@@ -290,11 +290,11 @@ namespace Interface_2
             };
             enableTimer.Start();
             int numVertices = Convert.ToInt32(txNumVertices.Text);
-            if (numVertices > 18 || numVertices < 1)
-            {
-                MessageBox.Show("Specify a number of vertices less than 20");
-                return;
-            }
+            //if (numVertices > 18 || numVertices < 1)
+            //{
+            //    MessageBox.Show("Number of vertices not within range");
+            //    return;
+            //}
             Random rand = new Random();
             Graph randomGraph = new Graph();
             for (int i = 0; i < numVertices; ++i)
