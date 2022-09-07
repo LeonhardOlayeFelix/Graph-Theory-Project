@@ -309,7 +309,7 @@
                                             <Button Margin="20,10,10,10"
                                             x:Name="btnRandomGraph"
                                             Click="BtnRandomGraph_Click">
-                                                Generate a random graph
+                                                Generate a connected graph
                                             </Button>
                                             <TextBlock
                                                        VerticalAlignment="Center"
@@ -345,7 +345,7 @@
                                             Height="20" 
                                             Margin="40,39,28,29"
                                             FontSize="10"
-                                            HorizontalAlignment="Center" Width="358" Grid.RowSpan="2" Grid.Row="2" Text="Weights will be randomised according to the option below the 'Select' button"/>
+                                            HorizontalAlignment="Center" Width="358" Grid.RowSpan="2" Grid.Row="2"><Run Text="Weights will be randomized according to the option"/><Run Text="s"/><Run Text=" below the 'Select' button"/></TextBlock>
                                     </Grid>
                                 </GroupBox>
                                 <GroupBox Grid.Row="2"

@@ -303,18 +303,27 @@ namespace Interface_2
                 int canvasWidth = Convert.ToInt32(mainCanvas.ActualWidth);
                 randomGraph.AddVertex(0, 0);
             }
-            while (!randomGraph.IsConnected())
+            while (!randomGraph.IsConnected())//keeps generating random edges until the graph is connected
             {
+                int weight = 0;
+                if (cbAutoGenEdges.IsChecked == true)
+                {
+                    weight = rand.Next(Convert.ToInt32(txRandomGenLB.Text), Convert.ToInt32(txRandomGenUB.Text));
+                }
+                else if (cbAutoGenEdgesValue.IsChecked == true)
+                {
+                    weight = Convert.ToInt32(txAutoWeight.Text);
+                }
                 int v1 = rand.Next(numVertices);
                 int v2 = rand.Next(numVertices);
                 while (v1 == v2)
                 {
                     v2 = rand.Next(numVertices);
                 }
-                int weight = rand.Next(Convert.ToInt32(txRandomGenLB.Text), Convert.ToInt32(txRandomGenUB.Text));
                 randomGraph.AddEdge(v1, v2, weight);
+
             }
-            ArrangeGraph(4, randomGraph);
+            ArrangeGraph(4, 100, randomGraph); //arranges graph into appropriate shape
             RenderGraph(randomGraph);
         }
         private void btnRouteInspStartAndEnd_Click(object sender, RoutedEventArgs e)

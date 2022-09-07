@@ -30,6 +30,7 @@ namespace Interface_2
         /// </summary>
         /// <param name="vertexID"></param>
         /// <returns></returns>
+        /// 
         public bool IsInVertexList(int vertexID)
         {
             //returns true if vertex exists
@@ -42,6 +43,40 @@ namespace Interface_2
                 }
             }
             return false;
+        }
+        /// <summary>
+        /// Parametrically arranges a graph into a shape using properties of a circle
+        /// </summary>
+        /// <param name="center"> the coordinates of the place the vertices will revolve around</param>
+        /// <param name="numInnerVertices">the number of vertices on the inner shape</param>
+        /// <param name="radiusIncrement"></param>
+        public void ArrangeGraph(MyPoint center, int numInnerVertices, int radiusIncrement)
+        {
+            int numberOfVerticesArranged = 0;
+            int index = 0;
+            int radius;
+            List<int> ListVertices = GetListOfVertices();
+            double numRadii = Math.Ceiling((double)GetNumberOfVertices() / (double)numInnerVertices);
+            for (int i = 1; i < numRadii + 1; ++i)
+            {
+                radius = radiusIncrement * i;//after each shape has been made, increase the radius by the same amount
+                double angle = 2.0 / (double)numInnerVertices * Math.PI;
+                for (int j = 1; j < numInnerVertices + 1; ++j)
+                {
+                    if (numberOfVerticesArranged == GetNumberOfVertices())
+                    {
+                        break;
+                    }
+                    double theta = angle * j; //angle away from the positive real x axis
+
+                    //center (a,b) means new x coordinate = a + cos(theta) and y coordinate = b + sin(theta)
+                    MyPoint arrangedPoint = new MyPoint(center.X + radius * Math.Cos(theta), center.Y + radius * Math.Sin(theta));
+                    int vertexID = ListVertices[index++];
+                    SetCoordinate(vertexID, arrangedPoint);
+                    numberOfVerticesArranged++;
+                }
+                numInnerVertices += 2;
+            }
         }
         public void SetCoordinate(int vertexID, MyPoint mypoint)
         {
