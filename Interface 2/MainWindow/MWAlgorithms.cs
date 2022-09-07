@@ -93,6 +93,46 @@ namespace Interface_2
             btnLoadGraph.IsEnabled = false;
         }
         /// <summary>
+        /// Uses Parametric equations to represent the position of each vertex x = rcost and y = rcost
+        /// </summary>
+        /// <param name="numSides">The number of sides that the inner shape should be arranged in. Inputting 5 would result in a pentagonal shape</param>
+        /// <param name="graphToArrange">The graph to be arranged</param>
+        public void ArrangeGraph(int numSides, Graph graphToArrange)
+        {
+            int numberOfVerticesArranged = 0;
+            int index = 0;
+            List<int> ListVertices = graphToArrange.GetListOfVertices();
+            double canvasCenterX = mainCanvas.ActualWidth / 2;
+            double canvasCenterY = mainCanvas.ActualHeight / 2;
+            MyPoint center = new MyPoint(canvasCenterX, canvasCenterY);
+            double numRadii = Math.Ceiling((double)graphToArrange.GetNumberOfVertices() / (double)numSides);
+            for (int i = 1; i < numRadii+1; ++i)
+            {
+                int radius = 150 * i;
+                double angle = (2.0 / (double)numSides) * Math.PI; //divide by the number of sides of the shape
+                for (int j = 1; j < numSides + 1; ++j)
+                {
+                    if (numberOfVerticesArranged == graphToArrange.GetNumberOfVertices())
+                    {
+                        break;
+                    }
+                    double theta = angle * j; //angle away from the positive real x axis
+
+                    //center (a,b) means new x coordinate = a + cos(theta) and y coordinate = b + sin(theta)
+                    MyPoint arrangedPoint = new MyPoint(center.X + radius * Math.Cos(theta), center.Y + radius * Math.Sin(theta));
+
+                    int vertexID = ListVertices[index++];
+                    Ellipse currentEllipse = FindEllipse(vertexID);
+                    graphToArrange.SetCoordinate(vertexID, arrangedPoint);
+                    numberOfVerticesArranged++;
+                }
+                //numSides = (i % 2 == 1) ? numSides + 1: numSides + 2 ; //changes the shape with each loop
+                numSides+=2;
+            }
+            
+
+        }
+        /// <summary>
         /// Displays the result of a breadth first search
         /// </summary>
         /// <param name="startVertex">Vertex to start the search from</param>

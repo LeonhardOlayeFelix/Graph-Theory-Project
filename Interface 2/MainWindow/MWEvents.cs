@@ -37,21 +37,22 @@ namespace Interface_2
         private void BtnRandomGraph_Click(object sender, RoutedEventArgs e)
         {
             int numVertices = Convert.ToInt32(txNumVertices.Text);
+            if (numVertices > 20 || numVertices < 1)
+            {
+                MessageBox.Show("Specify a number of vertices less than 20");
+                return;
+            }
             Random rand = new Random();
             Graph randomGraph = new Graph();
             for (int i = 0; i < numVertices; ++i)
             {
-                double randomX;
-                double randomY;
                 int canvasHeight = Convert.ToInt32(mainCanvas.ActualHeight);
                 int canvasWidth = Convert.ToInt32(mainCanvas.ActualWidth);
-                randomX = rand.Next(canvasWidth);
-                randomY = rand.Next(canvasHeight);
-                randomGraph.AddVertex(randomX, randomY);
+                randomGraph.AddVertex(0,0);
             }
-            //by here the vertices have been generated and given random coordinates
+            //by here the vertices have been generated
             int maxEdges = Convert.ToInt32(0.5*(numVertices)*(numVertices - 1));
-            for (int i = 0; i < rand.Next(maxEdges); ++i)
+            for (int i = 0; i < rand.Next(maxEdges) / 2; ++i)
             {
                 int v1 = rand.Next(numVertices);
                 int v2 = rand.Next(numVertices);
@@ -73,6 +74,7 @@ namespace Interface_2
                 int weight = rand.Next(Convert.ToInt32(txRandomGenLB.Text), Convert.ToInt32(txRandomGenUB.Text));
                 randomGraph.AddEdge(v1, v2, weight);
             }
+            ArrangeGraph(5, randomGraph);
             RenderGraph(randomGraph);
         }
         private void cbAutoGenEdges_Checked(object sender, RoutedEventArgs e)

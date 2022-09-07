@@ -313,7 +313,7 @@
                                             </Button>
                                             <TextBlock
                                                        VerticalAlignment="Center"
-                                                       HorizontalAlignment="Center" Grid.ColumnSpan="3" Margin="224,14,47,15">Number of vertices (<Bold>Max 75</Bold>):</TextBlock>
+                                                       HorizontalAlignment="Center" Grid.ColumnSpan="3" Margin="224,14,47,15">Number of vertices (<Bold>Max 20</Bold>):</TextBlock>
                                             <TextBox
                                                 Grid.Column="2"
                                                 Margin="10"

@@ -43,6 +43,16 @@ namespace Interface_2
             }
             return false;
         }
+        public void SetCoordinate(int vertexID, MyPoint mypoint)
+        {
+            foreach (Vertex vertex in vertexSet)
+            {
+                if (vertex.GetVertexId() == vertexID)
+                {
+                    vertex.Position = mypoint;
+                }
+            }
+        }
         /// <summary>
         /// Returns the adjacent vertices of a specified vertex
         /// </summary>
