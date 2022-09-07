@@ -93,7 +93,8 @@ namespace Interface_2
             btnLoadGraph.IsEnabled = false;
         }
         /// <summary>
-        /// Uses Parametric equations to represent the position of each vertex x = rcost and y = rcost
+        /// Parametrically represents the position of each vertex x = rcost and y = rcost so it looks like a polygon of
+        /// n sides enscribed in a circle
         /// </summary>
         /// <param name="numSides">The number of sides that the inner shape should be arranged in. Inputting 5 would result in a pentagonal shape</param>
         /// <param name="graphToArrange">The graph to be arranged</param>
@@ -109,7 +110,7 @@ namespace Interface_2
             for (int i = 1; i < numRadii+1; ++i)
             {
                 int radius = 150 * i;
-                double angle = (2.0 / (double)numSides) * Math.PI; //divide by the number of sides of the shape
+                double angle = 2.0 / (double)numSides * Math.PI; //divide by the number of sides of the shape
                 for (int j = 1; j < numSides + 1; ++j)
                 {
                     if (numberOfVerticesArranged == graphToArrange.GetNumberOfVertices())

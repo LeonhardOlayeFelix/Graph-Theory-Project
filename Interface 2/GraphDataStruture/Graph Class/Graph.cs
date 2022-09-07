@@ -23,6 +23,7 @@ namespace Interface_2
             this.numberOfDeletedVertices = 0;
             this.vertexSet = new List<Vertex>();
             this.listOfEdges = new List<Tuple<int, int, int>>();
+            this.Name = "";
         }
     }
 }

@@ -226,7 +226,7 @@ namespace Interface_2
             edgeList.Add(Tuple.Create(line, smallerEllipse, largerEllipse, weightLabel));
             List<int> order = new List<int>() { Convert.ToInt32(v1.Name.Substring(3)), Convert.ToInt32(v2.Name.Substring(3)) };
             //InitiateHighlightPathStoryboard(edgeAsList, TimeSpan.FromSeconds((rendering) ? 0.75 : 0.2), false);
-            InitiateLineStoryboard(line, TimeSpan.FromSeconds((rendering)? 0.75: 0.2), order); //start line storyboard
+            InitiateLineStoryboard(line, TimeSpan.FromSeconds(0.2), order); //start line storyboard
             if (weight != 0)
                 mainCanvas.Children.Add(weightLabel);
             GenerateAdjList();
@@ -563,6 +563,21 @@ namespace Interface_2
         /// </summary>
         public void SaveGraph()
         {
+            if (Graph.Name == "")
+            {
+                string newName = "";
+                NameCreatedGraph nameGraphWindow = new NameCreatedGraph(); //create an instance of the new window
+                nameGraphWindow.ShowDialog(); //opens a new window
+                if (nameGraphWindow.DialogResult == true) //if they pressed ok rather than the exit button
+                {
+                    newName = nameGraphWindow.txBoxGraphName.Text; //re-initialise everything:
+                    Graph.Name = newName;
+                }
+                else 
+                {
+                    return;
+                }
+            }
             OleDbConnection conn = new OleDbConnection(MainWindow.ConStr);
             OleDbCommand cmd = new OleDbCommand();
             conn.Open();

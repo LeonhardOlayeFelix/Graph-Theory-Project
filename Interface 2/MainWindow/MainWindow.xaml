@@ -313,10 +313,11 @@
                                             </Button>
                                             <TextBlock
                                                        VerticalAlignment="Center"
-                                                       HorizontalAlignment="Center" Grid.ColumnSpan="3" Margin="224,14,47,15">Number of vertices (<Bold>Max 20</Bold>):</TextBlock>
+                                                       HorizontalAlignment="Center" Grid.ColumnSpan="3" Margin="224,14,47,15">Number of vertices (<Bold>Max 18</Bold>):</TextBlock>
                                             <TextBox
                                                 Grid.Column="2"
                                                 Margin="10"
+                                                PreviewTextInput="txAutoWeight_PreviewTextInput"
                                                 x:Name="txNumVertices"
                                                 HorizontalContentAlignment="Center"
                                                 VerticalAlignment="Center">10</TextBox>
@@ -342,9 +343,9 @@
                                             HorizontalAlignment="Center" Width="178" Grid.RowSpan="2" Grid.Row="1" Text="Delete all edges within the canvas"/>
                                         <TextBlock Foreground="Black"
                                             Height="20" 
-                                            Margin="135,39,112,29"
+                                            Margin="40,39,28,29"
                                             FontSize="10"
-                                            HorizontalAlignment="Center" Width="178" Grid.RowSpan="2" Grid.Row="2" Text="Generate a random graph"/>
+                                            HorizontalAlignment="Center" Width="358" Grid.RowSpan="2" Grid.Row="2" Text="Weights will be randomised according to the option below the 'Select' button"/>
                                     </Grid>
                                 </GroupBox>
                                 <GroupBox Grid.Row="2"
@@ -472,7 +473,7 @@
                                                     <Label Content="Randomly generate edge weights"/>
                                                     <TextBox Width="25"
                                                              Margin="0,2,0,2"
-                                                             Text="0"
+                                                             Text="1"
                                                              x:Name="txRandomGenLB"
                                                              PreviewTextInput="txAutoWeight_PreviewTextInput" 
                                                              FontWeight="Medium"

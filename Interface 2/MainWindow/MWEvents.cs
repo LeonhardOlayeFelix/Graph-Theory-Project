@@ -10,6 +10,7 @@ using System.Windows.Shapes;
 using System.Windows.Media.Imaging;
 using System.Data.OleDb;
 using System.Text.RegularExpressions;
+using System.Timers;
 
 namespace Interface_2
 {
@@ -28,54 +29,6 @@ namespace Interface_2
             HideValencies();
             labelExtraInfo.Content = "Click two vertices you want to connect and provide the weight";
             ActivateButton(sender);
-        }
-        /// <summary>
-        /// Generates a random graph
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void BtnRandomGraph_Click(object sender, RoutedEventArgs e)
-        {
-            int numVertices = Convert.ToInt32(txNumVertices.Text);
-            if (numVertices > 20 || numVertices < 1)
-            {
-                MessageBox.Show("Specify a number of vertices less than 20");
-                return;
-            }
-            Random rand = new Random();
-            Graph randomGraph = new Graph();
-            for (int i = 0; i < numVertices; ++i)
-            {
-                int canvasHeight = Convert.ToInt32(mainCanvas.ActualHeight);
-                int canvasWidth = Convert.ToInt32(mainCanvas.ActualWidth);
-                randomGraph.AddVertex(0,0);
-            }
-            //by here the vertices have been generated
-            int maxEdges = Convert.ToInt32(0.5*(numVertices)*(numVertices - 1));
-            for (int i = 0; i < rand.Next(maxEdges) / 2; ++i)
-            {
-                int v1 = rand.Next(numVertices);
-                int v2 = rand.Next(numVertices);
-                while (v1 == v2)
-                {
-                    v2 = rand.Next(numVertices);
-                }
-                int weight = rand.Next(Convert.ToInt32(txRandomGenLB.Text), Convert.ToInt32(txRandomGenUB.Text));
-                randomGraph.AddEdge(v1, v2, weight);
-            }
-            while (!randomGraph.IsConnected())
-            {
-                int v1 = rand.Next(numVertices);
-                int v2 = rand.Next(numVertices);
-                while (v1 == v2)
-                {
-                    v2 = rand.Next(numVertices);
-                }
-                int weight = rand.Next(Convert.ToInt32(txRandomGenLB.Text), Convert.ToInt32(txRandomGenUB.Text));
-                randomGraph.AddEdge(v1, v2, weight);
-            }
-            ArrangeGraph(5, randomGraph);
-            RenderGraph(randomGraph);
         }
         private void cbAutoGenEdges_Checked(object sender, RoutedEventArgs e)
         {
@@ -154,6 +107,7 @@ namespace Interface_2
         }
         private void btnDeleteAllEdges_Click(object sender, RoutedEventArgs e)
         {
+            ActivateButton(sender);
             List<Tuple<Line, Ellipse, Ellipse, TextBlock>> edgesToDelete = new List<Tuple<Line, Ellipse, Ellipse, TextBlock>>();
             foreach (var edge in edgeList)
             {
@@ -321,6 +275,47 @@ namespace Interface_2
             ActivateButton(sender);
             vertexDiameterSlider.Value = 40;
             pathWalkerDurationSlider.Value = pathWalkerDurationSlider.Minimum;
+        }
+        private void BtnRandomGraph_Click(object sender, RoutedEventArgs e)
+        {
+            btnRandomGraph.IsEnabled = false;
+            Timer enableTimer = new Timer() { Interval = 500};
+            enableTimer.Elapsed += (sender1, e1) =>
+            {
+                enableTimer.Stop();
+                this.Dispatcher.Invoke(() =>
+                {
+                    btnRandomGraph.IsEnabled = true;
+                });
+            };
+            enableTimer.Start();
+            int numVertices = Convert.ToInt32(txNumVertices.Text);
+            if (numVertices > 18 || numVertices < 1)
+            {
+                MessageBox.Show("Specify a number of vertices less than 20");
+                return;
+            }
+            Random rand = new Random();
+            Graph randomGraph = new Graph();
+            for (int i = 0; i < numVertices; ++i)
+            {
+                int canvasHeight = Convert.ToInt32(mainCanvas.ActualHeight);
+                int canvasWidth = Convert.ToInt32(mainCanvas.ActualWidth);
+                randomGraph.AddVertex(0, 0);
+            }
+            while (!randomGraph.IsConnected())
+            {
+                int v1 = rand.Next(numVertices);
+                int v2 = rand.Next(numVertices);
+                while (v1 == v2)
+                {
+                    v2 = rand.Next(numVertices);
+                }
+                int weight = rand.Next(Convert.ToInt32(txRandomGenLB.Text), Convert.ToInt32(txRandomGenUB.Text));
+                randomGraph.AddEdge(v1, v2, weight);
+            }
+            ArrangeGraph(4, randomGraph);
+            RenderGraph(randomGraph);
         }
         private void btnRouteInspStartAndEnd_Click(object sender, RoutedEventArgs e)
         {

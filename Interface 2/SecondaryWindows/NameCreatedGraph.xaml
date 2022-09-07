@@ -12,7 +12,7 @@
     <StackPanel>
         <Border Background="Black" Margin="20" CornerRadius="20">
             <StackPanel Margin="20">
-                <Label Content="Create Graph" Foreground="White" FontSize="25" HorizontalAlignment="Center"/>
+                <Label Content="Name Graph" Foreground="White" FontSize="25" HorizontalAlignment="Center"/>
                 <Separator></Separator>
                 <Label Content="Name:" Foreground="white"/>
                 <TextBox x:Name="txBoxGraphName" Background="#403D3D" Foreground="White" FontSize="18" Text="Untitled"/>
