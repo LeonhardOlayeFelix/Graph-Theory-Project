@@ -22,6 +22,7 @@ namespace Interface_2
             visited.Add(Tuple.Create(startNode, -1));//start vertex doesnt have a parent so we can set it to -1 and mark it as visited
             outputList.Add(startNode);
             List<int> adjNodes = GetAdjVertices(startNode); //get the vertices that are adjacent to that start vertex
+            adjNodes.Sort();
             for (int i = 0; i < adjNodes.Count(); ++i)
             {
                 //add all the adjacent vertices to the queue
@@ -61,6 +62,8 @@ namespace Interface_2
             visited.Add(Tuple.Create(startNode, -1)); //start vertex doesnt have a parent so we can set it to -1 and mark it as visited
             outputList.Add(startNode);
             List<int> adjNodes = GetAdjVertices(startNode); //get the vertex that are adjacent to that start node
+            adjNodes.Sort();
+            adjNodes.Reverse();
             for (int i = 0; i < adjNodes.Count(); ++i)
             {
                 stack.Push(Tuple.Create(adjNodes[i], startNode)); //add all the adjacent vertex to the stack
