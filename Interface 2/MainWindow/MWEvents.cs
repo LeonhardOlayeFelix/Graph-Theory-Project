@@ -16,6 +16,7 @@ namespace Interface_2
 {
     public partial class MainWindow : Window
     {
+
         //All of the event handlers
         private void btnAddVertex_Click(object sender, RoutedEventArgs e)
         {
@@ -152,7 +153,7 @@ namespace Interface_2
         }
         private void btnDefault_Click(object sender, RoutedEventArgs e)
         {
-            labelExtraInfo.Content = "Click freely around the Canvas";
+            labelExtraInfo.Content = "Click or Drag to select objects";
             ActivateButton(sender);
         }
         private void btnDragAndDrop_Click(object sender, RoutedEventArgs e)
@@ -216,6 +217,14 @@ namespace Interface_2
         {
             ActivateButton(btnLogOut);
             LogOutProcess();
+        }
+        private void SelectionCavas_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            if (currentButton == btnDefault)
+            {
+                // Release the mouse capture and stop tracking it.
+                
+            }
         }
         private void mouseMove(object sender, MouseEventArgs e)
         {

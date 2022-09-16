@@ -64,7 +64,20 @@
                 Background="{Binding ElementName=colourPickerBackground, Path=SelectedBrush, UpdateSourceTrigger=PropertyChanged}"
                 Margin="20"
                 MouseLeftButtonDown="mainCanvas_MouseLeftButtonDown"
-                PreviewMouseWheel="mainCanvas_PreviewMouseWheel">
+                MouseLeftButtonUp="MainCanvas_MouseLeftButtonUp"
+                PreviewMouseWheel="mainCanvas_PreviewMouseWheel"
+                MouseMove="MainCanvas_MouseMove">
+                    <Rectangle Name="selectionBox"
+                               Visibility="Collapsed"
+                               Width="100"
+                               Height="100"
+                               Stroke="Black"   
+                               StrokeThickness="1"
+                               Panel.ZIndex="1000">
+                        <Rectangle.Fill>
+                            <SolidColorBrush Color="Black" Opacity="0.3"/>
+                        </Rectangle.Fill>
+                    </Rectangle>
                 </Canvas>
                 <Label Foreground="White"
                FontSize="15"

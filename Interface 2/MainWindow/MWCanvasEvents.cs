@@ -14,6 +14,8 @@ namespace Interface_2
 
     public partial class MainWindow : Window
     {
+        bool mouseDown = false;
+        Point mouseDownPos;
         /// <summary>
         /// The section of code that determines what happens when the canvas, or anything on the canvas is clicked.
         /// </summary>
@@ -243,6 +245,61 @@ namespace Interface_2
                 {
                     GenerateAdjList();
                 }
+            }
+            else if (currentButton == btnDefault)
+            {
+                selectionBox.Visibility = Visibility.Visible;
+                mouseDown = true;
+                mouseDownPos = e.GetPosition(mainCanvas);
+                mainCanvas.CaptureMouse();
+
+                // Initial placement of the drag selection box.         
+                Canvas.SetLeft(selectionBox, mouseDownPos.X);
+                Canvas.SetTop(selectionBox, mouseDownPos.Y);
+                mainCanvas.Children.Add(selectionBox);
+                selectionBox.Width = 0;
+                selectionBox.Height = 0;
+            }
+        }
+        private void MainCanvas_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (mouseDown && currentButton == btnDefault)
+            {
+                // When the mouse is held down, reposition the drag selection box.
+
+                Point mousePos = e.GetPosition(mainCanvas);
+                if (mouseDownPos.X < mousePos.X)
+                {
+                    Canvas.SetLeft(selectionBox, mouseDownPos.X);
+                    selectionBox.Width = mousePos.X - mouseDownPos.X;
+                }
+                else
+                {
+                    Canvas.SetLeft(selectionBox, mousePos.X);
+                    selectionBox.Width = mouseDownPos.X - mousePos.X;
+                }
+                if (mouseDownPos.Y < mousePos.Y)
+                {
+                    Canvas.SetTop(selectionBox, mouseDownPos.Y);
+                    selectionBox.Height = mousePos.Y - mouseDownPos.Y;
+                }
+                else
+                {
+                    Canvas.SetTop(selectionBox, mousePos.Y);
+                    selectionBox.Height = mouseDownPos.Y - mousePos.Y;
+                }
+            }
+        }
+        private void MainCanvas_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if (currentButton == btnDefault)
+            {
+                selectionBox.Visibility = Visibility.Collapsed;
+                mouseDown = false;
+                mainCanvas.ReleaseMouseCapture();
+                mainCanvas.Children.Remove(selectionBox);
+                Point mouseUpPos = e.GetPosition(mainCanvas);
+                // DO stuff here
             }
         }
     }

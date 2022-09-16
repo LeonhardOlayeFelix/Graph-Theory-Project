@@ -21,24 +21,6 @@ namespace Interface_2
         /// Highlights a button that has been pressed
         /// </summary>
         /// <param name="btnSender">Button that was pressed</param>
-        private void ActivateButton(object btnSender)
-        {
-            RevertEllipseColour();
-            RevertLineColour();
-            ClearHighlightedLines();
-            timer.Stop();
-            timer1.Stop();
-            livePath.Clear(); //incase they were in the midst of the highlight path action
-            if (btnSender != null) //make sure that the button isnt null
-            {
-                if (currentButton != (Button)btnSender) //if the same button is not pressed
-                {
-                    DeactivateButton(); //'deactivate' the previous button
-                    currentButton = (Button)btnSender;
-                    currentButton.Background = new SolidColorBrush(btnActivatedColour); //'activate' the current button
-                }
-            }
-        }
         /// <summary>
         /// Responsible for re-initialisation of attributes when a new graph is created
         /// </summary>
