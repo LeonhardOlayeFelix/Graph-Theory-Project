@@ -16,6 +16,8 @@ namespace Interface_2
     {
         bool mouseDown = false;
         Point mouseDownPos;
+        List<Ellipse> selectedVertices = new List<Ellipse>();
+        List<string> selectedLinesNames = new List<string>();
         /// <summary>
         /// The section of code that determines what happens when the canvas, or anything on the canvas is clicked.
         /// </summary>
@@ -252,7 +254,10 @@ namespace Interface_2
                 mouseDown = true;
                 mouseDownPos = e.GetPosition(mainCanvas);
                 mainCanvas.CaptureMouse();
-
+                selectedVertices.Clear();
+                selectedLinesNames.Clear();
+                RevertEllipseColour();
+                RevertLineColour();
                 // Initial placement of the drag selection box.         
                 Canvas.SetLeft(selectionBox, mouseDownPos.X);
                 Canvas.SetTop(selectionBox, mouseDownPos.Y);
@@ -299,7 +304,55 @@ namespace Interface_2
                 mainCanvas.ReleaseMouseCapture();
                 mainCanvas.Children.Remove(selectionBox);
                 Point mouseUpPos = e.GetPosition(mainCanvas);
-                // DO stuff here
+                //two coordinates of rectangle
+                double X1 = mouseUpPos.X;
+                double X2 = mouseDownPos.X;
+                double Y1 = mouseUpPos.Y;
+                double Y2 = mouseDownPos.Y; 
+                foreach (var ctrl in mainCanvas.Children)
+                {
+                    try
+                    {
+                        Ellipse selectedVertex = (Ellipse)ctrl;
+                        double selVertexXCoord = Canvas.GetLeft(selectedVertex);
+                        double selVertexYCoord = Canvas.GetTop(selectedVertex);
+                        //check if vertex control is within the selection box
+                        if ((selVertexXCoord >= X1 && selVertexXCoord <= X2 && selVertexYCoord <= Y2 && selVertexYCoord >= Y1) ||
+                            (selVertexXCoord >= X2 && selVertexXCoord <= X1 && selVertexYCoord <= Y1 && selVertexYCoord >= Y2) ||
+                            (selVertexXCoord >= X2 && selVertexXCoord <= X1 && selVertexYCoord <= Y2 && selVertexYCoord >= Y1) ||
+                            (selVertexXCoord >= X1 && selVertexXCoord <= X2 && selVertexYCoord <= Y1 && selVertexYCoord >= Y2))
+                        {
+                            
+                            if (Graph.IsInVertexList(Convert.ToInt32(selectedVertex.Name.Substring(3))))
+                            {
+                                selectedVertices.Add(selectedVertex);
+                            }
+                            selectedVertex.Fill = HighlightColour;
+                        }
+                    }
+                    catch { };
+                    try
+                    {
+                        Line selectedLine = (Line)ctrl;
+                        double selLineXCoord = (selectedLine.X1 + selectedLine.X2) / 2;
+                        double selLineYCoord = (selectedLine.Y1 + selectedLine.Y2) / 2;
+                        //check if midpoint of Line control is within the selection box
+                        if ((selLineXCoord >= X1 && selLineXCoord <= X2 && selLineYCoord <= Y2 && selLineYCoord >= Y1) ||
+                            (selLineXCoord >= X2 && selLineXCoord <= X1 && selLineYCoord <= Y1 && selLineYCoord >= Y2) ||
+                            (selLineXCoord >= X2 && selLineXCoord <= X1 && selLineYCoord <= Y2 && selLineYCoord >= Y1) ||
+                            (selLineXCoord >= X1 && selLineXCoord <= X2 && selLineYCoord <= Y1 && selLineYCoord >= Y2))
+                        {
+                            Tuple<Line, Ellipse, Ellipse, TextBlock> currentLine = FindEdge(selectedLine.Name);
+                            if (edgeList.Contains(currentLine))
+                            {
+                                selectedLinesNames.Add(selectedLine.Name); ;
+                            }
+                            selectedLine.Stroke = HighlightColour;
+                        }
+                    }
+                    catch { };
+                }
+                labelExtraInfo.Content = "Now click 'Delete Vertex' or 'Delete Edge'";
             }
         }
     }

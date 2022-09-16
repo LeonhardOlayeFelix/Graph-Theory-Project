@@ -141,15 +141,33 @@ namespace Interface_2
         }
         private void btnDeleteVertex_Click(object sender, RoutedEventArgs e)
         {
+            //delete any vertices that have been selected
+            foreach (Ellipse vertex in selectedVertices)
+            {
+                DeleteVertex(vertex);
+            }
+            if (selectedVertices.Count == 0)
+            {
+                ActivateButton(sender);
+                labelExtraInfo.Content = "Click a vertex to delete it from the canvas";
+            }
+            selectedVertices.Clear();
             HideValencies();
-            labelExtraInfo.Content = "Click a vertex to delete it from the canvas";
-            ActivateButton(sender);
         }
         private void btnDeleteConnection_Click(object sender, RoutedEventArgs e)
         {
+            foreach (string name in selectedLinesNames)
+            {
+                Tuple<Line, Ellipse, Ellipse, TextBlock> line = FindEdge(name);
+                DeleteEdge(line);
+            }
+            if (selectedLinesNames.Count == 0)
+            {
+                ActivateButton(sender);
+                labelExtraInfo.Content = "Click an edge to Delete it from the canvas";
+            }
+            selectedLinesNames.Clear();
             HideValencies();
-            labelExtraInfo.Content = "Click an edge to Delete it from the canvas";
-            ActivateButton(sender);
         }
         private void btnDefault_Click(object sender, RoutedEventArgs e)
         {

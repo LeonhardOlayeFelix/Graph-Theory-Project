@@ -179,7 +179,7 @@
                                             x:Name="btnAddConnection"
                                             Grid.Row="2"
                                             Click="btnAddConnection_Click">
-                                            Add Connection
+                                            Add Edge
                                         </Button>
                                         <TextBlock Foreground="Black"
                                                Grid.Row="3" 
@@ -192,7 +192,7 @@
                                             x:Name="btnDeleteConnection"
                                             Grid.Row="3"
                                             Click="btnDeleteConnection_Click">
-                                            Delete Connection
+                                            Delete Edge
                                         </Button>
                                     </Grid>
                                 </GroupBox>
