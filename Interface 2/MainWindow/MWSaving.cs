@@ -21,7 +21,7 @@ namespace Interface_2
             using (Stream stream = File.Open(filePath, append ? FileMode.Append : FileMode.Create))
             {
                 var BinaryWriter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter(); 
-                BinaryWriter.Serialize(stream, objectToWrite);//writes the object to the binary file through serialization
+                BinaryWriter.Serialize(stream, objectToWrite);//writes the object to the binary file 
             }   
         }
         public static T ReadFromBinaryFile<T>(string filePath) //needs the file to read and type 
