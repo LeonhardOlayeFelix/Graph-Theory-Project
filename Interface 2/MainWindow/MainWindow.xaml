@@ -98,13 +98,13 @@
                     Content="Logged in as: Guest"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Center"
-                    x:Name="txLoggedInAs" Height="34" Width="259" Margin="622,8,0,19"/>
+                    x:Name="txLoggedInAs" Height="34" Width="259" Margin="724,7,0,20"/>
                 <Label Foreground="White"
                     FontSize="15"
                     FontWeight="Medium"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Center"
-                    x:Name="txLoggedID" Height="34" Width="183" Margin="622,27,0,0"/>
+                    x:Name="txLoggedID" Height="34" Width="183" Margin="724,27,0,0"/>
             </Grid>
             <GroupBox Grid.Column="1" 
                       Panel.ZIndex="3"
@@ -610,7 +610,7 @@
                                                Height="20" 
                                                Margin="30,-3,26,21"
                                                FontSize="10"
-                                               HorizontalAlignment="Center"> <!-- Have a new window appear when they connect vertices-->
+                                               HorizontalAlignment="Center"> 
                                         Enter a path to be highlighted
                                                 </TextBlock>
                                                 <Button Margin="20,12,20,3"
@@ -618,6 +618,20 @@
                                             Grid.Row="1"
                                             Click="btnHighlightPaths_Click">
                                                     Highlight Path
+                                                </Button>
+                                                <TextBlock Foreground="Black"
+                                               Grid.Row="2"
+                                               Height="20" 
+                                               Margin="30,-3,26,21"
+                                               FontSize="10"
+                                               HorizontalAlignment="Center"> 
+                                        Perform floyd warshalls algorithm
+                                                </TextBlock>
+                                                <Button Margin="20,12,20,3"
+                                            x:Name="btnFloyds"
+                                            Grid.Row="2"
+                                            Click="btnFloyds_Click">
+                                                    Floyd Warshall's Algorithm
                                                 </Button>
                                                 <Button Margin="20,12,20,3"
                                             x:Name="btnToggleValencies"
@@ -812,7 +826,7 @@
                                                                        x:Name="colourPickerHighlight"
                                                                        Width="40"
                                                                        Color="Red"
-                                                                       ColorChanged="ColourPickerHighlight_ColorChanged"/>
+                                                                       SelectedBrushChanged="colourPickerHighlight_SelectedBrushChanged"/>
                                         </StackPanel>
                                         <Button Margin="30,17,30,30"
                                             x:Name="btnResetColour"

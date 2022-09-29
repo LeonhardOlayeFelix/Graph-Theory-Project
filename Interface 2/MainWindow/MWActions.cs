@@ -68,14 +68,14 @@ namespace Interface_2
             {
                 //re-initiliase everything
                 edgeList = new HashSet<Tuple<Line, Ellipse, Ellipse, TextBlock>>();
-                Graph = new Graph();
+                graph = new Graph();
                 valencyState = "Hidden";
                 valencyList = new List<TextBlock>();
-                Graph.Name = graphName;
+                graph.Name = graphName;
                 vertexTxBoxList = new List<TextBlock>();
                 vertexList = new List<Ellipse>();
                 graphCreated = true;
-                labelGraphName.Content = Graph.Name;
+                labelGraphName.Content = graph.Name;
                 EnableAllActionButtons(); //can only navigate buttons when a graph is created
                 EnableAllAlgorithmButtons();
                 EnableTabControl();
@@ -93,6 +93,16 @@ namespace Interface_2
                 mainCanvas.Children.Remove(line);
             }
             linesToDelete.Clear();
+        }
+        /// <summary>
+        /// Clears all the Operations so no action can be performed
+        /// </summary>
+        private void ClearAllOperations()
+        {
+            leftClickCanvasOperation = () => { };
+            leftClickVertexOperation = (activeVertex) => { };
+            leftClickLineOperation = (activeLine) => { };
+            leftMouseButtonUpOperation = () => { };
         }
         /// <summary>
         /// Connects two vertices together
@@ -120,7 +130,7 @@ namespace Interface_2
             }
             if (!rendering)
             {
-                Graph.AddEdge(Convert.ToInt32(v1.Name.Substring(3)), Convert.ToInt32(v2.Name.Substring(3)), weight); //update the object
+                graph.AddEdge(Convert.ToInt32(v1.Name.Substring(3)), Convert.ToInt32(v2.Name.Substring(3)), weight); //update the object
             }
 
             //below creates the line which will be connected
@@ -239,13 +249,12 @@ namespace Interface_2
             mainCanvas.Children.Clear();
             btnDeleteGraph.IsEnabled = false;
             labelGraphName.Content = "";
-            Graph = new Graph();
+            graph = new Graph();
             ResetSelectionCounts();
             HideValencies();
-            buttonId = 0;
-            Graph = null;
+            buttonId = 0; 
+            graph = null;
             lastSelectedVertex = null;
-            vertexToConnectTo = null;
             vertexTxBoxList = new List<TextBlock>();
             vertexList = new List<Ellipse>();
             edgeList = new HashSet<Tuple<Line, Ellipse, Ellipse, TextBlock>>();
@@ -363,7 +372,7 @@ namespace Interface_2
         /// </summary>
         public void GenerateAdjList()
         {
-            txAdjset.Text = Graph.PrintAdjList();
+            txAdjset.Text = graph.PrintAdjList();
         }
         /// <summary>
         /// Returns a Hashset of all of the edges coming out an Ellipse
@@ -398,7 +407,7 @@ namespace Interface_2
         public List<List<int>> GenerateAdjMat()
         {
             //populates 2d list with adjacency matrix
-            List<List<int>> adjMat = Graph.GetAdjacencyMatrix();
+            List<List<int>> adjMat = graph.GetAdjacencyMatrix();
             if (adjMat.Count() != 0)
             {
                 int size = adjMat.ElementAt(0).Count();
@@ -545,7 +554,7 @@ namespace Interface_2
         /// </summary>
         public void SaveGraph()
         {
-            if (Graph.Name == "")
+            if (graph.Name == "")
             {
                 string newName = "";
                 NameCreatedGraph nameGraphWindow = new NameCreatedGraph(); //create an instance of the new window
@@ -553,7 +562,7 @@ namespace Interface_2
                 if (nameGraphWindow.DialogResult == true) //if they pressed ok rather than the exit button
                 {
                     newName = nameGraphWindow.txBoxGraphName.Text; //re-initialise everything:
-                    Graph.Name = newName;
+                    graph.Name = newName;
                 }
                 else 
                 {
@@ -564,7 +573,7 @@ namespace Interface_2
             OleDbCommand cmd = new OleDbCommand();
             conn.Open();
             cmd.Connection = conn;
-            string filename = Graph.Name; //change this to have a filename that the user wants
+            string filename = graph.Name; //change this to have a filename that the user wants
             FileStream fs;
             if (StudentIsLoggedIn()) //do this portion if the user is saving graphs as a student
             {
@@ -574,11 +583,11 @@ namespace Interface_2
                 {
                     fs = File.Create(filename);
                     //update the database to include that new file
-                    cmd.CommandText = $"INSERT INTO StudentGraph VALUES('{filename}','{loggedStudent.ID}','{Graph.Name}','{DateTime.Today.ToString("dd/MM/yyyy")}','{Graph.GetNumberOfVertices()}','{Graph.GetNumberOfEdges()}','{"s"}')";
+                    cmd.CommandText = $"INSERT INTO StudentGraph VALUES('{filename}','{loggedStudent.ID}','{graph.Name}','{DateTime.Today.ToString("dd/MM/yyyy")}','{graph.GetNumberOfVertices()}','{graph.GetNumberOfEdges()}','{"s"}')";
                     cmd.ExecuteNonQuery();
                     fs.Close();
                     //write the class instance to the binary file
-                    BinarySerialization.WriteToBinaryFile(filename, Graph, false);
+                    BinarySerialization.WriteToBinaryFile(filename, graph, false);
                     MessageBox.Show("Graph saved");
                 }
                 else
@@ -588,8 +597,8 @@ namespace Interface_2
                     if (overwrite.ShowDialog() == true)
                     {
                         //update the record since they are overwriting
-                        cmd.CommandText = $"UPDATE StudentGraph SET NoVertices = {Graph.GetNumberOfVertices()}, NoEdges = {Graph.GetNumberOfEdges()} WHERE Filename = '{filename}' AND StudentID = '{loggedStudent.ID}'";
-                        BinarySerialization.WriteToBinaryFile(filename, Graph, false);
+                        cmd.CommandText = $"UPDATE StudentGraph SET NoVertices = {graph.GetNumberOfVertices()}, NoEdges = {graph.GetNumberOfEdges()} WHERE Filename = '{filename}' AND StudentID = '{loggedStudent.ID}'";
+                        BinarySerialization.WriteToBinaryFile(filename, graph, false);
                         cmd.ExecuteNonQuery();
                         MessageBox.Show("Graph saved");
                     }
@@ -602,11 +611,11 @@ namespace Interface_2
                 if (!File.Exists(filename))//if that file didnt already exist then create the file and write the class instance to that file
                 {
                     fs = File.Create(filename);
-                    cmd.CommandText = $"INSERT INTO TeacherGraph VALUES('{filename}','{loggedTeacher.ID}','{Graph.Name}','{DateTime.Today.ToString("dd/MM/yyyy")}','{Graph.GetNumberOfVertices()}','{Graph.GetNumberOfEdges()}','{"t"}')";
+                    cmd.CommandText = $"INSERT INTO TeacherGraph VALUES('{filename}','{loggedTeacher.ID}','{graph.Name}','{DateTime.Today.ToString("dd/MM/yyyy")}','{graph.GetNumberOfVertices()}','{graph.GetNumberOfEdges()}','{"t"}')";
                     cmd.ExecuteNonQuery();
                     fs.Close();
                     //write the class instance to the database
-                    BinarySerialization.WriteToBinaryFile(filename, Graph, false);
+                    BinarySerialization.WriteToBinaryFile(filename, graph, false);
                     MessageBox.Show("Graph saved");
                 }
                 else
@@ -616,9 +625,9 @@ namespace Interface_2
                     if (overwrite.ShowDialog() == true)
                     {
                         //update the record since they are overwriting
-                        cmd.CommandText = $"UPDATE TeacherGraph SET NoVertices = {Graph.GetNumberOfVertices()}, NoEdges = {Graph.GetNumberOfEdges()} WHERE Filename = '{filename}' AND TeacherID = '{loggedTeacher.ID}'";
+                        cmd.CommandText = $"UPDATE TeacherGraph SET NoVertices = {graph.GetNumberOfVertices()}, NoEdges = {graph.GetNumberOfEdges()} WHERE Filename = '{filename}' AND TeacherID = '{loggedTeacher.ID}'";
                         cmd.ExecuteNonQuery();
-                        BinarySerialization.WriteToBinaryFile(filename, Graph, false);
+                        BinarySerialization.WriteToBinaryFile(filename, graph, false);
                         MessageBox.Show("Graph saved");
                     }
                 }
@@ -630,11 +639,11 @@ namespace Interface_2
                 {
                     fs = File.Create(filename);
                     //update the database
-                    cmd.CommandText = $"INSERT INTO GuestGraph VALUES('{filename}','{Graph.Name}','{"g"}')";
+                    cmd.CommandText = $"INSERT INTO GuestGraph VALUES('{filename}','{graph.Name}','{"g"}')";
                     cmd.ExecuteNonQuery();
                     fs.Close();
                     //write it to the file
-                    BinarySerialization.WriteToBinaryFile(filename, Graph, false);
+                    BinarySerialization.WriteToBinaryFile(filename, graph, false);
                     MessageBox.Show("Graph Saved");
                 }
                 else
@@ -642,7 +651,7 @@ namespace Interface_2
                     Overwrite overwrite = new Overwrite();
                     if (overwrite.ShowDialog() == true)
                     {
-                        BinarySerialization.WriteToBinaryFile(filename, Graph, false);
+                        BinarySerialization.WriteToBinaryFile(filename, graph, false);
                         MessageBox.Show("Graph saved");
                     }
                 }
@@ -660,7 +669,7 @@ namespace Interface_2
                 {
                     FontSize = 20,
                     Name = "Val" + vertex.Name.Substring(3), //set the name to Val(buttonId)
-                    Text = Graph.GetValency(Convert.ToInt32(vertex.Name.Substring(3))).ToString() //calls the graph class, which gets the valency of a vertex 
+                    Text = graph.GetValency(Convert.ToInt32(vertex.Name.Substring(3))).ToString() //calls the graph class, which gets the valency of a vertex 
                 };
                 Binding bindingBG = new Binding("SelectedBrush")
                 {

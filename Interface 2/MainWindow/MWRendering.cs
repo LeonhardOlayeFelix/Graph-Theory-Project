@@ -24,7 +24,7 @@ namespace Interface_2
         {
             DeleteGraph();
             CreateNewGraph(GraphToRender.Name, true);
-            Graph = GraphToRender;
+            graph = GraphToRender;
             RenderVertices(GraphToRender);
             RenderEdges(GraphToRender);
         }
@@ -35,7 +35,7 @@ namespace Interface_2
         private void RenderVertices(Graph GraphToRender)
         {
             buttonId = GraphToRender.GetMaxVertexID() + 1;
-            foreach (int vertex in Graph.GetListOfVertices())
+            foreach (int vertex in graph.GetListOfVertices())
             {
                 Ellipse vertexToAdd = new Ellipse() { StrokeThickness = 2 }; //create the vertex that will be added
                 Binding bindingStroke = new Binding("SelectedBrush") //binding the stroke of the vertices to the color picker

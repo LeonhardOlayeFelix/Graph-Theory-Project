@@ -17,19 +17,19 @@ namespace Interface_2
         /// <summary>
         /// Highlights the path that dijkstras algorithm has resulted in
         /// </summary>
-        /// <param name="path"></param>
+        /// <param name="route"></param>
         /// <param name="livePathhighlighting">True only if the Highlight path button is activated</param>
-        public void DijkstraHighlightPath(List<int> path, bool livePathhighlighting = false) 
+        public void DijkstraHighlightRoute(List<int> route, bool livePathhighlighting = false) 
         {
 
             int total = 0;
-            if (path.Count() > 1)
+            if (route.Count() > 1)
             {
                 List<Line> highlightedLines = new List<Line>(); //converts the vertices list into lines
-                for (int i = 0; i < path.Count() - 1; ++i)
+                for (int i = 0; i < route.Count() - 1; ++i)
                 {
-                    int Vertex1 = path.ElementAt(i);
-                    int Vertex2 = path.ElementAt(i + 1);
+                    int Vertex1 = route.ElementAt(i);
+                    int Vertex2 = route.ElementAt(i + 1);
                     int smallerId = GetMin(Vertex1, Vertex2);
                     int largerId = GetMax(Vertex1, Vertex2);
                     string lineName = "line" + smallerId.ToString() + "to" + largerId.ToString(); //uses this to check if theres a path
@@ -37,33 +37,33 @@ namespace Interface_2
                     {
                         if (edge.Item1.Name == lineName)//detetcs if theres a path because theres a matching name
                         {
-                            total += Graph.GetEdgeWeight(smallerId, largerId);
+                            total += graph.GetEdgeWeight(smallerId, largerId);
                             highlightedLines.Add(edge.Item1); //adds it to the list of edges
                         }
                     }
                 }
-                if (highlightedLines.Count() == path.Count() - 1)//if the path is found, then the size of the array is always 1 less than the n. of vertices passed in
+                if (highlightedLines.Count() == route.Count() - 1)//if the path is found, then the size of the array is always 1 less than the n. of vertices passed in
                 {
-                    string pathString = "";
+                    string routeString = "";
                     if (livePathhighlighting)
                     {
                         for (int i = 0; i < highlightedLines.Count(); ++i)
                         {
                             highlightedLines[i].Stroke = HighlightColour;
-                            pathString += FindLabel(Convert.ToInt32(path[i].ToString())).Text + "=>";
+                            routeString += FindLabel(Convert.ToInt32(route[i].ToString())).Text + "=>";
                         }
-                        pathString += FindLabel(Convert.ToInt32(path[path.Count() - 1])).Text;
-                        txExtraInfo2.Text = "Traversal Order:\n" + pathString + "\nCost: " + total;
+                        routeString += FindLabel(Convert.ToInt32(route[route.Count() - 1])).Text;
+                        txExtraInfo2.Text = "Traversal Order:\n" + routeString + "\nCost: " + total;
                         return;
                     }
                     for (int i = 0; i < highlightedLines.Count(); ++i)
                     {
-                        pathString += FindLabel(Convert.ToInt32(path[i].ToString())).Text + "=>";
+                        routeString += FindLabel(Convert.ToInt32(route[i].ToString())).Text + "=>";
                     }
-                    pathString += FindLabel(Convert.ToInt32(path[path.Count() - 1])).Text;
-                    txExtraInfo2.Text = "Traversal Order:\n" + pathString + "\nCost: " + total;
-                    InitiateHighlightPathStoryboard(path, TimeSpan.FromSeconds(1));
-                    InitiatePathWalkerStoryboard(path);
+                    routeString += FindLabel(Convert.ToInt32(route[route.Count() - 1])).Text;
+                    txExtraInfo2.Text = "Traversal Order:\n" + routeString + "\nCost: " + total;
+                    InitiateHighlightPathStoryboard(route, TimeSpan.FromSeconds(1));
+                    InitiatePathWalkerStoryboard(route);
                 }
                 else //if this isnt true, then a valid path was not passed in.
                 {
@@ -81,7 +81,7 @@ namespace Interface_2
         /// </summary>
         /// <param name="edges">The edges that will be highlighted tuple(vertex, vertex, weight)</param>
         /// <returns></returns>
-        public bool mstHighlightPath(List<Tuple<int, int, int>> edges, int cost = -1)
+        public bool mstHighlightTree(List<Tuple<int, int, int>> edges, int cost = -1)
         {
             RevertLineColour();
             if (edges.Count() != 0)
@@ -157,7 +157,7 @@ namespace Interface_2
             {
                 info += "(" + FindLabel(edge.Item1).Text + ", " + FindLabel(edge.Item2).Text + ")" + "   ";
             }
-            info += "\nCost: " + (cost + Graph.GetSumOfWeights());
+            info += "\nCost: " + (cost + graph.GetSumOfWeights());
             txExtraInfo2.Text = info;
         }
         /// <summary>

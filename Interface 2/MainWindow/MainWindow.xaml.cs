@@ -15,34 +15,40 @@ using System.Data.OleDb;
 using System.IO;
 namespace Interface_2
 {
-
     public partial class MainWindow : Window
     {
         List<Line> linesToDelete = new List<Line>();
         public static Teacher loggedTeacher = null;
         public static Student loggedStudent = null;
         Ellipse lastSelectedVertex;
-        Ellipse vertexToConnectTo;
         int buttonSelectionCount = 0;
         int dijkstraSelectionCount = 0;
         int rInspSelectionCount = 0;
         int rInspStart = 0;
         int startVertex = 0;
-        static List<string> alphabet = new List<string>();
-        private bool graphCreated = false;
+        public static List<string> alphabet = new List<string>();
+        public bool graphCreated = false;
         private Button currentButton = null;
+        Action leftClickCanvasOperation;
+        Action<Ellipse> leftClickVertexOperation;
+        Action<Line> leftClickLineOperation;
+        Action leftMouseButtonUpOperation;
         private Color btnActivatedColour = Color.FromRgb(190, 230, 253);
         List<TextBlock> valencyList = null;
         List<int> livePath = new List<int>();
-        List<Ellipse> vertexList = null;
-        List<TextBlock> vertexTxBoxList = null;
+        public List<Ellipse> vertexList = null;
+        public List<TextBlock> vertexTxBoxList = null;
         HashSet<Tuple<Line, Ellipse, Ellipse, TextBlock>> edgeList = null;
-        int Zindex = 2;
-        int buttonId = 0;
+        public int Zindex = 2;
+        public int buttonId = 0;
         string valencyState;
         Ellipse ellipseToDrop = null;
         SolidColorBrush HighlightColour = null;
-        private Graph Graph = null;
+        bool mouseDown = false;
+        Point mouseDownPos;
+        List<Ellipse> selectedVertices = new List<Ellipse>();
+        List<string> selectedLinesNames = new List<string>();
+        public Graph graph = null;
         public MainWindow()
         {
             List<string> normalAlphabet = new List<string>() { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z" };
@@ -100,8 +106,6 @@ namespace Interface_2
                 cmd.ExecuteNonQuery();
                 conn.Close();
             }
-        }//creates a database
-
-        
+        }
     }
 }

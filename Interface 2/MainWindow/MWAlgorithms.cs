@@ -115,9 +115,9 @@ namespace Interface_2
             RevertEllipseColour();
             startVertex.Fill = HighlightColour;
             int startVertexId = Convert.ToInt32(startVertex.Name.Substring(3)); //id of the start vertex
-            if (Graph.GetAdjVertices(startVertexId).Count() != 0) //make sure the node has atleast one edge
+            if (graph.GetAdjVertices(startVertexId).Count() != 0) //make sure the node has atleast one edge
             {
-                Tuple<List<Tuple<int, int>>, List<int>> result = Graph.BreadthFirst(startVertexId);
+                Tuple<List<Tuple<int, int>>, List<int>> result = graph.BreadthFirst(startVertexId);
                 List<Tuple<int, int>> edges = result.Item1;
                 TraversalHighlightPath(edges); //highlight the traversal order
                 List<int> traversalOrder = result.Item2;
@@ -137,7 +137,7 @@ namespace Interface_2
         public void DeleteVertex(Ellipse activeVertex)
         {
             HashSet<Tuple<Line, Ellipse, Ellipse, TextBlock>> listOfEdgesToRemove = GetListOfEdgesFromVertex(activeVertex);//gets list of edges we need to remove with the vertex
-            Graph.RemoveVertex(Convert.ToInt32(activeVertex.Name.Substring(3))); //update the class
+            graph.RemoveVertex(Convert.ToInt32(activeVertex.Name.Substring(3))); //update the class
                                                                                  //loop through lines and delete any lines that come out of it
             foreach (Tuple<Line, Ellipse, Ellipse, TextBlock> edge in listOfEdgesToRemove)
             {
@@ -149,7 +149,7 @@ namespace Interface_2
             TextBlock label = FindLabel(Convert.ToInt32(activeVertex.Name.Substring(3)));
             mainCanvas.Children.Remove(label);
             vertexTxBoxList.Remove(label);
-            txAdjset.Text = Graph.PrintAdjList();
+            txAdjset.Text = graph.PrintAdjList();
         }
         /// <summary>
         /// Deletes an edge from the canvas
@@ -161,7 +161,7 @@ namespace Interface_2
         {
             if (!rendering && !deletingVertex)
             {
-                Graph.RemoveEdge(Convert.ToInt32(edge.Item2.Name.Substring(3)), Convert.ToInt32(edge.Item3.Name.Substring(3))); //update the class graph
+                graph.RemoveEdge(Convert.ToInt32(edge.Item2.Name.Substring(3)), Convert.ToInt32(edge.Item3.Name.Substring(3))); //update the class graph
             }
             mainCanvas.Children.Remove(edge.Item1); //remove the line which is the first item
             mainCanvas.Children.Remove(edge.Item4);//remove the label which is the fourth element
@@ -179,9 +179,9 @@ namespace Interface_2
             RevertLineColour();
             startVertex.Fill = HighlightColour;
             int startVertexId = Convert.ToInt32(startVertex.Name.Substring(3));//id of the start vertex
-            if (Graph.GetAdjVertices(startVertexId).Count() != 0) //make sure the node has atleast one edge
+            if (graph.GetAdjVertices(startVertexId).Count() != 0) //make sure the node has atleast one edge
             {
-                Tuple<List<Tuple<int, int>>, bool, List<int>> result = Graph.DepthFirst(startVertexId);
+                Tuple<List<Tuple<int, int>>, bool, List<int>> result = graph.DepthFirst(startVertexId);
                 List<Tuple<int, int>> edges = result.Item1;
                 TraversalHighlightPath(edges); //highlight the traversal order
                 List<int> traversalOrder = result.Item3;
@@ -215,8 +215,8 @@ namespace Interface_2
                 endVertex.Fill = HighlightColour;
                 try
                 {
-                    List<int> path = Graph.DijkstrasAlgorithmShort(startVertex, vId).Item1; //get the path from the method
-                    DijkstraHighlightPath(path);
+                    List<int> path = graph.DijkstrasAlgorithmShort(startVertex, vId).Item1; //get the path from the method
+                    DijkstraHighlightRoute(path);
                     labelExtraInfo.Content = "";
                 }
                 catch (NullReferenceException) //this means there was no path
@@ -248,7 +248,7 @@ namespace Interface_2
         /// <param name="activeVertex">The vertex that should be added to the path</param>
         public void HighlightPaths(Ellipse activeVertex)
         {
-            List<int> adjVertices = Graph.GetAdjVertices(Convert.ToInt32(activeVertex.Name.Substring(3)));
+            List<int> adjVertices = graph.GetAdjVertices(Convert.ToInt32(activeVertex.Name.Substring(3)));
             if (livePath.Count != 0)
             {
                 if (!adjVertices.Contains(livePath.Last()))
@@ -261,13 +261,13 @@ namespace Interface_2
             livePath.Add(activeVertexId); //add the vertex to the path that they want to highlight
             if (livePath.Count() > 1) //if there is only one vertex in the path then dont do anything
             {
-                if ((livePath.Last() == livePath[livePath.Count - 2]) || Graph.GetEdgeWeight(livePath.Last(), livePath[livePath.Count() - 2]) == -1) //if they are attempting to press the same vertex
+                if ((livePath.Last() == livePath[livePath.Count - 2]) || graph.GetEdgeWeight(livePath.Last(), livePath[livePath.Count() - 2]) == -1) //if they are attempting to press the same vertex
                 {
                     livePath.RemoveAt(livePath.Count() - 1); //remove the vertex from the list
                 }
                 else
                 {
-                    DijkstraHighlightPath(livePath); //highlight the path
+                    DijkstraHighlightRoute(livePath); //highlight the path
                 }
             }
         }
@@ -281,10 +281,10 @@ namespace Interface_2
             RevertEllipseColour();
             startVertex.Fill = HighlightColour;
             int startVertexID = Convert.ToInt32(startVertex.Name.Substring(3));
-            if (Graph.IsConnected())
+            if (graph.IsConnected())
             {
-                List<Tuple<int, int, int>> mst = Graph.Prims(startVertexID);
-                mstHighlightPath(mst);//highlight the path
+                List<Tuple<int, int, int>> mst = graph.Prims(startVertexID);
+                mstHighlightTree(mst);//highlight the path
             }
             else
             {
@@ -300,8 +300,8 @@ namespace Interface_2
         public void RouteInspStartAndEndEven(Ellipse endVertex)
         {
             int endVertexId = Convert.ToInt32(endVertex.Name.Substring(3));
-            if (Graph.GetValency(endVertexId) % 2 == 1) { endVertex.Fill = HighlightColour; }
-            if (Graph.GetValency(endVertexId) % 2 == 0) //if the valency of the end vertex is odd, the algorithm isnt useful here
+            if (graph.GetValency(endVertexId) % 2 == 1) { endVertex.Fill = HighlightColour; }
+            if (graph.GetValency(endVertexId) % 2 == 0) //if the valency of the end vertex is odd, the algorithm isnt useful here
             {
                 MessageBox.Show("The start and end Vertex must have an ODD valency.");
                 rInspSelectionCount -= 1; //decrement it as if that selection didnt count
@@ -318,12 +318,12 @@ namespace Interface_2
             }
             else
             {
-                Tuple<List<Tuple<int, int>>, int> result = Graph.RInspStartAndEnd(rInspStart, endVertexId);//returns the edges to repeated (1) and the cost of repitition (2)
-                if (!Graph.IsConnected()) //have to make sure that the graph is connected first
+                Tuple<List<Tuple<int, int>>, int> result = graph.RInspStartAndEnd(rInspStart, endVertexId);//returns the edges to repeated (1) and the cost of repitition (2)
+                if (!graph.IsConnected()) //have to make sure that the graph is connected first
                 {
                     MessageBox.Show("The graph is not connected");
                 }
-                else if (Graph.IsSemiEulerian()) //if the graph is already semi eulerian then it will be already traversable
+                else if (graph.IsSemiEulerian()) //if the graph is already semi eulerian then it will be already traversable
                 {
                     txExtraInfo2.Text = "No Extra Edges Need To Be Added.";
                     EnableAllActionButtons();
@@ -362,7 +362,7 @@ namespace Interface_2
             DisableAllAlgorithmButtons();
             DisableAllActionButtons();
             rInspStart = Convert.ToInt32(startVertex.Name.Substring(3));
-            if (Graph.GetValency(rInspStart) % 2 == 0) //make sure the vertex has an odd valency
+            if (graph.GetValency(rInspStart) % 2 == 0) //make sure the vertex has an odd valency
             {
                 EnableAllActionButtons();
                 EnableTabControl();
@@ -382,12 +382,12 @@ namespace Interface_2
         /// </summary>
         public void RouteInspectionStartAtEnd()
         {
-            Tuple<List<Tuple<int, int>>, int> result = Graph.RInspStartAtEnd();//returns the edges to repeated (1) and the cost of repitition (2)
-            if (!Graph.IsConnected()) //have to make sure that the graph is connected first
+            Tuple<List<Tuple<int, int>>, int> result = graph.RInspStartAtEnd();//returns the edges to repeated (1) and the cost of repitition (2)
+            if (!graph.IsConnected()) //have to make sure that the graph is connected first
             {
                 MessageBox.Show("The graph is not connected");
             }
-            else if (Graph.IsEulerian()) //if the graph is already eulerian then it will be traversable
+            else if (graph.IsEulerian()) //if the graph is already eulerian then it will be traversable
             {
                 MessageBox.Show("This graph is traversable");
             }
@@ -410,9 +410,9 @@ namespace Interface_2
         public void RevertOneVertexPosition(Ellipse currentEllipse)
         {
             int vertexID = Convert.ToInt32(currentEllipse.Name.Substring(3));
-            double originalX = Graph.GetVertex(vertexID).Position.originalX; //get original position
-            double originalY = Graph.GetVertex(vertexID).Position.originalY; //get original position
-            Graph.GetVertex(vertexID).Position.SetPosition(originalX, originalY); // update their positions in the class
+            double originalX = graph.GetVertex(vertexID).Position.originalX; //get original position
+            double originalY = graph.GetVertex(vertexID).Position.originalY; //get original position
+            graph.GetVertex(vertexID).Position.SetPosition(originalX, originalY); // update their positions in the class
             Canvas.SetLeft(currentEllipse, originalX);
             Canvas.SetTop(currentEllipse, originalY);
             TextBlock label = FindLabel(vertexID);

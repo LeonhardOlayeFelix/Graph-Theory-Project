@@ -16,20 +16,133 @@ namespace Interface_2
 {
     public partial class MainWindow : Window
     {
-
         //All of the event handlers
+        
         private void btnAddVertex_Click(object sender, RoutedEventArgs e)
         {
 
             HideValencies();
-            labelExtraInfo.Content = "Click anywhere on the canvas to place a vertex";
+            labelExtraInfo.Content = "Click on the canvas to place a vertex.";
             ActivateButton(sender);
+            ClearAllOperations();
+            leftClickCanvasOperation = () => 
+            {
+                int maxNumber = alphabet.Count(); //the highest number of uniquely representable nodes using the alphabet
+                if (graph.GetNumberOfVertices() + graph.numberOfDeletedVertices > maxNumber - 1 && cbAlphabet.IsChecked == true)
+                {
+                    MessageBox.Show("Turn off Alphabet Labelling so more Nodes can be represented");
+                }
+                else
+                {
+                    Ellipse vertexToAdd = new Ellipse() { StrokeThickness = 2 }; //create the vertex that will be added
+
+
+                    Binding bindingStroke = new Binding("SelectedBrush") //binding the stroke of the vertices to the color picker
+                    {
+                        Source = colourPickerVertexStroke,
+                        UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
+                        Mode = BindingMode.OneWay
+                    };
+                    vertexToAdd.SetBinding(Ellipse.StrokeProperty, bindingStroke);
+
+                    Binding bindingFill = new Binding("SelectedBrush")//binding the fill colour of the vertices to the color picker
+                    {
+                        Source = colourPickerVertex,
+                        UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
+                        Mode = BindingMode.OneWay
+                    };
+                    vertexToAdd.SetBinding(Ellipse.FillProperty, bindingFill);
+
+                    vertexToAdd.Height = 0;
+                    vertexToAdd.Width = 0;
+
+                    //positioning the vertex in the canvas.
+                    double vertexCenterXMousePos = Mouse.GetPosition(mainCanvas).X;
+                    double vertexCenterYMousePos = Mouse.GetPosition(mainCanvas).Y;
+                    vertexToAdd.Margin = new Thickness(-100000); //margin of 100000 so that it resizes around the center.
+                    Canvas.SetLeft(vertexToAdd, vertexCenterXMousePos);
+                    Canvas.SetTop(vertexToAdd, vertexCenterYMousePos);
+                    Canvas.SetZIndex(vertexToAdd, Zindex++);
+                    //give the string a Name in the form btn(vertexId)
+                    string vertexId = buttonId.ToString();
+                    vertexToAdd.Name = "btn" + vertexId;
+                    graph.AddVertex(vertexCenterXMousePos, vertexCenterYMousePos); //update the class
+                    labelExtraInfo.Content = "Placed at coordinates: " + graph.GetVertex(Convert.ToInt32(vertexToAdd.Name.Substring(3))).Position.GetPositionTuple();
+                    buttonId += 1; //increment button Id for unique buttons
+                    vertexList.Add(vertexToAdd);//add the vertex to the list
+                    vertexToAdd.MouseMove += mouseMove;//give the buttons drag and drop event handlers
+
+                    TextBlock vertexLabel = new TextBlock()//label for the ID of the vertex
+                    {
+                        FontSize = 15,
+                        Foreground = new SolidColorBrush(Colors.Black),
+                        Name = "labelFor" + vertexId,
+                        IsHitTestVisible = false //makes it so that the mouse clicks THROUGH the text block, and onto the ellipse
+                    };
+                    if ((bool)cbAlphabet.IsChecked)
+                    {
+                        vertexLabel.Text = alphabet.ElementAt(Convert.ToInt32(vertexId));
+                    }
+                    else
+                    {
+                        vertexLabel.Text = vertexId;
+                    }
+                    Binding bindingBG = new Binding("SelectedBrush")//binding the fill of the textblock to the colour picker
+                    {
+                        Source = colourPickerLabel,
+                        UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged,
+                        Mode = BindingMode.OneWay
+                    };
+                    vertexLabel.SetBinding(TextBlock.ForegroundProperty, bindingBG);
+
+                    //set its position ontop of the vertex, and at its center, depending on the number of digits
+                    if (vertexLabel.Text.Length == 1)
+                    {
+                        Canvas.SetTop(vertexLabel, Canvas.GetTop(vertexToAdd) - 9);
+                        Canvas.SetLeft(vertexLabel, Canvas.GetLeft(vertexToAdd) - 4);
+                    }
+                    else if (vertexLabel.Text.Length == 2)
+                    {
+                        Canvas.SetTop(vertexLabel, Canvas.GetTop(vertexToAdd) - 9);
+                        Canvas.SetLeft(vertexLabel, Canvas.GetLeft(vertexToAdd) - 9);
+                    }
+                    else
+                    {
+                        Canvas.SetTop(vertexLabel, Canvas.GetTop(vertexToAdd) - 9);
+                        Canvas.SetLeft(vertexLabel, Canvas.GetLeft(vertexToAdd) - 13);
+                    }
+                    Canvas.SetZIndex(vertexLabel, Zindex++);
+
+                    vertexTxBoxList.Add(vertexLabel);//add it to the label list
+                    vertexList.Add(vertexToAdd);
+                    mainCanvas.Children.Add(vertexToAdd);//add the vertex to the canvas
+                    mainCanvas.Children.Add(vertexLabel); //add the label to the canvas
+                    InitiateVertexStoryboard(vertexDiameterSlider.Value, TimeSpan.FromSeconds(0.2), vertexToAdd); //begin story board
+
+                }
+                if (graphCreated == true)
+                {
+                    GenerateAdjList();
+                }
+            }; //change operation to addvertex operation
         }
         private void btnAddConnection_Click(object sender, RoutedEventArgs e)
         {
             HideValencies();
-            labelExtraInfo.Content = "Click two vertices you want to connect and provide the weight";
+            labelExtraInfo.Content = "Click two vertices to connect them.";
             ActivateButton(sender);
+            ClearAllOperations();
+            leftClickVertexOperation = (activeVertex) => {
+                buttonSelectionCount += 1;
+                if (buttonSelectionCount % 2 == 0) //if even its the second vertex they want to connect to
+                {
+                    AddConnectionEven(activeVertex);
+                }
+                else if (buttonSelectionCount % 2 == 1) //if odd, its the first vertex they pressed to connect to, so set it to lastSelectedVertex
+                {
+                    AddConnectionOdd(activeVertex);
+                }
+            };
         }
         private void cbAutoGenEdges_Checked(object sender, RoutedEventArgs e)
         {
@@ -41,15 +154,15 @@ namespace Interface_2
         }
         private void cbAlphabet_Checked(object sender, RoutedEventArgs e)
         {
-            int maxNumber = alphabet.Count(); //the highest number of uniquely representable nodes using the alphabet
-            if (Graph.GetMaxVertexID() >= maxNumber)
+            int maxNumber = alphabet.Count(); //the highest number of uniquely representable vertices using the alphabet
+            if (graph.GetMaxVertexID() >= maxNumber)
             {
-                MessageBox.Show("Not enough Letters in the alphabet to represent each vertex");
+                MessageBox.Show("Not enough Letters in the alphabet to represent each vertex"); //this wont occur but is just a precaution
                 cbAlphabet.IsChecked = false;
             }
             else
             {
-                for (int i = 0; i < Graph.GetMaxVertexID() + 1; ++i) //loop through all the nodes
+                for (int i = 0; i < graph.GetMaxVertexID() + 1; ++i) //loop through all the nodes
                 {
                     if (FindEllipse(i) != null) //check in advanced that this operation wont return null
                     {
@@ -64,7 +177,7 @@ namespace Interface_2
         }
         private void cbAlphabet_Unchecked(object sender, RoutedEventArgs e)
         {
-            for (int i = 0; i < Graph.GetMaxVertexID() + 1; ++i) //loop through all the nodes
+            for (int i = 0; i < graph.GetMaxVertexID() + 1; ++i) //loop through all the nodes
             {
                 if (FindEllipse(i) != null)//check in advanced that this operation wont return null
                 {
@@ -86,6 +199,8 @@ namespace Interface_2
             ActivateButton(sender);
             HideValencies();
             labelExtraInfo.Content = "Choose a root vertex";
+            ClearAllOperations();
+            leftClickVertexOperation = (activeVertex) => { BreadthFirst(activeVertex); };
         }
         private void btnCreateNewGraph_Click(object sender, RoutedEventArgs e)
         {
@@ -102,7 +217,7 @@ namespace Interface_2
                 txAdjset.Clear();
             }
         }
-        private void ColourPickerHighlight_ColorChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private void colourPickerHighlight_SelectedBrushChanged(object sender, Syncfusion.Windows.Tools.Controls.SelectedBrushChangedEventArgs e)
         {
             HighlightColour = (SolidColorBrush)colourPickerHighlight.SelectedBrush;
         }
@@ -118,12 +233,26 @@ namespace Interface_2
             {
                 DeleteEdge(edge);
             }
+            ClearAllOperations();
         }
         private void btnDijkstrasShort_Click(object sender, RoutedEventArgs e)
         {
             HideValencies();
-            labelExtraInfo.Content = "Click a vertex to find the lowest cost route to the next clicked vertex";
+            labelExtraInfo.Content = "Find the lowest cost route between two vertices";
             ActivateButton(sender);
+            ClearAllOperations();
+            leftClickVertexOperation = (activeVertex) => {
+                ClearHighlightedLines();
+                dijkstraSelectionCount += 1;
+                if (dijkstraSelectionCount % 2 == 0)
+                {
+                    DijkstraEven(activeVertex);
+                }
+                else if (dijkstraSelectionCount % 2 == 1) //this is the start vertex
+                {
+                    DijkstraOdd(activeVertex);
+                }
+            };
         }
         private void btnDeleteGraph_Click(object sender, RoutedEventArgs e)
         {
@@ -132,87 +261,199 @@ namespace Interface_2
             DeleteGraph();
             DisableAllActionButtons();
             DisableTabControl();
+            ClearAllOperations();
         }
         private void btnDepthFirst_Click(object sender, RoutedEventArgs e)
         {
             ActivateButton(sender);
             HideValencies();
-            labelExtraInfo.Content = "Choose a root vertex";
+            labelExtraInfo.Content = "Click the root vertex";
+            ClearAllOperations();
+            leftClickVertexOperation = (activeVertex) => { DepthFirst(activeVertex); };
         }
         private void btnDeleteVertex_Click(object sender, RoutedEventArgs e)
         {
             //delete any vertices that have been selected
-            foreach (Ellipse vertex in selectedVertices)
+            if (currentButton == btnDefault && selectedVertices.Count != 0)
             {
-                DeleteVertex(vertex);
+                foreach (Ellipse vertex in selectedVertices)
+                {
+                    DeleteVertex(vertex);
+                }
+                selectedVertices.Clear();
             }
-            if (selectedVertices.Count == 0)
+            else
             {
-                ActivateButton(sender);
-                labelExtraInfo.Content = "Click a vertex to delete it from the canvas";
+                if (selectedVertices.Count == 0)
+                {
+                    ActivateButton(sender);
+                    labelExtraInfo.Content = "Click a vertex to delete";
+                }
+                HideValencies();
+                ClearAllOperations();
+                leftClickVertexOperation = (activeVertex) => { DeleteVertex(activeVertex); };
             }
-            selectedVertices.Clear();
-            HideValencies();
         }
         private void btnDeleteConnection_Click(object sender, RoutedEventArgs e)
         {
-            foreach (string name in selectedLinesNames)
+            if (currentButton == btnDefault && selectedLinesNames.Count != 0)
             {
-                Tuple<Line, Ellipse, Ellipse, TextBlock> line = FindEdge(name);
-                DeleteEdge(line);
+                foreach (string name in selectedLinesNames)
+                {
+                    Tuple<Line, Ellipse, Ellipse, TextBlock> line = FindEdge(name);
+                    DeleteEdge(line);
+                }
             }
-            if (selectedLinesNames.Count == 0)
+            else
             {
-                ActivateButton(sender);
-                labelExtraInfo.Content = "Click an edge to Delete it from the canvas";
+                if (selectedLinesNames.Count == 0)
+                {
+                    ActivateButton(sender);
+                    labelExtraInfo.Content = "Click an edge to delete";
+                }
+                selectedLinesNames.Clear();
+                HideValencies();
+                ClearAllOperations();
+                leftClickVertexOperation = (activeVertex) => { DeleteVertex(activeVertex); };
+                leftClickLineOperation = (activeLine) => { DeleteEdge(FindEdge(activeLine.Name)); };
             }
-            selectedLinesNames.Clear();
-            HideValencies();
+            
         }
         private void btnDefault_Click(object sender, RoutedEventArgs e)
         {
             labelExtraInfo.Content = "Click or Drag to select objects";
             ActivateButton(sender);
-        }
+            ClearAllOperations();
+            leftClickCanvasOperation = () => {
+                selectionBox.Visibility = Visibility.Visible;
+                mouseDown = true;
+                mouseDownPos = Mouse.GetPosition(mainCanvas);
+                mainCanvas.CaptureMouse();
+                selectedVertices.Clear();
+                selectedLinesNames.Clear();
+                RevertEllipseColour();
+                RevertLineColour();
+                // Initial placement of the drag selection box.         
+                Canvas.SetLeft(selectionBox, mouseDownPos.X);
+                Canvas.SetTop(selectionBox, mouseDownPos.Y);
+                mainCanvas.Children.Add(selectionBox);
+                selectionBox.Width = 0;
+                selectionBox.Height = 0;
+            };
+            leftClickVertexOperation = (activeVertex) => {
+                RevertEllipseColour();
+                RevertLineColour();
+                labelExtraInfo.Content = "Position: " + graph.GetVertex(Convert.ToInt32(activeVertex.Name.Substring(3))).Position.GetPositionTuple();
+                activeVertex.Fill = HighlightColour;
+            };
+            leftClickLineOperation = (activeLine) => {
+                RevertEllipseColour(); //reset the colours
+                RevertLineColour();
+                activeLine.Stroke = HighlightColour; 
+            };
+            leftMouseButtonUpOperation = () => {
+                selectionBox.Visibility = Visibility.Collapsed;
+                mouseDown = false;
+                mainCanvas.ReleaseMouseCapture();
+                mainCanvas.Children.Remove(selectionBox);
+                Point mouseUpPos = Mouse.GetPosition(mainCanvas);
+                //two coordinates of rectangle
+                double X1 = mouseUpPos.X;
+                double X2 = mouseDownPos.X;
+                double Y1 = mouseUpPos.Y;
+                double Y2 = mouseDownPos.Y;
+                foreach (var ctrl in mainCanvas.Children)
+                {
+                    try
+                    {
+                        Ellipse selectedVertex = (Ellipse)ctrl;
+                        double selVertexXCoord = Canvas.GetLeft(selectedVertex);
+                        double selVertexYCoord = Canvas.GetTop(selectedVertex);
+                        //check if vertex control is within the selection box
+                        if ((selVertexXCoord >= X1 && selVertexXCoord <= X2 && selVertexYCoord <= Y2 && selVertexYCoord >= Y1) ||
+                            (selVertexXCoord >= X2 && selVertexXCoord <= X1 && selVertexYCoord <= Y1 && selVertexYCoord >= Y2) ||
+                            (selVertexXCoord >= X2 && selVertexXCoord <= X1 && selVertexYCoord <= Y2 && selVertexYCoord >= Y1) ||
+                            (selVertexXCoord >= X1 && selVertexXCoord <= X2 && selVertexYCoord <= Y1 && selVertexYCoord >= Y2))
+                        {
+
+                            if (graph.IsInVertexList(Convert.ToInt32(selectedVertex.Name.Substring(3))))
+                            {
+                                selectedVertices.Add(selectedVertex);
+                            }
+                            selectedVertex.Fill = HighlightColour;
+                        }
+                    }
+                    catch { };
+                    try
+                    {
+                        Line selectedLine = (Line)ctrl;
+                        double selLineXCoord = (selectedLine.X1 + selectedLine.X2) / 2;
+                        double selLineYCoord = (selectedLine.Y1 + selectedLine.Y2) / 2;
+                        //check if midpoint of Line control is within the selection box
+                        if ((selLineXCoord >= X1 && selLineXCoord <= X2 && selLineYCoord <= Y2 && selLineYCoord >= Y1) ||
+                            (selLineXCoord >= X2 && selLineXCoord <= X1 && selLineYCoord <= Y1 && selLineYCoord >= Y2) ||
+                            (selLineXCoord >= X2 && selLineXCoord <= X1 && selLineYCoord <= Y2 && selLineYCoord >= Y1) ||
+                            (selLineXCoord >= X1 && selLineXCoord <= X2 && selLineYCoord <= Y1 && selLineYCoord >= Y2))
+                        {
+                            Tuple<Line, Ellipse, Ellipse, TextBlock> currentLine = FindEdge(selectedLine.Name);
+                            if (edgeList.Contains(currentLine))
+                            {
+                                selectedLinesNames.Add(selectedLine.Name); ;
+                            }
+                            selectedLine.Stroke = HighlightColour;
+                        }
+                    }
+                    catch { };
+                }
+                labelExtraInfo.Content = "Now click 'Delete Vertex' or 'Delete Edge'";
+            };
+            }
         private void btnDragAndDrop_Click(object sender, RoutedEventArgs e)
         {
             HideValencies();
             labelExtraInfo.Content = "Click and Hold vertices to drag them around the canvas";
             ActivateButton(sender);
+            ClearAllOperations();
+        }
+        private void btnFloyds_Click(object sender, RoutedEventArgs e)
+        {
+            ActivateButton(btnFloyds);
+            ClearAllOperations();
+            //do floyds algorithm
         }
         private void btnHighlightPaths_Click(object sender, RoutedEventArgs e)
         {
             ActivateButton(sender);
-            labelExtraInfo.Content = "Click on the vertices that you want the path to connect.";
-        }
-        private void btnGenerateMatrix_Click(object sender, RoutedEventArgs e)
-        {
-            labelExtraInfo.Content = "Updated Adjacency Matrix.";
-            GenerateAdjMat(); //function generates the matrix
+            labelExtraInfo.Content = "Click on a series of vertices to go on a walk";
+            ClearAllOperations();
+            leftClickVertexOperation = (activeVertex) => { HighlightPaths(activeVertex); };
         }
         private void btnKruskals_Click(object sender, RoutedEventArgs e)
         {
             ActivateButton(sender);
             HideValencies();
-            if (!Graph.IsConnected())
+            if (!graph.IsConnected())
             {
                 MessageBox.Show("The graph is not connected");
             }
             else
             {
-                Tuple<List<Tuple<int, int, int>>, int> mst = Graph.Kruskals();
-                mstHighlightPath(mst.Item1, mst.Item2); //highlight the MST
+                Tuple<List<Tuple<int, int, int>>, int> mst = graph.Kruskals();
+                mstHighlightTree(mst.Item1, mst.Item2); //highlight the MST
             }
+            ClearAllOperations();
         }
         private void btnLoadGraph_Click(object sender, RoutedEventArgs e)
         {
             ActivateButton(btnLoadGraph);
             LoadGraph();
+            ClearAllOperations();
         }
         private void btnLogin_Click(object sender, RoutedEventArgs e)
         {
             ActivateButton(btnLogin);
             LoginStudent loginstudent = new LoginStudent();
+            ClearAllOperations();
             if (loginstudent.ShowDialog() == true)
             {
                 if (loginstudent.studentJustLogged != null) //this identifies whther they are logged in as a student
@@ -234,19 +475,12 @@ namespace Interface_2
         private void btnLogOut_Click(object sender, RoutedEventArgs e)
         {
             ActivateButton(btnLogOut);
+            ClearAllOperations();
             LogOutProcess();
         }
-        private void SelectionCavas_MouseUp(object sender, MouseButtonEventArgs e)
+        public void mouseMove(object sender, MouseEventArgs e)
         {
-            if (currentButton == btnDefault)
-            {
-                // Release the mouse capture and stop tracking it.
-                
-            }
-        }
-        private void mouseMove(object sender, MouseEventArgs e)
-        {
-            //monitors the mouse as it hovers over a vertex
+            //tracks the mouse as it hovers over a vertex
             if (e.LeftButton == MouseButtonState.Pressed && currentButton == btnDragAndDrop)//if, whilst hovering, they press the vertex
             {
                 ellipseToDrop = sender as Ellipse;
@@ -261,10 +495,10 @@ namespace Interface_2
             int ellipseToDropID = Convert.ToInt32(ellipseToDrop.Name.Substring(3));
             Point dropPosition = e.GetPosition(mainCanvas); //current position of the place its being dragged
             Canvas.SetLeft(ellipseToDrop, dropPosition.X);//updates the x coordinate every time its dragged
-            Graph.GetVertex(ellipseToDropID).Position.X = dropPosition.X; //udpate its position in the class too
+            graph.GetVertex(ellipseToDropID).Position.X = dropPosition.X; //udpate its position in the class too
             Canvas.SetTop(ellipseToDrop, dropPosition.Y);//updates the y coordinate ever time its dragged
-            Graph.GetVertex(ellipseToDropID).Position.Y = dropPosition.Y; //update its position in the class too
-            labelExtraInfo.Content = "Drag position: " + Graph.GetVertex(ellipseToDropID).Position.GetPositionTuple();
+            graph.GetVertex(ellipseToDropID).Position.Y = dropPosition.Y; //update its position in the class too
+            labelExtraInfo.Content = "Drag position: " + graph.GetVertex(ellipseToDropID).Position.GetPositionTuple();
             TextBlock label = FindLabel(Convert.ToInt32(ellipseToDrop.Name.Substring(3)));
             Canvas.SetLeft(label, dropPosition.X - 4); //update that label too
             Canvas.SetTop(label, dropPosition.Y - 9);
@@ -295,16 +529,25 @@ namespace Interface_2
         {
             labelExtraInfo.Content = "Choose a start Vertex";
             ActivateButton(sender);
+            ClearAllOperations();
+            leftClickVertexOperation = (activeVertex) => {
+                if (vertexList.Count() != 0)
+                {
+                    Prims(activeVertex);
+                }
+            };
         }
         private void btnResetComponentShape_Click(object sender, RoutedEventArgs e)
         {
             //resets the sliders back to their original form
             ActivateButton(sender);
+            ClearAllOperations();
             vertexDiameterSlider.Value = 40;
             pathWalkerDurationSlider.Value = pathWalkerDurationSlider.Minimum;
         }
         private void BtnRandomGraph_Click(object sender, RoutedEventArgs e)
         {
+            ClearAllOperations();
             btnRandomGraph.IsEnabled = false;
             Timer enableTimer = new Timer() { Interval = 500};
             enableTimer.Elapsed += (sender1, e1) =>
@@ -317,11 +560,11 @@ namespace Interface_2
             };
             enableTimer.Start();
             int numVertices = Convert.ToInt32(txNumVertices.Text);
-            //if (numVertices > 18 || numVertices < 1)
-            //{
-            //    MessageBox.Show("Number of vertices not within range");
-            //    return;
-            //}
+            if (numVertices > 18 || numVertices < 1)
+            {
+                MessageBox.Show("Number of vertices not within range");
+                return;
+            }
             Random rand = new Random();
             Graph randomGraph = new Graph();
             for (int i = 0; i < numVertices; ++i)
@@ -348,7 +591,16 @@ namespace Interface_2
                     v2 = rand.Next(numVertices);
                 }
                 randomGraph.AddEdge(v1, v2, weight);
-
+                if (randomGraph.GetNumberOfEdges() >= numVertices * (numVertices - 1) / 3) //if theres far too many edges
+                {
+                    randomGraph = new Graph();
+                    for (int i = 0; i < numVertices; ++i)
+                    {
+                        int canvasHeight = Convert.ToInt32(mainCanvas.ActualHeight);
+                        int canvasWidth = Convert.ToInt32(mainCanvas.ActualWidth);
+                        randomGraph.AddVertex(0, 0);
+                    }
+                }
             }
             ArrangeGraph(4, 100, randomGraph); //arranges graph into appropriate shape
             RenderGraph(randomGraph);
@@ -358,9 +610,30 @@ namespace Interface_2
             ShowValencies();
             labelExtraInfo.Content = "Choose a START vertex with an ODD valency";
             ActivateButton(sender);
+            ClearAllOperations();
+            leftClickVertexOperation = (activeVertex) => {
+                ClearHighlightedLines();
+                if (!graph.IsConnected()) //can only be done on a connected graph
+                {
+                    MessageBox.Show("The graph is not connected");
+                }
+                else
+                {
+                    rInspSelectionCount += 1;
+                    if (rInspSelectionCount % 2 == 0) //if even, its the END vertex
+                    {
+                        RouteInspStartAndEndEven(activeVertex);
+                    }
+                    else if (rInspSelectionCount % 2 == 1) //if selectioncount is odd, then its the START vertex
+                    {
+                        RouteInspStartAndEndOdd(activeVertex);
+                    }
+                }
+            };
         }
         private void btnRouteInspStartAtEnd_Click(object sender, RoutedEventArgs e)
         {
+            ClearAllOperations();
             if (vertexList.Count() != 0)
             {
                 ActivateButton(sender);
@@ -370,6 +643,7 @@ namespace Interface_2
         }
         private void btnResetColour_Click(object sender, RoutedEventArgs e)
         {
+            ClearAllOperations();
             //resets the colours of all the colour pickers
             colourPickerBackground.SelectedBrush = new SolidColorBrush(Color.FromRgb(64, 61, 61));
             colourPickerVertex.SelectedBrush = new SolidColorBrush(Colors.DodgerBlue);
@@ -382,6 +656,7 @@ namespace Interface_2
         }
         private void btnRevertPositions_Click(object sender, RoutedEventArgs e)
         {
+            ClearAllOperations();
             labelExtraInfo.Content = "";
             ActivateButton(btnRevertPositions);
             foreach (var ctrl in mainCanvas.Children)
@@ -400,33 +675,41 @@ namespace Interface_2
         private void btnRevertOnePositions_Click(object sender, RoutedEventArgs e)
         {
             ActivateButton(sender);
+            ClearAllOperations();
+            leftClickVertexOperation = (activeVertex) => { RevertOneVertexPosition(activeVertex); };
         }
         private void btnRegisterStudent_Click(object sender, RoutedEventArgs e)
         {
             ActivateButton(btnRegisterStudent);
+            ClearAllOperations();
             RegisterStudent registerstudent = new RegisterStudent();
             registerstudent.ShowDialog();
         }
         private void btnRegisterTeacher_Click(object sender, RoutedEventArgs e)
         {
             ActivateButton(btnRegisterTeacher);
+            ClearAllOperations();
             RegisterTeacher registerteacher = new RegisterTeacher();
             registerteacher.ShowDialog();
         }
         private void btnSaveGraph_Click(object sender, RoutedEventArgs e)   
         {
             ActivateButton(btnSaveGraph);
+            ClearAllOperations();
             SaveGraph();
         }
         private void btnTakeScreenshot_Click(object sender, RoutedEventArgs e)
         {
-            HideValencies();
-            labelExtraInfo.Content = "Screenshot Taken";
             ActivateButton(sender);
+            HideValencies();
+            ClearAllOperations();
+            labelExtraInfo.Content = "Screenshot Taken";
+            
         }
         private void btnToggleValencies_Click(object sender, RoutedEventArgs e)
         {
             ActivateButton(sender);
+            ClearAllOperations();
             if (valencyState == "Hidden")
             {
                 ShowValencies(); //if hidden when pressed, we want to show
