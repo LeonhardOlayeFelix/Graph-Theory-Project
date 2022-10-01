@@ -116,9 +116,10 @@
                 </GroupBox.Header>
                 <StackPanel>
                     <TabControl x:Name="optionTabControl"
+                                BorderThickness="1"
                             TabStripPlacement="Top"
                             Margin="0,0,0,10"
-                            Height="625">
+                            Height="1000">
                         <TabItem x:Name="tabControlActions">
                             <TabItem.Header>Actions</TabItem.Header>
                             <Grid>
@@ -127,9 +128,10 @@
                                     <ColumnDefinition/>
                                 </Grid.ColumnDefinitions>
                                 <Grid.RowDefinitions>
-                                    <RowDefinition />
-                                    <RowDefinition />
-                                    <RowDefinition />
+                                    <RowDefinition Height="200"/>
+                                    <RowDefinition Height="200"/>
+                                    <RowDefinition Height="200"/>
+                                    <RowDefinition Height="200"/>
                                 </Grid.RowDefinitions>
                                 <GroupBox>
                                     <GroupBox.Header>
@@ -281,7 +283,23 @@
                                     </Grid>
                                 </GroupBox>
                                 <GroupBox Grid.Row="2"
-                                      Grid.Column="1">
+                                      Grid.Column="1"
+                                          Grid.RowSpan="2">
+                                    <GroupBox.Header>
+                                        <Bold>Adjacency Matrix</Bold>
+                                    </GroupBox.Header>
+                                    <Grid>
+                                        <TextBox AcceptsReturn="True"
+                                         x:Name="txAdjMat"
+                                         FontSize="20"
+                                         HorizontalContentAlignment="Center"
+                                         VerticalScrollBarVisibility="Auto" 
+                                         HorizontalScrollBarVisibility="Auto"
+                                         IsReadOnly="True"/>
+                                    </Grid>
+                                </GroupBox>
+                                <GroupBox Grid.Row="3"
+                                      Grid.Column="0">
                                     <GroupBox.Header>
                                         <Bold>General</Bold>
                                     </GroupBox.Header>
@@ -301,9 +319,9 @@
                                         <TextBlock Foreground="Black"
                                                Grid.Row="0"
                                                Height="20" 
-                                               Margin="128,-1,119,25"
+                                               Margin="113,-5,120,30"
                                                FontSize="10"
-                                               HorizontalAlignment="Center" Width="178">
+                                               HorizontalAlignment="Center" Width="193">
                                         Return All vertices to their original postions
                                         </TextBlock>
                                         <Button Margin="20,10,20,10"
@@ -337,7 +355,7 @@
 
                                         <TextBlock Foreground="Black"
                                                Height="20" 
-                                               Margin="124,42,123,26"
+                                               Margin="124,40,124,30"
                                                FontSize="10"
                                                HorizontalAlignment="Center" Width="178" Grid.RowSpan="2">
                                         Return a single vertex to original postions
@@ -530,14 +548,18 @@
                         <TabItem x:Name="tabControlAlgorithms" Height="22" VerticalAlignment="Bottom">
                             <TabItem.Header>Algorithms</TabItem.Header>
                             <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="15*"/>
+                                    <ColumnDefinition Width="862*"/>
+                                </Grid.ColumnDefinitions>
                                 <Grid.RowDefinitions>
-                                    <RowDefinition/>
+                                    <RowDefinition Height="300"/>
                                     <RowDefinition/>
                                 </Grid.RowDefinitions>
                                 <GroupBox Grid.Row="0"
                                       Grid.Column="0"
                                       Header="Path Finding Algorithms"
-                                      BorderThickness="2">
+                                      BorderThickness="2" Grid.ColumnSpan="2">
                                     <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition/>
@@ -733,17 +755,18 @@
                                         </GroupBox>
                                     </Grid>
                                 </GroupBox>
-                                <TextBlock
+                                <TextBox
                                     Grid.Row="1"
-                                    Margin="30"
-                                    HorizontalAlignment="Center"
+                                    IsReadOnly="True"
+                                    Margin="20"
+                                    HorizontalContentAlignment="Center"
+                                    HorizontalScrollBarVisibility="Auto"
+                                    VerticalScrollBarVisibility="Auto"
                                     TextAlignment="Center"
-                                    TextWrapping="Wrap"
                                     FontSize="25"
-                                    x:Name="txExtraInfo2">
-
-                                </TextBlock>
+                                    x:Name="txExtraInfo2" Grid.Column="1"/>
                             </Grid>
+
                         </TabItem>
                         <TabItem x:Name="tabControlDisplay">
                             <TabItem.Header>Display</TabItem.Header>

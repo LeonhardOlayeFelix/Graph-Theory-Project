@@ -123,7 +123,7 @@ namespace Interface_2
         public List<Tuple<int, int, int>> Prims(int startVertex = -1) 
         {
             //uses Prims Algo for MST
-            List<List<int>> adjMatrix = GetAdjacencyMatrix();
+            List<List<int>> adjMatrix = GetAdjacencyMatrix2();
             List<Tuple<int, int, int>> mstPath = new List<Tuple<int, int, int>>();
             //represents a value for each vertex which says if its in the MST
             bool[] isInMST = new bool[adjMatrix.Count()];

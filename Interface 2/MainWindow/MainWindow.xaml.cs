@@ -38,7 +38,7 @@ namespace Interface_2
         List<int> livePath = new List<int>();
         public List<Ellipse> vertexList = null;
         public List<TextBlock> vertexTxBoxList = null;
-        HashSet<Tuple<Line, Ellipse, Ellipse, TextBlock>> edgeList = null;
+        List<Tuple<Line, Ellipse, Ellipse, TextBlock>> edgeList = null;
         public int Zindex = 2;
         public int buttonId = 0;
         string valencyState;
@@ -107,5 +107,7 @@ namespace Interface_2
                 conn.Close();
             }
         }
+
+        
     }
 }

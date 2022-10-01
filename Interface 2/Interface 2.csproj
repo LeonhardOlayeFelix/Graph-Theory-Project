@@ -76,6 +76,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="GraphDataStruture\Graph Class\GraphFloydsAlgorithm.cs" />
     <Compile Include="GraphDataStruture\Graph Class\GraphMethods.cs" />
     <Compile Include="MainWindow\MWAlgorithms.cs" />
     <Compile Include="MainWindow\MWStoryBoards.cs" />

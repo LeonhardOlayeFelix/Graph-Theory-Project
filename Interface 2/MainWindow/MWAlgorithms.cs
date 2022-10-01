@@ -168,6 +168,7 @@ namespace Interface_2
             InitiateDeleteLineStoryboard(edge.Item1, TimeSpan.FromSeconds(0.1));
             edgeList.Remove(edge);//remove it from the graph
             GenerateAdjList();
+            GenerateAdjMat();
         }
         /// <summary>
         /// Displays the result of a depth first search
@@ -241,6 +242,19 @@ namespace Interface_2
             startVertex.Fill = HighlightColour;
             this.startVertex = Convert.ToInt32(startVertex.Name.Substring(3));
             labelExtraInfo.Content = "Shortest Path from " + FindLabel(Convert.ToInt32(this.startVertex)).Text + " to...";
+        }
+        /// <summary>
+        /// Hides all edges on the canvas
+        /// </summary>
+        public void HideAllEdges()
+        {
+            foreach (Tuple<Line, Ellipse, Ellipse, TextBlock> edge in edgeList)
+            {
+                Line line = edge.Item1;
+                TextBlock label = edge.Item4;
+                line.Visibility = Visibility.Hidden;
+                label.Visibility = Visibility.Hidden;
+            }
         }
         /// <summary>
         /// Highlights a path as a user adds more vertices to this path
@@ -428,6 +442,19 @@ namespace Interface_2
                     Canvas.SetTop(edge.Item4, MidPointY - 9);
                 }
 
+            }
+        }
+        /// <summary>
+        /// Shows all edges on the canvas
+        /// </summary>
+        public void ShowAllEdges()
+        {
+            foreach (Tuple<Line, Ellipse, Ellipse, TextBlock> edge in edgeList)
+            {
+                Line line = edge.Item1;
+                TextBlock label = edge.Item4;
+                line.Visibility = Visibility.Visible;
+                label.Visibility = Visibility.Visible;
             }
         }
     }

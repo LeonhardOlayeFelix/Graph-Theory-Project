@@ -123,6 +123,7 @@ namespace Interface_2
                 if (graphCreated == true)
                 {
                     GenerateAdjList();
+                    GenerateAdjMat();
                 }
             }; //change operation to addvertex operation
         }
@@ -419,7 +420,8 @@ namespace Interface_2
         {
             ActivateButton(btnFloyds);
             ClearAllOperations();
-            //do floyds algorithm
+            txExtraInfo2.Text = "Matrix of Shortest Paths:\n" + graph.FloydWarshallStr();
+            
         }
         private void btnHighlightPaths_Click(object sender, RoutedEventArgs e)
         {

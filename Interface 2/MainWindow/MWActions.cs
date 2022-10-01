@@ -67,7 +67,7 @@ namespace Interface_2
             if (!AlreadyExists)
             {
                 //re-initiliase everything
-                edgeList = new HashSet<Tuple<Line, Ellipse, Ellipse, TextBlock>>();
+                edgeList = new List<Tuple<Line, Ellipse, Ellipse, TextBlock>>();
                 graph = new Graph();
                 valencyState = "Hidden";
                 valencyList = new List<TextBlock>();
@@ -111,7 +111,7 @@ namespace Interface_2
         /// <param name="v2">Vertex from the other end of the edge</param>
         /// <param name="weight">Edge Weight</param>
         /// <param name="rendering">True only if this method is being used to load a previously saved graph</param>
-        private void ConnectVertices(Ellipse v1, Ellipse v2, int weight, bool rendering = false) 
+        private void ConnectVertices(Ellipse v1, Ellipse v2, int weight, bool rendering = false, bool floyds = false) 
         {
             
             //gets the smaller and larger vertex
@@ -123,12 +123,12 @@ namespace Interface_2
             {
                 if (edge.Item1.Name == lineName)//if it does....
                 {
-                    if (rendering) { return; }
+                    if (rendering || floyds) { return; }
                     DeleteEdge(edge, rendering);//delete the edge
                     break;
                 }
             }
-            if (!rendering)
+            if (!rendering && !floyds)
             {
                 graph.AddEdge(Convert.ToInt32(v1.Name.Substring(3)), Convert.ToInt32(v2.Name.Substring(3)), weight); //update the object
             }
@@ -206,7 +206,6 @@ namespace Interface_2
                 UpdateSourceTrigger = UpdateSourceTrigger.PropertyChanged
             };
             weightLabel.SetBinding(TextBlock.BackgroundProperty, bindingWeightBackcolor);
-
             //set the initial position of the weight to the midpoint of the line it is bound to
             double MidPointX = (Canvas.GetLeft(smallerEllipse) + Canvas.GetLeft(largerEllipse)) / 2;
             double MidPointY = (Canvas.GetTop(smallerEllipse) + Canvas.GetTop(largerEllipse)) / 2;
@@ -215,13 +214,18 @@ namespace Interface_2
             Canvas.SetZIndex(weightLabel, 1); //needs to be visible above the line
             line.MouseMove += mouseMove;
             //add a new edge tuple to the list
-            edgeList.Add(Tuple.Create(line, smallerEllipse, largerEllipse, weightLabel));
+            if (!floyds)
+            {
+                edgeList.Add(Tuple.Create(line, smallerEllipse, largerEllipse, weightLabel));
+            }
             List<int> order = new List<int>() { Convert.ToInt32(v1.Name.Substring(3)), Convert.ToInt32(v2.Name.Substring(3)) };
             //InitiateHighlightPathStoryboard(edgeAsList, TimeSpan.FromSeconds((rendering) ? 0.75 : 0.2), false);
             InitiateLineStoryboard(line, TimeSpan.FromSeconds(0.2), order); //start line storyboard
             if (weight != 0)
                 mainCanvas.Children.Add(weightLabel);
+            if (floyds) { line.Stroke = HighlightColour; }
             GenerateAdjList();
+            GenerateAdjMat();
         }
         /// <summary>
         /// Responsible for decreasing the selection counts
@@ -257,7 +261,7 @@ namespace Interface_2
             lastSelectedVertex = null;
             vertexTxBoxList = new List<TextBlock>();
             vertexList = new List<Ellipse>();
-            edgeList = new HashSet<Tuple<Line, Ellipse, Ellipse, TextBlock>>();
+            edgeList = new List<Tuple<Line, Ellipse, Ellipse, TextBlock>>();
             graphCreated = false;
             btnSaveGraph.IsEnabled = false;
         }
@@ -404,34 +408,9 @@ namespace Interface_2
         /// Makes the adjacency list appear in the on-screen area
         /// </summary>
         /// <returns></returns>
-        public List<List<int>> GenerateAdjMat()
+        public void GenerateAdjMat()
         {
-            //populates 2d list with adjacency matrix
-            List<List<int>> adjMat = graph.GetAdjacencyMatrix();
-            if (adjMat.Count() != 0)
-            {
-                int size = adjMat.ElementAt(0).Count();
-                for (int i = 0; i < size; ++i)
-                {
-                    adjMat.ElementAt(i).Insert(0, i);
-                }
-                List<int> headers = new List<int>();
-                for (int i = -1; i < size; ++i)
-                {
-                    if (i != -1)
-                    {
-                        headers.Add(i);
-                    }
-                    else
-                    {
-                        headers.Add(-1);
-                    }
-                }
-                adjMat.Insert(0, headers);
-            }
-            //show the list in the form of a table
-            return adjMat;
-            //return incase its necessary for future use
+            txAdjMat.Text = graph.PrintAdjMatrix();
         }
         /// <summary>
         /// Hides all of the valencies

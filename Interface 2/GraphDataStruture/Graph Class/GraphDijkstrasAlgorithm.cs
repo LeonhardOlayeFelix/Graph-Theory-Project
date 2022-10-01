@@ -28,7 +28,7 @@ namespace Interface_2
                 throw new Exception("End vertex does not exist.");
             }
             //uses the adjacency matrix to do the algorithm
-            List<List<int>> adjMat = GetAdjacencyMatrix();
+            List<List<int>> adjMat = GetAdjacencyMatrix2();
 
             List<int> path = new List<int>();
             int size = adjMat.ElementAt(0).Count();

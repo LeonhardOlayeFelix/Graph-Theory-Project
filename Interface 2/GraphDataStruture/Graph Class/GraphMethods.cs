@@ -261,7 +261,12 @@ namespace Interface_2
             List<int> listOfVertices = GetListOfVertices();
             for (int i = 0; i < listOfVertices.Count(); ++i)
             {
-                stringToReturn += listOfVertices[i] + ": " + string.Join(", ", GetAdjVertices(listOfVertices[i])) + "\n";
+                stringToReturn += listOfVertices[i] + ": ";
+                foreach (int vertex in GetAdjVertices(listOfVertices[i]))
+                {
+                    stringToReturn += "{" + vertex + "; " + GetEdgeWeight(i, vertex) + "},";
+                }
+                stringToReturn += "\n";
             }
             return stringToReturn;
         }
@@ -286,11 +291,20 @@ namespace Interface_2
         /// returns the adjacency matrix as a 2 dimensional list
         /// </summary>
         /// <returns></returns>
-        public List<List<int>> GetAdjacencyMatrix()
+        public int[,] GetAdjacencyMatrix()
         {
-            //returns adjacency matrix
-            int size = GetMaxVertexID() + 1;
-            List<List<int>> adjMatrix = new List<List<int>>();
+            int nV = GetMaxVertexID() + 1;
+            int[,] matrix = new int[nV, nV];
+            int i, j;
+            for (i = 0; i < nV; i++)
+                for (j = 0; j < nV; j++)
+                    matrix[i, j] = GetEdgeWeight(i, j);
+            return matrix;
+        }
+        public List<List<int>> GetAdjacencyMatrix2() //returns the adjacency matrix as a 2d list
+        {
+            int size = GetMaxVertexID() + 1; //need a size one greater since the nodes start from 0
+            List<List<int>> adjMatrix = new List<List<int>>(); //where we will store the matrix
             for (int row = 0; row < size; ++row)
             {
                 adjMatrix.Add(new List<int>());
@@ -300,16 +314,39 @@ namespace Interface_2
                     adjMatrix[row].Add(-1);
                 }
             }
-            foreach (Vertex node in vertexSet)
+            foreach (Vertex vertex in vertexSet)
             {
-                //intialise all entries which have a connection
-                foreach (Tuple<int, int> adjacentVertex in node.GetAdjVertices())
+                //intialise all entries which will have a connection
+                foreach (Tuple<int, int> adjacentVertex in vertex.GetAdjVertices())
                 {
-                    adjMatrix[node.GetVertexId()][adjacentVertex.Item1] = adjacentVertex.Item2;
-                    adjMatrix[adjacentVertex.Item1][node.GetVertexId()] = adjacentVertex.Item2;
+                    adjMatrix[vertex.GetVertexId()][adjacentVertex.Item1] = adjacentVertex.Item2; //update the position in the matrix 
+                    adjMatrix[adjacentVertex.Item1][vertex.GetVertexId()] = adjacentVertex.Item2;//both ways
                 }
             }
             return adjMatrix;
+        }
+        public string PrintAdjMatrix()
+        {
+            int nV = GetMaxVertexID() + 1;
+            int[,] matrix = new int[nV, nV];
+            int i, j;
+            for (i = 0; i < nV; i++)
+                for (j = 0; j < nV; j++)
+                    matrix[i, j] = GetEdgeWeight(i, j);
+            int n = GetMaxVertexID() + 1;
+            string table = "";
+            for (i = 0; i < n; ++i)
+            {
+                for (j = 0; j < n; ++j)
+                {
+                    if (matrix[i, j] == -1)
+                        table += "-, ";
+                    else
+                        table += matrix[i, j] + ", ";
+                }
+                table += "\n";
+            }
+            return table;
         }
         /// <summary>
         /// returns all of the vertices whose valency is odd
