@@ -123,7 +123,6 @@ namespace Interface_2
                 if (graphCreated == true)
                 {
                     GenerateAdjList();
-                    GenerateAdjMat();
                 }
             }; //change operation to addvertex operation
         }
@@ -144,11 +143,6 @@ namespace Interface_2
                     AddConnectionOdd(activeVertex);
                 }
             };
-        }
-        private void BtnAddToClass_Click(object sender, RoutedEventArgs e)
-        {
-            ActivateButton(sender);
-            ClearAllOperations();
         }
         private void cbAutoGenEdges_Checked(object sender, RoutedEventArgs e)
         {
@@ -425,8 +419,40 @@ namespace Interface_2
         {
             ActivateButton(btnFloyds);
             ClearAllOperations();
-            txExtraInfo2.Text = "Matrix of Shortest Paths:\n" + graph.FloydWarshallStr();
+            int n = graph.GetMaxVertexID() + 1;
+            int[,] a0 = new int[n, n];
+            for (int i = 0; i < n; ++i)
+            {
+                for (int j = 0; j < n; ++j)
+                {
+                    int weight = graph.GetEdgeWeight(i, j);
+                    a0[i, j] = (weight == -1) ? int.MaxValue : weight;
+                }
+            }
+            for (int x = 0; x < n; ++x)
+            {
+                int rowColumnToIgnore = x;
+                for (int i = 0; i < n; ++i)
+                {
+                    for (int j = 0; j < n; ++j)
+                    {
+                        if (i != rowColumnToIgnore && j != rowColumnToIgnore)
+                        {
+                            List<int> intermediateVertices = graph.DijkstrasAlgorithmShort(i, j).Item1;
+                            intermediateVertices.RemoveAt(0);
+                            intermediateVertices.RemoveAt(intermediateVertices.Count() - 1);
+                            int k = intermediateVertices[x];
+                            if (a0[i,j] > a0[i,k] + a0[k, j])
+                            {
+                                a0[i, j] = a0[i, k] + a0[k, j];
+                            }
+                        }
+                    }
+                }
+
+            }
             
+            //do floyds algorithm
         }
         private void btnHighlightPaths_Click(object sender, RoutedEventArgs e)
         {
@@ -699,11 +725,6 @@ namespace Interface_2
             RegisterTeacher registerteacher = new RegisterTeacher();
             registerteacher.ShowDialog();
         }
-        private void BtnRemoveFromClass_Click(object sender, RoutedEventArgs e)
-        {
-            ActivateButton(sender);
-            ClearAllOperations();
-        }
         private void btnSaveGraph_Click(object sender, RoutedEventArgs e)   
         {
             ActivateButton(btnSaveGraph);
@@ -735,8 +756,5 @@ namespace Interface_2
                 throw new Exception("Invalid valencyState"); //anything else is invalid
             }
         }
-        
-
-        
     }
 }
