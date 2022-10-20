@@ -15,6 +15,53 @@ namespace Interface_2
 {
     public partial class MainWindow : Window
     {
+        private bool Authorised(string classID)
+        {
+            string teacherID = loggedTeacher.ID;
+            OleDbConnection conn = new OleDbConnection(ConStr);
+            OleDbCommand cmd = new OleDbCommand();
+            cmd.Connection = conn;
+            conn.Open();
+            cmd.CommandText = $"SELECT * FROM Class WHERE ClassID = '{classID}' AND TeacherID = '{teacherID}'";
+            OleDbDataReader reader = cmd.ExecuteReader();
+            if (reader.HasRows)
+            {
+                conn.Close();
+                return true;
+            }
+            conn.Close();
+            return false;
+        }
+        public static void CreateDatabase()
+        {
+            if (!File.Exists("NetworkDB.accdb")) //if a file doesnt already exist for the database
+            {
+                //establish the connection and then create database 
+                ADOX.Catalog cat = new ADOX.Catalog();
+                cat.Create(ConStr);
+                OleDbConnection conn = new OleDbConnection(ConStr);
+                conn.Open();
+                OleDbCommand cmd = new OleDbCommand();
+                cmd.Connection = conn;
+                cmd.CommandText = "CREATE TABLE Student(StudentID VARCHAR(5), FirstName VARCHAR(30), LastName VARCHAR(30), DateOfBirth DATE, Email VARCHAR(100), SPassword VARCHAR(30), NoAssignmentsSubmitted INTEGER, NoDijkstras INTEGER, NoRInsp INTEGER, NoBFS INTEGER, NoDFS INTEGER, NoPrims INTEGER, NoGraph INTEGER, DateCreated DATE, PRIMARY KEY(StudentID))";
+                cmd.ExecuteNonQuery();
+                cmd.CommandText = "CREATE TABLE Teacher(TeacherID VARCHAR(5), FirstName VARCHAR(30), LastName VARCHAR(30), Email VARCHAR(100), TPassword VARCHAR(30), Title VARCHAR(7), PRIMARY KEY(TeacherID))";
+                cmd.ExecuteNonQuery();
+                cmd.CommandText = "CREATE TABLE StudentGraph(Filename VARCHAR(30), StudentID VARCHAR(5), GraphName VARCHAR(25), DateCreated DATE, NoVertices INTEGER, NoEdges INTEGER, CreatedBy CHAR(1), PRIMARY KEY(Filename), FOREIGN KEY (StudentID) REFERENCES Student(StudentID))";
+                cmd.ExecuteNonQuery();
+                cmd.CommandText = "CREATE TABLE TeacherGraph(Filename VARCHAR(30), TeacherID VARCHAR(5), GraphName VARCHAR(25), DateCreated DATE, NoVertices INTEGER, NoEdges INTEGER, CreatedBy CHAR(1), PRIMARY KEY(Filename), FOREIGN KEY (TeacherID) REFERENCES Teacher(TeacherID))";
+                cmd.ExecuteNonQuery();
+                cmd.CommandText = "CREATE TABLE GuestGraph(Filename VARCHAR(30), GraphName VARCHAR(25), CreatedBy CHAR(1), PRIMARY KEY(Filename))";
+                cmd.ExecuteNonQuery();
+                cmd.CommandText = "CREATE TABLE Assignment(AssignmentID VARCHAR(5), StudentID VARCHAR(5), Filename VARCHAR(30), SetBy VARCHAR(5), GraphName VARCHAR(25), DateSet DATE, DateDue DATE, isLate CHAR(1), isCompleted CHAR(1), PRIMARY KEY(AssignmentID), FOREIGN KEY (StudentID) REFERENCES Student(StudentID))";
+                cmd.ExecuteNonQuery();
+                cmd.CommandText = "CREATE TABLE Class(ClassID VARCHAR(5), TeacherID VARCHAR(5), ClassName VARCHAR(30), PRIMARY KEY(ClassID), FOREIGN KEY (TeacherID) REFERENCES Teacher(TeacherID))";
+                cmd.ExecuteNonQuery();
+                cmd.CommandText = "CREATE TABLE ClassEnrollment(ClassID VARCHAR(5), StudentID VARCHAR(5), FirstName VARCHAR(30), LastName VARCHAR(30), EnrollDate DATE, FOREIGN KEY (ClassID) REFERENCES Class(ClassID), FOREIGN KEY (StudentID) REFERENCES Student(StudentID))";
+                cmd.ExecuteNonQuery();
+                conn.Close();
+            }
+        }
         /// <summary>
         /// Saves a teacher to the database
         /// </summary>
@@ -26,7 +73,7 @@ namespace Interface_2
             {
                 string ID = NextID("T"); //generates the next ID for teacher
                 teacher.ID = ID; //initialises the teachers ID in the class
-                OleDbConnection conn = new OleDbConnection(MainWindow.ConStr);
+                OleDbConnection conn = new OleDbConnection(ConStr);
                 OleDbCommand cmd = new OleDbCommand();
                 cmd.Connection = conn;
                 conn.Open();
@@ -46,7 +93,7 @@ namespace Interface_2
         {
             if (!emailExists(student.email))//makes sure the student hasnt already signed up with this email
             {
-                
+
                 string ID = NextID("S"); //generates the next ID for the student
                 student.ID = ID;//initiliases the students ID in the class
                 OleDbConnection conn = new OleDbConnection(MainWindow.ConStr);
@@ -130,14 +177,13 @@ namespace Interface_2
         /// </summary>
         /// <param name="teacher">The teacher the database will check for</param>
         /// <returns></returns>
-        public static bool TeacherAlreadySaved(Teacher teacher)
+        public static bool TeacherAlreadySaved(string ID)
         {
-            string ID = teacher.ID;
             OleDbConnection conn = new OleDbConnection(MainWindow.ConStr);
             conn.Open();
             OleDbCommand cmd = new OleDbCommand();
             cmd.Connection = conn;
-            cmd.CommandText = $"SELECT * FROM Teacher WHERE TeacherID = '{teacher.ID}'";
+            cmd.CommandText = $"SELECT * FROM Teacher WHERE TeacherID = '{ID}'";
             OleDbDataReader reader = cmd.ExecuteReader();
             if (reader.HasRows)
             {
@@ -146,20 +192,20 @@ namespace Interface_2
             }
             conn.Close();
             return false;
-        } 
+        }
         /// <summary>
         /// Returns true if a specified student is already present within the database
         /// </summary>
         /// <param name="student">The student the database will check for</param>
         /// <returns></returns>
-        public static bool StudentAlreadySaved(Student student)
+        public static bool StudentAlreadySaved(string ID)
         {
-            string ID = student.ID;
+            
             OleDbConnection conn = new OleDbConnection(MainWindow.ConStr);
             conn.Open();
             OleDbCommand cmd = new OleDbCommand();
             cmd.Connection = conn;
-            cmd.CommandText = $"SELECT * FROM Student WHERE StudentID = '{student.ID}'";
+            cmd.CommandText = $"SELECT * FROM Student WHERE StudentID = '{ID}'";
             OleDbDataReader reader = cmd.ExecuteReader();
             if (reader.HasRows)
             {
@@ -168,7 +214,23 @@ namespace Interface_2
             }
             conn.Close();
             return false;
-        } 
+        }
+        public static bool ClassExists(string ID)
+        {
+            OleDbConnection conn = new OleDbConnection(MainWindow.ConStr);
+            conn.Open();
+            OleDbCommand cmd = new OleDbCommand();
+            cmd.Connection = conn;
+            cmd.CommandText = $"SELECT * FROM Class WHERE ClassID = '{ID}'";
+            OleDbDataReader reader = cmd.ExecuteReader();
+            if (reader.HasRows)
+            {
+                conn.Close();
+                return true;
+            }
+            conn.Close();
+            return false;
+        }
         /// <summary>
         /// Returns the ID of a specified student using their email
         /// </summary>
@@ -216,7 +278,7 @@ namespace Interface_2
             }
             conn.Close();
             return ID;
-        } 
+        }
         /// <summary>
         /// Enrolls a specified student into a specified class, saving it to the database
         /// </summary>
@@ -279,7 +341,7 @@ namespace Interface_2
         /// </summary>
         /// <param name="ClassID">The ID of the class</param>
         /// <returns></returns>
-        public static List<Student> ListClass(string ClassID) 
+        public static List<Student> ListClass(string ClassID)
         {
             List<Student> Ids = new List<Student>();
             OleDbConnection conn = new OleDbConnection(MainWindow.ConStr);

@@ -86,7 +86,7 @@ namespace Interface_2
                 };
                 if ((bool)cbAlphabet.IsChecked)
                 {
-                    vertexLabel.Text = alphabet.ElementAt(Convert.ToInt32(vertexId));
+                    vertexLabel.Text = ModifiedAlphabet.ElementAt(Convert.ToInt32(vertexId));
                 }
                 else
                 {

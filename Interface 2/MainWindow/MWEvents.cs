@@ -11,7 +11,7 @@ using System.Windows.Media.Imaging;
 using System.Data.OleDb;
 using System.Text.RegularExpressions;
 using System.Timers;
-
+using System.Configuration;
 namespace Interface_2
 {
     public partial class MainWindow : Window
@@ -27,7 +27,7 @@ namespace Interface_2
             ClearAllOperations();
             leftClickCanvasOperation = () => 
             {
-                int maxNumber = alphabet.Count(); //the highest number of uniquely representable nodes using the alphabet
+                int maxNumber = ModifiedAlphabet.Count(); //the highest number of uniquely representable nodes using the alphabet
                 if (graph.GetNumberOfVertices() + graph.numberOfDeletedVertices > maxNumber - 1 && cbAlphabet.IsChecked == true)
                 {
                     MessageBox.Show("Turn off Alphabet Labelling so more Nodes can be represented");
@@ -81,7 +81,7 @@ namespace Interface_2
                     };
                     if ((bool)cbAlphabet.IsChecked)
                     {
-                        vertexLabel.Text = alphabet.ElementAt(Convert.ToInt32(vertexId));
+                        vertexLabel.Text = ModifiedAlphabet.ElementAt(Convert.ToInt32(vertexId));
                     }
                     else
                     {
@@ -149,6 +149,43 @@ namespace Interface_2
         {
             ActivateButton(sender);
             ClearAllOperations();
+            Regex regex = new Regex(@"S[\d][\d][\d][\d]");
+            Regex regex2 = new Regex(@"C[\d][\d][\d][\d]");
+            string studentID = txStudentID.Text;
+            string classID = txClassID.Text;
+            
+            if (!(regex.IsMatch(studentID) && studentID.Length == 5))
+            {
+                MessageBox.Show("Invalid Student ID");
+                return;
+            }
+            else if (!(regex2.IsMatch(classID) && classID.Length == 5))
+            {
+                MessageBox.Show("Invalid Class ID");
+                return;
+            }
+            else if (!StudentAlreadySaved(studentID))
+            {
+                MessageBox.Show("Student ID is not registered");
+                return;
+            }
+            else if (!ClassExists(classID))
+            {
+                MessageBox.Show("Class ID is not registered");
+                return;
+            }
+            else if (!Authorised(classID))
+            {
+                MessageBox.Show("You must be the teacher of this class to add or remove students");
+                return;
+            }
+            Student student = InitialiseStudent(studentID);
+            if (IsInClass(classID, student))
+            {
+                MessageBox.Show("This student is already in this class");
+                return;
+            }
+            EnrollStudent(classID, student);
         }
         private void cbAutoGenEdges_Checked(object sender, RoutedEventArgs e)
         {
@@ -160,7 +197,7 @@ namespace Interface_2
         }
         private void cbAlphabet_Checked(object sender, RoutedEventArgs e)
         {
-            int maxNumber = alphabet.Count(); //the highest number of uniquely representable vertices using the alphabet
+            int maxNumber = ModifiedAlphabet.Count(); //the highest number of uniquely representable vertices using the alphabet
             if (graph.GetMaxVertexID() >= maxNumber)
             {
                 MessageBox.Show("Not enough Letters in the alphabet to represent each vertex"); //this wont occur but is just a precaution
@@ -175,7 +212,7 @@ namespace Interface_2
                         TextBlock label = FindLabel(Convert.ToInt32(FindEllipse(i).Name.Substring(3))); //find the label of each vertex
                         if (label != null) //incase the vertex and label were deleted
                         {
-                            label.Text = alphabet.ElementAt(i); //change the current label to the alphabet
+                            label.Text = ModifiedAlphabet.ElementAt(i); //change the current label to the alphabet
                         }
                     }
                 }
@@ -703,7 +740,44 @@ namespace Interface_2
         {
             ActivateButton(sender);
             ClearAllOperations();
+            Regex regex = new Regex(@"S[\d][\d][\d][\d]");
+            Regex regex2 = new Regex(@"C[\d][\d][\d][\d]");
+            string studentID = txStudentID.Text;
+            string classID = txClassID.Text;
+            if (!(regex.IsMatch(studentID) && studentID.Length == 5))
+            {
+                MessageBox.Show("Invalid Student ID");
+                return;
+            }
+            else if (!(regex2.IsMatch(classID) && classID.Length == 5))
+            {
+                MessageBox.Show("Invalid Class ID");
+                return;
+            }
+            else if (!StudentAlreadySaved(studentID))
+            {
+                MessageBox.Show("Student ID is not registered");
+                return;
+            }
+            else if (!ClassExists(classID))
+            {
+                MessageBox.Show("Class ID is not registered");
+                return;
+            }
+            else if (!Authorised(classID))
+            {
+                MessageBox.Show("You must be the teacher of this class to add or remove students");
+                return;
+            }
+            Student student = InitialiseStudent(studentID);
+            if (!IsInClass(classID, student))
+            {
+                MessageBox.Show("This student is not in this class");
+                return;
+            }
+            RemoveStudent(classID, student);
         }
+        
         private void btnSaveGraph_Click(object sender, RoutedEventArgs e)   
         {
             ActivateButton(btnSaveGraph);
@@ -735,8 +809,11 @@ namespace Interface_2
                 throw new Exception("Invalid valencyState"); //anything else is invalid
             }
         }
-        
-
-        
+        private void BtnViewClass_Click(object sender, RoutedEventArgs e)
+        {
+            ClearAllOperations();
+            ActivateButton(sender);
+            loadGrid();
+        }
     }
 }

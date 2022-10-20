@@ -9,7 +9,9 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Windows.Media.Animation;
 using System.Timers;
-
+using System.Data.OleDb;
+using System.Configuration;
+using System.Text.RegularExpressions;
 namespace Interface_2
 {
     public partial class MainWindow : Window
@@ -284,6 +286,33 @@ namespace Interface_2
                     DijkstraHighlightRoute(livePath); //highlight the path
                 }
             }
+        }
+        /// <summary>
+        /// Loads the class in the grid
+        /// </summary>
+        private void loadGrid()
+        {
+            OleDbConnection con = new OleDbConnection();
+            con.ConnectionString = ConfigurationManager.ConnectionStrings["Connection"].ToString();
+            con.Open();
+            Regex regex2 = new Regex(@"C[\d][\d][\d][\d]");
+            OleDbCommand cmd = new OleDbCommand();
+            cmd.Connection = con;
+            string classID = txClassID2.Text;
+            if (!(regex2.IsMatch(classID) && classID.Length == 5))
+            {
+                MessageBox.Show("Invalid Class ID");
+                return;
+            }
+            else if (!ClassExists(classID))
+            {
+                MessageBox.Show("Class is not registered.");
+                return;
+            }
+            cmd.CommandText = $"SELECT * FROM ClassEnrollment WHERE ClassID = '{classID}'";
+            cmd.ExecuteNonQuery();
+            OleDbDataReader rd = cmd.ExecuteReader();
+            classDataGrid.ItemsSource = rd;
         }
         /// <summary>
         /// Displays the result of prim's algorithm

@@ -958,7 +958,7 @@
                                             </StackPanel>
                                             <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0" >
                                                 <TextBlock VerticalAlignment="Center" FontSize="15" Text="Enter Class ID:"/>
-                                                <TextBox Width="284" Margin="5,6,5,5" VerticalContentAlignment="Center" x:Name="txClassID"/>
+                                                <TextBox Width="284" Margin="5,5,5,5" VerticalContentAlignment="Center" x:Name="txClassID"/>
                                             </StackPanel>
                                         </Grid>
                                         
@@ -967,27 +967,48 @@
                                                 <ColumnDefinition/>
                                                 <ColumnDefinition/>
                                             </Grid.ColumnDefinitions>
-                                            <Button  Margin="10,30,10,30" Content="Add Student to class" Name="btnAddToClass" Click="BtnAddToClass_Click"/>
-                                            <Button  Margin="10,30,10,30" Grid.Column="1" Content="Remove Student from class" Name="btnRemoveFromClass" Click="BtnRemoveFromClass_Click"/>
+                                            <Button  Margin="5,30,5,30" Content="Add to class" Name="btnAddToClass" Click="BtnAddToClass_Click"/>
+                                            <Button  Margin="5,30,5,30" Grid.Column="1" Content="Remove from class" Name="btnRemoveFromClass" Click="BtnRemoveFromClass_Click"/>
 
                                         </Grid>
                                     </Grid>
                                 </GroupBox>
-                                <GroupBox Grid.Column = "2" Header="Undefined">
-
+                                <GroupBox Grid.Column = "2" Header="View Class">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                        </Grid.RowDefinitions>
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition/>
+                                                <RowDefinition/>
+                                            </Grid.RowDefinitions>
+                                            <StackPanel  Orientation="Horizontal" Margin="0">
+                                                <TextBlock VerticalAlignment="Center" FontSize="15" Text="Enter Class ID:"/>
+                                                <TextBox Width="265" Margin="5" VerticalContentAlignment="Center" Name="txClassID2"/>
+                                            </StackPanel>
+                                            
+                                        </Grid>
+                                        <Grid Grid.Row="3">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition/>
+                                            </Grid.ColumnDefinitions>
+                                            <Button  Margin="5,30,5,30" Grid.Column="1" Content="View class" Name="btnViewClass" Click="BtnViewClass_Click"/>
+                                        </Grid>
+                                    </Grid>
                                 </GroupBox>
                                 <GroupBox Header="View Class" Grid.Row="1" Grid.RowSpan="4" Grid.ColumnSpan="2">
                                     <Grid Margin="20">
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="70"/>
-                                            <RowDefinition/>
-                                        </Grid.RowDefinitions>
+                                        <DataGrid x:Name="classDataGrid" AlternatingRowBackground="Gray" CanUserAddRows="False">
+                                            
+                                        </DataGrid>
                                     </Grid>
                                 </GroupBox>
                             </Grid>
                         </TabItem>
                         <TabItem>
-                            <TabItem.Header>Assignements</TabItem.Header>
+                            <TabItem.Header>Assignments</TabItem.Header>
                         </TabItem>
                     </TabControl>
                 </StackPanel>

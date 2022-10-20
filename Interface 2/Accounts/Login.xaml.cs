@@ -37,6 +37,7 @@ namespace Interface_2
             bool isStudent = false;
             string email = txEmail.Text;
             string password = txPassword.Text;
+            
             OleDbConnection conn = new OleDbConnection(MainWindow.ConStr);
             conn.Open();
             OleDbCommand cmd = new OleDbCommand();
