@@ -442,7 +442,8 @@ namespace Interface_2
             txLoggedID.Content = "";
             txLoggedInAs.Content = "Logged in as: Guest";
             DeleteGraph();
-
+            tabControlClass.IsEnabled = false;
+            tabControlAssignments.IsEnabled = false;
         }
         /// <summary>
         /// Loads a previously-saved graph
@@ -526,6 +527,8 @@ namespace Interface_2
             btnLogin.IsEnabled = false;
             btnRegisterTeacher.IsEnabled = false;
             btnLogOut.IsEnabled = true;
+            tabControlClass.IsEnabled = false;
+            tabControlAssignments.IsEnabled = true;
             DeleteGraph();
         }
         /// <summary>
@@ -678,6 +681,8 @@ namespace Interface_2
             btnLogin.IsEnabled = false;
             btnRegisterTeacher.IsEnabled = false;
             btnLogOut.IsEnabled = true;
+            tabControlClass.IsEnabled = true;
+            tabControlAssignments.IsEnabled = true;
             DeleteGraph();
         }
     }

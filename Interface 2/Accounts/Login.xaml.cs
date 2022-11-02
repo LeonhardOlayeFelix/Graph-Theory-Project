@@ -76,5 +76,14 @@ namespace Interface_2
                 MessageBox.Show("Email or Password was incorrect. Please try again.");
             }
         }
+
+        private void TxPassword_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key != Key.Enter && e.Key != Key.Back)
+            {
+                MessageBox.Show("Hello");
+                
+            }
+        }
     }
 }

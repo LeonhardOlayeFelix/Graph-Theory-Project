@@ -927,7 +927,7 @@
                                 </GroupBox>
                             </Grid>
                         </TabItem>
-                        <TabItem>
+                        <TabItem Name="tabControlClass">
                             <TabItem.Header>Class</TabItem.Header>
                             <Grid>
                                 <Grid.ColumnDefinitions>
@@ -1007,7 +1007,7 @@
                                 </GroupBox>
                             </Grid>
                         </TabItem>
-                        <TabItem>
+                        <TabItem Name ="tabControlAssignments">
                             <TabItem.Header>Assignments</TabItem.Header>
                         </TabItem>
                     </TabControl>

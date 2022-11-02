@@ -60,7 +60,8 @@ namespace Interface_2
             btnDefault.IsEnabled = false;
             btnRevertOnePositions.IsEnabled = false;
             btnRevertPositions.IsEnabled = false;
-            btnDeleteAllEdges.IsEnabled = false; ;
+            btnDeleteAllEdges.IsEnabled = false;
+
 
         }
         public void DisableTabControl()
@@ -69,6 +70,8 @@ namespace Interface_2
             tabControlAlgorithms.IsEnabled = false;
             tabControlDisplay.IsEnabled = false;
             tabControlActions.IsEnabled = false;
+            tabControlClass.IsEnabled = false;
+            tabControlAssignments.IsEnabled = false;
         }
         public void EnableAllAlgorithmButtons()
         {
@@ -103,6 +106,8 @@ namespace Interface_2
             tabControlAlgorithms.IsEnabled = true;
             tabControlDisplay.IsEnabled = true;
             tabControlActions.IsEnabled = true;
+            tabControlClass.IsEnabled = true;
+            tabControlAssignments.IsEnabled = true;
         }
 
     }

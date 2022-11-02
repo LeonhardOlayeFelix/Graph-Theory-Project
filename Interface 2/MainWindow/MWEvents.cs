@@ -777,7 +777,6 @@ namespace Interface_2
             }
             RemoveStudent(classID, student);
         }
-        
         private void btnSaveGraph_Click(object sender, RoutedEventArgs e)   
         {
             ActivateButton(btnSaveGraph);
