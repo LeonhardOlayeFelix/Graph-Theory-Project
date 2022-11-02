@@ -36,7 +36,8 @@ namespace Interface_2
             bool isTeacher = false;
             bool isStudent = false;
             string email = txEmail.Text;
-            string password = txPassword.Text;
+            string password = txPassword.Password;
+
             
             OleDbConnection conn = new OleDbConnection(MainWindow.ConStr);
             conn.Open();
@@ -74,15 +75,6 @@ namespace Interface_2
             else
             {
                 MessageBox.Show("Email or Password was incorrect. Please try again.");
-            }
-        }
-
-        private void TxPassword_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key != Key.Enter && e.Key != Key.Back)
-            {
-                MessageBox.Show("Hello");
-                
             }
         }
     }
