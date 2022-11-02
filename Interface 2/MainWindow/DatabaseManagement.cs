@@ -458,5 +458,25 @@ namespace Interface_2
             ID = ID.Insert(0, IDType);
             return ID;
         }
+        public static string GetClassName(string ClassID)
+        {
+            string ID = "";
+            OleDbConnection conn = new OleDbConnection(MainWindow.ConStr);
+            conn.Open();
+            OleDbCommand cmd = new OleDbCommand();
+            cmd.Connection = conn;
+            cmd.CommandText = $"SELECT ClassName FROM Class WHERE ClassID = '{ClassID}'";
+            OleDbDataReader reader = cmd.ExecuteReader();
+            try
+            {
+                ID = cmd.ExecuteScalar().ToString();
+            }
+            catch
+            {
+                MessageBox.Show("fail");
+            }
+            conn.Close();
+            return ID;
+        }
     }
 }

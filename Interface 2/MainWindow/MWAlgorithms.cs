@@ -334,6 +334,8 @@ namespace Interface_2
             cmd.ExecuteNonQuery();
             OleDbDataReader rd = cmd.ExecuteReader();
             classDataGrid.ItemsSource = rd;
+            MessageBox.Show(GetClassName(classID));
+            con.Close();
         }
         /// <summary>
         /// Displays the result of prim's algorithm
