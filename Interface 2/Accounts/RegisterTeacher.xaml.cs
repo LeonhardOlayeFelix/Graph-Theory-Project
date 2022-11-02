@@ -11,7 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-
+using System.Net.Mail;
 namespace Interface_2
 {
     /// <summary>
@@ -25,7 +25,21 @@ namespace Interface_2
         {
             InitializeComponent();
         }
+        private static bool IsValidEmail(string email)
+        {
+            var valid = true;
 
+            try
+            {
+                var emailAddress = new MailAddress(email);
+            }
+            catch
+            {
+                valid = false;
+            }
+
+            return valid;
+        }
         private void btnRegisterTeacherConfirm_Click(object sender, RoutedEventArgs e)
         {
             string email = txEmail.Text;
@@ -35,6 +49,10 @@ namespace Interface_2
             if (MainWindow.emailExists(email))
             {
                 MessageBox.Show("This email is already in use");
+            }
+            else if (!IsValidEmail(email))
+            {
+                MessageBox.Show("Invalid Email enetered.");
             }
             else if (email.Length != 0 && password.Length != 0 && firstname.Length != 0 && lastname.Length != 0 && title.Length != 0)
             {

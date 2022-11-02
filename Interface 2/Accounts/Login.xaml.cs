@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Data.OleDb;
+using System.Net.Mail;
 namespace Interface_2
 {
     /// <summary>
@@ -30,7 +31,12 @@ namespace Interface_2
         {
             this.Close();
         }
-
+        /// <summary>
+        /// Returns true if passed in email is valid
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns></returns>
+        
         private void btnLoginStudentConfirm_Click(object sender, RoutedEventArgs e)
         {
             bool isTeacher = false;

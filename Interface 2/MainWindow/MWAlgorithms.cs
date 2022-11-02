@@ -12,6 +12,7 @@ using System.Timers;
 using System.Data.OleDb;
 using System.Configuration;
 using System.Text.RegularExpressions;
+using System.Net.Mail;
 namespace Interface_2
 {
     public partial class MainWindow : Window
@@ -286,6 +287,26 @@ namespace Interface_2
                     DijkstraHighlightRoute(livePath); //highlight the path
                 }
             }
+        }
+        /// <summary>
+        /// Returns true if passed in email is valid
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns></returns>
+        private static bool IsValidEmail(string email)
+        {
+            var valid = true;
+
+            try
+            {
+                var emailAddress = new MailAddress(email);
+            }
+            catch
+            {
+                valid = false;
+            }
+
+            return valid;
         }
         /// <summary>
         /// Loads the class in the grid
