@@ -988,13 +988,17 @@
                                                 <TextBlock VerticalAlignment="Center" FontSize="15" Text="Enter Class ID:"/>
                                                 <TextBox Width="265" Margin="5" VerticalContentAlignment="Center" Name="txClassID2"/>
                                             </StackPanel>
-                                            
+                                            <TextBlock FontWeight="Medium" Margin="0,16,0,-17" Grid.Row="1" Name="txNextClass">
+                                                Next created class will be given the ID:
+                                            </TextBlock>
                                         </Grid>
                                         <Grid Grid.Row="3">
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition/>
+                                                <ColumnDefinition/>
                                             </Grid.ColumnDefinitions>
                                             <Button  Margin="5,30,5,30" Grid.Column="1" Content="View class" Name="btnViewClass" Click="BtnViewClass_Click"/>
+                                            <Button  Margin="5,30,5,30" Grid.Column="0" Content="Create class" Name="btnCreateClass" Click="btnCreateClass_Click"/>
                                         </Grid>
                                     </Grid>
                                 </GroupBox>

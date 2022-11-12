@@ -77,5 +77,7 @@ namespace Interface_2
             }
         }
         public const string ConStr = "Provider=Microsoft.Jet.OLEDB.4.0; Data Source=NetworkDB.accdb";
+
+        
     }
 }

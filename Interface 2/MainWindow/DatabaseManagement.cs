@@ -53,7 +53,7 @@ namespace Interface_2
                 cmd.ExecuteNonQuery();
                 cmd.CommandText = "CREATE TABLE GuestGraph(Filename VARCHAR(30), GraphName VARCHAR(25), CreatedBy CHAR(1), PRIMARY KEY(Filename))";
                 cmd.ExecuteNonQuery();
-                cmd.CommandText = "CREATE TABLE Assignment(AssignmentID VARCHAR(5), StudentID VARCHAR(5), Filename VARCHAR(30), SetBy VARCHAR(5), GraphName VARCHAR(25), DateSet DATE, DateDue DATE, isLate CHAR(1), isCompleted CHAR(1), PRIMARY KEY(AssignmentID), FOREIGN KEY (StudentID) REFERENCES Student(StudentID))";
+                cmd.CommandText = "CREATE TABLE Assignment(AssignmentID VARCHAR(5), StudentID VARCHAR(5), AssignmentNote VARCHAR(50), Filename VARCHAR(30), SetBy VARCHAR(5), GraphName VARCHAR(25), DateSet DATE, DateDue DATE, isLate CHAR(1), isCompleted CHAR(1), PRIMARY KEY(AssignmentID), FOREIGN KEY (StudentID) REFERENCES Student(StudentID))";
                 cmd.ExecuteNonQuery();
                 cmd.CommandText = "CREATE TABLE Class(ClassID VARCHAR(5), TeacherID VARCHAR(5), ClassName VARCHAR(30), PRIMARY KEY(ClassID), FOREIGN KEY (TeacherID) REFERENCES Teacher(TeacherID))";
                 cmd.ExecuteNonQuery();

@@ -260,6 +260,10 @@ namespace Interface_2
                 txAdjset.Clear();
             }
         }
+        private void btnCreateClass_Click(object sender, RoutedEventArgs e)
+        {
+            txNextClass.Text = "Next created class will be given the ID:" + NextID("C").ToString();
+        }
         private void colourPickerHighlight_SelectedBrushChanged(object sender, Syncfusion.Windows.Tools.Controls.SelectedBrushChangedEventArgs e)
         {
             HighlightColour = (SolidColorBrush)colourPickerHighlight.SelectedBrush;
