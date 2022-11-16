@@ -12,6 +12,7 @@ using System.Data.OleDb;
 using System.Text.RegularExpressions;
 using System.Timers;
 using System.Configuration;
+using System.Data;
 namespace Interface_2
 {
     public partial class MainWindow : Window
@@ -268,6 +269,26 @@ namespace Interface_2
         {
             HighlightColour = (SolidColorBrush)colourPickerHighlight.SelectedBrush;
         }
+        private void dataGridAdjacencyMatrix_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+        {
+            int rowIndex = e.Row.GetIndex(); //rowpicked
+            var column = e.Column as DataGridBoundColumn;
+            if (column != null)
+            {
+                int columnIndex = Convert.ToInt32((column.Binding as Binding).Path.Path); //finds the column picked
+                MessageBox.Show("(" + rowIndex + ", " + columnIndex + ")");
+                var txEnteredval = e.EditingElement as TextBox;
+                int weight = Convert.ToInt32(txEnteredval.Text);
+                MessageBox.Show(weight.ToString());
+                //if (rowIndex != columnIndex)
+                //{
+                //    var txEnteredval = e.EditingElement as TextBox;
+                //    int weight = Convert.ToInt32(txEnteredval.Text);
+                //    ConnectVertices(FindEllipse(rowIndex), FindEllipse(columnIndex), weight);
+                //}
+            }
+
+        }
         private void btnDeleteAllEdges_Click(object sender, RoutedEventArgs e)
         {
             ActivateButton(sender);
@@ -305,6 +326,7 @@ namespace Interface_2
         {
             HideValencies();
             txAdjset.Clear();
+            dataGridAdjacencyMatrix.ItemsSource = null;
             DeleteGraph();
             DisableAllActionButtons();
             DisableTabControl();
@@ -464,11 +486,23 @@ namespace Interface_2
         }
         private void btnFloyds_Click(object sender, RoutedEventArgs e)
         {
+            if (graph.IsConnected())
+            {
             ActivateButton(btnFloyds);
             ClearAllOperations();
-            txExtraInfo2.Text = "Matrix of Shortest Paths:\n" + graph.FloydWarshallStr();
+            int[,] FloydsResult = graph.FloydWarshall();
+            Func<int, bool> function = weight => weight == 10000;
+            populateDataGrid(dataGridExtraInfo, FloydsResult, function);
+            dataGridExtraInfo.Visibility = Visibility.Visible;
+            txExtraInfo2.Text = "Matrix of Shortest Paths:\n";
+            }
+            else
+            {
+                MessageBox.Show("Please make sure your graph is connected");
+            }
             
         }
+        
         private void btnHighlightPaths_Click(object sender, RoutedEventArgs e)
         {
             ActivateButton(sender);
@@ -529,7 +563,7 @@ namespace Interface_2
         public void mouseMove(object sender, MouseEventArgs e)
         {
             //tracks the mouse as it hovers over a vertex
-            if (e.LeftButton == MouseButtonState.Pressed && currentButton == btnDragAndDrop)//if, whilst hovering, they press the vertex
+            if (e.LeftButton == MouseButtonState.Pressed && currentButton == btnDragAndDrop && sender is Ellipse)//if, whilst hovering, they press the vertex
             {
                 ellipseToDrop = sender as Ellipse;
                 ellipseToDrop.Fill = HighlightColour;

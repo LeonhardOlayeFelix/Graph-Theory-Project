@@ -31,6 +31,8 @@ namespace Interface_2
                     currentButton.Background = new SolidColorBrush(btnActivatedColour); //'activate' the current button
                 }
             }
+            dataGridExtraInfo.ItemsSource = null;
+            dataGridExtraInfo.Visibility = Visibility.Hidden;
             selectedVertices.Clear();
             selectedLinesNames.Clear();
         }

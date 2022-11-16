@@ -289,13 +289,13 @@
                                         <Bold>Adjacency Matrix</Bold>
                                     </GroupBox.Header>
                                     <Grid>
-                                        <TextBox AcceptsReturn="True"
-                                         x:Name="txAdjMat"
-                                         FontSize="20"
-                                         HorizontalContentAlignment="Center"
-                                         VerticalScrollBarVisibility="Auto" 
-                                         HorizontalScrollBarVisibility="Auto"
-                                         IsReadOnly="True"/>
+                                        <DataGrid
+                                        FontSize="17"
+                                        Visibility="Visible"
+                                            CellEditEnding="dataGridAdjacencyMatrix_CellEditEnding" 
+                                        Name="dataGridAdjacencyMatrix"
+                                        AlternatingRowBackground="LightGray"
+                                        CanUserAddRows="False"/>
                                     </Grid>
                                 </GroupBox>
                                 <GroupBox Grid.Row="3"
@@ -765,6 +765,15 @@
                                     TextAlignment="Center"
                                     FontSize="25"
                                     x:Name="txExtraInfo2" Grid.Column="1"/>
+                                <DataGrid
+                                    FontSize="20"
+                                    Grid.Row="1" Margin="20,63,20,20" 
+                                    Grid.Column="1"
+                                    IsReadOnly="True"
+                                    Visibility="Hidden"
+                                    Name="dataGridExtraInfo"
+                                    AlternatingRowBackground="LightGray"
+                                    CanUserAddRows="False"/>
                             </Grid>
 
                         </TabItem>
@@ -961,7 +970,7 @@
                                                 <TextBox Width="284" Margin="5,5,5,5" VerticalContentAlignment="Center" x:Name="txClassID"/>
                                             </StackPanel>
                                         </Grid>
-                                        
+
                                         <Grid Grid.Row="2">
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition/>
@@ -1004,9 +1013,10 @@
                                 </GroupBox>
                                 <GroupBox Header="View Class" Grid.Row="1" Grid.RowSpan="4" Grid.ColumnSpan="2">
                                     <Grid Margin="20">
-                                        <DataGrid x:Name="classDataGrid" AlternatingRowBackground="Gray" CanUserAddRows="False">
-                                            
-                                        </DataGrid>
+                                        <DataGrid x:Name="classDataGrid" 
+                                                  AlternatingRowBackground="LightGray"  
+                                                  FontSize ="20 " CanUserAddRows="False"
+                                                  IsReadOnly="True"/>
                                     </Grid>
                                 </GroupBox>
                             </Grid>

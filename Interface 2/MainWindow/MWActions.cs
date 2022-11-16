@@ -410,7 +410,42 @@ namespace Interface_2
         /// <returns></returns>
         public void GenerateAdjMat()
         {
-            txAdjMat.Text = graph.PrintAdjMatrix();
+            Func<int, bool> function = weight => weight == -1;
+            populateDataGrid(dataGridAdjacencyMatrix, graph.GetAdjacencyMatrix(), function);
+        }
+        public void populateDataGrid(DataGrid datagrid, int[,] list, Func<int,bool> noPathFunction)
+        {
+            DataTable dt = new DataTable();
+            int vertex = 0;
+            int nbColumns = graph.GetMaxVertexID() + 1;
+            int nbRows = graph.GetMaxVertexID() + 1; ;
+            dt.Columns.Add("-");
+            for (int i = 0; i < nbColumns; i++)
+            {
+                dt.Columns.Add(i.ToString(), typeof(double));
+            }
+
+            for (int row = 0; row < nbRows; row++)
+            {
+                DataRow dr = dt.NewRow();
+                for (int col = 0; col < nbColumns + 1; col++)
+                {
+                    if (col == 0)
+                    {
+                        dr[col] = vertex++;
+                    }
+                    else
+                    {
+                        int weight = list[row, col - 1];
+                        if (!noPathFunction(weight))
+                        {
+                            dr[col] = (noPathFunction(weight)) ? -1 : weight;
+                        }
+                    }
+                }
+                dt.Rows.Add(dr);
+            }
+            datagrid.ItemsSource = dt.DefaultView;
         }
         /// <summary>
         /// Hides all of the valencies
