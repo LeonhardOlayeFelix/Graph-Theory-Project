@@ -12,6 +12,7 @@ using System.Data.OleDb;
 using System.Text.RegularExpressions;
 using System.Timers;
 using System.Configuration;
+using System.Data;
 namespace Interface_2
 {
     public partial class MainWindow : Window
@@ -260,9 +261,30 @@ namespace Interface_2
                 txAdjset.Clear();
             }
         }
+        private void DataGridAdjacencyMatrix_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+        {
+            TextBox txWeight = (TextBox)e.EditingElement;
+            if (txWeight.Text.Length != 0)
+            {
+                DataGridColumn col1 = e.Column;
+                DataGridRow row1 = e.Row;
+                int row_index = ((DataGrid)sender).ItemContainerGenerator.IndexFromContainer(row1);
+                int col_index = col1.DisplayIndex - 1;
+                int weight = Convert.ToInt32(txWeight.Text);
+                ConnectVertices(FindEllipse(row_index), FindEllipse(col_index), weight, false, false, true);
+                //change the cell value instead of generating the adjacency matrix
+            }
+        }
         private void btnCreateClass_Click(object sender, RoutedEventArgs e)
         {
-            txNextClass.Text = "Next created class will be given the ID:" + NextID("C").ToString();
+            string className = txClassName2.Text;
+            if (className.Length == 0) 
+            {
+                MessageBox.Show("Please enter a name for your class."); 
+                return; 
+            }
+            CreateClass(className, loggedTeacher);
+            showNextID();
         }
         private void colourPickerHighlight_SelectedBrushChanged(object sender, Syncfusion.Windows.Tools.Controls.SelectedBrushChangedEventArgs e)
         {
@@ -305,6 +327,7 @@ namespace Interface_2
         {
             HideValencies();
             txAdjset.Clear();
+            dataGridAdjacencyMatrix.ItemsSource = null;
             DeleteGraph();
             DisableAllActionButtons();
             DisableTabControl();
@@ -464,9 +487,20 @@ namespace Interface_2
         }
         private void btnFloyds_Click(object sender, RoutedEventArgs e)
         {
+            if (graph.IsConnected())
+            {
             ActivateButton(btnFloyds);
             ClearAllOperations();
-            txExtraInfo2.Text = "Matrix of Shortest Paths:\n" + graph.FloydWarshallStr();
+            int[,] FloydsResult = graph.FloydWarshall();
+            Func<int, bool> function = weight => weight == 10000;
+            populateDataGrid(dataGridExtraInfo, FloydsResult, function);
+            dataGridExtraInfo.Visibility = Visibility.Visible;
+            txExtraInfo2.Text = "Matrix of Shortest Paths:\n";
+            }
+            else
+            {
+                MessageBox.Show("Please make sure your graph is connected");
+            }
             
         }
         private void btnHighlightPaths_Click(object sender, RoutedEventArgs e)
@@ -529,7 +563,7 @@ namespace Interface_2
         public void mouseMove(object sender, MouseEventArgs e)
         {
             //tracks the mouse as it hovers over a vertex
-            if (e.LeftButton == MouseButtonState.Pressed && currentButton == btnDragAndDrop)//if, whilst hovering, they press the vertex
+            if (e.LeftButton == MouseButtonState.Pressed && currentButton == btnDragAndDrop && sender is Ellipse)//if, whilst hovering, they press the vertex
             {
                 ellipseToDrop = sender as Ellipse;
                 ellipseToDrop.Fill = HighlightColour;
@@ -652,6 +686,7 @@ namespace Interface_2
             }
             ArrangeGraph(4, 100, randomGraph); //arranges graph into appropriate shape
             RenderGraph(randomGraph);
+            if (!TeacherIsLoggedIn()) { tabControlClass.IsEnabled = false; }
         }
         private void btnRouteInspStartAndEnd_Click(object sender, RoutedEventArgs e)
         {

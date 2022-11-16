@@ -43,6 +43,7 @@ namespace Interface_2
                     AlreadyExists = true;
                     MessageBox.Show("There is a previously saved graph with this name, go to the menu to load it.");
                 }
+                reader.Close();
             }
             else if (TeacherIsLoggedIn() && !rendering)
             {
@@ -53,6 +54,7 @@ namespace Interface_2
                     AlreadyExists = true;
                     MessageBox.Show("There is a previously saved graph with this name, go to the menu to load it.");
                 }
+                reader.Close();
             }
             else if (!rendering)
             {
@@ -63,6 +65,7 @@ namespace Interface_2
                     AlreadyExists = true;
                     MessageBox.Show("There is a previously saved graph with this name, go to the menu to load it.");
                 }
+                reader.Close();
             }
             if (!AlreadyExists)
             {
@@ -82,6 +85,7 @@ namespace Interface_2
                 btnDeleteGraph.IsEnabled = true;
                 btnSaveGraph.IsEnabled = true;
             }
+            
         }
         /// <summary>
         /// Clears all of the highlighted lines that are on the screen
@@ -111,7 +115,7 @@ namespace Interface_2
         /// <param name="v2">Vertex from the other end of the edge</param>
         /// <param name="weight">Edge Weight</param>
         /// <param name="rendering">True only if this method is being used to load a previously saved graph</param>
-        private void ConnectVertices(Ellipse v1, Ellipse v2, int weight, bool rendering = false, bool floyds = false) 
+        private void ConnectVertices(Ellipse v1, Ellipse v2, int weight, bool rendering = false, bool floyds = false, bool edittingCell = false) 
         {
             
             //gets the smaller and larger vertex
@@ -124,7 +128,7 @@ namespace Interface_2
                 if (edge.Item1.Name == lineName)//if it does....
                 {
                     if (rendering || floyds) { return; }
-                    DeleteEdge(edge, rendering);//delete the edge
+                    DeleteEdge(edge, rendering, false, edittingCell);//delete the edge
                     break;
                 }
             }
@@ -225,7 +229,7 @@ namespace Interface_2
                 mainCanvas.Children.Add(weightLabel);
             if (floyds) { line.Stroke = HighlightColour; }
             GenerateAdjList();
-            GenerateAdjMat();
+            if (!edittingCell) { GenerateAdjMat(); };
         }
         /// <summary>
         /// Responsible for decreasing the selection counts
@@ -410,7 +414,42 @@ namespace Interface_2
         /// <returns></returns>
         public void GenerateAdjMat()
         {
-            txAdjMat.Text = graph.PrintAdjMatrix();
+            Func<int, bool> function = weight => weight == -1;
+            populateDataGrid(dataGridAdjacencyMatrix, graph.GetAdjacencyMatrix(), function);
+        }
+        public void populateDataGrid(DataGrid dataGrid, int[,] list, Func<int,bool> noPathFunction)
+        {
+            DataTable dt = new DataTable();
+            int vertex = 0;
+            int nbColumns = graph.GetMaxVertexID() + 1;
+            int nbRows = graph.GetMaxVertexID() + 1; ;
+            dt.Columns.Add("-");
+            for (int i = 0; i < nbColumns; i++)
+            {
+                dt.Columns.Add(i.ToString(), typeof(int));
+            }
+
+            for (int row = 0; row < nbRows; row++)
+            {
+                DataRow dr = dt.NewRow();
+                for (int col = 0; col < nbColumns + 1; col++)
+                {
+                    if (col == 0)
+                    {
+                        dr[col] = vertex++;
+                    }
+                    else
+                    {
+                        int weight = list[row, col - 1];
+                        if (!noPathFunction(weight))
+                        {
+                            dr[col] = (noPathFunction(weight)) ? -1 : weight;
+                        }
+                    }
+                }
+                dt.Rows.Add(dr);
+            }
+            dataGrid.ItemsSource = dt.DefaultView;
         }
         /// <summary>
         /// Hides all of the valencies
@@ -529,6 +568,7 @@ namespace Interface_2
             btnLogOut.IsEnabled = true;
             tabControlClass.IsEnabled = false;
             tabControlAssignments.IsEnabled = true;
+            tabControlActions.IsEnabled = true;
             DeleteGraph();
         }
         /// <summary>
@@ -639,6 +679,10 @@ namespace Interface_2
                 }
             }
         }
+        private void showNextID()
+        {
+            txNextClass.Text = "Next created class will be given the ID:" + NextID("C").ToString();
+        }
         /// <summary>
         /// Display all of the valencies on the screen
         /// </summary>
@@ -683,6 +727,7 @@ namespace Interface_2
             btnLogOut.IsEnabled = true;
             tabControlClass.IsEnabled = true;
             tabControlAssignments.IsEnabled = true;
+            tabControlActions.IsEnabled = true;
             DeleteGraph();
         }
     }

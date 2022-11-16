@@ -1,18 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.OleDb;
 using System.Linq;
+using System.Net.Mail;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Shapes;
-using System.Windows.Media.Animation;
-using System.Timers;
-using System.Data.OleDb;
-using System.Configuration;
-using System.Text.RegularExpressions;
-using System.Net.Mail;
+using System.Data;
 namespace Interface_2
 {
     public partial class MainWindow : Window
@@ -160,7 +155,7 @@ namespace Interface_2
         /// <param name="edge">The edge that is to be deleted</param>
         /// <param name="rendering">True only if this method is being used to load a previously saved graph</param>
         /// <param name="deletingVertex">True only if this function is being called as a result of a vertex is being deleted</param>
-        private void DeleteEdge(Tuple<Line, Ellipse, Ellipse, TextBlock> edge, bool rendering = false, bool deletingVertex = false)
+        private void DeleteEdge(Tuple<Line, Ellipse, Ellipse, TextBlock> edge, bool rendering = false, bool deletingVertex = false, bool edittingCell = false)
         {
             if (!rendering && !deletingVertex)
             {
@@ -171,7 +166,7 @@ namespace Interface_2
             InitiateDeleteLineStoryboard(edge.Item1, TimeSpan.FromSeconds(0.1));
             edgeList.Remove(edge);//remove it from the graph
             GenerateAdjList();
-            GenerateAdjMat();
+            if (!edittingCell) { GenerateAdjMat(); } ;
         }
         /// <summary>
         /// Displays the result of a depth first search
@@ -313,29 +308,36 @@ namespace Interface_2
         /// </summary>
         private void loadGrid()
         {
-            OleDbConnection con = new OleDbConnection();
-            con.ConnectionString = ConfigurationManager.ConnectionStrings["Connection"].ToString();
-            con.Open();
-            Regex regex2 = new Regex(@"C[\d][\d][\d][\d]");
-            OleDbCommand cmd = new OleDbCommand();
-            cmd.Connection = con;
             string classID = txClassID2.Text;
+            DataTable stuffToDisplay = new DataTable();
+            if (isValidTeacherID(classID))
+            {
+                OleDbConnection conn = new OleDbConnection(MainWindow.ConStr);
+                conn.Open();
+                OleDbCommand cmd = new OleDbCommand();
+                cmd.Connection = conn;
+                cmd.CommandText = $"SELECT * FROM ClassEnrollment WHERE ClassID = '{classID}'";
+                OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+                adapter.Fill(stuffToDisplay);
+                classDataGrid.ItemsSource = stuffToDisplay.DefaultView;
+                txClassName.Text = "Class Name: " + GetClassName(classID);
+                conn.Close();
+            }
+        }
+        public bool isValidTeacherID(string classID)
+        {
+            Regex regex2 = new Regex(@"C[\d][\d][\d][\d]");
             if (!(regex2.IsMatch(classID) && classID.Length == 5))
             {
                 MessageBox.Show("Invalid Class ID");
-                return;
+                return false;
             }
             else if (!ClassExists(classID))
             {
                 MessageBox.Show("Class is not registered.");
-                return;
+                return false;
             }
-            cmd.CommandText = $"SELECT * FROM ClassEnrollment WHERE ClassID = '{classID}'";
-            cmd.ExecuteNonQuery();
-            OleDbDataReader rd = cmd.ExecuteReader();
-            classDataGrid.ItemsSource = rd;
-            MessageBox.Show(GetClassName(classID));
-            con.Close();
+            return true;
         }
         /// <summary>
         /// Displays the result of prim's algorithm

@@ -54,9 +54,8 @@ namespace Interface_2
             InitializeComponent();
             DisableAllActionButtons();
             DisableTabControl();
+            showNextID();
             btnSaveGraph.IsEnabled = false;
-            //Database database = new Database("GraphDB");
-            //database.CreateDatabase();
             LogOutProcess();
             CreateDatabase();
         }

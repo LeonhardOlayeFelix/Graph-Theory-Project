@@ -289,13 +289,14 @@
                                         <Bold>Adjacency Matrix</Bold>
                                     </GroupBox.Header>
                                     <Grid>
-                                        <TextBox AcceptsReturn="True"
-                                         x:Name="txAdjMat"
-                                         FontSize="20"
-                                         HorizontalContentAlignment="Center"
-                                         VerticalScrollBarVisibility="Auto" 
-                                         HorizontalScrollBarVisibility="Auto"
-                                         IsReadOnly="True"/>
+                                        <DataGrid
+                                        FontSize="17"
+                                        Visibility="Visible"
+                                        Name="dataGridAdjacencyMatrix"
+                                        AlternatingRowBackground="LightGray"
+                                            CellEditEnding="DataGridAdjacencyMatrix_CellEditEnding"
+                                            
+                                        CanUserAddRows="False"/>
                                     </Grid>
                                 </GroupBox>
                                 <GroupBox Grid.Row="3"
@@ -765,6 +766,15 @@
                                     TextAlignment="Center"
                                     FontSize="25"
                                     x:Name="txExtraInfo2" Grid.Column="1"/>
+                                <DataGrid
+                                    FontSize="20"
+                                    Grid.Row="1" Margin="20,63,20,20" 
+                                    Grid.Column="1"
+                                    IsReadOnly="True"
+                                    Visibility="Hidden"
+                                    Name="dataGridExtraInfo"
+                                    AlternatingRowBackground="LightGray"
+                                    CanUserAddRows="False"/>
                             </Grid>
 
                         </TabItem>
@@ -853,7 +863,8 @@
                                         </StackPanel>
                                         <Button Margin="30,17,30,30"
                                             x:Name="btnResetColour"
-                                            Click="btnResetColour_Click" Content="Reset To Default"/>
+                                            Click="btnResetColour_Click" 
+                                            Content="Reset To Default"/>
                                     </StackPanel>
                                 </GroupBox>
                                 <GroupBox Grid.Column="1"
@@ -896,7 +907,7 @@
                                                        Height="30"></TextBlock>
                                             </StackPanel>
                                         </GroupBox>
-                                        <GroupBox Header="Path Walker Duration">
+                                        <GroupBox Header="Path Walker Duration" Height="147">
                                             <StackPanel>
                                                 <StackPanel Orientation="Horizontal">
                                                     <Slider Background="Gray"
@@ -937,15 +948,14 @@
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="200"/>
                                     <RowDefinition Height="200"/>
-                                    <RowDefinition Height="200"/>
-                                    <RowDefinition Height="200"/>
+                                    <RowDefinition Height="318"/>
+                                    <RowDefinition Height="250"/>
                                 </Grid.RowDefinitions>
                                 <GroupBox Header="Remove/Add Students to Class">
                                     <Grid>
                                         <Grid.RowDefinitions>
                                             <RowDefinition/>
                                             <RowDefinition/>
-
                                         </Grid.RowDefinitions>
                                         <Grid>
                                             <Grid.RowDefinitions>
@@ -961,7 +971,7 @@
                                                 <TextBox Width="284" Margin="5,5,5,5" VerticalContentAlignment="Center" x:Name="txClassID"/>
                                             </StackPanel>
                                         </Grid>
-                                        
+
                                         <Grid Grid.Row="2">
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition/>
@@ -973,7 +983,7 @@
                                         </Grid>
                                     </Grid>
                                 </GroupBox>
-                                <GroupBox Grid.Column = "2" Header="View Class">
+                                <GroupBox Grid.Column = "1" Header="View/Create Class">
                                     <Grid>
                                         <Grid.RowDefinitions>
                                             <RowDefinition/>
@@ -981,14 +991,19 @@
                                         </Grid.RowDefinitions>
                                         <Grid>
                                             <Grid.RowDefinitions>
-                                                <RowDefinition/>
-                                                <RowDefinition/>
+                                                <RowDefinition Height="36*"/>
+                                                <RowDefinition Height="36"/>
+                                                <RowDefinition Height="16*"/>
                                             </Grid.RowDefinitions>
                                             <StackPanel  Orientation="Horizontal" Margin="0">
                                                 <TextBlock VerticalAlignment="Center" FontSize="15" Text="Enter Class ID:"/>
                                                 <TextBox Width="265" Margin="5" VerticalContentAlignment="Center" Name="txClassID2"/>
                                             </StackPanel>
-                                            <TextBlock FontWeight="Medium" Margin="0,16,0,-17" Grid.Row="1" Name="txNextClass">
+                                            <StackPanel Grid.Row="1"  Orientation="Horizontal" Margin="0">
+                                                <TextBlock VerticalAlignment="Center" FontSize="15" Text="Enter Class Name:"/>
+                                                <TextBox Width="265" Margin="5" VerticalContentAlignment="Center" Name="txClassName2"/>
+                                            </StackPanel>
+                                            <TextBlock TextAlignment="Center" FontSize="15" FontWeight="Medium" Margin="0,16,0,-21" Grid.Row="2" Name="txNextClass">
                                                 Next created class will be given the ID:
                                             </TextBlock>
                                         </Grid>
@@ -1002,11 +1017,43 @@
                                         </Grid>
                                     </Grid>
                                 </GroupBox>
-                                <GroupBox Header="View Class" Grid.Row="1" Grid.RowSpan="4" Grid.ColumnSpan="2">
+                                <GroupBox Header="View Class" Grid.Row="1" Grid.RowSpan="2" Grid.ColumnSpan="2">
                                     <Grid Margin="20">
-                                        <DataGrid x:Name="classDataGrid" AlternatingRowBackground="Gray" CanUserAddRows="False">
-                                            
-                                        </DataGrid>
+                                        <TextBlock Margin="10,0,10,400" TextAlignment="Center" FontSize="20" Name="txClassName" Text="Class Name: "/>
+                                        <DataGrid x:Name="classDataGrid" 
+                                                  AlternatingRowBackground="LightGray"  
+                                                  FontSize ="20" CanUserAddRows="False"
+                                                  IsReadOnly="True"
+                                                  Margin="0,71,0,0"/>
+                                    </Grid>
+                                </GroupBox>
+                                <GroupBox Grid.Row="3" Header="Set Assignments">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                        </Grid.RowDefinitions>
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition/>
+                                                <RowDefinition/>
+                                            </Grid.RowDefinitions>
+                                            <StackPanel  Orientation="Horizontal" Margin="0">
+                                                <TextBlock VerticalAlignment="Center" FontSize="15" Text="Enter Class ID:"/>
+                                                <TextBox Width="320" Margin="5" VerticalContentAlignment="Center" Name="txClassAssignmentID"/>
+                                            </StackPanel>
+                                            <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0" >
+                                                <TextBlock VerticalAlignment="Center" FontSize="15" Text="Enter Assignment Note:"/>
+                                                <TextBox Width="258" Margin="5,5,5,5" VerticalContentAlignment="Center" x:Name="txAssignmentNote"/>
+                                            </StackPanel>
+                                        </Grid>
+                                        <Grid Grid.Row="2">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition/>
+                                                <ColumnDefinition/>
+                                            </Grid.ColumnDefinitions>
+                                            <Button Grid.ColumnSpan="2" Margin="5,40,5,40" Content="Add to class" Name="btnSetAssignment" Click="BtnAddToClass_Click"/>
+                                        </Grid>
                                     </Grid>
                                 </GroupBox>
                             </Grid>
