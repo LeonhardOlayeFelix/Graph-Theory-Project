@@ -765,17 +765,12 @@ namespace Interface_2
             ActivateButton(sender);
             ClearAllOperations();
             Regex regex = new Regex(@"S[\d][\d][\d][\d]");
-            Regex regex2 = new Regex(@"C[\d][\d][\d][\d]");
             string studentID = txStudentID.Text;
+            Student student = InitialiseStudent(studentID);
             string classID = cbClassID2.SelectedValue.ToString();
             if (!(regex.IsMatch(studentID) && studentID.Length == 5))
             {
                 MessageBox.Show("Invalid Student ID");
-                return;
-            }
-            else if (!(regex2.IsMatch(classID) && classID.Length == 5))
-            {
-                MessageBox.Show("Invalid Class ID");
                 return;
             }
             else if (!StudentAlreadySaved(studentID))
@@ -783,23 +778,13 @@ namespace Interface_2
                 MessageBox.Show("Student ID is not registered");
                 return;
             }
-            else if (!ClassExists(classID))
-            {
-                MessageBox.Show("Class ID is not registered");
-                return;
-            }
-            else if (!Authorised(classID))
-            {
-                MessageBox.Show("You must be the teacher of this class to add or remove students");
-                return;
-            }
-            Student student = InitialiseStudent(studentID);
-            if (!IsInClass(classID, student))
+            else if (!IsInClass(classID, student))
             {
                 MessageBox.Show("This student is not in this class");
                 return;
             }
             RemoveStudent(classID, student);
+            MessageBox.Show("Student has been removed from"+GetClassName(classID)+" ("+classID+")");
         }
         private void btnSaveGraph_Click(object sender, RoutedEventArgs e)   
         {
