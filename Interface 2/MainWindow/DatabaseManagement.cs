@@ -30,6 +30,7 @@ namespace Interface_2
                 return true;
             }
             conn.Close();
+            reader.Close();
             return false;
         }
         public static void CreateDatabase()
@@ -169,6 +170,8 @@ namespace Interface_2
                 conn.Close();
                 return true;
             }
+            reader.Close();
+            reader2.Close();
             conn.Close();
             return false;
         }
@@ -190,6 +193,7 @@ namespace Interface_2
                 conn.Close();
                 return true;
             }
+            reader.Close();
             conn.Close();
             return false;
         }
@@ -213,6 +217,7 @@ namespace Interface_2
                 return true;
             }
             conn.Close();
+            reader.Close();
             return false;
         }
         public static bool ClassExists(string ID)
@@ -333,6 +338,7 @@ namespace Interface_2
                 conn.Close();//theres a student so return true
                 return true;
             }
+            reader.Close();
             conn.Close();
             return false;
         }
@@ -356,6 +362,7 @@ namespace Interface_2
                 Ids.Add(InitialiseStudent(ID));
             }
             conn.Close();
+            reader.Close();
             return Ids;
         }
         /// <summary>
@@ -379,6 +386,7 @@ namespace Interface_2
                 return student;
             }
             conn.Close();
+            reader.Close();
             return null;
         }
         /// <summary>
@@ -401,6 +409,7 @@ namespace Interface_2
                 conn.Close();
                 return teacher;
             }
+            reader.Close();
             conn.Close();
             return null;
         }
@@ -465,16 +474,17 @@ namespace Interface_2
             conn.Open();
             OleDbCommand cmd = new OleDbCommand();
             cmd.Connection = conn;
-            cmd.CommandText = $"SELECT ClassName FROM Class WHERE ClassID = '{ClassID}'";
+            cmd.CommandText = $"SELECT * FROM Class WHERE ClassID = '{ClassID}'";
             OleDbDataReader reader = cmd.ExecuteReader();
-            try
+            if (reader.HasRows)
             {
-                ID = cmd.ExecuteScalar().ToString();
+                //reader.Read();
+                //ID = (string)reader["ClassName"];
+                //reader.Close();
+                reader.Close();
+                int i = reader.FieldCount;
             }
-            catch
-            {
-                MessageBox.Show("fail");
-            }
+            reader.Close();
             conn.Close();
             return ID;
         }

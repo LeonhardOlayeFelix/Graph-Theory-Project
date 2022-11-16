@@ -332,9 +332,10 @@ namespace Interface_2
             }
             cmd.CommandText = $"SELECT * FROM ClassEnrollment WHERE ClassID = '{classID}'";
             cmd.ExecuteNonQuery();
-            OleDbDataReader rd = cmd.ExecuteReader();
-            classDataGrid.ItemsSource = rd;
-            MessageBox.Show(GetClassName(classID));
+            OleDbDataReader reader = cmd.ExecuteReader();
+            classDataGrid.ItemsSource = reader;
+            txClassName.Text = "Class Name: " + GetClassName(classID);
+            reader.Close();
             con.Close();
         }
         /// <summary>

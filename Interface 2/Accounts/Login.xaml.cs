@@ -82,6 +82,8 @@ namespace Interface_2
             {
                 MessageBox.Show("Email or Password was incorrect. Please try again.");
             }
+            reader.Close();
+            reader2.Close();
         }
     }
 }

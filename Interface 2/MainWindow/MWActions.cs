@@ -43,6 +43,7 @@ namespace Interface_2
                     AlreadyExists = true;
                     MessageBox.Show("There is a previously saved graph with this name, go to the menu to load it.");
                 }
+                reader.Close();
             }
             else if (TeacherIsLoggedIn() && !rendering)
             {
@@ -53,6 +54,7 @@ namespace Interface_2
                     AlreadyExists = true;
                     MessageBox.Show("There is a previously saved graph with this name, go to the menu to load it.");
                 }
+                reader.Close();
             }
             else if (!rendering)
             {
@@ -63,6 +65,7 @@ namespace Interface_2
                     AlreadyExists = true;
                     MessageBox.Show("There is a previously saved graph with this name, go to the menu to load it.");
                 }
+                reader.Close();
             }
             if (!AlreadyExists)
             {
@@ -82,6 +85,7 @@ namespace Interface_2
                 btnDeleteGraph.IsEnabled = true;
                 btnSaveGraph.IsEnabled = true;
             }
+            
         }
         /// <summary>
         /// Clears all of the highlighted lines that are on the screen
@@ -564,6 +568,7 @@ namespace Interface_2
             btnLogOut.IsEnabled = true;
             tabControlClass.IsEnabled = false;
             tabControlAssignments.IsEnabled = true;
+            tabControlActions.IsEnabled = true;
             DeleteGraph();
         }
         /// <summary>
@@ -674,6 +679,10 @@ namespace Interface_2
                 }
             }
         }
+        private void showNextID()
+        {
+            txNextClass.Text = "Next created class will be given the ID:" + NextID("C").ToString();
+        }
         /// <summary>
         /// Display all of the valencies on the screen
         /// </summary>
@@ -718,6 +727,7 @@ namespace Interface_2
             btnLogOut.IsEnabled = true;
             tabControlClass.IsEnabled = true;
             tabControlAssignments.IsEnabled = true;
+            tabControlActions.IsEnabled = true;
             DeleteGraph();
         }
     }

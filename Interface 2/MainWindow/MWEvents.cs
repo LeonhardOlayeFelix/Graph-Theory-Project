@@ -263,31 +263,18 @@ namespace Interface_2
         }
         private void btnCreateClass_Click(object sender, RoutedEventArgs e)
         {
-            txNextClass.Text = "Next created class will be given the ID:" + NextID("C").ToString();
+            string className = txClassName2.Text;
+            if (className.Length == 0) 
+            {
+                MessageBox.Show("Please enter a name for your class."); 
+                return; 
+            }
+            CreateClass(className, loggedTeacher);
+            showNextID();
         }
         private void colourPickerHighlight_SelectedBrushChanged(object sender, Syncfusion.Windows.Tools.Controls.SelectedBrushChangedEventArgs e)
         {
             HighlightColour = (SolidColorBrush)colourPickerHighlight.SelectedBrush;
-        }
-        private void dataGridAdjacencyMatrix_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
-        {
-            int rowIndex = e.Row.GetIndex(); //rowpicked
-            var column = e.Column as DataGridBoundColumn;
-            if (column != null)
-            {
-                int columnIndex = Convert.ToInt32((column.Binding as Binding).Path.Path); //finds the column picked
-                MessageBox.Show("(" + rowIndex + ", " + columnIndex + ")");
-                var txEnteredval = e.EditingElement as TextBox;
-                int weight = Convert.ToInt32(txEnteredval.Text);
-                MessageBox.Show(weight.ToString());
-                //if (rowIndex != columnIndex)
-                //{
-                //    var txEnteredval = e.EditingElement as TextBox;
-                //    int weight = Convert.ToInt32(txEnteredval.Text);
-                //    ConnectVertices(FindEllipse(rowIndex), FindEllipse(columnIndex), weight);
-                //}
-            }
-
         }
         private void btnDeleteAllEdges_Click(object sender, RoutedEventArgs e)
         {
@@ -502,7 +489,6 @@ namespace Interface_2
             }
             
         }
-        
         private void btnHighlightPaths_Click(object sender, RoutedEventArgs e)
         {
             ActivateButton(sender);
@@ -686,6 +672,7 @@ namespace Interface_2
             }
             ArrangeGraph(4, 100, randomGraph); //arranges graph into appropriate shape
             RenderGraph(randomGraph);
+            if (!TeacherIsLoggedIn()) { tabControlClass.IsEnabled = false; }
         }
         private void btnRouteInspStartAndEnd_Click(object sender, RoutedEventArgs e)
         {
