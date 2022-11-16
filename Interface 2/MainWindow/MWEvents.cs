@@ -151,42 +151,26 @@ namespace Interface_2
             ActivateButton(sender);
             ClearAllOperations();
             Regex regex = new Regex(@"S[\d][\d][\d][\d]");
-            Regex regex2 = new Regex(@"C[\d][\d][\d][\d]");
             string studentID = txStudentID.Text;
-            string classID = txClassID.Text;
-            
+            Student student = InitialiseStudent(studentID);
+            string classID = cbClassID2.SelectedValue.ToString();
             if (!(regex.IsMatch(studentID) && studentID.Length == 5))
             {
                 MessageBox.Show("Invalid Student ID");
-                return;
-            }
-            else if (!(regex2.IsMatch(classID) && classID.Length == 5))
-            {
-                MessageBox.Show("Invalid Class ID");
                 return;
             }
             else if (!StudentAlreadySaved(studentID))
             {
                 MessageBox.Show("Student ID is not registered");
                 return;
-            }
-            else if (!ClassExists(classID))
-            {
-                MessageBox.Show("Class ID is not registered");
-                return;
-            }
-            else if (!Authorised(classID))
-            {
-                MessageBox.Show("You must be the teacher of this class to add or remove students");
-                return;
-            }
-            Student student = InitialiseStudent(studentID);
-            if (IsInClass(classID, student))
+            }            
+            else if (IsInClass(classID, student))
             {
                 MessageBox.Show("This student is already in this class");
                 return;
             }
             EnrollStudent(classID, student);
+            MessageBox.Show("Student has been added to "+GetClassName(classID)+" ("+classID+")");
         }
         private void cbAutoGenEdges_Checked(object sender, RoutedEventArgs e)
         {
@@ -284,6 +268,7 @@ namespace Interface_2
                 return; 
             }
             CreateClass(className, loggedTeacher);
+            loadComboBoxes();
             showNextID();
         }
         private void colourPickerHighlight_SelectedBrushChanged(object sender, Syncfusion.Windows.Tools.Controls.SelectedBrushChangedEventArgs e)
@@ -782,7 +767,7 @@ namespace Interface_2
             Regex regex = new Regex(@"S[\d][\d][\d][\d]");
             Regex regex2 = new Regex(@"C[\d][\d][\d][\d]");
             string studentID = txStudentID.Text;
-            string classID = txClassID.Text;
+            string classID = cbClassID2.SelectedValue.ToString();
             if (!(regex.IsMatch(studentID) && studentID.Length == 5))
             {
                 MessageBox.Show("Invalid Student ID");

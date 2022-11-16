@@ -682,6 +682,30 @@ namespace Interface_2
         private void showNextID()
         {
             txNextClass.Text = "Next created class will be given the ID:" + NextID("C").ToString();
+            
+        }
+        private void loadComboBoxes()
+        {
+            if (TeacherIsLoggedIn())
+            {
+                OleDbConnection conn = new OleDbConnection(ConStr);
+                OleDbCommand cmd = new OleDbCommand();
+                conn.Open();
+                cmd.Connection = conn;
+                // only want to display the classes that the teacher is supposed to have access to.
+                string ID = loggedTeacher.ID;
+                cmd.CommandText = $"SELECT ClassID, ClassName FROM Class WHERE TeacherID = '{ID}'";
+                DataTable datatable = new DataTable();
+                OleDbDataAdapter dataAdapter = new OleDbDataAdapter(cmd);
+                dataAdapter.Fill(datatable);
+                cbClassID.ItemsSource = datatable.DefaultView;
+                cbClassID.DisplayMemberPath = "ClassName";
+                cbClassID.SelectedValuePath = "ClassID";
+                cbClassID2.ItemsSource = datatable.DefaultView;
+                cbClassID2.DisplayMemberPath = "ClassName";
+                cbClassID2.SelectedValuePath = "ClassID";
+                conn.Close();
+            }
         }
         /// <summary>
         /// Display all of the valencies on the screen
@@ -729,6 +753,8 @@ namespace Interface_2
             tabControlAssignments.IsEnabled = true;
             tabControlActions.IsEnabled = true;
             DeleteGraph();
+            loadComboBoxes();
+            showNextID();
         }
     }
 }

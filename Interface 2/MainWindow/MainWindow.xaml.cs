@@ -54,10 +54,11 @@ namespace Interface_2
             InitializeComponent();
             DisableAllActionButtons();
             DisableTabControl();
+            CreateDatabase();
             showNextID();
+            loadComboBoxes();
             btnSaveGraph.IsEnabled = false;
             LogOutProcess();
-            CreateDatabase();
         }
         private void PopulateIDs()
         {

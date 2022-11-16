@@ -308,9 +308,9 @@ namespace Interface_2
         /// </summary>
         private void loadGrid()
         {
-            string classID = txClassID2.Text;
+            string classID = cbClassID.SelectedValue.ToString();
             DataTable stuffToDisplay = new DataTable();
-            if (isValidTeacherID(classID))
+            if (isValidClassID(classID))
             {
                 OleDbConnection conn = new OleDbConnection(MainWindow.ConStr);
                 conn.Open();
@@ -324,7 +324,7 @@ namespace Interface_2
                 conn.Close();
             }
         }
-        public bool isValidTeacherID(string classID)
+        public bool isValidClassID(string classID)
         {
             Regex regex2 = new Regex(@"C[\d][\d][\d][\d]");
             if (!(regex2.IsMatch(classID) && classID.Length == 5))
