@@ -57,14 +57,12 @@ namespace Interface_2
             btnAddConnection.IsEnabled = false;
             btnDeleteConnection.IsEnabled = false;
             btnDeleteVertex.IsEnabled = false;
-            btnTakeScreenshot.IsEnabled = false;
             btnDragAndDrop.IsEnabled = false;
             btnDefault.IsEnabled = false;
             btnRevertOnePositions.IsEnabled = false;
             btnRevertPositions.IsEnabled = false;
             btnDeleteAllEdges.IsEnabled = false;
-
-
+            btnFluidAddEdge.IsEnabled = false;
         }
         public void DisableTabControl()
         {
@@ -95,12 +93,13 @@ namespace Interface_2
             btnAddConnection.IsEnabled = true;
             btnDeleteConnection.IsEnabled = true;
             btnDeleteVertex.IsEnabled = true;
-            btnTakeScreenshot.IsEnabled = true;
             btnDragAndDrop.IsEnabled = true;
             btnDefault.IsEnabled = true;
             btnRevertOnePositions.IsEnabled = true;
             btnRevertPositions.IsEnabled = true;
             btnDeleteAllEdges.IsEnabled = true;
+            btnFluidAddEdge.IsEnabled = true;
+            
         }
         public void EnableTabControl()
         {

@@ -629,28 +629,56 @@ namespace Interface_2
             //tracks the mouse as it hovers over a vertex
             if (e.LeftButton == MouseButtonState.Pressed && currentButton == btnDragAndDrop && sender is Ellipse)//if, whilst hovering, they press the vertex
             {
-                ellipseToDrop = sender as Ellipse;
-                ellipseToDrop.Fill = HighlightColour;
+                ellipseHovered = sender as Ellipse;
+                ellipseHovered.Fill = HighlightColour;
                 DragDrop.DoDragDrop(sender as Ellipse, sender as Ellipse, DragDropEffects.Move); //start the drag function on this vertex
                 RevertEllipseColour();
+            }
+            else if (e.LeftButton == MouseButtonState.Pressed && currentButton == btnFluidAddEdge && sender is Ellipse)
+            {
+                gbParent.IsEnabled = false;
+                ellipseHovered = sender as Ellipse;
+                if (ellipseHovered != lastSelectedVertex)
+                {
+                    buttonSelectionCount += 1;
+                    if (buttonSelectionCount % 2 == 0) //if even its the second vertex they want to connect to
+                    {
+                        AddConnectionEven(ellipseHovered, true);
+                    }
+                    else if (buttonSelectionCount % 2 == 1) //if odd, its the first vertex they pressed to connect to, so set it to lastSelectedVertex
+                    {
+                        AddConnectionOdd(ellipseHovered);
+                    }
+                }
+            }
+        }
+        private void mainCanvas_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            if (currentButton == btnFluidAddEdge)
+            {
+                gbParent.IsEnabled = true;
+                EnableTabControl();
+                EnableAllActionButtons();
+                btnLoadGraph.IsEnabled = true;
+                btnSaveGraph.IsEnabled = true;
             }
         }
         private void mainCanvas_DragOver(object sender, DragEventArgs e)
         {
             //if the mouse the vertex is being dragged
-            int ellipseToDropID = Convert.ToInt32(ellipseToDrop.Name.Substring(3));
+            int ellipseToDropID = Convert.ToInt32(ellipseHovered.Name.Substring(3));
             Point dropPosition = e.GetPosition(mainCanvas); //current position of the place its being dragged
-            Canvas.SetLeft(ellipseToDrop, dropPosition.X);//updates the x coordinate every time its dragged
+            Canvas.SetLeft(ellipseHovered, dropPosition.X);//updates the x coordinate every time its dragged
             graph.GetVertex(ellipseToDropID).Position.X = dropPosition.X; //udpate its position in the class too
-            Canvas.SetTop(ellipseToDrop, dropPosition.Y);//updates the y coordinate ever time its dragged
+            Canvas.SetTop(ellipseHovered, dropPosition.Y);//updates the y coordinate ever time its dragged
             graph.GetVertex(ellipseToDropID).Position.Y = dropPosition.Y; //update its position in the class too
             labelExtraInfo.Content = "Drag position: " + graph.GetVertex(ellipseToDropID).Position.GetPositionTuple();
-            TextBlock label = FindLabel(Convert.ToInt32(ellipseToDrop.Name.Substring(3)));
+            TextBlock label = FindLabel(Convert.ToInt32(ellipseHovered.Name.Substring(3)));
             Canvas.SetLeft(label, dropPosition.X - 4); //update that label too
             Canvas.SetTop(label, dropPosition.Y - 9);
             foreach (Tuple<Line, Ellipse, Ellipse, TextBlock> edge in edgeList)
             {
-                if (edge.Item2 == ellipseToDrop || edge.Item3 == ellipseToDrop) //look for the weight that matches to vertexes
+                if (edge.Item2 == ellipseHovered || edge.Item3 == ellipseHovered) //look for the weight that matches to vertexes
                 {
                     double MidPointX = (Canvas.GetLeft(edge.Item2) + Canvas.GetLeft(edge.Item3)) / 2;
                     double MidPointY = (Canvas.GetTop(edge.Item2) + Canvas.GetTop(edge.Item3)) / 2; //update it to the midpoint of the line as it moves each time
@@ -978,6 +1006,12 @@ namespace Interface_2
             cmd.ExecuteNonQuery();
             DeleteGraph();
             loadComboBoxes();
+        }
+        private void btnFluidAddEdge_Click(object sender, RoutedEventArgs e)
+        {
+            ActivateButton(sender);
+            labelExtraInfo.Content = "Click and hold on a vertex and drag to other vertices to add edges with random weights fluidly.";
+            ClearAllOperations();
         }
     }
 }

@@ -44,7 +44,7 @@ namespace Interface_2
         public int Zindex = 2;
         public int buttonId = 0;
         string valencyState;
-        Ellipse ellipseToDrop = null;
+        Ellipse ellipseHovered = null;
         SolidColorBrush HighlightColour = null;
         bool mouseDown = false;
         Point mouseDownPos;

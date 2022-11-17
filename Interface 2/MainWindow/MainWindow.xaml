@@ -61,6 +61,7 @@
                 DragOver="mainCanvas_DragOver"
                 x:Name="mainCanvas"
                 Grid.Row="0"
+                        MouseUp="mainCanvas_MouseUp"
                 Background="{Binding ElementName=colourPickerBackground, Path=SelectedBrush, UpdateSourceTrigger=PropertyChanged}"
                 Margin="20"
                 MouseLeftButtonDown="mainCanvas_MouseLeftButtonDown"
@@ -109,8 +110,8 @@
             <GroupBox Grid.Column="1" 
                       Panel.ZIndex="3"
                   Background="White" 
-                  Margin="7">
-
+                  Margin="7"
+                      Name="gbParent">
                 <GroupBox.Header>
                     <Label>Options</Label>
                 </GroupBox.Header>
@@ -466,10 +467,10 @@
                                         Take a screenshot of the canvas
                                         </TextBlock>
                                         <Button Margin="20,14,20,6"
-                                            x:Name="btnTakeScreenshot"
+                                            x:Name="btnFluidAddEdge"
                                             Grid.Row="0"
-                                            Click="btnTakeScreenshot_Click">
-                                            Take Screenshot
+                                            Click="btnFluidAddEdge_Click">
+                                            Add Edges Fluidly
                                         </Button>
                                         <TextBlock Foreground="Black"
                                                Grid.Row="1"

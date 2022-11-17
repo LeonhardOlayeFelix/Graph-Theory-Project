@@ -17,7 +17,7 @@ namespace Interface_2
         /// it should actually be rendered on screen here.
         /// </summary>
         /// <param name="vertexToConnectTo">The vertex on the other end of the edge</param>
-        public void AddConnectionEven(Ellipse vertexToConnectTo)
+        public void AddConnectionEven(Ellipse vertexToConnectTo, bool fluidAdding = false)
         {
             vertexToConnectTo.Fill = HighlightColour;
             ConnectEdges connectEdges = new ConnectEdges();
@@ -27,7 +27,7 @@ namespace Interface_2
                 EnableTabControl();
                 labelExtraInfo.Content = "";
             }
-            else if ((bool)cbAutoGenEdges.IsChecked) //if the auto generate weight randomly button is checked
+            else if ((bool)cbAutoGenEdges.IsChecked || fluidAdding) //if the auto generate weight randomly button is checked
             {
                 Random random = new Random();
                 int lowerBound = Convert.ToInt32(txRandomGenLB.Text);
