@@ -636,6 +636,11 @@ namespace Interface_2
             }
             else if (e.LeftButton == MouseButtonState.Pressed && currentButton == btnFluidAddEdge && sender is Ellipse)
             {
+                if (assignmentOpen)
+                {
+                    MessageBox.Show("You cannot edit this graph since it has been set as an assignment. Close assignment then try again");
+                    return;
+                }
                 gbParent.IsEnabled = false;
                 ellipseHovered = sender as Ellipse;
                 if (ellipseHovered != lastSelectedVertex)
@@ -656,6 +661,11 @@ namespace Interface_2
         {
             if (currentButton == btnFluidAddEdge)
             {
+                if (buttonSelectionCount % 2 == 1)
+                {
+                    DecrementSelectionCount(ref buttonSelectionCount);
+                    lastSelectedVertex = null;
+                }
                 gbParent.IsEnabled = true;
                 EnableTabControl();
                 EnableAllActionButtons();
@@ -1010,7 +1020,7 @@ namespace Interface_2
         private void btnFluidAddEdge_Click(object sender, RoutedEventArgs e)
         {
             ActivateButton(sender);
-            labelExtraInfo.Content = "Click and hold on a vertex and drag to other vertices to add edges with random weights fluidly.";
+            labelExtraInfo.Content = "Click and hold on a vertex and while navigating to other vertices to add edges with random weights more easily.";
             ClearAllOperations();
         }
     }

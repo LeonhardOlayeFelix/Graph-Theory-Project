@@ -92,7 +92,7 @@
                FontWeight="Medium"
                HorizontalAlignment="Left"
                VerticalAlignment="Bottom"
-               x:Name="labelExtraInfo" Height="28" Width="610" Margin="7,0,0,7"/>
+               x:Name="labelExtraInfo" Height="38" Width="996" Margin="7,0,0,7"/>
                 <Label Foreground="White"
                     FontSize="15"
                     FontWeight="Medium"
@@ -1086,12 +1086,12 @@
                                             <RowDefinition/>
                                             <RowDefinition Height="126"/>
                                         </Grid.RowDefinitions>
-                                            <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0" >
-                                                <TextBlock VerticalAlignment="Center" FontSize="15" Text="Choose Assignment"/>
-                                                <ComboBox VerticalContentAlignment="Center" Name="cbLoadAssignment" Margin="10, 10, 10, 10" Foreground="Black" Width="278" />
-                                            </StackPanel>
+                                        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0" >
+                                            <TextBlock VerticalAlignment="Center" FontSize="15" Text="Choose Assignment"/>
+                                            <ComboBox VerticalContentAlignment="Center" Name="cbLoadAssignment" Margin="10, 10, 10, 10" Foreground="Black" Width="278" />
+                                        </StackPanel>
                                         <Grid Grid.Row="1">
-                                            
+
                                             <Grid Grid.Row="2">
                                                 <Grid.RowDefinitions>
                                                     <RowDefinition/>
@@ -1105,7 +1105,7 @@
                                                 <Button Name="btnCloseAssignmentComp" Click="btnCloseAssignmentComp_Click" Margin="10,15,10,15" Grid.Column="1" Content="Close Assignment (Completed)"/>
                                                 <Button Name="btnOpenAssignment" Click="btnOpenAssignment_Click" Grid.Row="2" Grid.ColumnSpan="2" Margin="100,15,100,15" Content="Open Assignment" />
                                             </Grid>
-                                            
+
                                         </Grid>
                                     </Grid>
                                 </GroupBox>
