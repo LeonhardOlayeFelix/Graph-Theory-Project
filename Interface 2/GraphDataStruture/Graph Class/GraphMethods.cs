@@ -264,7 +264,7 @@ namespace Interface_2
                 stringToReturn += listOfVertices[i] + ": ";
                 foreach (int vertex in GetAdjVertices(listOfVertices[i]))
                 {
-                    stringToReturn += "{" + vertex + "; " + GetEdgeWeight(i, vertex) + "},";
+                    stringToReturn += "{" + vertex + "},";
                 }
                 stringToReturn += "\n";
             }

@@ -289,14 +289,18 @@
                                         <Bold>Adjacency Matrix</Bold>
                                     </GroupBox.Header>
                                     <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="323*"/>
+                                            <RowDefinition Height="56*"/>
+                                        </Grid.RowDefinitions>
                                         <DataGrid
-                                        FontSize="17"
-                                        Visibility="Visible"
-                                        Name="dataGridAdjacencyMatrix"
-                                        AlternatingRowBackground="LightGray"
+                                            FontSize="17"
+                                            Visibility="Visible"
+                                            Name="dataGridAdjacencyMatrix"
+                                            AlternatingRowBackground="LightGray"
                                             CellEditEnding="DataGridAdjacencyMatrix_CellEditEnding"
-                                            
-                                        CanUserAddRows="False"/>
+                                            CanUserAddRows="False"/>
+                                        <TextBlock Grid.Row="1" Margin="5" TextAlignment="Center" Text="Edit the adjacency matrix by double clicking on a cell. This will also update the graph" FontSize="17" TextWrapping="Wrap"/>
                                     </Grid>
                                 </GroupBox>
                                 <GroupBox Grid.Row="3"
@@ -344,7 +348,7 @@
                                             </Button>
                                             <TextBlock
                                                        VerticalAlignment="Center"
-                                                       HorizontalAlignment="Center" Grid.ColumnSpan="3" Margin="224,14,47,15">Number of vertices (<Bold>Max 18</Bold>):</TextBlock>
+                                                       HorizontalAlignment="Center" Grid.ColumnSpan="3" Margin="224,14,47,15">Number of vertices (<Bold>Max 28</Bold>):</TextBlock>
                                             <TextBox
                                                 Grid.Column="2"
                                                 Margin="10"
@@ -964,11 +968,11 @@
                                             </Grid.RowDefinitions>
                                             <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0" >
                                                 <TextBlock VerticalAlignment="Center" FontSize="15" Text="Enter Class ID:"/>
-                                                <ComboBox Name="cbClassID2" Margin="10, 5, 0, 5" Foreground="Black" Width="315"/>
+                                                <ComboBox VerticalContentAlignment="Center" Name="cbClassID2" Margin="10, 5, 0, 5" Foreground="Black" Width="315"/>
                                             </StackPanel>
                                             <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0">
                                                 <TextBlock VerticalAlignment="Center" FontSize="15" Text="Enter Student ID:"/>
-                                                <TextBox Width="265" Margin="5" VerticalContentAlignment="Center" Name="txStudentID"/>
+                                                <ComboBox VerticalContentAlignment="Center" Name="cbStudentID" Margin="10, 5, 0, 5" Foreground="Black" Width="294"/>
                                             </StackPanel>
                                         </Grid>
 
@@ -997,7 +1001,7 @@
                                             </Grid.RowDefinitions>
                                             <StackPanel  Orientation="Horizontal" Margin="0">
                                                 <TextBlock VerticalAlignment="Center" FontSize="15" Text="Class to view: "/>
-                                                <ComboBox Name="cbClassID" Margin="10, 5, 0, 5" Foreground="Black" Width="315"/>
+                                                <ComboBox VerticalContentAlignment="Center" Name="cbClassID" Margin="10, 5, 0, 5" Foreground="Black" Width="315"/>
                                             </StackPanel>
                                             <StackPanel Grid.Row="1"  Orientation="Horizontal" Margin="0">
                                                 <TextBlock VerticalAlignment="Center" FontSize="15" Text="Create class with name: "/>
@@ -1022,7 +1026,7 @@
                                         <TextBlock Margin="10,0,10,400" TextAlignment="Center" FontSize="20" Name="txClassName" Text="Class Name: "/>
                                         <DataGrid x:Name="classDataGrid" 
                                                   AlternatingRowBackground="LightGray"  
-                                                  FontSize ="20" CanUserAddRows="False"
+                                                  FontSize ="15" CanUserAddRows="False"
                                                   IsReadOnly="True"
                                                   Margin="0,71,0,0"/>
                                     </Grid>
@@ -1040,7 +1044,7 @@
                                             </Grid.RowDefinitions>
                                             <StackPanel  Orientation="Horizontal" Margin="0">
                                                 <TextBlock VerticalAlignment="Center" FontSize="15" Text="Enter Class ID:"/>
-                                                <TextBox Width="320" Margin="5" VerticalContentAlignment="Center" Name="txClassAssignmentID"/>
+                                                <ComboBox VerticalContentAlignment="Center" Name="cbClassID3" Margin="10, 5, 0, 5" Foreground="Black" Width="315"/>
                                             </StackPanel>
                                             <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0" >
                                                 <TextBlock VerticalAlignment="Center" FontSize="15" Text="Enter Assignment Note:"/>
@@ -1052,7 +1056,7 @@
                                                 <ColumnDefinition/>
                                                 <ColumnDefinition/>
                                             </Grid.ColumnDefinitions>
-                                            <Button Grid.ColumnSpan="2" Margin="5,40,5,40" Content="Add to class" Name="btnSetAssignment" Click="BtnAddToClass_Click"/>
+                                            <Button Grid.ColumnSpan="2" Margin="5,40,5,40" Content="Assign Graph" Name="btnSetAssignment" Click="btnSetAssignment_Click"/>
                                         </Grid>
                                     </Grid>
                                 </GroupBox>

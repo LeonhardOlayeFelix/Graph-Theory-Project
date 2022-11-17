@@ -14,6 +14,7 @@ namespace Interface_2
         public string email { get; set; }
         public string password { get; set; }
         public string ID { get; set; }
+        public string alias { get; set; }
         public User(string Firstname, string Lastname, string Email, string Password) //cosntructor to initialise
         {
             firstname = Firstname;
@@ -31,6 +32,7 @@ namespace Interface_2
         {
             ID = Id;
             title = Title;
+            alias = ID + ": " + firstname + " " + lastname;
         }
     }
     public class Student : User //inherits from user
@@ -41,6 +43,7 @@ namespace Interface_2
         {
             ID = Id;
             dob = Dob;
+            alias = ID + ": " + firstname + " " + lastname;
         }
 
     }

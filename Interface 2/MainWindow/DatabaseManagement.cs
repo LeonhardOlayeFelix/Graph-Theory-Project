@@ -10,7 +10,7 @@ using System.Windows.Shapes;
 using System.Media;
 using System.Data.OleDb;
 using System.IO;
-
+using System.Threading;
 namespace Interface_2
 {
     public partial class MainWindow : Window
@@ -44,9 +44,9 @@ namespace Interface_2
                 conn.Open();
                 OleDbCommand cmd = new OleDbCommand();
                 cmd.Connection = conn;
-                cmd.CommandText = "CREATE TABLE Student(StudentID VARCHAR(5), FirstName VARCHAR(30), LastName VARCHAR(30), DateOfBirth DATE, Email VARCHAR(100), SPassword VARCHAR(30), NoAssignmentsSubmitted INTEGER, NoDijkstras INTEGER, NoRInsp INTEGER, NoBFS INTEGER, NoDFS INTEGER, NoPrims INTEGER, NoGraph INTEGER, DateCreated DATE, PRIMARY KEY(StudentID))";
+                cmd.CommandText = "CREATE TABLE Student(StudentID VARCHAR(5), FirstName VARCHAR(30), LastName VARCHAR(30), Alias VARCHAR(200),DateOfBirth DATE, Email VARCHAR(100), SPassword VARCHAR(30), NoAssignmentsSubmitted INTEGER, NoDijkstras INTEGER, NoRInsp INTEGER, NoBFS INTEGER, NoDFS INTEGER, NoPrims INTEGER, NoGraph INTEGER, DateCreated DATE, PRIMARY KEY(StudentID))";
                 cmd.ExecuteNonQuery();
-                cmd.CommandText = "CREATE TABLE Teacher(TeacherID VARCHAR(5), FirstName VARCHAR(30), LastName VARCHAR(30), Email VARCHAR(100), TPassword VARCHAR(30), Title VARCHAR(7), PRIMARY KEY(TeacherID))";
+                cmd.CommandText = "CREATE TABLE Teacher(TeacherID VARCHAR(5), FirstName VARCHAR(30), LastName VARCHAR(30), Alias VARCHAR(200), Email VARCHAR(100), TPassword VARCHAR(30), Title VARCHAR(7), PRIMARY KEY(TeacherID))";
                 cmd.ExecuteNonQuery();
                 cmd.CommandText = "CREATE TABLE StudentGraph(Filename VARCHAR(30), StudentID VARCHAR(5), GraphName VARCHAR(25), DateCreated DATE, NoVertices INTEGER, NoEdges INTEGER, CreatedBy CHAR(1), PRIMARY KEY(Filename), FOREIGN KEY (StudentID) REFERENCES Student(StudentID))";
                 cmd.ExecuteNonQuery();
@@ -54,9 +54,9 @@ namespace Interface_2
                 cmd.ExecuteNonQuery();
                 cmd.CommandText = "CREATE TABLE GuestGraph(Filename VARCHAR(30), GraphName VARCHAR(25), CreatedBy CHAR(1), PRIMARY KEY(Filename))";
                 cmd.ExecuteNonQuery();
-                cmd.CommandText = "CREATE TABLE Assignment(AssignmentID VARCHAR(5), StudentID VARCHAR(5), AssignmentNote VARCHAR(50), Filename VARCHAR(30), SetBy VARCHAR(5), GraphName VARCHAR(25), DateSet DATE, DateDue DATE, isLate CHAR(1), isCompleted CHAR(1), PRIMARY KEY(AssignmentID), FOREIGN KEY (StudentID) REFERENCES Student(StudentID))";
+                cmd.CommandText = "CREATE TABLE Assignment(AssignmentID VARCHAR(5), StudentID VARCHAR(5), AssignmentNote VARCHAR(50), Filename VARCHAR(30), SetBy VARCHAR(5), GraphName VARCHAR(25), DateSet DATE, DateDue DATE, isLate CHAR(1), isCompleted CHAR(1), PRIMARY KEY(AssignmentID))";
                 cmd.ExecuteNonQuery();
-                cmd.CommandText = "CREATE TABLE Class(ClassID VARCHAR(5), TeacherID VARCHAR(5), ClassName VARCHAR(30), PRIMARY KEY(ClassID), FOREIGN KEY (TeacherID) REFERENCES Teacher(TeacherID))";
+                cmd.CommandText = "CREATE TABLE Class(ClassID VARCHAR(5), TeacherID VARCHAR(5), ClassName VARCHAR(30), Alias VARCHAR(200), PRIMARY KEY(ClassID), FOREIGN KEY (TeacherID) REFERENCES Teacher(TeacherID))";
                 cmd.ExecuteNonQuery();
                 cmd.CommandText = "CREATE TABLE ClassEnrollment(ClassID VARCHAR(5), StudentID VARCHAR(5), FirstName VARCHAR(30), LastName VARCHAR(30), EnrollDate DATE, FOREIGN KEY (ClassID) REFERENCES Class(ClassID), FOREIGN KEY (StudentID) REFERENCES Student(StudentID))";
                 cmd.ExecuteNonQuery();
@@ -79,7 +79,7 @@ namespace Interface_2
                 cmd.Connection = conn;
                 conn.Open();
                 //insert the new teacher into the database
-                cmd.CommandText = $"INSERT INTO Teacher VALUES('{ID}','{teacher.firstname}','{teacher.lastname}','{teacher.email}','{teacher.password}','{teacher.title}')";
+                cmd.CommandText = $"INSERT INTO Teacher VALUES('{ID}','{teacher.firstname}','{teacher.lastname}', '{teacher.alias}','{teacher.email}','{teacher.password}','{teacher.title}')";
                 cmd.ExecuteNonQuery();
                 conn.Close();
                 return true;
@@ -102,7 +102,7 @@ namespace Interface_2
                 cmd.Connection = conn;
                 conn.Open();
                 //insert the new student into the databse
-                cmd.CommandText = $"INSERT INTO Student VALUES('{ID}', '{student.firstname}', '{student.lastname}','{student.dob}','{student.email}','{student.password}'," +
+                cmd.CommandText = $"INSERT INTO Student VALUES('{ID}', '{student.firstname}', '{student.lastname}', '{student.alias}','{student.dob}','{student.email}','{student.password}'," +
                     $"{0}, {0}, {0},{0},{0},{0},{0},'{DateTime.Today.ToString("dd/MM/yyyy")}')";
                 cmd.ExecuteNonQuery();
                 conn.Close();
@@ -118,10 +118,11 @@ namespace Interface_2
             string classID = NextID("C"); //generates the class ID 
             OleDbConnection conn = new OleDbConnection(MainWindow.ConStr);
             OleDbCommand cmd = new OleDbCommand();
+            string classAlias = classID + ": " + className;
             cmd.Connection = conn;
             conn.Open();
             //inserts the new class into the database
-            cmd.CommandText = $"INSERT INTO Class VALUES('{classID}', '{teacher.ID}', '{className}')";
+            cmd.CommandText = $"INSERT INTO Class VALUES('{classID}', '{teacher.ID}', '{className}', '{classAlias}')";
             cmd.ExecuteNonQuery();
             conn.Close();
         }
@@ -453,6 +454,10 @@ namespace Interface_2
             {
                 cmd.CommandText = "SELECT MAX(ClassID) AS MaxID FROM Class";
             }
+            else if (IDType == "A")
+            {
+                cmd.CommandText = "SELECT MAX(AssignmentID) AS MaxID FROM Assignment";
+            }
             if (cmd.ExecuteScalar() != DBNull.Value)
             {
                 NextID = Convert.ToInt32(cmd.ExecuteScalar().ToString().Substring(1)) + 1; //set NextID to highest ID found
@@ -484,6 +489,32 @@ namespace Interface_2
             reader.Close();
             conn.Close();
             return ID;
+        }
+        public void SetAssignment(string ClassID)
+        {
+            string assignmentID = NextID("A");
+            string assingmentNote = txAssignmentNote.Text;
+            OleDbConnection conn = new OleDbConnection(MainWindow.ConStr);
+            OleDbCommand cmd = new OleDbCommand();
+            conn.Open();
+            cmd.Connection = conn;
+            FileStream fs;
+            List<Student> studentsInClass = ListClass(ClassID);
+            foreach (Student student in studentsInClass)
+            {
+                MessageBox.Show(assignmentID);
+                string filename = "AssignmentGraphs/" + assignmentID + student.ID;
+                fs = File.Create(filename);
+                cmd.CommandText = $"INSERT INTO Assignment VALUES('{assignmentID}','{student.ID}','{assingmentNote}','{filename}','{loggedTeacher.ID}','{graph.Name}','{DateTime.Today.ToString("dd/MM/yyyy")}', '{DateTime.Today.ToString("dd/MM/yyyy")}','{"n"}', '{"n"}')";
+                cmd.ExecuteNonQuery();
+                int NextID = Convert.ToInt32(assignmentID.Substring(1)) + 1;
+                assignmentID = "0000" + NextID.ToString();
+                assignmentID = assignmentID.Substring(assignmentID.Length - 4);
+                assignmentID = assignmentID.Insert(0, "A");
+                fs.Close();
+                //write the class instance to the database
+                BinarySerialization.WriteToBinaryFile(filename, graph, false);
+            }
         }
     }
 }

@@ -308,6 +308,11 @@ namespace Interface_2
         /// </summary>
         private void loadGrid()
         {
+            if (cbClassID.SelectedIndex == -1)
+            {
+                MessageBox.Show("Please select a Class from the drop down list");
+                return;
+            }
             string classID = cbClassID.SelectedValue.ToString();
             DataTable stuffToDisplay = new DataTable();
             if (isValidClassID(classID))
@@ -316,11 +321,11 @@ namespace Interface_2
                 conn.Open();
                 OleDbCommand cmd = new OleDbCommand();
                 cmd.Connection = conn;
-                cmd.CommandText = $"SELECT * FROM ClassEnrollment WHERE ClassID = '{classID}'";
+                cmd.CommandText = $"SELECT StudentID, FirstName, LastName, DateOfBirth, NoDijkstras, NoRInsp, NoBFS, NoDFS, NoPrims, NoGraph FROM Student WHERE StudentID IN (SELECT StudentID FROM ClassEnrollment WHERE ClassID = '{classID}')"; //nested query
                 OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
                 adapter.Fill(stuffToDisplay);
                 classDataGrid.ItemsSource = stuffToDisplay.DefaultView;
-                txClassName.Text = "Class Name: " + GetClassName(classID);
+                txClassName.Text = "Class Name: " + GetClassName(classID) + "\nClass ID: " + classID;
                 conn.Close();
             }
         }

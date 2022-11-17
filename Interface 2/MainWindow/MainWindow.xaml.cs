@@ -54,6 +54,7 @@ namespace Interface_2
             InitializeComponent();
             DisableAllActionButtons();
             DisableTabControl();
+            ClearAllOperations();
             CreateDatabase();
             showNextID();
             loadComboBoxes();

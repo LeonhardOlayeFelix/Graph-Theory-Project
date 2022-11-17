@@ -150,27 +150,21 @@ namespace Interface_2
         {
             ActivateButton(sender);
             ClearAllOperations();
-            Regex regex = new Regex(@"S[\d][\d][\d][\d]");
-            string studentID = txStudentID.Text;
-            Student student = InitialiseStudent(studentID);
-            string classID = cbClassID2.SelectedValue.ToString();
-            if (!(regex.IsMatch(studentID) && studentID.Length == 5))
+            if (cbStudentID.SelectedIndex == -1 || cbClassID2.SelectedIndex == -1)
             {
-                MessageBox.Show("Invalid Student ID");
+                MessageBox.Show("Please select both a Student and a Class from the drop down list");
                 return;
             }
-            else if (!StudentAlreadySaved(studentID))
+            string studentID = cbStudentID.SelectedValue.ToString();
+            Student student = InitialiseStudent(studentID);
+            string classID = cbClassID2.SelectedValue.ToString();
+            if (IsInClass(classID, student))
             {
-                MessageBox.Show("Student ID is not registered");
-                return;
-            }            
-            else if (IsInClass(classID, student))
-            {
-                MessageBox.Show("This student is already in this class");
+                MessageBox.Show(student.firstname + " " + student.lastname + " is already in this class");
                 return;
             }
             EnrollStudent(classID, student);
-            MessageBox.Show("Student has been added to "+GetClassName(classID)+" ("+classID+")");
+            MessageBox.Show(student.firstname + " " + student.lastname + " has been added to " + GetClassName(classID)+" ("+classID+")");
         }
         private void cbAutoGenEdges_Checked(object sender, RoutedEventArgs e)
         {
@@ -254,9 +248,45 @@ namespace Interface_2
                 DataGridRow row1 = e.Row;
                 int row_index = ((DataGrid)sender).ItemContainerGenerator.IndexFromContainer(row1);
                 int col_index = col1.DisplayIndex - 1;
-                int weight = Convert.ToInt32(txWeight.Text);
-                ConnectVertices(FindEllipse(row_index), FindEllipse(col_index), weight, false, false, true);
-                //change the cell value instead of generating the adjacency matrix
+                int weight;
+                if (row_index == col_index)
+                {
+                    MessageBox.Show("Can't connect a vertex to itself");
+                    txWeight.Text = null;
+                    return;
+                }
+                else if (col_index == -1)
+                {
+                    MessageBox.Show("This cell can't be editted");
+                    txWeight.Text = row_index.ToString();
+                    return;
+                }
+                else if (!int.TryParse(txWeight.Text, out weight))
+                {
+                    MessageBox.Show("Invalid input");
+                    txWeight.Text = null;
+                    return;
+                }
+                else if (weight < 0)
+                {
+                    MessageBox.Show("Weight must be atleast 0");
+                    txWeight.Text = null;
+                    return;
+                }
+                else
+                {
+                    ConnectVertices(FindEllipse(row_index), FindEllipse(col_index), weight, false, false, true);
+                    int i = 0;
+                    foreach (DataRowView dr in dataGridAdjacencyMatrix.ItemsSource)
+                    {
+                        if (i == col_index)
+                        {
+                            dr[row_index + 1] = weight;
+                            return;
+                        }
+                        i++;
+                    }
+                }
             }
         }
         private void btnCreateClass_Click(object sender, RoutedEventArgs e)
@@ -627,7 +657,7 @@ namespace Interface_2
             };
             enableTimer.Start();
             int numVertices = Convert.ToInt32(txNumVertices.Text);
-            if (numVertices > 18 || numVertices < 1)
+            if (numVertices > 28 || numVertices < 1)
             {
                 MessageBox.Show("Number of vertices not within range");
                 return;
@@ -764,33 +794,42 @@ namespace Interface_2
         {
             ActivateButton(sender);
             ClearAllOperations();
-            Regex regex = new Regex(@"S[\d][\d][\d][\d]");
-            string studentID = txStudentID.Text;
+            if (cbStudentID.SelectedIndex == -1 || cbClassID2.SelectedIndex == -1)
+            {
+                MessageBox.Show("Please select both a Student and a Class from the drop down list");
+                return;
+            }
+            string studentID = cbStudentID.SelectedValue.ToString();
             Student student = InitialiseStudent(studentID);
             string classID = cbClassID2.SelectedValue.ToString();
-            if (!(regex.IsMatch(studentID) && studentID.Length == 5))
+            if (!IsInClass(classID, student))
             {
-                MessageBox.Show("Invalid Student ID");
-                return;
-            }
-            else if (!StudentAlreadySaved(studentID))
-            {
-                MessageBox.Show("Student ID is not registered");
-                return;
-            }
-            else if (!IsInClass(classID, student))
-            {
-                MessageBox.Show("This student is not in this class");
+                MessageBox.Show(student.firstname + " " + student.lastname + " is not in this class");
                 return;
             }
             RemoveStudent(classID, student);
-            MessageBox.Show("Student has been removed from"+GetClassName(classID)+" ("+classID+")");
+            MessageBox.Show(student.firstname + " " + student.lastname + " has been removed from "+GetClassName(classID)+" ("+classID+")");
         }
         private void btnSaveGraph_Click(object sender, RoutedEventArgs e)   
         {
             ActivateButton(btnSaveGraph);
             ClearAllOperations();
             SaveGraph();
+        }
+        private void btnSetAssignment_Click(object sender, RoutedEventArgs e)
+        {
+            if (graphCreated == false)
+            {
+                MessageBox.Show("Please create a graph to assign first");
+                return;
+            }
+            else if (cbClassID3.SelectedIndex == -1)
+            {
+                MessageBox.Show("Please select a Class from the drop down list");
+                return;
+            }
+            string classID = cbClassID3.SelectedValue.ToString();
+            SetAssignment(classID);
         }
         private void btnTakeScreenshot_Click(object sender, RoutedEventArgs e)
         {

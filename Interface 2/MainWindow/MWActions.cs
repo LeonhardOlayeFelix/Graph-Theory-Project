@@ -82,6 +82,7 @@ namespace Interface_2
                 EnableAllActionButtons(); //can only navigate buttons when a graph is created
                 EnableAllAlgorithmButtons();
                 EnableTabControl();
+                if (!TeacherIsLoggedIn()) { tabControlClass.IsEnabled = false; }
                 btnDeleteGraph.IsEnabled = true;
                 btnSaveGraph.IsEnabled = true;
             }
@@ -480,6 +481,7 @@ namespace Interface_2
             btnLogOut.IsEnabled = false;
             txLoggedID.Content = "";
             txLoggedInAs.Content = "Logged in as: Guest";
+            classDataGrid.ItemsSource = null;
             DeleteGraph();
             tabControlClass.IsEnabled = false;
             tabControlAssignments.IsEnabled = false;
@@ -694,16 +696,26 @@ namespace Interface_2
                 cmd.Connection = conn;
                 // only want to display the classes that the teacher is supposed to have access to.
                 string ID = loggedTeacher.ID;
-                cmd.CommandText = $"SELECT ClassID, ClassName FROM Class WHERE TeacherID = '{ID}'";
+                cmd.CommandText = $"SELECT ClassID, Alias FROM Class WHERE TeacherID = '{ID}'";
                 DataTable datatable = new DataTable();
                 OleDbDataAdapter dataAdapter = new OleDbDataAdapter(cmd);
                 dataAdapter.Fill(datatable);
                 cbClassID.ItemsSource = datatable.DefaultView;
-                cbClassID.DisplayMemberPath = "ClassName";
+                cbClassID.DisplayMemberPath = "Alias";
                 cbClassID.SelectedValuePath = "ClassID";
                 cbClassID2.ItemsSource = datatable.DefaultView;
-                cbClassID2.DisplayMemberPath = "ClassName";
+                cbClassID2.DisplayMemberPath = "Alias";
                 cbClassID2.SelectedValuePath = "ClassID";
+                cbClassID3.ItemsSource = datatable.DefaultView;
+                cbClassID3.DisplayMemberPath = "Alias";
+                cbClassID3.SelectedValuePath = "ClassID";
+                cmd.CommandText = $"SELECT Alias, StudentID FROM Student";
+                OleDbDataAdapter dataAdapter2 = new OleDbDataAdapter(cmd);
+                DataTable datatable2 = new DataTable();
+                dataAdapter2.Fill(datatable2);
+                cbStudentID.ItemsSource = datatable2.DefaultView;
+                cbStudentID.DisplayMemberPath = "Alias";
+                cbStudentID.SelectedValuePath = "StudentID";
                 conn.Close();
             }
         }
