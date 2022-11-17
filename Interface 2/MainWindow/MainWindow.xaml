@@ -294,13 +294,17 @@
                                             <RowDefinition Height="56*"/>
                                         </Grid.RowDefinitions>
                                         <DataGrid
+                                            CanUserResizeRows="False"
+                                            CanUserResizeColumns="False"
                                             FontSize="17"
                                             Visibility="Visible"
                                             Name="dataGridAdjacencyMatrix"
                                             AlternatingRowBackground="LightGray"
                                             CellEditEnding="DataGridAdjacencyMatrix_CellEditEnding"
-                                            CanUserAddRows="False"/>
-                                        <TextBlock Grid.Row="1" Margin="5" TextAlignment="Center" Text="Edit the adjacency matrix by double clicking on a cell. This will also update the graph" FontSize="17" TextWrapping="Wrap"/>
+                                            CanUserAddRows="False"
+                                            CanUserSortColumns="False">
+                                        </DataGrid>
+                                        <TextBlock Grid.Row="1" Margin="5" TextAlignment="Center" Text="Edit the adjacency matrix by clicking on a cell and entering a value. This will also update the graph" FontSize="17" TextWrapping="Wrap"/>
                                     </Grid>
                                 </GroupBox>
                                 <GroupBox Grid.Row="3"
@@ -772,6 +776,7 @@
                                     x:Name="txExtraInfo2" Grid.Column="1"/>
                                 <DataGrid
                                     FontSize="20"
+                                    CanUserSortColumns="False"
                                     Grid.Row="1" Margin="20,63,20,20" 
                                     Grid.Column="1"
                                     IsReadOnly="True"
@@ -1047,7 +1052,7 @@
                                                 <ComboBox VerticalContentAlignment="Center" Name="cbClassID3" Margin="10, 5, 0, 5" Foreground="Black" Width="315"/>
                                             </StackPanel>
                                             <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0" >
-                                                <TextBlock VerticalAlignment="Center" FontSize="15" Text="Enter Assignment Note:"/>
+                                                <TextBlock VerticalAlignment="Center" FontSize="15" Text="Enter Assignment Title:"/>
                                                 <TextBox Width="258" Margin="5,5,5,5" VerticalContentAlignment="Center" x:Name="txAssignmentNote"/>
                                             </StackPanel>
                                         </Grid>
@@ -1064,6 +1069,46 @@
                         </TabItem>
                         <TabItem Name ="tabControlAssignments">
                             <TabItem.Header>Assignments</TabItem.Header>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="211*"/>
+                                    <RowDefinition Height="436*"/>
+                                    <RowDefinition Height="323*"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <GroupBox Header="Open Assignment">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition/>
+                                            <RowDefinition Height="126"/>
+                                        </Grid.RowDefinitions>
+                                            <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0" >
+                                                <TextBlock VerticalAlignment="Center" FontSize="15" Text="Choose Assignment"/>
+                                                <ComboBox VerticalContentAlignment="Center" Name="cbLoadAssignment" Margin="10, 10, 10, 10" Foreground="Black" Width="278" />
+                                            </StackPanel>
+                                        <Grid Grid.Row="1">
+                                            
+                                            <Grid Grid.Row="2">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition/>
+                                                    <RowDefinition/>
+                                                </Grid.RowDefinitions>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition/>
+                                                    <ColumnDefinition/>
+                                                </Grid.ColumnDefinitions>
+                                                <Button Name="btnCloseAssignmentIncomp" Click="btnCloseAssignmentIncomp_Click" Margin="10,15,10,15" Grid.Column="0" Content="Close Assignment (Incomplete)"/>
+                                                <Button Name="btnCloseAssignmentComp" Click="btnCloseAssignmentComp_Click" Margin="10,15,10,15" Grid.Column="1" Content="Close Assignment (Completed)"/>
+                                                <Button Name="btnOpenAssignment" Click="btnOpenAssignment_Click" Grid.Row="2" Grid.ColumnSpan="2" Margin="100,15,100,15" Content="Open Assignment" />
+                                            </Grid>
+                                            
+                                        </Grid>
+                                    </Grid>
+                                </GroupBox>
+                            </Grid>
                         </TabItem>
                     </TabControl>
                 </StackPanel>

@@ -21,7 +21,11 @@ namespace Interface_2
         
         private void btnAddVertex_Click(object sender, RoutedEventArgs e)
         {
-
+            if (assignmentOpen)
+            {
+                MessageBox.Show("You cannot edit this graph since it has been set as an assignment. Close assignment then try again");
+                return;
+            }
             HideValencies();
             labelExtraInfo.Content = "Click on the canvas to place a vertex.";
             ActivateButton(sender);
@@ -130,6 +134,11 @@ namespace Interface_2
         }
         private void btnAddConnection_Click(object sender, RoutedEventArgs e)
         {
+            if (assignmentOpen)
+            {
+                MessageBox.Show("You cannot edit this graph since it has been set as an assignment. Close assignment then try again");
+                return;
+            }
             HideValencies();
             labelExtraInfo.Content = "Click two vertices to connect them.";
             ActivateButton(sender);
@@ -226,6 +235,11 @@ namespace Interface_2
         }
         private void btnCreateNewGraph_Click(object sender, RoutedEventArgs e)
         {
+            if (assignmentOpen)
+            {
+                MessageBox.Show("You cannot edit this graph since it has been set as an assignment. Close assignment then try again");
+                return;
+            }
             ActivateButton(btnCreateNewGraph);
             string name = "";
             NameCreatedGraph nameGraphWindow = new NameCreatedGraph(); //create an instance of the new window
@@ -307,6 +321,11 @@ namespace Interface_2
         }
         private void btnDeleteAllEdges_Click(object sender, RoutedEventArgs e)
         {
+            if (assignmentOpen)
+            {
+                MessageBox.Show("You cannot edit this graph since it has been set as an assignment. Close assignment then try again");
+                return;
+            }
             ActivateButton(sender);
             List<Tuple<Line, Ellipse, Ellipse, TextBlock>> edgesToDelete = new List<Tuple<Line, Ellipse, Ellipse, TextBlock>>();
             foreach (var edge in edgeList)
@@ -340,6 +359,11 @@ namespace Interface_2
         }
         private void btnDeleteGraph_Click(object sender, RoutedEventArgs e)
         {
+            if (assignmentOpen)
+            {
+                MessageBox.Show("You cannot edit this graph since it has been set as an assignment. Close assignment then try again");
+                return;
+            }
             HideValencies();
             txAdjset.Clear();
             dataGridAdjacencyMatrix.ItemsSource = null;
@@ -358,6 +382,11 @@ namespace Interface_2
         }
         private void btnDeleteVertex_Click(object sender, RoutedEventArgs e)
         {
+            if (assignmentOpen)
+            {
+                MessageBox.Show("You cannot edit this graph since it has been set as an assignment. Close assignment then try again");
+                return;
+            }
             //delete any vertices that have been selected
             if (currentButton == btnDefault && selectedVertices.Count != 0)
             {
@@ -381,6 +410,11 @@ namespace Interface_2
         }
         private void btnDeleteConnection_Click(object sender, RoutedEventArgs e)
         {
+            if (assignmentOpen)
+            {
+                MessageBox.Show("You cannot edit this graph since it has been set as an assignment. Close assignment then try again");
+                return;
+            }
             if (currentButton == btnDefault && selectedLinesNames.Count != 0)
             {
                 foreach (string name in selectedLinesNames)
@@ -542,12 +576,22 @@ namespace Interface_2
         }
         private void btnLoadGraph_Click(object sender, RoutedEventArgs e)
         {
+            if (assignmentOpen)
+            {
+                MessageBox.Show("You cannot load a graph since an assignment is open. Close assignment then try again");
+                return;
+            }
             ActivateButton(btnLoadGraph);
             LoadGraph();
             ClearAllOperations();
         }
         private void btnLogin_Click(object sender, RoutedEventArgs e)
         {
+            if (assignmentOpen)
+            {
+                MessageBox.Show("You cannot Login since an assignment is open. Close assignment then try again");
+                return;
+            }
             ActivateButton(btnLogin);
             LoginStudent loginstudent = new LoginStudent();
             ClearAllOperations();
@@ -571,6 +615,11 @@ namespace Interface_2
         }
         private void btnLogOut_Click(object sender, RoutedEventArgs e)
         {
+            if (assignmentOpen)
+            {
+                MessageBox.Show("You cannot Log Out since an assignment is open. Close assignment then try again");
+                return;
+            }
             ActivateButton(btnLogOut);
             ClearAllOperations();
             LogOutProcess();
@@ -644,6 +693,11 @@ namespace Interface_2
         }
         private void BtnRandomGraph_Click(object sender, RoutedEventArgs e)
         {
+            if (assignmentOpen)
+            {
+                MessageBox.Show("You cannot edit this graph since it has been set as an assignment. Close assignment then try again");
+                return;
+            }
             ClearAllOperations();
             btnRandomGraph.IsEnabled = false;
             Timer enableTimer = new Timer() { Interval = 500};
@@ -778,6 +832,11 @@ namespace Interface_2
         }
         private void btnRegisterStudent_Click(object sender, RoutedEventArgs e)
         {
+            if (assignmentOpen)
+            {
+                MessageBox.Show("You cannot Register since an assignment is open. Close assignment then try again");
+                return;
+            }
             ActivateButton(btnRegisterStudent);
             ClearAllOperations();
             RegisterStudent registerstudent = new RegisterStudent();
@@ -785,6 +844,11 @@ namespace Interface_2
         }
         private void btnRegisterTeacher_Click(object sender, RoutedEventArgs e)
         {
+            if (assignmentOpen)
+            {
+                MessageBox.Show("You cannot Register since an assignment is open. Close assignment then try again");
+                return;
+            }
             ActivateButton(btnRegisterTeacher);
             ClearAllOperations();
             RegisterTeacher registerteacher = new RegisterTeacher();
@@ -812,6 +876,11 @@ namespace Interface_2
         }
         private void btnSaveGraph_Click(object sender, RoutedEventArgs e)   
         {
+            if (assignmentOpen)
+            {
+                MessageBox.Show("You cannot save this graph since it has been set as an assignment. Close assignment then try again");
+                return;
+            }
             ActivateButton(btnSaveGraph);
             ClearAllOperations();
             SaveGraph();
@@ -861,6 +930,54 @@ namespace Interface_2
             ClearAllOperations();
             ActivateButton(sender);
             loadGrid();
+        }
+        private void btnOpenAssignment_Click(object sender, RoutedEventArgs e)
+        {
+            ActivateButton(sender);
+            if (cbLoadAssignment.SelectedIndex == -1)
+            {
+                MessageBox.Show("Please select an assignment from the drop down list");
+                return;
+            }
+            string filename = cbLoadAssignment.SelectedValue.ToString();
+            Graph toLoad = BinarySerialization.ReadFromBinaryFile<Graph>(filename); //read the file into the toLoad class instance
+            openAssignmentPath = filename;
+            RenderGraph(toLoad); //render the just-loaded graph onto the screen
+            LoadAssignmentProcess();
+        }
+        public void LoadAssignmentProcess()
+        {
+            assignmentOpen = true;
+        }
+        private void btnCloseAssignmentIncomp_Click(object sender, RoutedEventArgs e)
+        {
+            ActivateButton(sender);
+            if (assignmentOpen == false)
+            {
+                MessageBox.Show("An assignment is not open");
+                return;
+            }
+            assignmentOpen = false;
+            DeleteGraph();
+            loadComboBoxes();
+        }
+        private void btnCloseAssignmentComp_Click(object sender, RoutedEventArgs e)
+        {
+            ActivateButton(sender);
+            if (assignmentOpen == false)
+            {
+                MessageBox.Show("An assignment is not open");
+                return;
+            }
+            assignmentOpen = false;
+            OleDbConnection conn = new OleDbConnection(ConStr);
+            OleDbCommand cmd = new OleDbCommand();
+            conn.Open();
+            cmd.Connection = conn;
+            cmd.CommandText = $"UPDATE Assignment SET isCompleted = '{"y"}' WHERE FileName = '{openAssignmentPath}'";
+            cmd.ExecuteNonQuery();
+            DeleteGraph();
+            loadComboBoxes();
         }
     }
 }

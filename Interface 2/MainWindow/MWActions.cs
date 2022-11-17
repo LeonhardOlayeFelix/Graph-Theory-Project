@@ -571,6 +571,7 @@ namespace Interface_2
             tabControlClass.IsEnabled = false;
             tabControlAssignments.IsEnabled = true;
             tabControlActions.IsEnabled = true;
+            loadComboBoxes();
             DeleteGraph();
         }
         /// <summary>
@@ -717,6 +718,21 @@ namespace Interface_2
                 cbStudentID.DisplayMemberPath = "Alias";
                 cbStudentID.SelectedValuePath = "StudentID";
                 conn.Close();
+            }
+            if (StudentIsLoggedIn())
+            {
+                OleDbConnection conn = new OleDbConnection(ConStr);
+                OleDbCommand cmd = new OleDbCommand();
+                conn.Open();
+                cmd.Connection = conn;
+                string ID = loggedStudent.ID;
+                cmd.CommandText = $"SELECT Alias, AssignmentID, Filename FROM Assignment WHERE StudentID = '{ID}' AND isCompleted = '{"n"}'";
+                OleDbDataAdapter dataAdapter = new OleDbDataAdapter(cmd);
+                DataTable dataTable = new DataTable();
+                dataAdapter.Fill(dataTable);
+                cbLoadAssignment.ItemsSource = dataTable.DefaultView;
+                cbLoadAssignment.DisplayMemberPath = "Alias";
+                cbLoadAssignment.SelectedValuePath = "Filename";
             }
         }
         /// <summary>

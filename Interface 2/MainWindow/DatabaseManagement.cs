@@ -44,7 +44,7 @@ namespace Interface_2
                 conn.Open();
                 OleDbCommand cmd = new OleDbCommand();
                 cmd.Connection = conn;
-                cmd.CommandText = "CREATE TABLE Student(StudentID VARCHAR(5), FirstName VARCHAR(30), LastName VARCHAR(30), Alias VARCHAR(200),DateOfBirth DATE, Email VARCHAR(100), SPassword VARCHAR(30), NoAssignmentsSubmitted INTEGER, NoDijkstras INTEGER, NoRInsp INTEGER, NoBFS INTEGER, NoDFS INTEGER, NoPrims INTEGER, NoGraph INTEGER, DateCreated DATE, PRIMARY KEY(StudentID))";
+                cmd.CommandText = "CREATE TABLE Student(StudentID VARCHAR(5), FirstName VARCHAR(30), LastName VARCHAR(30), Alias VARCHAR(200), DateOfBirth DATE, Email VARCHAR(100), SPassword VARCHAR(30), NoAssignmentsSubmitted INTEGER, NoDijkstras INTEGER, NoRInsp INTEGER, NoBFS INTEGER, NoDFS INTEGER, NoPrims INTEGER, NoGraph INTEGER, DateCreated DATE, PRIMARY KEY(StudentID))";
                 cmd.ExecuteNonQuery();
                 cmd.CommandText = "CREATE TABLE Teacher(TeacherID VARCHAR(5), FirstName VARCHAR(30), LastName VARCHAR(30), Alias VARCHAR(200), Email VARCHAR(100), TPassword VARCHAR(30), Title VARCHAR(7), PRIMARY KEY(TeacherID))";
                 cmd.ExecuteNonQuery();
@@ -54,7 +54,7 @@ namespace Interface_2
                 cmd.ExecuteNonQuery();
                 cmd.CommandText = "CREATE TABLE GuestGraph(Filename VARCHAR(30), GraphName VARCHAR(25), CreatedBy CHAR(1), PRIMARY KEY(Filename))";
                 cmd.ExecuteNonQuery();
-                cmd.CommandText = "CREATE TABLE Assignment(AssignmentID VARCHAR(5), StudentID VARCHAR(5), AssignmentNote VARCHAR(50), Filename VARCHAR(30), SetBy VARCHAR(5), GraphName VARCHAR(25), DateSet DATE, DateDue DATE, isLate CHAR(1), isCompleted CHAR(1), PRIMARY KEY(AssignmentID))";
+                cmd.CommandText = "CREATE TABLE Assignment(AssignmentID VARCHAR(5), StudentID VARCHAR(5), AssignmentNote VARCHAR(50), Alias VARCHAR(200), Filename VARCHAR(30), SetBy VARCHAR(5), GraphName VARCHAR(25), DateSet DATE, DateDue DATE, isLate CHAR(1), isCompleted CHAR(1), PRIMARY KEY(AssignmentID))";
                 cmd.ExecuteNonQuery();
                 cmd.CommandText = "CREATE TABLE Class(ClassID VARCHAR(5), TeacherID VARCHAR(5), ClassName VARCHAR(30), Alias VARCHAR(200), PRIMARY KEY(ClassID), FOREIGN KEY (TeacherID) REFERENCES Teacher(TeacherID))";
                 cmd.ExecuteNonQuery();
@@ -500,12 +500,12 @@ namespace Interface_2
             cmd.Connection = conn;
             FileStream fs;
             List<Student> studentsInClass = ListClass(ClassID);
+            string alias = loggedTeacher.title + " " + loggedTeacher.lastname + ": " + assingmentNote;
             foreach (Student student in studentsInClass)
             {
-                MessageBox.Show(assignmentID);
                 string filename = "AssignmentGraphs/" + assignmentID + student.ID;
                 fs = File.Create(filename);
-                cmd.CommandText = $"INSERT INTO Assignment VALUES('{assignmentID}','{student.ID}','{assingmentNote}','{filename}','{loggedTeacher.ID}','{graph.Name}','{DateTime.Today.ToString("dd/MM/yyyy")}', '{DateTime.Today.ToString("dd/MM/yyyy")}','{"n"}', '{"n"}')";
+                cmd.CommandText = $"INSERT INTO Assignment VALUES('{assignmentID}','{student.ID}','{assingmentNote}','{alias}','{filename}','{loggedTeacher.ID}','{graph.Name}','{DateTime.Today.ToString("dd/MM/yyyy")}', '{DateTime.Today.ToString("dd/MM/yyyy")}','{"n"}', '{"n"}')";
                 cmd.ExecuteNonQuery();
                 int NextID = Convert.ToInt32(assignmentID.Substring(1)) + 1;
                 assignmentID = "0000" + NextID.ToString();
@@ -515,6 +515,7 @@ namespace Interface_2
                 //write the class instance to the database
                 BinarySerialization.WriteToBinaryFile(filename, graph, false);
             }
+            MessageBox.Show("This graph has been set as an assignment for: " + GetClassName(ClassID) + "(" + ClassID +")");
         }
     }
 }

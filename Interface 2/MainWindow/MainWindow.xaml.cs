@@ -20,6 +20,8 @@ namespace Interface_2
         List<Line> linesToDelete = new List<Line>();
         public static Teacher loggedTeacher = null;
         public static Student loggedStudent = null;
+        bool assignmentOpen = false;
+        string openAssignmentPath = "";
         Ellipse lastSelectedVertex;
         int buttonSelectionCount = 0;
         int dijkstraSelectionCount = 0;
