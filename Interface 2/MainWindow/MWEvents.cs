@@ -982,6 +982,7 @@ namespace Interface_2
             openAssignmentPath = filename;
             RenderGraph(toLoad); //render the just-loaded graph onto the screen
             LoadAssignmentProcess();
+            loadComboBoxes();
         }
         public void LoadAssignmentProcess()
         {
@@ -993,6 +994,7 @@ namespace Interface_2
             if (assignmentOpen == false)
             {
                 MessageBox.Show("An assignment is not open");
+                loadComboBoxes();
                 return;
             }
             assignmentOpen = false;
@@ -1005,6 +1007,7 @@ namespace Interface_2
             if (assignmentOpen == false)
             {
                 MessageBox.Show("An assignment is not open");
+                loadComboBoxes();
                 return;
             }
             assignmentOpen = false;
