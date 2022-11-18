@@ -464,13 +464,13 @@
                                                Margin="27,0,28,30"
                                                FontSize="10"
                                                HorizontalAlignment="Center"> <!-- Have a new window appear when they connect vertices-->
-                                        Take a screenshot of the canvas
+                                        Add edges more easily by clicking and holding as you visit each vertex
                                         </TextBlock>
                                         <Button Margin="20,14,20,6"
                                             x:Name="btnFluidAddEdge"
                                             Grid.Row="0"
                                             Click="btnFluidAddEdge_Click">
-                                            Add Edges Fluidly
+                                            Add Edges Using Walk
                                         </Button>
                                         <TextBlock Foreground="Black"
                                                Grid.Row="1"
