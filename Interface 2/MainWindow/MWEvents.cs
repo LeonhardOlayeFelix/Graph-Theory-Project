@@ -247,6 +247,10 @@ namespace Interface_2
             if (nameGraphWindow.DialogResult == true) //if they pressed ok rather than the exit button
             {
                 name = nameGraphWindow.txBoxGraphName.Text; //re-initialise everything:
+                if (StudentIsLoggedIn())
+                {
+                    IncrementStudentField(loggedStudent.ID, "NoGraph");
+                }
                 DeleteGraph();
                 CreateNewGraph(name);
                 graphCreated = true;
@@ -545,6 +549,10 @@ namespace Interface_2
             populateDataGrid(dataGridExtraInfo, FloydsResult, function);
             dataGridExtraInfo.Visibility = Visibility.Visible;
             txExtraInfo2.Text = "Matrix of Shortest Paths:\n";
+            if (StudentIsLoggedIn())
+            {
+                IncrementStudentField(loggedStudent.ID, "NoFloyds");
+            }
             }
             else
             {
@@ -571,6 +579,10 @@ namespace Interface_2
             {
                 Tuple<List<Tuple<int, int, int>>, int> mst = graph.Kruskals();
                 mstHighlightTree(mst.Item1, mst.Item2); //highlight the MST
+                if (StudentIsLoggedIn())
+                {
+                    IncrementStudentField(loggedStudent.ID, "NoKruskals");
+                }
             }
             ClearAllOperations();
         }
@@ -1010,6 +1022,10 @@ namespace Interface_2
                 loadComboBoxes();
                 return;
             }
+            if (StudentIsLoggedIn())
+            {
+                IncrementStudentField(loggedStudent.ID, "NoAssignmentsSubmitted");
+            }
             assignmentOpen = false;
             OleDbConnection conn = new OleDbConnection(ConStr);
             OleDbCommand cmd = new OleDbCommand();
@@ -1025,6 +1041,25 @@ namespace Interface_2
             ActivateButton(sender);
             labelExtraInfo.Content = "Click and hold on a vertex and while navigating to other vertices to add edges with random weights more easily.";
             ClearAllOperations();
+        }
+        private void btnViewSelfStats_Click(object sender, RoutedEventArgs e)
+        {
+            if (!StudentIsLoggedIn())
+            {
+                MessageBox.Show("This option is reserved for students");
+                return;
+            }
+            string ID = loggedStudent.ID;
+            OleDbConnection conn = new OleDbConnection(ConStr);
+            OleDbCommand cmd = new OleDbCommand();
+            conn.Open();
+            cmd.Connection = conn;
+            cmd.CommandText = $"SELECT StudentID, FirstName, LastName, DateOfBirth, NoDijkstras, NoFloyds, NoRInsp, NoBFS, NoDFS, NoPrims, NoKruskals, NoGraph FROM Student WHERE StudentID = '{ID}'";
+            DataTable stuffToDisplay = new DataTable();
+            OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
+            adapter.Fill(stuffToDisplay);
+            classDataGrid.ItemsSource = stuffToDisplay.DefaultView;
+            conn.Close();
         }
     }
 }

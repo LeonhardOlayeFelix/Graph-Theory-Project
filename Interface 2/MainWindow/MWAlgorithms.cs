@@ -126,6 +126,10 @@ namespace Interface_2
                     if (i != traversalOrder.Count() - 1) { outputString += "=>"; }//create a string containing the traversal order
                 }
                 txExtraInfo2.Text = "Traversal Order: " + outputString;
+                if (StudentIsLoggedIn())
+                {
+                    IncrementStudentField(loggedStudent.ID, "NoBFS");
+                }
             }
         }
         /// <summary>
@@ -191,6 +195,10 @@ namespace Interface_2
                     if (i != traversalOrder.Count() - 1) { outputString += "=>"; }//create a string containing the traversal order
                 }
                 txExtraInfo2.Text = "Traversal Order: " + outputString;
+                if (StudentIsLoggedIn())
+                {
+                    IncrementStudentField(loggedStudent.ID, "NoDFS");
+                }
             }
         }
         /// <summary>
@@ -216,6 +224,10 @@ namespace Interface_2
                 {
                     List<int> path = graph.DijkstrasAlgorithmShort(startVertex, vId).Item1; //get the path from the method
                     DijkstraHighlightRoute(path);
+                    if (StudentIsLoggedIn())
+                    {
+                        IncrementStudentField(loggedStudent.ID, "NoDijkstras");
+                    }
                     labelExtraInfo.Content = "";
                 }
                 catch (NullReferenceException) //this means there was no path
@@ -321,7 +333,7 @@ namespace Interface_2
                 conn.Open();
                 OleDbCommand cmd = new OleDbCommand();
                 cmd.Connection = conn;
-                cmd.CommandText = $"SELECT StudentID, FirstName, LastName, DateOfBirth, NoDijkstras, NoRInsp, NoBFS, NoDFS, NoPrims, NoGraph FROM Student WHERE StudentID IN (SELECT StudentID FROM ClassEnrollment WHERE ClassID = '{classID}')"; //nested query
+                cmd.CommandText = $"SELECT StudentID, FirstName, LastName, DateOfBirth, NoDijkstras, NoFloyds, NoRInsp, NoBFS, NoDFS, NoPrims, NoKruskals, NoGraph FROM Student WHERE StudentID IN (SELECT StudentID FROM ClassEnrollment WHERE ClassID = '{classID}')"; //nested query
                 OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
                 adapter.Fill(stuffToDisplay);
                 classDataGrid.ItemsSource = stuffToDisplay.DefaultView;
@@ -358,6 +370,10 @@ namespace Interface_2
             {
                 List<Tuple<int, int, int>> mst = graph.Prims(startVertexID);
                 mstHighlightTree(mst);//highlight the path
+                if (StudentIsLoggedIn())
+                {
+                    IncrementStudentField(loggedStudent.ID, "NoPrims");
+                }
             }
             else
             {
@@ -395,6 +411,7 @@ namespace Interface_2
                 if (!graph.IsConnected()) //have to make sure that the graph is connected first
                 {
                     MessageBox.Show("The graph is not connected");
+                    return;
                 }
                 else if (graph.IsSemiEulerian()) //if the graph is already semi eulerian then it will be already traversable
                 {
@@ -407,6 +424,7 @@ namespace Interface_2
                 else if (result == null)
                 {
                     MessageBox.Show("Appropriate graph was not entered"); //in this case, there was an unexpected eror
+                    return;
                 }
                 else
                 {
@@ -414,8 +432,12 @@ namespace Interface_2
                     int cost = result.Item2;//second item of the tuple reps the total cost
                     RevertEllipseColour();
                     RouteInspHighlightPath(edgesToRepeat, cost); //highlights the edges to be repeated and presents the cost
-                    HideValencies();
                 }
+                if (StudentIsLoggedIn())
+                {
+                    IncrementStudentField(loggedStudent.ID, "NoRInsp");
+                }
+                HideValencies();
                 EnableTabControl();
                 EnableAllActionButtons();
                 EnableAllAlgorithmButtons();
@@ -467,13 +489,16 @@ namespace Interface_2
             else if (result == null)
             {
                 MessageBox.Show("Appropriate graph was not entered"); //in this case, there was an unexpected error
-
             }
             else
             {
                 List<Tuple<int, int>> edgesToRepeat = result.Item1; //first item of the tuple
                 int cost = result.Item2;//second item of the tuple
                 RouteInspHighlightPath(edgesToRepeat, cost); //highlights the edges to be repeated and presents the cost
+                if (StudentIsLoggedIn())
+                {
+                    IncrementStudentField(loggedStudent.ID, "NoRInsp");
+                }
             }
         }
         /// <summary>

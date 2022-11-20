@@ -269,6 +269,15 @@ namespace Interface_2
             graphCreated = false;
             btnSaveGraph.IsEnabled = false;
         }
+        public void ClearClassComboBoxes()
+        {
+            cbClassID.ItemsSource = null;
+            cbClassID2.ItemsSource = null;
+            cbClassID3.ItemsSource = null;
+            cbLoadAssignment.ItemsSource = null;
+            cbStudentID.ItemsSource = null;
+
+        }
         /// <summary>
         /// Deactivates the currently activated button
         /// </summary>
@@ -481,6 +490,7 @@ namespace Interface_2
             txLoggedID.Content = "";
             txLoggedInAs.Content = "Logged in as: Guest";
             classDataGrid.ItemsSource = null;
+            ClearClassComboBoxes();
             DeleteGraph();
         }
         /// <summary>
@@ -561,12 +571,13 @@ namespace Interface_2
         /// </summary>
         private void StudentLogInProcess()
         {
+            
             btnRegisterStudent.IsEnabled = false;
             btnLogin.IsEnabled = false;
             btnRegisterTeacher.IsEnabled = false;
             btnLogOut.IsEnabled = true;
-            tabControlAssignments.IsEnabled = true;
             tabControlActions.IsEnabled = true;
+            ClearClassComboBoxes();
             loadComboBoxes();
             DeleteGraph();
         }
@@ -774,7 +785,6 @@ namespace Interface_2
             btnRegisterTeacher.IsEnabled = false;
             btnLogOut.IsEnabled = true;
             tabControlClass.IsEnabled = true;
-            tabControlAssignments.IsEnabled = true;
             tabControlActions.IsEnabled = true;
             DeleteGraph();
             loadComboBoxes();

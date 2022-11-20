@@ -44,7 +44,7 @@ namespace Interface_2
                 conn.Open();
                 OleDbCommand cmd = new OleDbCommand();
                 cmd.Connection = conn;
-                cmd.CommandText = "CREATE TABLE Student(StudentID VARCHAR(5), FirstName VARCHAR(30), LastName VARCHAR(30), Alias VARCHAR(200), DateOfBirth DATE, Email VARCHAR(100), SPassword VARCHAR(30), NoAssignmentsSubmitted INTEGER, NoDijkstras INTEGER, NoRInsp INTEGER, NoBFS INTEGER, NoDFS INTEGER, NoPrims INTEGER, NoGraph INTEGER, DateCreated DATE, PRIMARY KEY(StudentID))";
+                cmd.CommandText = "CREATE TABLE Student(StudentID VARCHAR(5), FirstName VARCHAR(30), LastName VARCHAR(30), Alias VARCHAR(200), DateOfBirth DATE, Email VARCHAR(100), SPassword VARCHAR(30), NoAssignmentsSubmitted INTEGER, NoDijkstras INTEGER, NoFloyds INTEGER, NoRInsp INTEGER, NoBFS INTEGER, NoDFS INTEGER, NoPrims INTEGER, NoKruskals INTEGER, NoGraph INTEGER, DateCreated DATE, PRIMARY KEY(StudentID))";
                 cmd.ExecuteNonQuery();
                 cmd.CommandText = "CREATE TABLE Teacher(TeacherID VARCHAR(5), FirstName VARCHAR(30), LastName VARCHAR(30), Alias VARCHAR(200), Email VARCHAR(100), TPassword VARCHAR(30), Title VARCHAR(7), PRIMARY KEY(TeacherID))";
                 cmd.ExecuteNonQuery();
@@ -103,7 +103,7 @@ namespace Interface_2
                 conn.Open();
                 //insert the new student into the databse
                 cmd.CommandText = $"INSERT INTO Student VALUES('{ID}', '{student.firstname}', '{student.lastname}', '{student.alias}','{student.dob}','{student.email}','{student.password}'," +
-                    $"{0}, {0}, {0},{0},{0},{0},{0},'{DateTime.Today.ToString("dd/MM/yyyy")}')";
+                    $"{0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, '{DateTime.Today.ToString("dd/MM/yyyy")}')";
                 cmd.ExecuteNonQuery();
                 conn.Close();
             }
@@ -516,6 +516,30 @@ namespace Interface_2
                 BinarySerialization.WriteToBinaryFile(filename, graph, false);
             }
             MessageBox.Show("This graph has been set as an assignment for: " + GetClassName(ClassID) + "(" + ClassID +")");
+        }
+        public void IncrementStudentField(string ID, string field)
+        {
+            if (!StudentAlreadySaved(ID))
+            {
+                throw new Exception("Invalid student ID was passed in to IncrementStudentField function");
+            }
+            string[] fields = new string[] { "NoAssignmentsSubmitted", "NoDijkstras", "NoRInsp", "NoBFS", "NoDFS", "NoPrims", "NoGraph", "NoKruskals", "NoFloyds" };
+            if (!fields.Contains(field))
+            {
+                throw new Exception("Invalid Field was passed in to IncrementStudentField function.");
+            }
+            OleDbConnection conn = new OleDbConnection(MainWindow.ConStr);
+            OleDbCommand cmd = new OleDbCommand();
+            cmd.Connection = conn;
+            conn.Open();
+            cmd.CommandText = $"SELECT {field} FROM Student WHERE StudentID = '{ID}'";
+            //OleDbDataReader reader = cmd.ExecuteReader();
+            //reader.Read();
+            //int newFieldValue = Convert.ToInt32(reader[0]);
+            int newFieldValue = Convert.ToInt32(cmd.ExecuteScalar()) + 1;
+            cmd.CommandText = $"UPDATE Student SET {field} = {newFieldValue} WHERE StudentID = '{ID}'";
+            cmd.ExecuteNonQuery();
+            conn.Close();
         }
     }
 }

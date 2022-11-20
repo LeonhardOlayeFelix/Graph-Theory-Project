@@ -49,6 +49,7 @@ namespace Interface_2
             btnPrims.IsEnabled = false;
             btnKruskals.IsEnabled = false;
             btnHighlightPaths.IsEnabled = false;
+            btnFloyds.IsEnabled = false;
         }
         public void DisableAllActionButtons()
         {
@@ -71,7 +72,6 @@ namespace Interface_2
             tabControlDisplay.IsEnabled = false;
             tabControlActions.IsEnabled = false;
             tabControlClass.IsEnabled = false;
-            tabControlAssignments.IsEnabled = false;
         }
         public void EnableAllAlgorithmButtons()
         {
@@ -85,6 +85,7 @@ namespace Interface_2
             btnPrims.IsEnabled = true;
             btnKruskals.IsEnabled = true;
             btnHighlightPaths.IsEnabled = true;
+            btnFloyds.IsEnabled = true;
         }
         public void EnableAllActionButtons()
         {
@@ -108,7 +109,6 @@ namespace Interface_2
             tabControlDisplay.IsEnabled = true;
             tabControlActions.IsEnabled = true;
             tabControlClass.IsEnabled = true;
-            tabControlAssignments.IsEnabled = true;
         }
 
     }

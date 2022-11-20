@@ -1066,21 +1066,9 @@
                                         </Grid>
                                     </Grid>
                                 </GroupBox>
-                            </Grid>
-                        </TabItem>
-                        <TabItem Name ="tabControlAssignments">
-                            <TabItem.Header>Assignments</TabItem.Header>
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="211*"/>
-                                    <RowDefinition Height="436*"/>
-                                    <RowDefinition Height="323*"/>
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition/>
-                                </Grid.ColumnDefinitions>
-                                <GroupBox Header="Open Assignment">
+                                <GroupBox Header="Open Assignment"
+                                          Grid.Row="3"
+                                          Grid.Column="2">
                                     <Grid>
                                         <Grid.RowDefinitions>
                                             <RowDefinition/>
@@ -1088,7 +1076,7 @@
                                         </Grid.RowDefinitions>
                                         <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0" >
                                             <TextBlock VerticalAlignment="Center" FontSize="15" Text="Choose Assignment"/>
-                                            <ComboBox VerticalContentAlignment="Center" Name="cbLoadAssignment" Margin="10, 10, 10, 10" Foreground="Black" Width="278" />
+                                            <ComboBox VerticalContentAlignment="Center" Name="cbLoadAssignment" Margin="10, 30, 10, 30" Foreground="Black" Width="278" />
                                         </StackPanel>
                                         <Grid Grid.Row="1">
 
@@ -1103,7 +1091,8 @@
                                                 </Grid.ColumnDefinitions>
                                                 <Button Name="btnCloseAssignmentIncomp" Click="btnCloseAssignmentIncomp_Click" Margin="10,15,10,15" Grid.Column="0" Content="Close Assignment (Incomplete)"/>
                                                 <Button Name="btnCloseAssignmentComp" Click="btnCloseAssignmentComp_Click" Margin="10,15,10,15" Grid.Column="1" Content="Close Assignment (Completed)"/>
-                                                <Button Name="btnOpenAssignment" Click="btnOpenAssignment_Click" Grid.Row="2" Grid.ColumnSpan="2" Margin="100,15,100,15" Content="Open Assignment" />
+                                                <Button Name="btnOpenAssignment" Click="btnOpenAssignment_Click" Grid.Row="2" Grid.ColumnSpan="1" Margin="10,15,10,15" Content="Open Assignment" />
+                                                <Button Name="btnViewSelfStats" Click="btnViewSelfStats_Click" Grid.Row="2" Grid.Column="1" Margin="10,15,10,15" Content="View your statistics" />
                                             </Grid>
 
                                         </Grid>
