@@ -42,10 +42,8 @@ namespace Interface_2
             {
                 valid = false;
             }
-
             return valid;
         }
-
         private void btnRegisterStudentConfirm_Click(object sender, RoutedEventArgs e)
         {
             

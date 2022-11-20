@@ -309,6 +309,7 @@ namespace Interface_2
         }
         private void btnCreateClass_Click(object sender, RoutedEventArgs e)
         {
+            ActivateButton(sender);
             string className = txClassName2.Text;
             if (className.Length == 0) 
             {
@@ -937,6 +938,7 @@ namespace Interface_2
         }
         private void btnSetAssignment_Click(object sender, RoutedEventArgs e)
         {
+            ActivateButton(sender);
             if (graphCreated == false)
             {
                 MessageBox.Show("Please create a graph to assign first");
@@ -977,6 +979,7 @@ namespace Interface_2
         }
         private void BtnViewClass_Click(object sender, RoutedEventArgs e)
         {
+            ActivateButton(sender);
             ClearAllOperations();
             ActivateButton(sender);
             loadGrid();
@@ -1044,6 +1047,7 @@ namespace Interface_2
         }
         private void btnViewSelfStats_Click(object sender, RoutedEventArgs e)
         {
+            ActivateButton(sender);
             if (!StudentIsLoggedIn())
             {
                 MessageBox.Show("This option is reserved for students");

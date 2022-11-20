@@ -48,11 +48,11 @@ namespace Interface_2
                 cmd.ExecuteNonQuery();
                 cmd.CommandText = "CREATE TABLE Teacher(TeacherID VARCHAR(5), FirstName VARCHAR(30), LastName VARCHAR(30), Alias VARCHAR(200), Email VARCHAR(100), TPassword VARCHAR(30), Title VARCHAR(7), PRIMARY KEY(TeacherID))";
                 cmd.ExecuteNonQuery();
-                cmd.CommandText = "CREATE TABLE StudentGraph(Filename VARCHAR(30), StudentID VARCHAR(5), GraphName VARCHAR(25), DateCreated DATE, NoVertices INTEGER, NoEdges INTEGER, CreatedBy CHAR(1), PRIMARY KEY(Filename), FOREIGN KEY (StudentID) REFERENCES Student(StudentID))";
+                cmd.CommandText = "CREATE TABLE StudentGraph(Filename VARCHAR(200), StudentID VARCHAR(5), GraphName VARCHAR(100), DateCreated DATE, NoVertices INTEGER, NoEdges INTEGER, CreatedBy CHAR(1), PRIMARY KEY(Filename), FOREIGN KEY (StudentID) REFERENCES Student(StudentID))";
                 cmd.ExecuteNonQuery();
-                cmd.CommandText = "CREATE TABLE TeacherGraph(Filename VARCHAR(30), TeacherID VARCHAR(5), GraphName VARCHAR(25), DateCreated DATE, NoVertices INTEGER, NoEdges INTEGER, CreatedBy CHAR(1), PRIMARY KEY(Filename), FOREIGN KEY (TeacherID) REFERENCES Teacher(TeacherID))";
+                cmd.CommandText = "CREATE TABLE TeacherGraph(Filename VARCHAR(200), TeacherID VARCHAR(5), GraphName VARCHAR(100), DateCreated DATE, NoVertices INTEGER, NoEdges INTEGER, CreatedBy CHAR(1), PRIMARY KEY(Filename), FOREIGN KEY (TeacherID) REFERENCES Teacher(TeacherID))";
                 cmd.ExecuteNonQuery();
-                cmd.CommandText = "CREATE TABLE GuestGraph(Filename VARCHAR(30), GraphName VARCHAR(25), CreatedBy CHAR(1), PRIMARY KEY(Filename))";
+                cmd.CommandText = "CREATE TABLE GuestGraph(Filename VARCHAR(200), GraphName VARCHAR(100), CreatedBy CHAR(1), PRIMARY KEY(Filename))";
                 cmd.ExecuteNonQuery();
                 cmd.CommandText = "CREATE TABLE Assignment(AssignmentID VARCHAR(5), StudentID VARCHAR(5), AssignmentNote VARCHAR(50), Alias VARCHAR(200), Filename VARCHAR(30), SetBy VARCHAR(5), GraphName VARCHAR(25), DateSet DATE, DateDue DATE, isLate CHAR(1), isCompleted CHAR(1), PRIMARY KEY(AssignmentID))";
                 cmd.ExecuteNonQuery();
