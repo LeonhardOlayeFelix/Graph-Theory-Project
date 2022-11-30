@@ -14,28 +14,31 @@ namespace Interface_2
         /// <returns></returns>
         public Tuple<List<Tuple<int, int, int>>, int> Kruskals() 
         {
-            //uses Kruskals Algo for MST
-            List<Tuple<int, int, int>> listOfSortedEdges = GetListOfSortedEdges();
-            Graph mst = new Graph();
+            List<Tuple<int, int, int>> listOfSortedEdges = GetListOfSortedEdges(); //merge sort
+            Graph mst = new Graph(); //graph that represents the mst
             for (int i = 0; i < GetMaxVertexID() + 1; i++)
             {
+                //add the right number of vertices
                 mst.AddVertex(0,0);
                 if (!IsInVertexList(i))
                 {
+                    //get red of any vertices that are not in this graph
                     mst.RemoveVertex(i);
                 }
             }
-            int successful = 0;
+            int successful = 0; //successful additions
             for (int i = 0; i < listOfSortedEdges.Count(); ++i)
             {
-                if (successful == mst.GetNumberOfVertices()) { break; }
-                mst.AddEdge(listOfSortedEdges[i].Item1, listOfSortedEdges[i].Item2, listOfSortedEdges[i].Item3);
+                if (successful == mst.GetNumberOfVertices()) { break; } //this is when the minimum spanning tree has been made
+                mst.AddEdge(listOfSortedEdges[i].Item1, listOfSortedEdges[i].Item2, listOfSortedEdges[i].Item3); //add the lowest edge
                 if (mst.ContainsCycle())
                 {
+                    //if it created a cycle, remove it from the minimum spanning tree
                     mst.RemoveEdge(listOfSortedEdges[i].Item1, listOfSortedEdges[i].Item2);
                 }
                 else if (!mst.ContainsCycle())
                 {
+                    //if it doesnt create a cycle, increment successful
                     successful++;
                 }
             }
@@ -45,12 +48,10 @@ namespace Interface_2
         }
         private List<Tuple<int, int, int>> MergeSort(List<Tuple<int, int, int>> edges) 
         {
-            //recursively splits the list into right and left until the size is 1
             if (edges.Count() <= 1) 
             {
-                //base case (where the size is 1)
-                return edges; 
-            } 
+                return edges; //base case (where the size is 1)
+            }
 
             List<Tuple<int, int, int>> left = new List<Tuple<int, int, int>>(); 
             List<Tuple<int, int, int>> right = new List<Tuple<int, int, int>>(); 
@@ -143,7 +144,6 @@ namespace Interface_2
                     }
                 }
             }
-
             int numVertex = adjMatrix.Count;
             int countedEdges = 0; //to know when to stop the loop
             int mstTotal = 0;

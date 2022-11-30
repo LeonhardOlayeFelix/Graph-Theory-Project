@@ -50,10 +50,15 @@ namespace Interface_2
             OleDbCommand cmd = new OleDbCommand();
             cmd.Connection = conn;
             bool correctCredentials = false;
-            cmd.CommandText = $"SELECT * FROM Student WHERE Email = '{email}' AND Spassword = '{password}'"; //look for where both the password and email match
+            cmd.CommandText = $"SELECT * FROM Student WHERE Email = ? AND SPassword = ?"; //look for where both the password and email match
             OleDbCommand cmd2 = new OleDbCommand();
+            cmd.Parameters.Add(new OleDbParameter("Email", email));
+            cmd.Parameters.Add(new OleDbParameter("SPassword", password));
+            //SELECT * FROM Student WHERE Email = '{email}' AND Spassword = '{password}'
             cmd2.Connection = conn;
-            cmd2.CommandText = $"SELECT * FROM Teacher WHERE Email = '{email}' AND Tpassword = '{password}'";
+            cmd2.CommandText = $"SELECT * FROM Teacher WHERE Email = ? AND Tpassword = ?";
+            cmd2.Parameters.Add(new OleDbParameter("Email", email));
+            cmd2.Parameters.Add(new OleDbParameter("TPassword", password));
             OleDbDataReader reader = cmd.ExecuteReader();
             OleDbDataReader reader2 = cmd2.ExecuteReader();
             if (reader.HasRows) //if they entered the credentials for a student

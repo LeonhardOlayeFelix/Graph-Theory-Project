@@ -94,14 +94,15 @@ namespace Interface_2
         /// Parametrically represents the position of each vertex x = rcost and y = rcost so it looks like a polygon of
         /// n sides enscribed in a circle
         /// </summary>
-        /// <param name="numInnerVertices">The number of sides that the inner shape should be arranged in. Inputting 5 would result in a pentagonal shape</param>
+        /// <param name="numSides">Number of sides that the shapes should be arranged in. Inputting 5 would result in a pentagonal shape</param>
         /// <param name="graphToArrange">The graph to be arranged</param>
-        public void ArrangeGraph(int numInnerVertices, int radiusIncrement, Graph graphToArrange)
+        /// <param name="radiusIncrement">The radius that each circle increases by</param>
+        public void ArrangeGraph(int numSides, int radiusIncrement, Graph graphToArrange)
         {
             double canvasCenterX = mainCanvas.ActualWidth / 2;
             double canvasCenterY = mainCanvas.ActualHeight / 2;
             MyPoint center = new MyPoint(canvasCenterX, canvasCenterY);
-            graphToArrange.ArrangeGraph(center, numInnerVertices, 100);
+            graphToArrange.ArrangeGraph(center, numSides, radiusIncrement);
         }
         /// <summary>
         /// Displays the result of a breadth first search
@@ -333,7 +334,10 @@ namespace Interface_2
                 conn.Open();
                 OleDbCommand cmd = new OleDbCommand();
                 cmd.Connection = conn;
-                cmd.CommandText = $"SELECT StudentID, FirstName, LastName, DateOfBirth, NoDijkstras, NoFloyds, NoRInsp, NoBFS, NoDFS, NoPrims, NoKruskals, NoGraph FROM Student WHERE StudentID IN (SELECT StudentID FROM ClassEnrollment WHERE ClassID = '{classID}')"; //nested query
+                cmd.CommandText = $"SELECT StudentID, FirstName, LastName, DateOfBirth, NoDijkstras, NoFloyds, NoRInsp, " +
+                    $"NoBFS, NoDFS, NoPrims, NoKruskals, NoGraph FROM Student " +
+                    $"WHERE StudentID IN (SELECT StudentID FROM ClassEnrollment " +
+                    $"WHERE ClassID = '{classID}')"; //nested query
                 OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
                 adapter.Fill(stuffToDisplay);
                 classDataGrid.ItemsSource = stuffToDisplay.DefaultView;

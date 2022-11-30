@@ -45,7 +45,6 @@ namespace Interface_2
                     Mode = BindingMode.OneWay
                 };
                 vertexToAdd.SetBinding(Ellipse.StrokeProperty, bindingStroke);
-
                 Binding bindingFill = new Binding("SelectedBrush")//binding the fill colour of the vertices to the color picker
                 {
                     Source = colourPickerVertex,
@@ -53,7 +52,6 @@ namespace Interface_2
                     Mode = BindingMode.OneWay
                 };
                 vertexToAdd.SetBinding(Ellipse.FillProperty, bindingFill);
-
                 Binding bindingDiameter = new Binding("Value")//binding the diameter of the vertices to the slider
                 {
                     Source = vertexDiameterSlider,
@@ -61,18 +59,15 @@ namespace Interface_2
                 };
                 vertexToAdd.SetBinding(Ellipse.HeightProperty, bindingDiameter);
                 vertexToAdd.SetBinding(Ellipse.WidthProperty, bindingDiameter);
-
                 //positioning the vertex in the canvas.
                 double vertexCenterXMousePos = GraphToRender.GetVertex(Convert.ToInt32(vertex)).Position.X;
                 double vertexCenterYMousePos = GraphToRender.GetVertex(Convert.ToInt32(vertex)).Position.Y;
-                vertexToAdd.Margin = new Thickness(-100000); //margin of 100000 so that it resizes around the center.
+                vertexToAdd.Margin = new Thickness(-100000); //margin of -100000 so that it resizes around the center.
                 Canvas.SetLeft(vertexToAdd, vertexCenterXMousePos);
                 Canvas.SetTop(vertexToAdd, vertexCenterYMousePos);
                 Canvas.SetZIndex(vertexToAdd, Zindex++);
-
                 vertexList.Add(vertexToAdd);//add the vertex to the list
                 vertexToAdd.MouseMove += mouseMove;//give the buttons drag and drop event handlers
-
                 //give the string a Name in the form btn(vertexId)
                 string vertexId = vertex.ToString();
                 vertexToAdd.Name = "btn" + vertexId;

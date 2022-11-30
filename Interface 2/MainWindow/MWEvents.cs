@@ -309,6 +309,11 @@ namespace Interface_2
         }
         private void btnCreateClass_Click(object sender, RoutedEventArgs e)
         {
+            if (!TeacherIsLoggedIn())
+            {
+                MessageBox.Show("This function is reserved for teachers");
+                return;
+            }
             ActivateButton(sender);
             string className = txClassName2.Text;
             if (className.Length == 0) 
@@ -997,7 +1002,7 @@ namespace Interface_2
                 return;
             }
             string filename = cbLoadAssignment.SelectedValue.ToString();
-            Graph toLoad = BinarySerialization.ReadFromBinaryFile<Graph>(filename); //read the file into the toLoad class instance
+            Graph toLoad = BinarySerialization.Read<Graph>(filename); //read the file into the toLoad class instance
             openAssignmentPath = filename;
             RenderGraph(toLoad); //render the just-loaded graph onto the screen
             LoadAssignmentProcess();

@@ -79,7 +79,14 @@ namespace Interface_2
                 cmd.Connection = conn;
                 conn.Open();
                 //insert the new teacher into the database
-                cmd.CommandText = $"INSERT INTO Teacher VALUES('{ID}','{teacher.firstname}','{teacher.lastname}', '{teacher.alias}','{teacher.email}','{teacher.password}','{teacher.title}')";
+                cmd.CommandText = "INSERT INTO Teacher VALUES(?, ?, ?, ?, ?, ?, ?)";
+                cmd.Parameters.Add(new OleDbParameter("TeacherID", ID));
+                cmd.Parameters.Add(new OleDbParameter("FirstName", teacher.firstname));
+                cmd.Parameters.Add(new OleDbParameter("LastName", teacher.lastname));
+                cmd.Parameters.Add(new OleDbParameter("Alias", teacher.alias));
+                cmd.Parameters.Add(new OleDbParameter("Email", teacher.email));
+                cmd.Parameters.Add(new OleDbParameter("TPassword", teacher.password));
+                cmd.Parameters.Add(new OleDbParameter("Title", teacher.title));
                 cmd.ExecuteNonQuery();
                 conn.Close();
                 return true;
@@ -102,8 +109,15 @@ namespace Interface_2
                 cmd.Connection = conn;
                 conn.Open();
                 //insert the new student into the databse
-                cmd.CommandText = $"INSERT INTO Student VALUES('{ID}', '{student.firstname}', '{student.lastname}', '{student.alias}','{student.dob}','{student.email}','{student.password}'," +
-                    $"{0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, {0}, '{DateTime.Today.ToString("dd/MM/yyyy")}')";
+                cmd.CommandText = $"INSERT INTO Student VALUES(?, ?, ?, ?, ?, ?, ?, '{0}', '{0}', '{0}', '{0}', '{0}'," +
+                    $" '{0}', '{0}', '{0}', '{0}', '{DateTime.Today.ToString("dd/MM/yyyy")}')";
+                cmd.Parameters.Add(new OleDbParameter("StudentID", ID));
+                cmd.Parameters.Add(new OleDbParameter("FirstName", student.firstname));
+                cmd.Parameters.Add(new OleDbParameter("LastName", student.lastname));
+                cmd.Parameters.Add(new OleDbParameter("Alias", student.alias));
+                cmd.Parameters.Add(new OleDbParameter("DateOfBirth", student.dob));
+                cmd.Parameters.Add(new OleDbParameter("Email", student.email));
+                cmd.Parameters.Add(new OleDbParameter("SPassword", student.password));
                 cmd.ExecuteNonQuery();
                 conn.Close();
             }
@@ -122,7 +136,11 @@ namespace Interface_2
             cmd.Connection = conn;
             conn.Open();
             //inserts the new class into the database
-            cmd.CommandText = $"INSERT INTO Class VALUES('{classID}', '{teacher.ID}', '{className}', '{classAlias}')";
+            cmd.CommandText = $"INSERT INTO Class VALUES(?, ?, ?, ?)";
+            cmd.Parameters.Add(new OleDbParameter("ClassID", classID));
+            cmd.Parameters.Add(new OleDbParameter("TeacherID", teacher.ID));
+            cmd.Parameters.Add(new OleDbParameter("ClassName", className));
+            cmd.Parameters.Add(new OleDbParameter("Alias", classAlias));
             cmd.ExecuteNonQuery();
             conn.Close();
         }
@@ -157,8 +175,10 @@ namespace Interface_2
             OleDbCommand cmd2 = new OleDbCommand();
             cmd2.Connection = conn;
             //check in both the student and teacher tables
-            cmd.CommandText = $"SELECT * FROM Student WHERE Email = '{email}'";
-            cmd2.CommandText = $"SELECT * FROM Teacher WHERE Email = '{email}'";
+            cmd.CommandText = $"SELECT * FROM Student WHERE Email = ?";
+            cmd.Parameters.Add(new OleDbParameter("Email", email));
+            cmd2.CommandText = $"SELECT * FROM Teacher WHERE Email = ?";
+            cmd2.Parameters.Add(new OleDbParameter("Email", email));
             OleDbDataReader reader = cmd.ExecuteReader();
             OleDbDataReader reader2 = cmd2.ExecuteReader();
             if (reader.HasRows) //if either of these tables have this email then return true;
@@ -513,7 +533,7 @@ namespace Interface_2
                 assignmentID = assignmentID.Insert(0, "A");
                 fs.Close();
                 //write the class instance to the database
-                BinarySerialization.WriteToBinaryFile(filename, graph, false);
+                BinarySerialization.Write(filename, graph, false);
             }
             MessageBox.Show("This graph has been set as an assignment for: " + GetClassName(ClassID) + "(" + ClassID +")");
         }

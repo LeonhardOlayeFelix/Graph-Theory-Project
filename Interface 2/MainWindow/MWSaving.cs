@@ -14,22 +14,22 @@ using System.IO;
 
 namespace Interface_2
 {
-    public static class BinarySerialization //this class will read and write a given object into a binary file
+    public static class BinarySerialization //this class will read and write an object into a binary file
     {
-        public static void WriteToBinaryFile<T>(string filePath, T objectToWrite, bool append = false) //takes in type T which is the type of the object
+        public static void Write<T>(string path, T obj, bool append = false) //takes in type T which is the type of the object
         {
-            using (Stream stream = File.Open(filePath, append ? FileMode.Append : FileMode.Create))
+            using (Stream stream = File.Open(path, append ? FileMode.Append : FileMode.Create))
             {
-                var BinaryWriter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter(); 
-                BinaryWriter.Serialize(stream, objectToWrite);//writes the object to the binary file 
+                var Writer = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter(); 
+                Writer.Serialize(stream, obj);//writes the object to the binary file 
             }   
         }
-        public static T ReadFromBinaryFile<T>(string filePath) //needs the file to read and type 
+        public static T Read<T>(string path) //needs the file to read and type 
         {
-            using (Stream stream = File.Open(filePath, FileMode.Open))
+            using (Stream stream = File.Open(path, FileMode.Open))
             {
-                var BinaryReader = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-                return (T)BinaryReader.Deserialize(stream); //writes the object to the binary file through deserialization
+                var reader = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+                return (T)reader.Deserialize(stream); //writes the object to the binary file through deserialization
             }
         }
     }

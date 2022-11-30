@@ -508,7 +508,7 @@ namespace Interface_2
                 }
                 else
                 {
-                    Graph toLoad = BinarySerialization.ReadFromBinaryFile<Graph>(fileName); //read the file into the toLoad class instance
+                    Graph toLoad = BinarySerialization.Read<Graph>(fileName); //read the file into the toLoad class instance
                     RenderGraph(toLoad); //render the just-loaded graph onto the screen 
                     btnDeleteGraph.IsEnabled = true;
                 }
@@ -619,7 +619,7 @@ namespace Interface_2
                     cmd.ExecuteNonQuery();
                     fs.Close();
                     //write the class instance to the binary file
-                    BinarySerialization.WriteToBinaryFile(filename, graph, false);
+                    BinarySerialization.Write(filename, graph, false);
                     MessageBox.Show("Graph saved");
                 }
                 else
@@ -630,7 +630,7 @@ namespace Interface_2
                     {
                         //update the record since they are overwriting
                         cmd.CommandText = $"UPDATE StudentGraph SET NoVertices = {graph.GetNumberOfVertices()}, NoEdges = {graph.GetNumberOfEdges()} WHERE Filename = '{filename}' AND StudentID = '{loggedStudent.ID}'";
-                        BinarySerialization.WriteToBinaryFile(filename, graph, false);
+                        BinarySerialization.Write(filename, graph, false);
                         cmd.ExecuteNonQuery();
                         MessageBox.Show("Graph saved");
                     }
@@ -647,7 +647,7 @@ namespace Interface_2
                     cmd.ExecuteNonQuery();
                     fs.Close();
                     //write the class instance to the database
-                    BinarySerialization.WriteToBinaryFile(filename, graph, false);
+                    BinarySerialization.Write(filename, graph, false);
                     MessageBox.Show("Graph saved");
                 }
                 else
@@ -659,7 +659,7 @@ namespace Interface_2
                         //update the record since they are overwriting
                         cmd.CommandText = $"UPDATE TeacherGraph SET NoVertices = {graph.GetNumberOfVertices()}, NoEdges = {graph.GetNumberOfEdges()} WHERE Filename = '{filename}' AND TeacherID = '{loggedTeacher.ID}'";
                         cmd.ExecuteNonQuery();
-                        BinarySerialization.WriteToBinaryFile(filename, graph, false);
+                        BinarySerialization.Write(filename, graph, false);
                         MessageBox.Show("Graph saved");
                     }
                 }
@@ -675,7 +675,7 @@ namespace Interface_2
                     cmd.ExecuteNonQuery();
                     fs.Close();
                     //write it to the file
-                    BinarySerialization.WriteToBinaryFile(filename, graph, false);
+                    BinarySerialization.Write(filename, graph, false);
                     MessageBox.Show("Graph Saved");
                 }
                 else
@@ -683,7 +683,7 @@ namespace Interface_2
                     Overwrite overwrite = new Overwrite();
                     if (overwrite.ShowDialog() == true)
                     {
-                        BinarySerialization.WriteToBinaryFile(filename, graph, false);
+                        BinarySerialization.Write(filename, graph, false);
                         MessageBox.Show("Graph saved");
                     }
                 }

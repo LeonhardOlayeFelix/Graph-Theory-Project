@@ -56,8 +56,8 @@ namespace Interface_2
             int index = 0;
             int radius;
             List<int> ListVertices = GetListOfVertices();
-            double numRadii = Math.Ceiling((double)GetNumberOfVertices() / (double)numInnerVertices);
-            for (int i = 1; i < numRadii + 1; ++i)
+            double numberOfRadii = Math.Ceiling((double)GetNumberOfVertices() / (double)numInnerVertices);
+            for (int i = 1; i < numberOfRadii + 1; ++i)
             {
                 radius = radiusIncrement * i;//after each shape has been made, increase the radius by the same amount
                 double angle = 2.0 / (double)numInnerVertices * Math.PI;

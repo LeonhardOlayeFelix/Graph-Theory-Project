@@ -194,15 +194,15 @@ namespace Interface_2
             for (int i = 1; i < list.Count; ++i)
             {
                 //split apart: [0,1] [2,3,4,5]
-                List<List<T>> p1 = new List<List<T>>() { new List<T>() { list[0], list[i] } };
+                List<List<T>> brokenUpList = new List<List<T>>() { new List<T>() { list[0], list[i] } };
 
                 //generate combinations of [2,3,4,5] recursively
                 List<T> temp = AddListAtoListB(SliceList(list, 1, i), SliceList(list, i + 1, -1)); 
 
                 List<List<List<T>>> result = Partition(temp);
-                foreach (var combo in result)
+                foreach (var combination in result)
                 {
-                    ret.Add(AddListAtoListB(p1, combo)); //add those combination to [0,1]
+                    ret.Add(AddListAtoListB(brokenUpList, combination)); //add each combination to [0,1]
                 }
             }
             return ret;
