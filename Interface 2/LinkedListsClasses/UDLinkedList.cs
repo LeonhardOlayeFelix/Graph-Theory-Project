@@ -9,10 +9,9 @@ namespace Interface_2
     class UDLinkedList
     {
         public int Count;
-        UDLinkedListNode head; //each list has a head
+        UDLinkedListNode head;
         public UDLinkedList()
         {
-            //at first the head will be null;
             head = null; 
             Count = 0; 
         }
@@ -29,12 +28,10 @@ namespace Interface_2
             //pop an element off the top of the stack
             if (head == null)
             {
-                //if theres nothing in the list return null
                 return null; 
             }
             if (head.next == null)
             {
-                //if there was one item in the list, also return null
                 return null;
             }
 
@@ -54,9 +51,7 @@ namespace Interface_2
             //take an element off the front of a queue
             Tuple<int, int> value = head.data; 
             UDLinkedListNode node = head;
-            //set the head to be the node after
             head = head.next;
-            //set the old head to null
             node = null; 
             Count--;
             return value;
@@ -67,7 +62,6 @@ namespace Interface_2
             UDLinkedListNode newNode = new UDLinkedListNode(data);
             if (head == null)  
             {
-                //if the list was empty make the head the item
                 head = new UDLinkedListNode(data); 
                 Count++;
                 return;

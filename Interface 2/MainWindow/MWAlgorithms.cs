@@ -27,6 +27,13 @@ namespace Interface_2
                 EnableTabControl();
                 labelExtraInfo.Content = "";
             }
+            else if ((bool)cbAutoGenEdgesValue.IsChecked) //if the auto generate weight to 0 button is checked
+            {
+                ConnectVertices(lastSelectedVertex, vertexToConnectTo, (txAutoWeight.Text.Length == 0) ? 0 : Convert.ToInt32(txAutoWeight.Text));//conditional operator
+                labelExtraInfo.Content = "";
+                EnableTabControl();
+                EnableAllActionButtons();
+            }
             else if ((bool)cbAutoGenEdges.IsChecked || fluidAdding) //if the auto generate weight randomly button is checked
             {
                 Random random = new Random();
@@ -46,13 +53,6 @@ namespace Interface_2
                     EnableTabControl();
                     EnableAllActionButtons();
                 }
-            }
-            else if ((bool)cbAutoGenEdgesValue.IsChecked) //if the auto generate weight to 0 button is checked
-            {
-                ConnectVertices(lastSelectedVertex, vertexToConnectTo, (txAutoWeight.Text.Length == 0) ? 0 : Convert.ToInt32(txAutoWeight.Text));//conditional operator
-                labelExtraInfo.Content = "";
-                EnableTabControl();
-                EnableAllActionButtons();
             }
             else if (connectEdges.ShowDialog() == true) // otherwise, open a new form and get the weight
             {

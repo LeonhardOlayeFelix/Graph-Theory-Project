@@ -669,6 +669,10 @@ namespace Interface_2
                     }
                 }
             }
+            else if (e.LeftButton == MouseButtonState.Pressed && currentButton == btnHighlightPaths && sender is Ellipse)
+            {
+                HighlightPaths(sender as Ellipse);
+            }
         }
         private void mainCanvas_MouseUp(object sender, MouseButtonEventArgs e)
         {
@@ -1042,7 +1046,7 @@ namespace Interface_2
         private void btnFluidAddEdge_Click(object sender, RoutedEventArgs e)
         {
             ActivateButton(sender);
-            labelExtraInfo.Content = "Click and hold on a vertex and while navigating to other vertices to add edges with random weights more easily.";
+            labelExtraInfo.Content = "Hover over vertices, while holding down the LMB, to add edges with weights corresponding to the checkbox selected under the 'Select' Button.";
             ClearAllOperations();
         }
         private void btnViewSelfStats_Click(object sender, RoutedEventArgs e)
