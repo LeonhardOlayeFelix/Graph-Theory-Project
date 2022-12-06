@@ -11,11 +11,17 @@ using System.Media;
 using System.Data.OleDb;
 using System.IO;
 using System.Threading;
+
 namespace Interface_2
 {
-    public partial class MainWindow : Window
+    public class Database
     {
-        private bool Authorised(string classID)
+        const string ConStr = "Provider=Microsoft.Jet.OLEDB.4.0; Data Source=NetworkDB.accdb";
+        public Database()
+        {
+            CreateDatabase();
+        }
+        private static bool Authorised(string classID, Teacher loggedTeacher)
         {
             string teacherID = loggedTeacher.ID;
             OleDbConnection conn = new OleDbConnection(ConStr);
@@ -438,7 +444,7 @@ namespace Interface_2
         /// Returns true if a teacher is currently logged in
         /// </summary>
         /// <returns></returns>
-        public static bool TeacherIsLoggedIn()
+        public static bool TeacherIsLoggedIn(Teacher loggedTeacher)
         {
             return (loggedTeacher != null);
         }
@@ -446,7 +452,7 @@ namespace Interface_2
         /// Returns true if a student is currently logged in
         /// </summary>
         /// <returns></returns>
-        public static bool StudentIsLoggedIn()
+        public static bool StudentIsLoggedIn(Student loggedStudent)
         {
             return (loggedStudent != null);
         }
@@ -510,10 +516,9 @@ namespace Interface_2
             conn.Close();
             return ID;
         }
-        public void SetAssignment(string ClassID)
+        public static void SetAssignment(string ClassID, string assingmentNote, Teacher loggedTeacher, Student loggedStudent, Graph graph)
         {
             string assignmentID = NextID("A");
-            string assingmentNote = txAssignmentNote.Text;
             OleDbConnection conn = new OleDbConnection(MainWindow.ConStr);
             OleDbCommand cmd = new OleDbCommand();
             conn.Open();
@@ -537,7 +542,7 @@ namespace Interface_2
             }
             MessageBox.Show("This graph has been set as an assignment for: " + GetClassName(ClassID) + "(" + ClassID + ")");
         }
-        public void IncrementStudentField(string ID, string field)
+        public static void IncrementStudentField(string ID, string field)
         {
             if (!StudentAlreadySaved(ID))
             {

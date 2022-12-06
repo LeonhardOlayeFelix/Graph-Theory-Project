@@ -919,7 +919,7 @@
                                                        Height="30"></TextBlock>
                                             </StackPanel>
                                         </GroupBox>
-                                        <GroupBox Header="Path Walker Duration" Height="147">
+                                        <GroupBox Header="Path Walker Duration" Height="51">
                                             <StackPanel>
                                                 <StackPanel Orientation="Horizontal">
                                                     <Slider Background="Gray"
@@ -940,11 +940,12 @@
                                                        Width="30"
                                                        Height="30"></TextBlock>
                                                 </StackPanel>
-                                                <Button Margin="30,35,30,30"
-                                                    x:Name="btnResetComponentShape"
-                                                    Click="btnResetComponentShape_Click">Reset To Default</Button>
+                                                
                                             </StackPanel>
                                         </GroupBox>
+                                        <Button Margin="30,33,30,30"
+                                                    x:Name="btnResetComponentShape"
+                                                    Click="btnResetComponentShape_Click">Reset To Default</Button>
                                     </StackPanel>
 
                                 </GroupBox>

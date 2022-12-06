@@ -51,6 +51,8 @@ namespace Interface_2
         List<Ellipse> selectedVertices = new List<Ellipse>();
         List<string> selectedLinesNames = new List<string>();
         public Graph graph = null;
+        Database database = new Database();
+
         public MainWindow()
         {
             InitializeComponent();
