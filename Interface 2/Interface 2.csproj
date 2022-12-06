@@ -77,7 +77,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Database.cs" />
+    <Compile Include="Databases\Database.cs" />
+    <Compile Include="Files\BinarySerialization.cs" />
     <Compile Include="GraphDataStruture\Graph Class\GraphFloydsAlgorithm.cs" />
     <Compile Include="GraphDataStruture\Graph Class\GraphMethods.cs" />
     <Compile Include="MainWindow\MWAlgorithms.cs" />
@@ -88,7 +89,6 @@
     <Compile Include="Accounts\Login.xaml.cs">
       <DependentUpon>Login.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MainWindow\DatabaseManagement.cs" />
     <Compile Include="SecondaryWindows\Overwrite.xaml.cs">
       <DependentUpon>Overwrite.xaml</DependentUpon>
     </Compile>
@@ -141,7 +141,6 @@
     <Compile Include="LinkedListsClasses\UDLinkedList.cs" />
     <Compile Include="LinkedListsClasses\UDLinkedListNode.cs" />
     <Compile Include="MainWindow\MWRendering.cs" />
-    <Compile Include="MainWindow\MWSaving.cs" />
     <Compile Include="SecondaryWindows\ConnectEdges.xaml.cs">
       <DependentUpon>ConnectEdges.xaml</DependentUpon>
     </Compile>

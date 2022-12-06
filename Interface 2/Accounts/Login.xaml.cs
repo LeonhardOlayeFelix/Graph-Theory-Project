@@ -22,6 +22,7 @@ namespace Interface_2
     {
         public Student studentJustLogged = null;
         public Teacher teacherJustLogged = null;
+        Database database = MainWindow.database;
         public LoginStudent()
         {
             InitializeComponent();
@@ -73,13 +74,15 @@ namespace Interface_2
             }
             if (correctCredentials && isStudent)
             {
-                studentJustLogged = MainWindow.InitialiseStudent(MainWindow.GetStudentID(email)); //updates the student just logged in instance
+                
+                //studentJustLogged = MainWindow.InitialiseStudent(MainWindow.GetStudentID(email)); //updates the student just logged in instance
+                studentJustLogged = database.InitialiseStudent(database.GetStudentID(email));
                 this.DialogResult = true;
                 this.Close();
             }
             else if (correctCredentials && isTeacher)
             {
-                teacherJustLogged = MainWindow.InitialiseTeacher(MainWindow.GetTeacherID(email)); //updates the teacher just logged in instance
+                teacherJustLogged = database.InitialiseTeacher(database.GetTeacherID(email)); //updates the teacher just logged in instance
                 this.DialogResult = true;
                 this.Close();
             }

@@ -11,11 +11,17 @@ using System.Media;
 using System.Data.OleDb;
 using System.IO;
 using System.Threading;
+
 namespace Interface_2
 {
-    public partial class MainWindow : Window
+    public class Database
     {
-        private bool Authorised(string classID)
+        const string ConStr = "Provider=Microsoft.Jet.OLEDB.4.0; Data Source=NetworkDB.accdb";
+        public Database()
+        {
+            CreateDatabase();
+        }
+        private bool Authorised(string classID, Teacher loggedTeacher)
         {
             string teacherID = loggedTeacher.ID;
             OleDbConnection conn = new OleDbConnection(ConStr);
@@ -33,7 +39,7 @@ namespace Interface_2
             reader.Close();
             return false;
         }
-        public static void CreateDatabase()
+        public void CreateDatabase()
         {
             if (!File.Exists("NetworkDB.accdb")) //if a file doesnt already exist for the database
             {
@@ -68,7 +74,7 @@ namespace Interface_2
         /// </summary>
         /// <param name="teacher">The Teacher that will be saved</param>
         /// <returns></returns>
-        public static bool SaveTeacher(Teacher teacher)
+        public bool SaveTeacher(Teacher teacher)
         {
             if (!emailExists(teacher.email)) //makes sure the teacher hasnt already signed up with this email
             {
@@ -97,7 +103,7 @@ namespace Interface_2
         /// Saves a student to the database
         /// </summary>
         /// <param name="student">The Student that will be saved</param>
-        public static void SaveStudent(Student student)
+        public void SaveStudent(Student student)
         {
             if (!emailExists(student.email))//makes sure the student hasnt already signed up with this email
             {
@@ -127,7 +133,7 @@ namespace Interface_2
         /// </summary>
         /// <param name="className">The Name of the class</param>
         /// <param name="teacher">The class's Teacher</param>
-        public static void CreateClass(string className, Teacher teacher)
+        public void CreateClass(string className, Teacher teacher)
         {
             string classID = NextID("C"); //generates the class ID 
             OleDbConnection conn = new OleDbConnection(MainWindow.ConStr);
@@ -166,7 +172,7 @@ namespace Interface_2
         /// </summary>
         /// <param name="email">The email the database will check for</param>
         /// <returns></returns>
-        public static bool emailExists(string email)
+        public bool emailExists(string email)
         {
             OleDbConnection conn = new OleDbConnection(MainWindow.ConStr);
             conn.Open();
@@ -241,7 +247,7 @@ namespace Interface_2
             reader.Close();
             return false;
         }
-        public static bool ClassExists(string ID)
+        public bool ClassExists(string ID)
         {
             OleDbConnection conn = new OleDbConnection(MainWindow.ConStr);
             conn.Open();
@@ -262,7 +268,7 @@ namespace Interface_2
         /// </summary>
         /// <param name="email">The email of student</param>
         /// <returns></returns>
-        public static string GetStudentID(string email)
+        public string GetStudentID(string email)
         {
             string ID = "";
             OleDbConnection conn = new OleDbConnection(MainWindow.ConStr);
@@ -286,7 +292,7 @@ namespace Interface_2
         /// </summary>
         /// <param name="email">The email of the teacher</param>
         /// <returns></returns>
-        public static string GetTeacherID(string email)
+        public string GetTeacherID(string email)
         {
             string ID = "";
             OleDbConnection conn = new OleDbConnection(MainWindow.ConStr);
@@ -310,7 +316,7 @@ namespace Interface_2
         /// </summary>
         /// <param name="ClassID">ID of the class that the student will be added to</param>
         /// <param name="student">The student that will be added to the class</param>
-        public static void EnrollStudent(string ClassID, Student student)
+        public void EnrollStudent(string ClassID, Student student)
         {
             if (!IsInClass(ClassID, student)) //only do this if the student is not already in this class
             {
@@ -329,7 +335,7 @@ namespace Interface_2
         /// </summary>
         /// <param name="ClassID">ID of the class the student will be removed from</param>
         /// <param name="student">The student that is being removed from the class</param>
-        public static void RemoveStudent(string ClassID, Student student)
+        public void RemoveStudent(string ClassID, Student student)
         {
             OleDbConnection conn = new OleDbConnection(MainWindow.ConStr);
             conn.Open();
@@ -345,7 +351,7 @@ namespace Interface_2
         /// <param name="ClassID">ID of the Class to check against</param>
         /// <param name="student">The student to check for</param>
         /// <returns></returns>
-        public static bool IsInClass(string ClassID, Student student)
+        public bool IsInClass(string ClassID, Student student)
         {
             OleDbConnection conn = new OleDbConnection(MainWindow.ConStr);
             OleDbCommand cmd = new OleDbCommand();
@@ -368,7 +374,7 @@ namespace Interface_2
         /// </summary>
         /// <param name="ClassID">The ID of the class</param>
         /// <returns></returns>
-        public static List<Student> ListClass(string ClassID)
+        public List<Student> ListClass(string ClassID)
         {
             List<Student> Ids = new List<Student>();
             OleDbConnection conn = new OleDbConnection(MainWindow.ConStr);
@@ -391,7 +397,7 @@ namespace Interface_2
         /// </summary>
         /// <param name="StudentID">ID of the student</param>
         /// <returns></returns>
-        public static Student InitialiseStudent(string StudentID)
+        public Student InitialiseStudent(string StudentID)
         {
             OleDbConnection conn = new OleDbConnection(MainWindow.ConStr);
             conn.Open();
@@ -415,7 +421,7 @@ namespace Interface_2
         /// </summary>
         /// <param name="TeacherID">ID of the teacher</param>
         /// <returns></returns>
-        public static Teacher InitialiseTeacher(string TeacherID)
+        public  Teacher InitialiseTeacher(string TeacherID)
         {
             OleDbConnection conn = new OleDbConnection(MainWindow.ConStr);
             conn.Open();
@@ -438,7 +444,7 @@ namespace Interface_2
         /// Returns true if a teacher is currently logged in
         /// </summary>
         /// <returns></returns>
-        public static bool TeacherIsLoggedIn()
+        public bool TeacherIsLoggedIn(Teacher loggedTeacher)
         {
             return (loggedTeacher != null);
         }
@@ -446,7 +452,7 @@ namespace Interface_2
         /// Returns true if a student is currently logged in
         /// </summary>
         /// <returns></returns>
-        public static bool StudentIsLoggedIn()
+        public bool StudentIsLoggedIn(Student loggedStudent)
         {
             return (loggedStudent != null);
         }
@@ -455,7 +461,7 @@ namespace Interface_2
         /// </summary>
         /// <param name="IDType">The Type of ID that is to be generated</param>
         /// <returns></returns>
-        public static string NextID(string IDType)
+        public string NextID(string IDType)
         {
             int NextID;
             OleDbConnection conn = new OleDbConnection(MainWindow.ConStr);
@@ -492,7 +498,7 @@ namespace Interface_2
             ID = ID.Insert(0, IDType);
             return ID;
         }
-        public static string GetClassName(string ClassID)
+        public string GetClassName(string ClassID)
         {
             string ID = "";
             OleDbConnection conn = new OleDbConnection(MainWindow.ConStr);
@@ -510,10 +516,9 @@ namespace Interface_2
             conn.Close();
             return ID;
         }
-        public void SetAssignment(string ClassID)
+        public void SetAssignment(string ClassID, string assingmentNote, Teacher loggedTeacher, Graph graph)
         {
             string assignmentID = NextID("A");
-            string assingmentNote = txAssignmentNote.Text;
             OleDbConnection conn = new OleDbConnection(MainWindow.ConStr);
             OleDbCommand cmd = new OleDbCommand();
             conn.Open();

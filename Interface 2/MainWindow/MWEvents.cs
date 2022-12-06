@@ -165,15 +165,16 @@ namespace Interface_2
                 return;
             }
             string studentID = cbStudentID.SelectedValue.ToString();
-            Student student = InitialiseStudent(studentID);
+            Student student = database.InitialiseStudent(studentID);
             string classID = cbClassID2.SelectedValue.ToString();
-            if (IsInClass(classID, student))
+            
+            if (database.IsInClass(classID, student))
             {
                 MessageBox.Show(student.firstname + " " + student.lastname + " is already in this class");
                 return;
             }
-            EnrollStudent(classID, student);
-            MessageBox.Show(student.firstname + " " + student.lastname + " has been added to " + GetClassName(classID)+" ("+classID+")");
+            database.EnrollStudent(classID, student);
+            MessageBox.Show(student.firstname + " " + student.lastname + " has been added to " + database.GetClassName(classID)+" ("+classID+")");
         }
         private void cbAutoGenEdges_Checked(object sender, RoutedEventArgs e)
         {
@@ -247,9 +248,9 @@ namespace Interface_2
             if (nameGraphWindow.DialogResult == true) //if they pressed ok rather than the exit button
             {
                 name = nameGraphWindow.txBoxGraphName.Text; //re-initialise everything:
-                if (StudentIsLoggedIn())
+                if (database.StudentIsLoggedIn(loggedStudent))
                 {
-                    IncrementStudentField(loggedStudent.ID, "NoGraph");
+                    database.IncrementStudentField(loggedStudent.ID, "NoGraph");
                 }
                 DeleteGraph();
                 CreateNewGraph(name);
@@ -309,7 +310,7 @@ namespace Interface_2
         }
         private void btnCreateClass_Click(object sender, RoutedEventArgs e)
         {
-            if (!TeacherIsLoggedIn())
+            if (!database.TeacherIsLoggedIn(loggedTeacher))
             {
                 MessageBox.Show("This function is reserved for teachers");
                 return;
@@ -321,7 +322,7 @@ namespace Interface_2
                 MessageBox.Show("Please enter a name for your class."); 
                 return; 
             }
-            CreateClass(className, loggedTeacher);
+            database.CreateClass(className, loggedTeacher);
             loadComboBoxes();
             showNextID();
         }
@@ -555,9 +556,9 @@ namespace Interface_2
             populateDataGrid(dataGridExtraInfo, FloydsResult, function);
             dataGridExtraInfo.Visibility = Visibility.Visible;
             txExtraInfo2.Text = "Matrix of Shortest Paths:\n";
-            if (StudentIsLoggedIn())
+            if (database.StudentIsLoggedIn(loggedStudent))
             {
-                IncrementStudentField(loggedStudent.ID, "NoFloyds");
+                database.IncrementStudentField(loggedStudent.ID, "NoFloyds");
             }
             }
             else
@@ -585,9 +586,9 @@ namespace Interface_2
             {
                 Tuple<List<Tuple<int, int, int>>, int> mst = graph.Kruskals();
                 mstHighlightTree(mst.Item1, mst.Item2); //highlight the MST
-                if (StudentIsLoggedIn())
+                if (database.StudentIsLoggedIn(loggedStudent))
                 {
-                    IncrementStudentField(loggedStudent.ID, "NoKruskals");
+                    database.IncrementStudentField(loggedStudent.ID, "NoKruskals");
                 }
             }
             ClearAllOperations();
@@ -815,7 +816,7 @@ namespace Interface_2
             }
             ArrangeGraph(4, 100, randomGraph); //arranges graph into appropriate shape
             RenderGraph(randomGraph);
-            if (!TeacherIsLoggedIn()) { tabControlClass.IsEnabled = false; }
+            if (!database.TeacherIsLoggedIn(loggedTeacher)) { tabControlClass.IsEnabled = false; }
         }
         private void btnRouteInspStartAndEnd_Click(object sender, RoutedEventArgs e)
         {
@@ -924,15 +925,15 @@ namespace Interface_2
                 return;
             }
             string studentID = cbStudentID.SelectedValue.ToString();
-            Student student = InitialiseStudent(studentID);
+            Student student = database.InitialiseStudent(studentID);
             string classID = cbClassID2.SelectedValue.ToString();
-            if (!IsInClass(classID, student))
+            if (!database.IsInClass(classID, student))
             {
                 MessageBox.Show(student.firstname + " " + student.lastname + " is not in this class");
                 return;
             }
-            RemoveStudent(classID, student);
-            MessageBox.Show(student.firstname + " " + student.lastname + " has been removed from "+GetClassName(classID)+" ("+classID+")");
+            database.RemoveStudent(classID, student);
+            MessageBox.Show(student.firstname + " " + student.lastname + " has been removed from "+ database.GetClassName(classID)+" ("+classID+")");
         }
         private void btnSaveGraph_Click(object sender, RoutedEventArgs e)   
         {
@@ -959,7 +960,7 @@ namespace Interface_2
                 return;
             }
             string classID = cbClassID3.SelectedValue.ToString();
-            SetAssignment(classID);
+            database.SetAssignment(classID, txAssignmentNote.Text, loggedTeacher, graph);
         }
         private void btnTakeScreenshot_Click(object sender, RoutedEventArgs e)
         {
@@ -1034,9 +1035,9 @@ namespace Interface_2
                 loadComboBoxes();
                 return;
             }
-            if (StudentIsLoggedIn())
+            if (database.StudentIsLoggedIn(loggedStudent))
             {
-                IncrementStudentField(loggedStudent.ID, "NoAssignmentsSubmitted");
+                database.IncrementStudentField(loggedStudent.ID, "NoAssignmentsSubmitted");
             }
             assignmentOpen = false;
             OleDbConnection conn = new OleDbConnection(ConStr);
@@ -1057,7 +1058,7 @@ namespace Interface_2
         private void btnViewSelfStats_Click(object sender, RoutedEventArgs e)
         {
             ActivateButton(sender);
-            if (!StudentIsLoggedIn())
+            if (!database.StudentIsLoggedIn(loggedStudent))
             {
                 MessageBox.Show("This option is reserved for students");
                 return;

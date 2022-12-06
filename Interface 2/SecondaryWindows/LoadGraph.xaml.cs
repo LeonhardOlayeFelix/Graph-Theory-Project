@@ -23,6 +23,7 @@ namespace Interface_2
     {
         public string graphToLoad = "";
         public string usertype = "";
+        Database database = MainWindow.database;
         public LoadGraph()
         {
             InitializeComponent();
@@ -31,13 +32,13 @@ namespace Interface_2
             conn.Open();
             cmd.Connection = conn;
             //we only want to display the graphs that the user is supposed to have access to.
-            if (MainWindow.StudentIsLoggedIn())
+            if (database.StudentIsLoggedIn(MainWindow.loggedStudent))
             {
                 usertype = "s";
                 string ID = MainWindow.loggedStudent.ID;
                 cmd.CommandText = $"SELECT GraphName FROM StudentGraph WHERE StudentID = '{ID}'";
             } 
-            else if (MainWindow.TeacherIsLoggedIn())
+            else if (database.TeacherIsLoggedIn(MainWindow.loggedTeacher))
             {
                 usertype = "t";
                 string ID = MainWindow.loggedTeacher.ID;

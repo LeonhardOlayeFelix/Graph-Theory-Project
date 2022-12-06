@@ -127,9 +127,9 @@ namespace Interface_2
                     if (i != traversalOrder.Count() - 1) { outputString += "=>"; }//create a string containing the traversal order
                 }
                 txExtraInfo2.Text = "Traversal Order: " + outputString;
-                if (StudentIsLoggedIn())
+                if (database.StudentIsLoggedIn(loggedStudent))
                 {
-                    IncrementStudentField(loggedStudent.ID, "NoBFS");
+                    database.IncrementStudentField(loggedStudent.ID, "NoBFS");
                 }
             }
         }
@@ -196,9 +196,9 @@ namespace Interface_2
                     if (i != traversalOrder.Count() - 1) { outputString += "=>"; }//create a string containing the traversal order
                 }
                 txExtraInfo2.Text = "Traversal Order: " + outputString;
-                if (StudentIsLoggedIn())
+                if (database.StudentIsLoggedIn(loggedStudent))
                 {
-                    IncrementStudentField(loggedStudent.ID, "NoDFS");
+                    database.IncrementStudentField(loggedStudent.ID, "NoDFS");
                 }
             }
         }
@@ -225,9 +225,9 @@ namespace Interface_2
                 {
                     List<int> path = graph.DijkstrasAlgorithmShort(startVertex, vId).Item1; //get the path from the method
                     DijkstraHighlightRoute(path);
-                    if (StudentIsLoggedIn())
+                    if (database.StudentIsLoggedIn(loggedStudent))
                     {
-                        IncrementStudentField(loggedStudent.ID, "NoDijkstras");
+                        database.IncrementStudentField(loggedStudent.ID, "NoDijkstras");
                     }
                     labelExtraInfo.Content = "";
                 }
@@ -341,7 +341,7 @@ namespace Interface_2
                 OleDbDataAdapter adapter = new OleDbDataAdapter(cmd);
                 adapter.Fill(stuffToDisplay);
                 classDataGrid.ItemsSource = stuffToDisplay.DefaultView;
-                txClassName.Text = "Class Name: " + GetClassName(classID) + "\nClass ID: " + classID;
+                txClassName.Text = "Class Name: " + database.GetClassName(classID) + "\nClass ID: " + classID;
                 conn.Close();
             }
         }
@@ -353,7 +353,7 @@ namespace Interface_2
                 MessageBox.Show("Invalid Class ID");
                 return false;
             }
-            else if (!ClassExists(classID))
+            else if (!database.ClassExists(classID))
             {
                 MessageBox.Show("Class is not registered.");
                 return false;
@@ -374,9 +374,9 @@ namespace Interface_2
             {
                 List<Tuple<int, int, int>> mst = graph.Prims(startVertexID);
                 mstHighlightTree(mst);//highlight the path
-                if (StudentIsLoggedIn())
+                if (database.StudentIsLoggedIn(loggedStudent))
                 {
-                    IncrementStudentField(loggedStudent.ID, "NoPrims");
+                    database.IncrementStudentField(loggedStudent.ID, "NoPrims");
                 }
             }
             else
@@ -437,9 +437,9 @@ namespace Interface_2
                     RevertEllipseColour();
                     RouteInspHighlightPath(edgesToRepeat, cost); //highlights the edges to be repeated and presents the cost
                 }
-                if (StudentIsLoggedIn())
+                if (database.StudentIsLoggedIn(loggedStudent))
                 {
-                    IncrementStudentField(loggedStudent.ID, "NoRInsp");
+                    database.IncrementStudentField(loggedStudent.ID, "NoRInsp");
                 }
                 HideValencies();
                 EnableTabControl();
@@ -499,9 +499,9 @@ namespace Interface_2
                 List<Tuple<int, int>> edgesToRepeat = result.Item1; //first item of the tuple
                 int cost = result.Item2;//second item of the tuple
                 RouteInspHighlightPath(edgesToRepeat, cost); //highlights the edges to be repeated and presents the cost
-                if (StudentIsLoggedIn())
+                if (database.StudentIsLoggedIn(loggedStudent))
                 {
-                    IncrementStudentField(loggedStudent.ID, "NoRInsp");
+                    database.IncrementStudentField(loggedStudent.ID, "NoRInsp");
                 }
             }
         }

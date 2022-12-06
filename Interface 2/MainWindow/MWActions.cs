@@ -34,7 +34,7 @@ namespace Interface_2
             OleDbCommand cmd = new OleDbCommand();
             cmd.Connection = conn;
             //check whether a graph with the given name already exists for that type of user
-            if (StudentIsLoggedIn() && !rendering)
+            if (database.StudentIsLoggedIn(loggedStudent) && !rendering)
             {
                 cmd.CommandText = $"SELECT * FROM StudentGraph WHERE StudentID = '{loggedStudent.ID}' AND GraphName = '{graphName}'";
                 OleDbDataReader reader = cmd.ExecuteReader();
@@ -45,7 +45,7 @@ namespace Interface_2
                 }
                 reader.Close();
             }
-            else if (TeacherIsLoggedIn() && !rendering)
+            else if (database.TeacherIsLoggedIn(loggedTeacher) && !rendering)
             {
                 cmd.CommandText = $"SELECT * FROM TeacherGraph WHERE TeacherID = '{loggedTeacher.ID}' AND GraphName = '{graphName}'";
                 OleDbDataReader reader = cmd.ExecuteReader();
@@ -607,7 +607,7 @@ namespace Interface_2
             cmd.Connection = conn;
             string filename = graph.Name; //change this to have a filename that the user wants
             FileStream fs;
-            if (StudentIsLoggedIn()) //do this portion if the user is saving graphs as a student
+            if (database.StudentIsLoggedIn(loggedStudent)) //do this portion if the user is saving graphs as a student
             {
                 filename += loggedStudent.ID;
                 filename = "StudentGraphs/" + filename; //format the filename we expect to find
@@ -636,7 +636,7 @@ namespace Interface_2
                     }
                 }
             }
-            else if (TeacherIsLoggedIn()) //do this portion if the user is saving graphs as a teacher
+            else if (database.TeacherIsLoggedIn(loggedTeacher)) //do this portion if the user is saving graphs as a teacher
             {
                 filename += loggedTeacher.ID;
                 filename = "TeacherGraphs/" + filename; //format the filename we expect we find
@@ -691,12 +691,12 @@ namespace Interface_2
         }
         private void showNextID()
         {
-            txNextClass.Text = "Next created class will be given the ID:" + NextID("C").ToString();
+            txNextClass.Text = "Next created class will be given the ID:" + database.NextID("C").ToString();
             
         }
         private void loadComboBoxes()
         {
-            if (TeacherIsLoggedIn())
+            if (database.TeacherIsLoggedIn(loggedTeacher))
             {
                 OleDbConnection conn = new OleDbConnection(ConStr);
                 OleDbCommand cmd = new OleDbCommand();
@@ -726,7 +726,7 @@ namespace Interface_2
                 cbStudentID.SelectedValuePath = "StudentID";
                 conn.Close();
             }
-            if (StudentIsLoggedIn())
+            if (database.StudentIsLoggedIn(loggedStudent))
             {
                 OleDbConnection conn = new OleDbConnection(ConStr);
                 OleDbCommand cmd = new OleDbCommand();

@@ -51,7 +51,7 @@ namespace Interface_2
         List<Ellipse> selectedVertices = new List<Ellipse>();
         List<string> selectedLinesNames = new List<string>();
         public Graph graph = null;
-        Database database = new Database();
+        public static Database database = new Database();
 
         public MainWindow()
         {
@@ -59,7 +59,6 @@ namespace Interface_2
             DisableAllActionButtons();
             DisableTabControl();
             ClearAllOperations();
-            CreateDatabase();
             showNextID();
             loadComboBoxes();
             btnSaveGraph.IsEnabled = false;
@@ -82,7 +81,5 @@ namespace Interface_2
             }
         }
         public const string ConStr = "Provider=Microsoft.Jet.OLEDB.4.0; Data Source=NetworkDB.accdb";
-
-        
     }
 }

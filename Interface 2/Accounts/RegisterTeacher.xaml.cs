@@ -20,6 +20,7 @@ namespace Interface_2
     public partial class RegisterTeacher : Window
     {
         Teacher newTeacher = null;
+        Database database = MainWindow.database;
         string title = "";
         public RegisterTeacher()
         {
@@ -46,7 +47,7 @@ namespace Interface_2
             string password = txPassword.Text;
             string firstname = txFirstname.Text;
             string lastname = txLastname.Text;
-            if (MainWindow.emailExists(email))
+            if (database.emailExists(email))
             {
                 MessageBox.Show("This email is already in use");
             }
@@ -56,9 +57,9 @@ namespace Interface_2
             }
             else if (email.Length != 0 && password.Length != 0 && firstname.Length != 0 && lastname.Length != 0 && title.Length != 0)
             {
-                string ID = MainWindow.NextID("T");
+                string ID = database.NextID("T");
                 newTeacher = new Teacher(firstname, lastname, email, password, title, ID);
-                MainWindow.SaveTeacher(newTeacher); //add the new teacher to the database using a function defined in another file
+                database.SaveTeacher(newTeacher); //add the new teacher to the database using a function defined in another file
                 this.DialogResult = true;
                 this.Close();
                 MessageBox.Show("Successuflly Signed Up. You can now log in with this account");

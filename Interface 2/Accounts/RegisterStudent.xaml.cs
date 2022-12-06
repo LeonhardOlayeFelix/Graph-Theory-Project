@@ -21,6 +21,7 @@ namespace Interface_2
     public partial class RegisterStudent : Window
     {
         Student newStudent = null;
+        Database database = MainWindow.database;
         public RegisterStudent()
         {
             InitializeComponent();
@@ -52,7 +53,7 @@ namespace Interface_2
             string firstname = txFirstname.Text;
             string lastname = txLastname.Text;
             string dob = dpDob.SelectedDate == null ? null : dpDob.SelectedDate.Value.ToString("dd/MM/yyyy");
-            if (MainWindow.emailExists(email))
+            if (database.emailExists(email))
             {
                 MessageBox.Show("This email is already in use");
             }
@@ -62,9 +63,9 @@ namespace Interface_2
             }
             else if (email.Length != 0 && password.Length != 0 && firstname.Length != 0 && lastname.Length != 0 && dob != null)
             {
-                string ID = MainWindow.NextID("S");
+                string ID = database.NextID("S");
                 newStudent = new Student(firstname, lastname, email, password, dpDob.SelectedDate.Value, ID);
-                MainWindow.SaveStudent(newStudent); //adds the student to the database using a function defined in another file
+                database.SaveStudent(newStudent); //adds the student to the database using a function defined in another file
                 this.DialogResult = true;
                 this.Close();
                 MessageBox.Show("Successuflly Signed Up. You can now log in with this account");

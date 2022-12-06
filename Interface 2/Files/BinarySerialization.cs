@@ -11,7 +11,6 @@ using System.Data;
 using System.Data.OleDb;
 using System.Text.RegularExpressions;
 using System.IO;
-
 namespace Interface_2
 {
     public static class BinarySerialization //this class will read and write an object into a binary file
