@@ -134,7 +134,7 @@ namespace Interface_2
             }
             if (!rendering && !floyds)
             {
-                graph.AddEdge(Convert.ToInt32(v1.Name.Substring(3)), Convert.ToInt32(v2.Name.Substring(3)), weight); //update the object
+                graph.AddEdge(Convert.ToInt32(v1.Name.Substring(3)), Convert.ToInt32(v2.Name.Substring(3)), weight, (bool)cbDashedLines.IsChecked); //update the object
             }
 
             //below creates the line which will be connected
@@ -142,8 +142,12 @@ namespace Interface_2
             {
                 StrokeThickness = 4,
                 Name = lineName,
-                Stroke = new SolidColorBrush(Colors.Black)
+                Stroke = new SolidColorBrush(Colors.Black),
             };
+            if (graph.EdgeIsDashed(Convert.ToInt32(v1.Name.Substring(3)), Convert.ToInt32(v2.Name.Substring(3))))
+            {
+                line.StrokeDashArray = new DoubleCollection() { 2, 2 };
+            }
             Canvas.SetZIndex(line, 0); //make sure the line is underneath everything
 
             Binding bindingStroke = new Binding("SelectedBrush") //this will bind the stroke of the line to the colour picker
@@ -301,6 +305,26 @@ namespace Interface_2
                     if (currentEllipse.Name.Substring(3) == vertexId.ToString()) //when youve found a match
                     {
                         return currentEllipse;
+                    }
+                }
+                catch { }
+            }
+            return null;
+        }
+        public Line FindLine(Ellipse FromVertex, Ellipse ToVertex)
+        {
+            Ellipse smallerEllipse = GetMinEllipse(FromVertex, ToVertex);
+            Ellipse largerEllipse = GetMaxEllipse(FromVertex, ToVertex);
+            //creates the lines soon-to-be name as "line5to6 for example 
+            string lineName = "line" + smallerEllipse.Name.Substring(3).ToString() + "to" + largerEllipse.Name.Substring(3).ToString();
+            foreach (var ctrl in mainCanvas.Children)
+            {
+                try //incase the ctrl is not an ellipse
+                {
+                    Line currentLine = (Line)ctrl;
+                    if (currentLine.Name == lineName) //when youve found a match
+                    {
+                        return currentLine;
                     }
                 }
                 catch { }

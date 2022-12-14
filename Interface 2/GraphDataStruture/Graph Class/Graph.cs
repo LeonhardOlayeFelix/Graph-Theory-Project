@@ -15,6 +15,7 @@ namespace Interface_2
         private int iDVertex = 0; //this increments
         private List<Vertex> vertexSet; //Adjacency List 
         private List<Tuple<int, int, int>> listOfEdges = null; //list of edges in graph (u,v,weight)
+        private List<Tuple<int, int, int>> listOfDashedEdges = null;
         public string Name { get; set; }
         public Graph()
         {
@@ -23,6 +24,7 @@ namespace Interface_2
             this.numberOfDeletedVertices = 0;
             this.vertexSet = new List<Vertex>();
             this.listOfEdges = new List<Tuple<int, int, int>>();
+            this.listOfDashedEdges = new List<Tuple<int, int, int>>();
             this.Name = "";
         }
     }

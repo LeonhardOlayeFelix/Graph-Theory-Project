@@ -74,7 +74,7 @@ namespace Interface_2
         /// <param name="v1">Vertex on one end of the edge</param>
         /// <param name="v2">Vertex on the other end of the edge</param>
         /// <param name="weight">Weight on edge</param>
-        public void AddEdge(int v1, int v2, int weight = 0)
+        public void AddEdge(int v1, int v2, int weight = 0, bool dashed = false)
         {
             //adds an edge between passed in vertices
             if (v1 == v2)
@@ -100,6 +100,12 @@ namespace Interface_2
             //Update the vertices instances themselves
             this.vertexSet.ElementAt(v1Index).AddEdge(v2, weight); 
             this.vertexSet.ElementAt(v2Index).AddEdge(v1, weight); 
+            if (dashed)
+            {
+                listOfDashedEdges.Remove(Tuple.Create(v1, v2, GetEdgeWeight(v1, v2)));
+                listOfDashedEdges.Remove(Tuple.Create(v2, v1, GetEdgeWeight(v1, v2))); //remove an edge that may already be present
+                listOfDashedEdges.Add(Tuple.Create(v1, v2, weight));
+            }
         }
         /// <summary>
         /// Removes an exisiting connection between two specified vertices
@@ -139,7 +145,13 @@ namespace Interface_2
                 listOfEdges.Remove(Tuple.Create(v1, v2, weight));
 
                 //incase vertices were saved the other way
-                listOfEdges.Remove(Tuple.Create(v2, v1, weight)); 
+                listOfEdges.Remove(Tuple.Create(v2, v1, weight));
+
+                //update list of edges
+                listOfDashedEdges.Remove(Tuple.Create(v1, v2, weight));
+
+                //incase vertices were saved the other way
+                listOfDashedEdges.Remove(Tuple.Create(v2, v1, weight));
             }
         }
         

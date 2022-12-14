@@ -55,7 +55,6 @@ namespace Interface_2
             OleDbCommand cmd2 = new OleDbCommand();
             cmd.Parameters.Add(new OleDbParameter("Email", email));
             cmd.Parameters.Add(new OleDbParameter("SPassword", password));
-            //SELECT * FROM Student WHERE Email = '{email}' AND Spassword = '{password}'
             cmd2.Connection = conn;
             cmd2.CommandText = $"SELECT * FROM Teacher WHERE Email = ? AND Tpassword = ?";
             cmd2.Parameters.Add(new OleDbParameter("Email", email));

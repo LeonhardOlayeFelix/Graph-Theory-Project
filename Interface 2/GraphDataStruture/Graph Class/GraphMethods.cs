@@ -521,6 +521,10 @@ namespace Interface_2
         {
             return (a < b) ? a : b;
         }
+        public bool EdgeIsDashed(int v1, int v2)
+        {
+            return listOfDashedEdges.Contains(Tuple.Create(v1, v2, GetEdgeWeight(v1, v2)));
+        }
     }
 }
 
