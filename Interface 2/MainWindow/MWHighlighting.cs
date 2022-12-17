@@ -182,7 +182,7 @@ namespace Interface_2
             }
             for (int i = 0; i < highlightedLines.Count(); ++i)
             {
-                highlightedLines[i].Stroke = HighlightColour;
+                InitiateHighlightLineStoryboard(highlightedLines[i], TimeSpan.FromSeconds(1));
                 if (i != highlightedLines.Count() - 1)
                 {
                     MessageBox.Show("Press ok to show next edge");

@@ -105,6 +105,7 @@ namespace Interface_2
                 listOfDashedEdges.Remove(Tuple.Create(v1, v2, GetEdgeWeight(v1, v2)));
                 listOfDashedEdges.Remove(Tuple.Create(v2, v1, GetEdgeWeight(v1, v2))); //remove an edge that may already be present
                 listOfDashedEdges.Add(Tuple.Create(v1, v2, weight));
+                listOfDashedEdges.Add(Tuple.Create(v2, v1, weight));
             }
         }
         /// <summary>
