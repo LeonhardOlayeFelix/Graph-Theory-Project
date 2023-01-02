@@ -56,6 +56,7 @@ namespace Interface_2
         public MainWindow()
         {
             InitializeComponent();
+            PopulateIDs();
             DisableAllActionButtons();
             DisableTabControl();
             ClearAllOperations();

@@ -1051,6 +1051,11 @@ namespace Interface_2
         }
         private void btnFluidAddEdge_Click(object sender, RoutedEventArgs e)
         {
+            if (assignmentOpen)
+            {
+                MessageBox.Show("You cannot edit this graph since it has been set as an assignment. Close assignment then try again");
+                return;
+            }
             ActivateButton(sender);
             labelExtraInfo.Content = "Hover over vertices, while holding down the LMB, to add edges with weights corresponding to the checkbox selected under the 'Select' Button.";
             ClearAllOperations();

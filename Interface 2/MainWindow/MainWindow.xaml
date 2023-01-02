@@ -782,6 +782,7 @@
                                     HorizontalScrollBarVisibility="Auto"
                                     VerticalScrollBarVisibility="Auto"
                                     TextAlignment="Center"
+                                    TextWrapping="Wrap"
                                     FontSize="25"
                                     x:Name="txExtraInfo2" Grid.Column="1"/>
                                 <DataGrid
