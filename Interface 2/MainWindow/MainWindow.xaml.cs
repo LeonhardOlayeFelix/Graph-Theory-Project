@@ -51,13 +51,13 @@ namespace Interface_2
         public Graph graph = null;
         public MainWindow()
         {
+            CreateDatabase();
             InitializeComponent();
             DisableAllActionButtons();
             DisableTabControl();
             showNextID();
             btnSaveGraph.IsEnabled = false;
             LogOutProcess();
-            CreateDatabase();
         }
         private void PopulateIDs()
         {
